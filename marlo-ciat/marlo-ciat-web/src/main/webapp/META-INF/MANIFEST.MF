@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: marlo-ciat-web
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: nmatovu
+Specification-Title: marlo-ciat-web
+Implementation-Vendor-Id: org.cgiar.ccafs
+Build-Jdk: 1.8.0_51
+Specification-Version: 0.0.1-SNAPSHOT
+Created-By: Maven Integration for Eclipse
+

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- Add addition packages and configuration here. -->
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	<constant name="struts.mapper.alwaysSelectFullNamespace"
+		value="false" />
+	<constant name="struts.patternMatcher" value="regex" />
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+
+	<!-- Add addition packages and configuration here. -->
+	<package name="marlo-default" namespace="/" extends="struts-default">
+
+		<result-types>
+			<result-type name="freemarker"
+				class="org.apache.struts2.views.freemarker.FreemarkerResult"
+				default="true" />
+		</result-types>
+
+		<interceptors>
+
+			<interceptor name="requireUser"
+				class="org.cgiar.ccafs.marlo.interceptor.RequireUserInterceptor" />
+
+			<interceptor name="i18nFile"
+				class="org.cgiar.ccafs.marlo.interceptor.InternationalitazionFileInterceptor" />
+
+			<!-- Custom interceptor to prevent the unauthorized access of a inactive 
+				section -->
+			<!-- <interceptor name="accessibleStage"
+				class="org.cgiar.ccafs.marlo.interceptor.AccessibleStageInterceptor" />
+ -->
+			<!-- custom interceptor to preserve action messages across redirects -->
+			<interceptor name="keepRedirectMessages"
+				class="org.cgiar.ccafs.marlo.interceptor.RedirectMessageInterceptor" />
+
+			<!-- custom interceptor to remove all the whitespace present in the values 
+				received as paramter -->
+			<interceptor name="trimInputs"
+				class="org.cgiar.ccafs.marlo.interceptor.TrimInterceptor" />
+
+			<!-- validating if the crp entered in the action or url is valid. -->
+	<!-- 		<interceptor name="validCrp"
+				class="org.cgiar.ccafs.marlo.interceptor.ValidCrpActionInterceptor" />
+ -->
+			<!-- validating if the url is valid in the open session -->
+			<!-- <interceptor name="validSessionCrp"
+				class="org.cgiar.ccafs.marlo.interceptor.ValidSessionCrpInterceptor" /> -->
+
+			<!-- Crp Admin interceptors -->
+			<!-- <interceptor name="canEditCrpAdmin"
+				class="org.cgiar.ccafs.marlo.interceptor.admin.EditCrpAdminInterceptor" /> -->
+
+			<!-- ImpactPathway interceptors -->
+			<!-- <interceptor name="canEditImpactPathway"
+				class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditImpactPathwayInterceptor" />
+ -->
+			<!-- Project interceptors -->
+	<!-- 		<interceptor name="editProjectOutcome"
+				class="org.cgiar.ccafs.marlo.interceptor.project.EditProjectOutcomeInterceptor" />
+
+			<interceptor name="editDeliverable"
+				class="org.cgiar.ccafs.marlo.interceptor.project.EditDeliverableInterceptor" />
+
+			<interceptor name="editCofunded"
+				class="org.cgiar.ccafs.marlo.interceptor.bilateral.EditCofundedInterceptor" />
+
+			<interceptor name="canEditProject"
+				class="org.cgiar.ccafs.marlo.interceptor.project.EditProjectInterceptor" />
+ -->
+			<!-- SuperAdmin interceptors -->
+			<interceptor name="superAdminValidation"
+				class="org.cgiar.ccafs.marlo.interceptor.superadmin.SuperAdminInterceptor" />
+
+			<!-- Security (Json) interceptors -->
+			<!-- <interceptor name="SecurityControl"
+				class="org.cgiar.ccafs.marlo.interceptor.json.SecurityJsonInterceptor" />
+ -->
+			<!-- stack from home packgae -->
+			<interceptor-stack name="homeStack">
+				<interceptor-ref name="i18nFile" />
+				<!-- <interceptor-ref name="validCrp" /> -->
+				<interceptor-ref name="requireUser" />
+				<!-- <interceptor-ref name="validSessionCrp" /> -->
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+<!-- 
+			<interceptor-stack name="crpAdminStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="validCrp" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="validSessionCrp" />
+				<interceptor-ref name="canEditCrpAdmin" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack> -->
+
+	<!-- 		<interceptor-stack name="impactPathwayStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="validCrp" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="validSessionCrp" />
+				<interceptor-ref name="canEditImpactPathway" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+ -->
+	<!-- 		<interceptor-stack name="projectsStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="validCrp" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="validSessionCrp" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+ -->
+	<!-- 		<interceptor-stack name="projectListStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="validCrp" />
+				<interceptor-ref name="SecurityControl" />
+				<interceptor-ref name="validSessionCrp" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="editProjectsStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="validCrp" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="validSessionCrp" />
+				<interceptor-ref name="canEditProject" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="editProjectListStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="validCrp" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="validSessionCrp" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+			</interceptor-stack>
+ -->
+			<!-- <interceptor-stack name="superAdminStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="superAdminValidation" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="accessibleStage" />
+				<interceptor-ref name="trimInputs" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+ -->
+		</interceptors>
+
+		<default-action-ref name="login" />
+
+		<global-results>
+			<result name="savedStatus">
+				/WEB-INF/global/pages/saveStatus.ftl
+			</result>
+			<result name="401">
+				/WEB-INF/global/pages/error/401.ftl
+			</result>
+			<result name="403">
+				/WEB-INF/global/pages/error/403.ftl
+			</result>
+			<result name="404">
+				/WEB-INF/global/pages/error/404.ftl
+			</result>
+			<result name="unhandledException" type="chain">
+				<param name="actionName">unhandledExceptionAction</param>
+				<param name="namespace">/</param>
+			</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception"
+				result="unhandledException" />
+		</global-exception-mappings>
+
+		<action name="unhandledExceptionAction"
+			class="org.cgiar.ccafs.marlo.action.UnhandledExceptionAction">
+			<result name="success">/WEB-INF/global/pages/error/500.ftl</result>
+			<result name="input">/WEB-INF/global/pages/error/500.ftl</result>
+		</action>
+
+		<action name="*" class="org.cgiar.ccafs.marlo.action.BaseAction">
+			<result name="input">/WEB-INF/global/pages/error/404.ftl</result>
+		</action>
+	</package>
+
+	<!-- <include file="struts-json.xml" /> -->
+	<include file="struts-home.xml" />
+	<!-- <include file="struts-admin.xml" /> -->
+<!-- 	<include file="struts-superadmin.xml" /> -->
+	<!-- <include file="struts-impactPathway.xml" />
+	<include file="struts-projects.xml" />
+	<include file="struts-bilaterals.xml" /> -->
+
+</struts>

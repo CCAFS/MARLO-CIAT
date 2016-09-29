@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.search.autoregister_listeners">false</property>
+		<property name="hibernate.validator.apply_to_ddl">false</property>
+		<property name="connection.autoReconnect">true</property>
+		<property name="connection.autoReconnectForPools">true</property>
+		<property name="connection.is-connection-validation-required">true</property>
+		<property name="show_sql">false</property>
+		<property name="use_sql_comments">false</property>
+		<property name="generate_statistics">false</property>
+
+		<property name="hibernate.connection.verifyServerCertificate">false</property>
+		<property name="hibernate.connection.requireSSL">false</property>
+		<property name="hibernate.connection.useSSL">false</property>
+
+		<property name="hibernate.c3p0.idle_test_period">6</property>
+		<property name="hibernate.c3p0.timeout">6</property>
+		<property name="hibernate.c3p0.max_size">7000</property>
+		<property name="hibernate.c3p0.min_size">20</property>
+		<property name="hibernate.c3p0.max_statements">100</property>
+		<property name="hibernate.c3p0.preferredTestQuery">select 1;</property>
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<property name="hibernate.c3p0.validate">true</property>
+
+		<!-- Model Mappings -->
+		<mapping resource="xmls/Auditlog.hbm.xml" />
+		<mapping resource="xmls/Users.hbm.xml" />
+		<mapping resource="xmls/Crps.hbm.xml" />
+		<mapping resource="xmls/CrpUsers.hbm.xml" />
+		<mapping resource="xmls/Roles.hbm.xml" />
+		<mapping resource="xmls/UserRoles.hbm.xml" />
+	</session-factory>
+
+</hibernate-configuration>
+
+   
