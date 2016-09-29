@@ -35,6 +35,7 @@
       var justificationLimitWords = 100;
       var errorMessages = [];
       var hashScroll = true;
+     [#-- var forceChange = ${draft?string};--]
       
       var GOOGLE_API_KEY="${config.googleApiKey}";
       var PUSHER_KEY = "${config.pushApiKey}";
@@ -43,6 +44,7 @@
       var production = ${config.production?string};
       var baseURL = "${baseUrl}";
       var debugMode = ${config.debug?string};
+     [#-- var editable = ${editable?string};--]
       var canEdit = ${canEdit?string};
       var autoSaveActive = ${((currentUser.autoSave)!false)?string};
       var currentCrpID=${(crpID)!'-1'};

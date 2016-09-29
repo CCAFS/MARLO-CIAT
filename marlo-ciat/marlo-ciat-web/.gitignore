@@ -1,5 +1,8 @@
 /target/
 /.classpath
+<<<<<<< HEAD
 /.keystore
+=======
+>>>>>>> branch 'master' of https://github.com/CCAFS/MARLO-CIAT.git
 /.project
 /.settings/
