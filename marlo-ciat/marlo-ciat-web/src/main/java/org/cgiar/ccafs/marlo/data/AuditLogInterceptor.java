@@ -17,7 +17,7 @@
 package org.cgiar.ccafs.marlo.data;
 
 import org.cgiar.ccafs.marlo.data.dao.impl.StandardDAO;
-import org.cgiar.ccafs.marlo.data.IAuditlog;
+import org.cgiar.ccafs.marlo.data.IAuditLog;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -86,7 +86,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
   }
 
 
-  public Set<HashMap<String, Object>> loadList(IAuditlog entity) {
+  public Set<HashMap<String, Object>> loadList(IAuditLog entity) {
     Set<HashMap<String, Object>> setRelations = new HashSet<>();
 
     ClassMetadata classMetadata = session.getSessionFactory().getClassMetadata(entity.getClass());
@@ -98,10 +98,10 @@ public class AuditLogInterceptor extends EmptyInterceptor {
 
       if (propertyValue != null && (propertyType instanceof OrderedSetType || propertyType instanceof SetType)) {
         HashMap<String, Object> objects = new HashMap<>();
-        Set<IAuditlog> listRelation = new HashSet<>();
+        Set<IAuditLog> listRelation = new HashSet<>();
 
-        Set<IAuditlog> entityRelation =  (Set<IAuditlog>) propertyValue;
-        for (IAuditlog iAuditLog : entityRelation) {
+        Set<IAuditLog> entityRelation =  (Set<IAuditLog>) propertyValue;
+        for (IAuditLog iAuditLog : entityRelation) {
 
           if (iAuditLog.isActive()) {
 
@@ -122,7 +122,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
   }
 
 
-  public void loadRelations(IAuditlog entity, boolean loadUsers, int level) {
+  public void loadRelations(IAuditLog entity, boolean loadUsers, int level) {
     ClassMetadata classMetadata = session.getSessionFactory().getClassMetadata(entity.getClass());
 
 
@@ -130,26 +130,26 @@ public class AuditLogInterceptor extends EmptyInterceptor {
     for (String name : propertyNames) {
       Object propertyValue = classMetadata.getPropertyValue(entity, name, EntityMode.POJO);
 
-      if (propertyValue != null && propertyValue instanceof IAuditlog) {
+      if (propertyValue != null && propertyValue instanceof IAuditLog) {
         Type propertyType = classMetadata.getPropertyType(name);
 
         if (propertyValue != null && propertyType instanceof ManyToOneType) {
 
           if (loadUsers) {
-            IAuditlog entityRelation =   (IAuditlog) propertyValue;
+            IAuditLog entityRelation =   (IAuditLog) propertyValue;
 
 
             Object obj = dao.find(propertyType.getReturnedClass(), (Serializable) entityRelation.getId());
 
-            this.loadRelations((IAuditlog) obj, false, 2);
+            this.loadRelations((IAuditLog) obj, false, 2);
             classMetadata.setPropertyValue(entity, name, obj, EntityMode.POJO);
           } else {
             if (!(name.equals("createdBy") || name.equals("modifiedBy"))) {
-              IAuditlog entityRelation =   (IAuditlog) propertyValue;
+              IAuditLog entityRelation =   (IAuditLog) propertyValue;
 
               Object obj = dao.find(propertyType.getReturnedClass(), (Serializable) entityRelation.getId());
               if (level == 2) {
-                this.loadRelations((IAuditlog) obj, false, 3);
+                this.loadRelations((IAuditLog) obj, false, 3);
               }
 
               // this.loadRelations((IAuditLog) obj, false);
@@ -174,7 +174,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
     for (Iterator<Map<String, Object>> it = elements.iterator(); it.hasNext();) {
       Map<String, Object> map = it.next();
       if (map.get(PRINCIPAL).toString().equals("1")) {
-        IAuditlog entity =   (IAuditlog) map.get(ENTITY);
+        IAuditLog entity =   (IAuditLog) map.get(ENTITY);
         this.loadRelations(entity, true, 1);
         String json = gson.toJson(entity);
 
@@ -182,8 +182,8 @@ public class AuditLogInterceptor extends EmptyInterceptor {
           new Long(map.get(PRINCIPAL).toString()), null, actionName);
 
       } else {
-        Set<IAuditlog> set = (Set<IAuditlog>) map.get(ENTITY);
-        for (IAuditlog iAuditLog : set) {
+        Set<IAuditLog> set = (Set<IAuditLog>) map.get(ENTITY);
+        for (IAuditLog iAuditLog : set) {
           this.loadRelations(iAuditLog, false, 2);
           if (iAuditLog.isActive()) {
             String json = gson.toJson(iAuditLog);
@@ -211,12 +211,12 @@ public class AuditLogInterceptor extends EmptyInterceptor {
 
     HashMap<String, Object> objects = new HashMap<>();
 
-    if (entity instanceof IAuditlog) {
+    if (entity instanceof IAuditLog) {
       objects.put(ENTITY, entity);
       objects.put("PRINCIPAL", new Long(1));
 
       deletes.add(objects);
-      deletes.addAll(this.relations(state, types, propertyNames, ((IAuditlog) entity).getId(), true));
+      deletes.addAll(this.relations(state, types, propertyNames, ((IAuditLog) entity).getId(), true));
     }
   }
 
@@ -228,19 +228,19 @@ public class AuditLogInterceptor extends EmptyInterceptor {
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState,
     String[] propertyNames, Type[] types) throws CallbackException {
     HashMap<String, Object> objects = new HashMap<>();
-    if (entity instanceof IAuditlog) {
-      if (!((IAuditlog) entity).isActive()) {
+    if (entity instanceof IAuditLog) {
+      if (!((IAuditLog) entity).isActive()) {
         objects.put(ENTITY, entity);
         objects.put("PRINCIPAL", new Long(1));
 
         deletes.add(objects);
-        deletes.addAll(this.relations(currentState, types, propertyNames, ((IAuditlog) entity).getId(), true));
+        deletes.addAll(this.relations(currentState, types, propertyNames, ((IAuditLog) entity).getId(), true));
       } else {
         objects.put(ENTITY, entity);
         objects.put(PRINCIPAL, new Long(1));
         updates.add(objects);
 
-        updates.addAll(this.relations(currentState, types, propertyNames, ((IAuditlog) entity).getId(), true));
+        updates.addAll(this.relations(currentState, types, propertyNames, ((IAuditLog) entity).getId(), true));
       }
 
     }
@@ -255,13 +255,13 @@ public class AuditLogInterceptor extends EmptyInterceptor {
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types)
     throws CallbackException {
     HashMap<String, Object> objects = new HashMap<>();
-    if (entity instanceof IAuditlog) {
+    if (entity instanceof IAuditLog) {
       objects.put(ENTITY, entity);
       objects.put(PRINCIPAL, new Long(1));
       inserts.add(objects);
 
 
-      inserts.addAll(this.relations(state, types, propertyNames, ((IAuditlog) entity).getId(), true));
+      inserts.addAll(this.relations(state, types, propertyNames, ((IAuditLog) entity).getId(), true));
     }
     return false;
 
@@ -318,12 +318,12 @@ public class AuditLogInterceptor extends EmptyInterceptor {
       if (type instanceof OrderedSetType || type instanceof SetType) {
 
         if (relationsName.contains(type.getName())) {
-          Set<IAuditlog> listRelation = new HashSet<>();
+          Set<IAuditLog> listRelation = new HashSet<>();
           Set<Object> set = (Set<Object>) state[i];
           if (set != null) {
             for (Object iAuditLog : set) {
-              if (iAuditLog instanceof IAuditlog) {
-                IAuditlog audit = (IAuditlog) iAuditLog;
+              if (iAuditLog instanceof IAuditLog) {
+                IAuditLog audit = (IAuditLog) iAuditLog;
                 if (audit.isActive()) {
                   try {
                     String name = audit.getClass().getName();
@@ -332,11 +332,11 @@ public class AuditLogInterceptor extends EmptyInterceptor {
                     Object obj = dao.find(className, (Serializable) audit.getId());
 
 
-                    listRelation.add((IAuditlog) obj);
-                    Set<HashMap<String, Object>> loadList = this.loadList((IAuditlog) obj);
+                    listRelation.add((IAuditLog) obj);
+                    Set<HashMap<String, Object>> loadList = this.loadList((IAuditLog) obj);
                     for (HashMap<String, Object> hashMap : loadList) {
-                      HashSet<IAuditlog> relationAudit = (HashSet<IAuditlog>) hashMap.get(ENTITY);
-                      for (IAuditlog iAuditLog2 : relationAudit) {
+                      HashSet<IAuditLog> relationAudit = (HashSet<IAuditLog>) hashMap.get(ENTITY);
+                      for (IAuditLog iAuditLog2 : relationAudit) {
                         Set<HashMap<String, Object>> loadListRelations = this.loadList(iAuditLog2);
 
                         relations.addAll(loadListRelations);

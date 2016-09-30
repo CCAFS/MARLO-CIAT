@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.cgiar.ccafs.marlo.data.IAuditlog;
+import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import com.google.gson.annotations.Expose;
 
@@ -32,7 +32,7 @@ import com.google.gson.annotations.Expose;
  * Modified by @author nmatovu last on Sep 29, 2016
  *
  */
-public class User implements IAuditlog {
+public class User implements IAuditLog {
 	// TODO: Extend Auditlog
 	private static final long serialVersionUID = -5959737574447795130L;
 	@Expose

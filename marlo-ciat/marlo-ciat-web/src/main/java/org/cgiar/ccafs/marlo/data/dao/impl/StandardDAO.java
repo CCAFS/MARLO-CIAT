@@ -25,7 +25,7 @@ import org.apache.struts2.ServletActionContext;
 import org.cgiar.ccafs.marlo.config.HibernateListener;
 import org.cgiar.ccafs.marlo.data.AuditLogInterceptor;
 import org.cgiar.ccafs.marlo.data.CloseSession;
-import org.cgiar.ccafs.marlo.data.IAuditlog;
+import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -278,7 +278,7 @@ public class StandardDAO {
   }
 
 
-  public void logIt(String action, IAuditlog entity, String json, long userId, String transactionId, Long principal,
+  public void logIt(String action, IAuditLog entity, String json, long userId, String transactionId, Long principal,
     String relationName, String actionName) {
 
 

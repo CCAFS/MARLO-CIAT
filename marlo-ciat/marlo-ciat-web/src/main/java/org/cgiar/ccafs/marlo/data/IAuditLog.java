@@ -26,7 +26,7 @@ import org.cgiar.ccafs.marlo.data.model.User;
  * Modified by @author nmatovu last on Sep 29, 2016
  *
  */
-public interface IAuditlog extends Serializable{
+public interface IAuditLog extends Serializable{
 	 /**
 	   * This method gets the Entity id that is the primary key
 	   * 

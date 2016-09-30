@@ -20,7 +20,7 @@ package org.cgiar.ccafs.marlo.data.model;
 
 import java.util.Date;
 
-import org.cgiar.ccafs.marlo.data.IAuditlog;
+import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import com.google.gson.annotations.Expose;
 
@@ -28,7 +28,7 @@ import com.google.gson.annotations.Expose;
  * Modified by @author nmatovu last on Sep 29, 2016
  *
  */
-public class CrpUser implements IAuditlog {
+public class CrpUser implements IAuditLog {
 
 	private static final long serialVersionUID = 3078405268131406743L;
 
