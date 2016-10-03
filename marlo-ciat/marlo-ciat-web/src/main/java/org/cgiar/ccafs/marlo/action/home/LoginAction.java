@@ -66,9 +66,12 @@ public class LoginAction extends BaseAction {
   private ICenterUserService crpUserManager;
 
   @Inject
-  public LoginAction(APConfig config, UserService userManager) {
+  public LoginAction(APConfig config, UserService userManager, ICenterService crpManager,
+    ICenterUserService crpUserManager) {
     super(config);
     this.userManager = userManager;
+    this.crpManager = crpManager;
+    this.crpUserManager = crpUserManager;
   }
 
   @Override
@@ -77,8 +80,7 @@ public class LoginAction extends BaseAction {
   }
 
   public String getCrp() {
-    // return crp;
-    return APConstants.CRP_CENTER;
+    return crp;
   }
 
   private void getLoginMessages() {
@@ -142,10 +144,14 @@ public class LoginAction extends BaseAction {
         // Obtain the crp selected
         // Obtain the only CRP Center CIAT
         // TODO: Modify CRP to represent Center
-        Crp loggedCrp = crpManager.findCrpByAcronym(this.crp);
+        // Crp loggedCrp = crpManager.findCrpByAcronym(this.crp);
+        Crp loggedCrp = crpManager.findCrpByAcronym(APConstants.CRP_CENTER);
 
         // Validate if the user belongs to the selected crp
         if (loggedCrp != null) {
+          // TODO: Assumed there is only one CRP/Center
+          // TODO: Should the logged in user be subjected to another check for the CIAT crp?
+          // TODO: Assume the login is enough
           if (crpUserManager.existCrpUser(loggedUser.getId(), loggedCrp.getId())) {
             loggedUser.setLastLogin(new Date());
             userManager.saveLastLogin(loggedUser);
@@ -159,6 +165,7 @@ public class LoginAction extends BaseAction {
             }
             this.getSession().put("color", this.randomColor());
           } else {
+
             this.addFieldError("loginMessage", this.getText("login.error.invalidUserCrp"));
             this.setCrpSession(loggedCrp.getAcronym());
             this.getSession().clear();
@@ -167,15 +174,17 @@ public class LoginAction extends BaseAction {
             user.setPassword(null);
             return BaseAction.INPUT;
           }
-        } else {
-          this.addFieldError("loginMessage", this.getText("login.error.selectCrp"));
-          user.setPassword(null);
-          this.getSession().clear();
-          SecurityUtils.getSubject().logout();
-          user.setPassword(null);
-          return BaseAction.INPUT;
         }
-
+        /*
+         * else {
+         * this.addFieldError("loginMessage", this.getText("login.error.selectCrp"));
+         * user.setPassword(null);
+         * this.getSession().clear();
+         * SecurityUtils.getSubject().logout();
+         * user.setPassword(null);
+         * return BaseAction.INPUT;
+         * }
+         */
         LOG.info("User " + user.getEmail() + " logged in successfully.");
         /*
          * Save the user url with trying to enter the system to redirect after

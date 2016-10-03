@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- Add addition packages and configuration here. -->
+	<package name="superadmin" namespace="/superadmin" extends="marlo-default">
+    
+    <action name="marloBoard" class="org.cgiar.ccafs.marlo.action.superadmin.BoardAction">
+      <interceptor-ref name="superAdminStack" />   
+      <result name="input">/WEB-INF/views/superadmin/marloBoard.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">marloBoard</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    
+    <action name="marloSLOs" class="org.cgiar.ccafs.marlo.action.superadmin.SLOsAction">
+      <interceptor-ref name="superAdminStack" />   
+      <result name="input">/WEB-INF/views/superadmin/marloSLOs.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">marloSLOs</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    <action name="marloCrossCutting" class="org.cgiar.ccafs.marlo.action.superadmin.SLOsAction">
+      <interceptor-ref name="superAdminStack" />   
+      <result name="input">/WEB-INF/views/superadmin/marloCrossCutting.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">marloCrossCutting</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    <action name="marloIDOs" class="org.cgiar.ccafs.marlo.action.superadmin.IDOsAction">
+      <interceptor-ref name="superAdminStack" />   
+      <result name="input">/WEB-INF/views/superadmin/marloIDOs.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">marloIDOs</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    <action name="marloSiteIntegration" class="org.cgiar.ccafs.marlo.action.superadmin.SiteIntegrationAction">
+      <interceptor-ref name="superAdminStack" />   
+      <result name="input">/WEB-INF/views/superadmin/marloSiteIntegration.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">marloSiteIntegration</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    <action name="notifications" class="org.cgiar.ccafs.marlo.action.BaseAction">
+      <interceptor-ref name="superAdminStack" />   
+      <result name="input">/WEB-INF/views/superadmin/marloNotifications.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">notifications</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+
+  </package>
+</struts>

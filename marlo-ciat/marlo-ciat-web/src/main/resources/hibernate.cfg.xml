@@ -39,6 +39,67 @@
 		<mapping resource="xmls/CrpParameters.hbm.xml" />
 		<mapping resource="xmls/Roles.hbm.xml" />
 		<mapping resource="xmls/UserRoles.hbm.xml" />
+		
+		
+		
+		     
+    <mapping resource="xmls/SrfIdos.hbm.xml" />
+    <mapping resource="xmls/CrpsSitesIntegration.hbm.xml" />
+    <mapping resource="xmls/CrpProgramLeaders.hbm.xml" />
+    <mapping resource="xmls/CrpSitesLeaders.hbm.xml" />
+    <mapping resource="xmls/SrfSloIndicatorTargets.hbm.xml" />
+    <mapping resource="xmls/CrpMilestones.hbm.xml" />
+    <mapping resource="xmls/CrpAssumptions.hbm.xml" />
+    <mapping resource="xmls/CrpPrograms.hbm.xml" />
+    <mapping resource="xmls/SrfSubIdos.hbm.xml" />
+    <mapping resource="xmls/CrpOutcomeSubIdos.hbm.xml" />
+    <mapping resource="xmls/SrfTargetUnits.hbm.xml" />
+    <mapping resource="xmls/SrfSloIdos.hbm.xml" />
+    <mapping resource="xmls/LocElementTypes.hbm.xml" />
+    <mapping resource="xmls/CrpClusterOfActivities.hbm.xml" />
+    <mapping resource="xmls/SrfCrossCuttingIssues.hbm.xml" />
+    <mapping resource="xmls/CrpProgramOutcomes.hbm.xml" />
+    <mapping resource="xmls/SrfSlos.hbm.xml" />
+    <mapping resource="xmls/CrpSubIdosContributions.hbm.xml" />
+    <mapping resource="xmls/LocElements.hbm.xml" />
+    <mapping resource="xmls/LocGeopositions.hbm.xml" />
+    <mapping resource="xmls/SrfSloIndicators.hbm.xml" />
+    <mapping resource="xmls/Institutions.hbm.xml" />
+    <mapping resource="xmls/InstitutionTypes.hbm.xml" />
+    <mapping resource="xmls/CrpPpaPartners.hbm.xml" />
+    <mapping resource="xmls/CrpProgramCountries.hbm.xml" />
+    <mapping resource="xmls/CrpClusterActivityLeaders.hbm.xml" />
+    <mapping resource="xmls/SectionStatuses.hbm.xml" />
+    <mapping resource="xmls/Submissions.hbm.xml" />
+    <mapping resource="xmls/Projects.hbm.xml" />
+    <mapping resource="xmls/ProjectFocuses.hbm.xml" />
+    <mapping resource="xmls/LiaisonInstitutions.hbm.xml" />
+    <mapping resource="xmls/LiaisonUsers.hbm.xml" />
+    <mapping resource="xmls/ProjectLocations.hbm.xml" />
+    <mapping resource="xmls/ProjectPartners.hbm.xml" />
+    <mapping resource="xmls/ProjectPartnerContributions.hbm.xml" />
+    <mapping resource="xmls/ProjectPartnerPersons.hbm.xml" />
+    <mapping resource="xmls/ProjectPartnerOverall.hbm.xml" />
+    <mapping resource="xmls/ProjectComponentLessons.hbm.xml" />  
+    <mapping resource="xmls/Files.hbm.xml" />  
+    <mapping resource="xmls/CrpClusterKeyOutputs.hbm.xml" />  
+    <mapping resource="xmls/ProjectClusterActivities.hbm.xml"/>
+    <mapping resource="xmls/ProjectOutcomes.hbm.xml"/>
+    <mapping resource="xmls/ProjectMilestones.hbm.xml"/>
+    <mapping resource="xmls/ProjectCommunications.hbm.xml"/>
+    <mapping resource="xmls/ProjectScopes.hbm.xml"/>
+    <mapping resource="xmls/Deliverables.hbm.xml"/>
+    <mapping resource="xmls/DeliverableTypes.hbm.xml"/>
+    <mapping resource="xmls/ProjectNextusers.hbm.xml"/>
+    <mapping resource="xmls/DeliverablePartnerships.hbm.xml"/>
+    <mapping resource="xmls/Activities.hbm.xml"/>
+    <mapping resource="xmls/ProjectCrpContributions.hbm.xml"/>
+    <mapping resource="xmls/ProjectBudgets.hbm.xml"/>
+    <mapping resource="xmls/BudgetTypes.hbm.xml"/>
+    <mapping resource="xmls/DeliverableActivities.hbm.xml"/>
+    <mapping resource="xmls/ProjectsBilateralCofinancing.hbm.xml"/>
+    <mapping resource="xmls/ProjectBudgetsCluserActvities.hbm.xml"/>
+    <mapping resource="xmls/CrpClusterKeyOutputsOutcome.hbm.xml"/>
 	</session-factory>
 
 </hibernate-configuration>

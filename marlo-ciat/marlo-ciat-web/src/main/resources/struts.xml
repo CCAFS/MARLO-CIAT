@@ -40,21 +40,21 @@
 				class="org.cgiar.ccafs.marlo.interceptor.TrimInterceptor" />
 
 			<!-- validating if the crp entered in the action or url is valid. -->
-	<!-- 		<interceptor name="validCrp"
-				class="org.cgiar.ccafs.marlo.interceptor.ValidCrpActionInterceptor" />
- -->
+	 		<interceptor name="validCrp"
+				class="org.cgiar.ccafs.marlo.interceptor.ValidCrpActionInterceptor" /> 
+ 
 			<!-- validating if the url is valid in the open session -->
-			<!-- <interceptor name="validSessionCrp"
-				class="org.cgiar.ccafs.marlo.interceptor.ValidSessionCrpInterceptor" /> -->
+		<interceptor name="validSessionCrp"
+				class="org.cgiar.ccafs.marlo.interceptor.ValidSessionCrpInterceptor" /> 
 
 			<!-- Crp Admin interceptors -->
 			<!-- <interceptor name="canEditCrpAdmin"
 				class="org.cgiar.ccafs.marlo.interceptor.admin.EditCrpAdminInterceptor" /> -->
 
 			<!-- ImpactPathway interceptors -->
-			<!-- <interceptor name="canEditImpactPathway"
-				class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditImpactPathwayInterceptor" />
- -->
+			<interceptor name="canEditImpactPathway"
+				class="org.cgiar.ccafs.marlo.interceptor.EditImpactPathwayInterceptor" />
+ 
 			<!-- Project interceptors -->
 	<!-- 		<interceptor name="editProjectOutcome"
 				class="org.cgiar.ccafs.marlo.interceptor.project.EditProjectOutcomeInterceptor" />
@@ -69,8 +69,8 @@
 				class="org.cgiar.ccafs.marlo.interceptor.project.EditProjectInterceptor" />
  -->
 			<!-- SuperAdmin interceptors -->
-			<interceptor name="superAdminValidation"
-				class="org.cgiar.ccafs.marlo.interceptor.superadmin.SuperAdminInterceptor" />
+			<!-- <interceptor name="superAdminValidation"
+				class="org.cgiar.ccafs.marlo.interceptor.SuperAdminInterceptor" /> -->
 
 			<!-- Security (Json) interceptors -->
 			<!-- <interceptor name="SecurityControl"
@@ -81,34 +81,34 @@
 				<interceptor-ref name="i18nFile" />
 				<!-- <interceptor-ref name="validCrp" /> -->
 				<interceptor-ref name="requireUser" />
-				<!-- <interceptor-ref name="validSessionCrp" /> -->
+				<!-- <interceptor-ref name="validSessionCrp" />  -->
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
-<!-- 
+
 			<interceptor-stack name="crpAdminStack">
 				<interceptor-ref name="i18nFile" />
-				<interceptor-ref name="validCrp" />
+				<!-- <interceptor-ref name="validCrp" /> -->
 				<interceptor-ref name="requireUser" />
-				<interceptor-ref name="validSessionCrp" />
-				<interceptor-ref name="canEditCrpAdmin" />
+			<!-- 	<interceptor-ref name="validSessionCrp" /> -->
+				<!-- <interceptor-ref name="canEditCrpAdmin" /> -->
 				<interceptor-ref name="keepRedirectMessages" />
-				<interceptor-ref name="accessibleStage" />
+				<!-- <interceptor-ref name="accessibleStage" /> -->
 				<interceptor-ref name="trimInputs" />
 				<interceptor-ref name="defaultStack" />
-			</interceptor-stack> -->
+			</interceptor-stack>
 
-	<!-- 		<interceptor-stack name="impactPathwayStack">
+   		<interceptor-stack name="impactPathwayStack">
 				<interceptor-ref name="i18nFile" />
 				<interceptor-ref name="validCrp" />
 				<interceptor-ref name="requireUser" />
 				<interceptor-ref name="validSessionCrp" />
 				<interceptor-ref name="canEditImpactPathway" />
 				<interceptor-ref name="keepRedirectMessages" />
-				<interceptor-ref name="accessibleStage" />
+				<!-- <interceptor-ref name="accessibleStage" /> -->
 				<interceptor-ref name="trimInputs" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
- -->
+
 	<!-- 		<interceptor-stack name="projectsStack">
 				<interceptor-ref name="i18nFile" />
 				<interceptor-ref name="validCrp" />
@@ -153,7 +153,7 @@
 				<interceptor-ref name="trimInputs" />
 			</interceptor-stack>
  -->
-			<!-- <interceptor-stack name="superAdminStack">
+		<!-- 	<interceptor-stack name="superAdminStack">
 				<interceptor-ref name="i18nFile" />
 				<interceptor-ref name="requireUser" />
 				<interceptor-ref name="superAdminValidation" />
@@ -161,8 +161,8 @@
 				<interceptor-ref name="accessibleStage" />
 				<interceptor-ref name="trimInputs" />
 				<interceptor-ref name="defaultStack" />
-			</interceptor-stack>
- -->
+			</interceptor-stack> -->
+ 
 		</interceptors>
 
 		<default-action-ref name="login" />
@@ -204,10 +204,10 @@
 
 	<!-- <include file="struts-json.xml" /> -->
 	<include file="struts-home.xml" />
-	<!-- <include file="struts-admin.xml" /> -->
-<!-- 	<include file="struts-superadmin.xml" /> -->
-	<!-- <include file="struts-impactPathway.xml" />
-	<include file="struts-projects.xml" />
+	<include file="struts-admin.xml" />
+<!-- <include file="struts-superadmin.xml" /> -->
+	<include file="struts-impactPathway.xml" />
+<!--	<include file="struts-projects.xml" />
 	<include file="struts-bilaterals.xml" /> -->
 
 </struts>

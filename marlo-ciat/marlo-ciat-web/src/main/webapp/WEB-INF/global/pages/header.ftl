@@ -48,7 +48,7 @@
     [#if !(avoidHeader!false)]
       <header class="clearfix">
         [#-- MARLO Admin Menu --]
-        [#include "/WEB-INF/global/pages/superadmin-menu.ftl" /]
+        [#-- include "/WEB-INF/global/pages/superadmin-menu.ftl" /--]
         
         <div class="container">
           <div id="marlo-logo" class="animated fadeIn">
@@ -61,7 +61,7 @@
           [#if namespace?contains('superadmin')]
             <img id="crp-image" src="${baseUrl}/images/global/cgiar.png" alt="" />
           [#else]
-            [#if crpSession??]<img id="crp-image" src="${baseUrl}/images/global/centers_ciat.jpg" alt="CIAT" />[/#if]
+            [#if crpSession??]<img id="crp-image" src="${baseUrl}/images/global/crps/logo_ciat.png" alt="CIAT" />[/#if]
           [/#if]
           
         </div>
