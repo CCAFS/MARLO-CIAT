@@ -15,150 +15,141 @@
 
 package org.cgiar.ccafs.marlo.data.service.impl;
 
+import org.cgiar.ccafs.marlo.data.dao.impl.UserDAO;
+import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.IUserService;
+import org.cgiar.ccafs.marlo.utils.MD5Convert;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.Inject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.cgiar.ccafs.marlo.ciat.utils.MD5Convert;
-import org.cgiar.ccafs.marlo.data.dao.impl.UserDAO;
-import org.cgiar.ccafs.marlo.data.model.User;
-import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
- * 
  *         Modified by @author nmatovu last on Sep 29, 2016
  */
 public class UserService implements IUserService {
 
-	// Logger
-	private static final Logger LOG = LoggerFactory
-			.getLogger(UserService.class);
+  // Logger
+  private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-	// DAO
-	private UserDAO userDAO;
+  // DAO
+  private UserDAO userDAO;
 
-	@Inject
-	public UserService(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
+  @Inject
+  public UserService(UserDAO userDAO) {
+    this.userDAO = userDAO;
+  }
 
-	@Override
-	public List<String> getPermission(int userId, String crpId) {
-		List<String> permissions = new ArrayList<String>();
+  @Override
+  public List<String> getPermission(int userId, String crpId) {
+    List<String> permissions = new ArrayList<String>();
 
-		List<Map<String, Object>> view = userDAO.getPermission(userId, crpId);
-		if (view != null) {
-			for (Map<String, Object> map : view) {
-				permissions.add(map.get("permission").toString());
-			}
-		}
+    List<Map<String, Object>> view = userDAO.getPermission(userId, crpId);
+    if (view != null) {
+      for (Map<String, Object> map : view) {
+        permissions.add(map.get("permission").toString());
+      }
+    }
 
-		return permissions;
-	}
+    return permissions;
+  }
 
-	@Override
-	public User getUser(Long userId) {
-		User user = userDAO.getUser(userId);
-		if (user != null) {
-			return user;
-		}
-		LOG.warn("Information related to the user with id {} wasn't found.",
-				userId);
-		return null;
-	}
+  @Override
+  public User getUser(Long userId) {
+    User user = userDAO.getUser(userId);
+    if (user != null) {
+      return user;
+    }
+    LOG.warn("Information related to the user with id {} wasn't found.", userId);
+    return null;
+  }
 
-	@Override
-	public User getUserByEmail(String email) {
-		User user = userDAO.getUser(email);
-		if (user != null) {
-			return user;
-		}
-		LOG.warn("Information related to the user {} wasn't found.", email);
-		return null;
-	}
+  @Override
+  public User getUserByEmail(String email) {
+    User user = userDAO.getUser(email);
+    if (user != null) {
+      return user;
+    }
+    LOG.warn("Information related to the user {} wasn't found.", email);
+    return null;
+  }
 
-	@Override
-	public User getUserByUsername(String username) {
-		String email = userDAO.getEmailByUsername(username);
-		return this.getUserByEmail(email);
-	}
+  @Override
+  public User getUserByUsername(String username) {
+    String email = userDAO.getEmailByUsername(username);
+    return this.getUserByEmail(email);
+  }
 
-	@Override
-	public User login(String email, String password) {
-		User userFound = null;
+  @Override
+  public User login(String email, String password) {
+    User userFound = null;
 
-		if (email != null && password != null) {
-			Subject currentUser = SecurityUtils.getSubject();
-			if (!currentUser.isAuthenticated()) {
-				UsernamePasswordToken token = new UsernamePasswordToken(email,
-						password);
-				LOG.info("Trying to log in the user {} against the database.",
-						email);
-				try {
+    if (email != null && password != null) {
+      Subject currentUser = SecurityUtils.getSubject();
+      if (!currentUser.isAuthenticated()) {
+        UsernamePasswordToken token = new UsernamePasswordToken(email, password);
+        LOG.info("Trying to log in the user {} against the database.", email);
+        try {
 
-					currentUser.login(token);
+          currentUser.login(token);
 
-					// If user is logging-in with their email account.
-					if (email.contains("@")) {
-						userFound = this.getUserByEmail(email);
-					} else {
-						// if user is loggin with his username, we must attach
-						// the cgiar.org.
-						userFound = this.getUserByUsername(email);
-					}
-				} catch (UnknownAccountException uae) {
-					LOG.warn("There is no user with email of "
-							+ token.getPrincipal());
-				} catch (IncorrectCredentialsException ice) {
-					LOG.warn("Password for account " + token.getPrincipal()
-							+ " was incorrect!");
-				} catch (LockedAccountException lae) {
-					LOG.warn("The account for username " + token.getPrincipal()
-							+ " is locked.  "
-							+ "Please contact your administrator to unlock it.");
-				}
-			} else {
-				Long userID = (Long) currentUser.getPrincipals()
-						.getPrimaryPrincipal();
-				userFound = this.getUser(userID);
-				LOG.info("Already logged in");
-			}
+          // If user is logging-in with their email account.
+          if (email.contains("@")) {
+            userFound = this.getUserByEmail(email);
+          } else {
+            // if user is loggin with his username, we must attach
+            // the cgiar.org.
+            userFound = this.getUserByUsername(email);
+          }
+        } catch (UnknownAccountException uae) {
+          LOG.warn("There is no user with email of " + token.getPrincipal());
+        } catch (IncorrectCredentialsException ice) {
+          LOG.warn("Password for account " + token.getPrincipal() + " was incorrect!");
+        } catch (LockedAccountException lae) {
+          LOG.warn("The account for username " + token.getPrincipal() + " is locked.  "
+            + "Please contact your administrator to unlock it.");
+        }
+      } else {
+        Long userID = (Long) currentUser.getPrincipals().getPrimaryPrincipal();
+        userFound = this.getUser(userID);
+        LOG.info("Already logged in");
+      }
 
-		}
-		return userFound;
-	}
+    }
+    return userFound;
+  }
 
-	@Override
-	public boolean saveLastLogin(User user) {
-		user.setLastLogin(new Date());
-		return userDAO.saveLastLogin(user);
-	}
+  @Override
+  public boolean saveLastLogin(User user) {
+    user.setLastLogin(new Date());
+    return userDAO.saveLastLogin(user);
+  }
 
-	@Override
-	public Long saveUser(User user, User createdBy) {
-		if (!user.isCgiarUser()) {
-			user.setPassword(MD5Convert.stringToMD5(user.getPassword()));
-		}
-		user.setCreatedBy(createdBy);
-		return userDAO.saveUser(user);
+  @Override
+  public Long saveUser(User user, User createdBy) {
+    if (!user.isCgiarUser()) {
+      user.setPassword(MD5Convert.stringToMD5(user.getPassword()));
+    }
+    user.setCreatedBy(createdBy);
+    return userDAO.saveUser(user);
 
-	}
+  }
 
-	@Override
-	public List<User> searchUser(String searchValue) {
-		return userDAO.searchUser(searchValue);
-	}
+  @Override
+  public List<User> searchUser(String searchValue) {
+    return userDAO.searchUser(searchValue);
+  }
 
 }

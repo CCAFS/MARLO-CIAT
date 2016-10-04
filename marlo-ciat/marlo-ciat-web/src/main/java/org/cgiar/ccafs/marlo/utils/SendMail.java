@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +14,8 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.utils;
 
+import org.cgiar.ccafs.marlo.config.APConfig;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
@@ -23,7 +25,6 @@ import javax.activation.DataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -33,8 +34,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 import com.google.inject.Inject;
-
-import org.cgiar.ccafs.marlo.config.APConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,8 +84,8 @@ public class SendMail {
     Session session = Session.getInstance(properties, new Authenticator() {
 
       @Override
-      protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(config.getEmailUsername(), config.getEmailPassword());
+      protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+        return new javax.mail.PasswordAuthentication(config.getEmailUsername(), config.getEmailPassword());
       }
     });
 
