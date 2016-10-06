@@ -13,6 +13,7 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 package org.cgiar.ccafs.marlo.data.model;
+
 // Generated May 26, 2016 9:42:28 AM by Hibernate Tools 4.3.1.Final
 
 
@@ -42,8 +43,8 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
 
   @Expose
   private Crp crp;
-
-
+  @Expose
+  private ResearchArea researchArea;
   @Expose
   private String name;
 
@@ -104,16 +105,17 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
   public CrpProgram() {
   }
 
-  public CrpProgram(Crp crps, String name, String acronym, int programType) {
+  public CrpProgram(Crp crps, String name, String acronym, int programType, ResearchArea researchArea) {
     this.crp = crps;
     this.name = name;
     this.acronym = acronym;
     this.programType = programType;
+    this.researchArea = researchArea;
   }
 
   public CrpProgram(Crp crps, String name, String acronym, int programType,
     Set<CrpClusterOfActivity> crpClusterOfActivities, Set<CrpProgramLeader> crpProgramLeaders,
-    Set<CrpProgramOutcome> crpProgramOutcomes) {
+    Set<CrpProgramOutcome> crpProgramOutcomes, ResearchArea researchArea) {
     this.crp = crps;
     this.name = name;
     this.acronym = acronym;
@@ -121,6 +123,7 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
     this.crpClusterOfActivities = crpClusterOfActivities;
     this.crpProgramLeaders = crpProgramLeaders;
     this.crpProgramOutcomes = crpProgramOutcomes;
+    this.researchArea = researchArea;
   }
 
   @Override
@@ -246,6 +249,13 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
     return projectFocuses;
   }
 
+  /**
+   * @return the researchArea
+   */
+  public ResearchArea getResearchArea() {
+    return researchArea;
+  }
+
   public Set<SectionStatus> getSectionStatuses() {
     return sectionStatuses;
   }
@@ -267,6 +277,7 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
     this.acronym = acronym;
   }
 
+
   public void setAction(String action) {
     this.action = action;
   }
@@ -275,7 +286,6 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -297,10 +307,10 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
     this.crp = crp;
   }
 
+
   public void setCrpClusterOfActivities(Set<CrpClusterOfActivity> crpClusterOfActivities) {
     this.crpClusterOfActivities = crpClusterOfActivities;
   }
-
 
   public void setCrpProgramCountries(Set<CrpProgramCountry> crpProgramCountries) {
     this.crpProgramCountries = crpProgramCountries;
@@ -350,13 +360,22 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
     this.projectFocuses = projectFocuses;
   }
 
+  /**
+   * @param researchArea the researchArea to set
+   */
+  public void setResearchArea(ResearchArea researchArea) {
+    this.researchArea = researchArea;
+  }
+
   public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
     this.sectionStatuses = sectionStatuses;
   }
 
+
   public void setSelectedCountries(List<String> selectedCountries) {
     this.selectedCountries = selectedCountries;
   }
+
 
   public void setSubmissions(Set<Submission> submissions) {
     this.submissions = submissions;
@@ -369,4 +388,3 @@ public class CrpProgram implements java.io.Serializable, IAuditLog {
 
 
 }
-

@@ -13,6 +13,10 @@
 			fetch="select">
 			<column name="crp_id" not-null="true" />
 		</many-to-one>
+		<many-to-one name="researchArea" class="org.cgiar.ccafs.marlo.data.model.ResearchArea"
+      fetch="select">
+      <column name="research_area_id" not-null="true" />
+    </many-to-one>
 		<property name="name" type="string">
 			<column name="name" length="65535" not-null="true" />
 		</property>
