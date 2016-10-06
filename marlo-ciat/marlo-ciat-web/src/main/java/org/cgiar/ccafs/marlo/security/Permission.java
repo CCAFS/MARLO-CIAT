@@ -35,6 +35,22 @@ public class Permission {
   public static final String IMPACT_PATHWAY_BASE_PERMISSION = "impactPathway:{0}";
   public static final String IMPACT_PATHWAY_EDIT_PRIVILEGES = "impactPathway:{0}:*";
   public static final String IMPACT_PATHWAY_VISIBLE_PRIVILEGES = "impactPathway:canAcess";
+
+  /** Has full access and control of research area and programs. */
+  public static final String RESEARCH_AREA_SUPERADMIN = "research:*";
+  /** Has full access and control of Research Area */
+  public static final String RESEARCH_AREA_ADMIN = "research:area:*";
+  /** Can only Access or View Research Area */
+  public static final String RESEARCH_AREA_ACCESS = "research:area:canAccess";
+  /** Can Edit Research Area */
+  public static final String RESEARCH_AREA_EDIT = "research:area:canEdit";
+  /** Has full access and control of research program */
+  public static final String RESEARCH_PROGRAM_ADMIN = "research:program:*";
+  /** Can view and edit the research program */
+  public static final String RESEARCH_PROGRAM_EDIT = "research:program:canEdit";
+  /** Can only view research area program */
+  public static final String RESEARCH_PROGRAM_ACCESS = "research:program:canAccess";
+
   public static final String PROJECT_DESCRIPTION_BASE_PERMISSION = "project:{0}:description";
   public static final String PROJECT_LIST_BASE_PERMISSION = "project:projectsList";
   public static final String PROJECT_CONTRIBRUTIONCRP_BASE_PERMISSION = "project:{0}:contributionCrp";
