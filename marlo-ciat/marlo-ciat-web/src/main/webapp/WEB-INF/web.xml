@@ -17,7 +17,7 @@
   </listener>
   
     <!--  Flyway listener  -->
-  <listener>
+<listener>
     <listener-class>org.cgiar.ccafs.marlo.config.FlywayContextListener</listener-class>
   </listener>
     

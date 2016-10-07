@@ -35,7 +35,7 @@ public final class APConstants {
   public static final String SESSION_USER = "current_user";
   public static final String SESSION_CRP = "current_crp";
   public static final String USER_TOKEN = "user_token";
-
+  public static final Object SESSION_RESEARCH_AREA = "current_research_area";
   // Crp Parameters
   public static final String CRP_PARAMETERS = "crp_parameters";
   public static final String CRP_LANGUAGE = "crp_language";

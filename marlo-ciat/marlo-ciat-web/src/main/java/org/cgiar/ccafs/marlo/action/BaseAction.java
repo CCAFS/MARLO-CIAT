@@ -57,6 +57,7 @@ import org.slf4j.LoggerFactory;
  * @author Héctor Fabio Tobón R.
  * @author Christian Garcia
  */
+// @SuppressWarnings("unused")
 public class BaseAction extends ActionSupport implements Preparable, SessionAware, ServletRequestAware {
 
   public static final String CANCEL = "cancel";
@@ -151,20 +152,16 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean canAcessCrpAdmin() {
     String permission = this.generatePermission(Permission.CRP_ADMIN_VISIBLE_PRIVILEGES, this.getCrpSession());
-    LOG.debug("===============================Admin=============================================");
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
-    LOG.debug("================================Admin============================================");
     return securityContext.hasPermission(permission);
   }
 
 
   public boolean canAcessImpactPathway() {
     String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCrpSession());
-    LOG.debug("==============================Impact==============================================");
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
-    LOG.debug("================================Impact============================================");
     return securityContext.hasPermission(permission);
   }
 
