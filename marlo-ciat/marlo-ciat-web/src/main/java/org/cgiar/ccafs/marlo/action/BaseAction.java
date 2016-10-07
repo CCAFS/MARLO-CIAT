@@ -18,8 +18,10 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
 import org.cgiar.ccafs.marlo.data.model.Crp;
+import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -33,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -79,7 +82,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   protected APConfig config;
   private Long crpID;
-
+  // @Inject
+  // private ICrpProgramService crpProgramManager;
+  // @Inject
+  // private ICrpProgramLeaderService crpProgramLeaderManager;
   // Variables
   private String crpSession;
   private Crp currentCrp;
@@ -113,6 +119,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   protected boolean submit;
 
   @Inject
+  private ISectionStatusService sectionStatusManager;
+
+  @Inject
   public BaseAction(APConfig config) {
     this.config = config;
     this.saveable = true;
@@ -136,7 +145,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     this.addActionMessage("--warn--" + message);
   }
 
-
   public boolean canAccessSuperAdmin() {
     return this.securityContext.hasAllPermissions(Permission.FULL_PRIVILEGES);
   }
@@ -146,18 +154,20 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     LOG.debug("===============================Admin=============================================");
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
-    LOG.debug("============================================================================");
+    LOG.debug("================================Admin============================================");
     return securityContext.hasPermission(permission);
   }
+
 
   public boolean canAcessImpactPathway() {
     String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCrpSession());
     LOG.debug("==============================Impact==============================================");
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
-    LOG.debug("============================================================================");
+    LOG.debug("================================Impact============================================");
     return securityContext.hasPermission(permission);
   }
+
 
   /* Override this method depending of the cancel action. */
   public String cancel() {
@@ -233,7 +243,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       try {
         Crp crp =
           (Crp) session.get(APConstants.SESSION_CRP) != null ? (Crp) session.get(APConstants.SESSION_CRP) : null;
-          this.crpID = crp.getId();
+        this.crpID = crp.getId();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user crp in the session.");
       }
@@ -256,8 +266,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       try {
         Crp crp =
           (Crp) session.get(APConstants.SESSION_CRP) != null ? (Crp) session.get(APConstants.SESSION_CRP) : null;
-          // Assumed there is only one CRP in the system, the default one.
-          this.crpSession = crp.getAcronym();
+        // Assumed there is only one CRP in the system, the default one.
+        this.crpSession = crp.getAcronym();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user's crp in the session.");
       }
@@ -275,7 +285,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       try {
         Crp crp =
           (Crp) session.get(APConstants.SESSION_CRP) != null ? (Crp) session.get(APConstants.SESSION_CRP) : null;
-          this.currentCrp = crp;
+        this.currentCrp = crp;
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user crp in the session.");
       }
@@ -302,6 +312,16 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       }
     }
     return u;
+  }
+
+  public boolean getImpactSectionStatus(String section, long crpProgramID) {
+    SectionStatus sectionStatus = sectionStatusManager.getSectionStatusByCrpProgam(crpProgramID, section);
+    if (sectionStatus != null) {
+      if (sectionStatus.getMissingFields().length() == 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
 
@@ -406,6 +426,14 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return permissions;
   }
 
+  public boolean hasProgramnsRegions() {
+    try {
+      return Boolean.parseBoolean(this.getSession().get(APConstants.CRP_HAS_REGIONS).toString());
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
   /**
    * @param role
    * @return true if is the user role
@@ -416,6 +444,29 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean isCanEdit() {
     return canEdit;
+  }
+
+  public boolean isCompleteImpact(long crpProgramID) {
+
+    List<SectionStatus> sectionsBD = sectionStatusManager.findAll();
+    if (sectionsBD == null) {
+      return false;
+    }
+    List<SectionStatus> sections =
+      sectionsBD.stream()
+      .filter(c -> (c.getCrpProgram() != null && c.getCrpProgram().getId().longValue() == crpProgramID))
+      .collect(Collectors.toList());
+
+    for (SectionStatus sectionStatus : sections) {
+      if (sectionStatus.getMissingFields().length() > 0) {
+        return false;
+      }
+    }
+    if (sections.size() == 0) {
+      return false;
+    }
+
+    return true;
   }
 
   protected boolean isHttpPost() {

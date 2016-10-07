@@ -18,33 +18,26 @@
  */
 package org.cgiar.ccafs.marlo.data.dao;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.criteria.Order;
-import javax.persistence.metamodel.SingularAttribute;
-
-import com.google.common.base.Optional;
 
 /**
  * Modified by @author nmatovu last on Sep 29, 2016
- *
  */
 public interface IDao<T> {
-	public T save(T t);
 
-	public T saveOrUpdate(T t);
+  // public <K> T find(K id);
+  //
+  // public <K> List<T> find(SingularAttribute<T, K> property, K value);
+  //
+  // public List<T> findAll();
+  //
+  // public void remove(T t);
+  //
+  // public T save(T t);
 
-	public List<T> findAll();
+  // public <K> List<T> find(SingularAttribute<T, K> property, K value,
+  // Optional<Integer> offset, Optional<Integer> limit,
+  // Optional<Order> order);
 
-	public <K> T find(K id);
-
-	public <K> List<T> find(SingularAttribute<T, K> property, K value);
-
-	public <K> List<T> find(SingularAttribute<T, K> property, K value,
-			Optional<Integer> offset, Optional<Integer> limit,
-			Optional<Order> order);
-
-	public void remove(T t);
+  // public T saveOrUpdate(T t);
 
 }

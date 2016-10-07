@@ -18,270 +18,284 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import com.google.gson.annotations.Expose;
 
 /**
  * Represents the User of the system.
- * 
  * Modified by @author nmatovu last on Sep 29, 2016
- *
  */
 public class User implements IAuditLog {
-	// TODO: Extend Auditlog
-	private static final long serialVersionUID = -5959737574447795130L;
-	@Expose
-	private Long id;
 
-	@Expose
-	private String firstName;
+  // TODO: Extend Auditlog
+  private static final long serialVersionUID = -5959737574447795130L;
+  @Expose
+  private Long id;
 
-	@Expose
-	private String lastName;
+  @Expose
+  private String firstName;
 
-	@Expose
-	private String username;
+  @Expose
+  private String lastName;
 
-	@Expose
-	private String email;
+  @Expose
+  private String username;
 
-	@Expose
-	private String password;
+  @Expose
+  private String email;
 
-	@Expose
-	private boolean cgiarUser;
+  @Expose
+  private String password;
 
-	private boolean autoSave;
+  @Expose
+  private boolean cgiarUser;
 
-	private User createdBy;
+  private boolean autoSave;
 
-	private Date activeSince;
+  private User createdBy;
 
-	private User modifiedBy;
+  private Date activeSince;
 
-	private String modificationJustification;
-	private boolean active;
-	private Date lastLogin;
-	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
-	private Set<CrpUser> crpUsers = new HashSet<CrpUser>(0);
+  private User modifiedBy;
 
-	public User() {
-	}
+  private String modificationJustification;
+  private boolean active;
+  private Date lastLogin;
+  private Set<UserRole> userRoles = new HashSet<UserRole>(0);
+  private Set<CrpUser> crpUsers = new HashSet<CrpUser>(0);
+  private Set<CrpProgramLeader> crpProgramLeaders = new HashSet<CrpProgramLeader>(0);
 
-	public User(String email, String password, boolean cgiarUser, boolean active) {
-		this.email = email;
-		this.password = password;
-		this.cgiarUser = cgiarUser;
-		this.active = active;
-	}
+  public User() {
+  }
 
-	public User(String firstName, String lastName, String username,
-			String email, String password, boolean cgiarUser, User createdBy,
-			boolean active, Date lastLogin, Set<UserRole> userRoles,
-			Set<CrpUser> crpUsers) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.cgiarUser = cgiarUser;
-		this.active = active;
-		this.createdBy = createdBy;
+  public User(String email, String password, boolean cgiarUser, boolean active) {
+    this.email = email;
+    this.password = password;
+    this.cgiarUser = cgiarUser;
+    this.active = active;
+  }
 
-		this.lastLogin = lastLogin;
-		this.userRoles = userRoles;
-		this.crpUsers = crpUsers;
-	}
+  public User(String firstName, String lastName, String username, String email, String password, boolean cgiarUser,
+    User createdBy, boolean active, Date lastLogin, Set<UserRole> userRoles, Set<CrpUser> crpUsers) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.cgiarUser = cgiarUser;
+    this.active = active;
+    this.createdBy = createdBy;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
-			return false;
-		}
-		User other = (User) obj;
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		return true;
-	}
+    this.lastLogin = lastLogin;
+    this.userRoles = userRoles;
+    this.crpUsers = crpUsers;
+  }
 
-	public Date getActiveSince() {
-		return activeSince;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    User other = (User) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
 
-	/**
-	 * This method returns the user's full name.
-	 * 
-	 * @return a String that represents the user's full name. e.g. Héctor Tobón
-	 */
-	public String getComposedCompleteName() {
-		return this.firstName + " " + this.lastName;
-	}
+  public Date getActiveSince() {
+    return activeSince;
+  }
 
-	/**
-	 * This method returns a composed way to show a User.
-	 * 
-	 * @return a String that represents a User. e.g. Tobón, Héctor
-	 *         <h.f.tobon@cgiar.org>
-	 */
-	public String getComposedName() {
-		if (this.id == null || this.id == -1) {
-			return "";
-		}
-		return this.lastName + ", " + this.firstName + " <" + this.email + ">";
-	}
 
-	public User getCreatedBy() {
-		return createdBy;
-	}
+  /**
+   * This method returns the user's full name.
+   * 
+   * @return a String that represents the user's full name. e.g. Héctor Tobón
+   */
+  public String getComposedCompleteName() {
+    return this.firstName + " " + this.lastName;
+  }
 
-	public Set<CrpUser> getCrpUsers() {
-		return this.crpUsers;
-	}
 
-	public String getEmail() {
-		return this.email;
-	}
+  /**
+   * This method returns a composed way to show a User.
+   * 
+   * @return a String that represents a User. e.g. Tobón, Héctor
+   *         <h.f.tobon@cgiar.org>
+   */
+  public String getComposedName() {
+    if (this.id == null || this.id == -1) {
+      return "";
+    }
+    return this.lastName + ", " + this.firstName + " <" + this.email + ">";
+  }
 
-	public String getFirstName() {
-		return this.firstName;
-	}
+  public User getCreatedBy() {
+    return createdBy;
+  }
 
-	@Override
-	public Long getId() {
-		return this.id;
-	}
+  /**
+   * @return the crpProgramLeaders
+   */
+  public Set<CrpProgramLeader> getCrpProgramLeaders() {
+    return crpProgramLeaders;
+  }
 
-	public Date getLastLogin() {
-		return this.lastLogin;
-	}
+  public Set<CrpUser> getCrpUsers() {
+    return this.crpUsers;
+  }
 
-	public String getLastName() {
-		return this.lastName;
-	}
+  public String getEmail() {
+    return this.email;
+  }
 
-	@Override
-	public String getLogDeatil() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Id : ").append(this.getId());
-		return sb.toString();
-	}
+  public String getFirstName() {
+    return this.firstName;
+  }
 
-	public String getModificationJustification() {
-		return modificationJustification;
-	}
+  @Override
+  public Long getId() {
+    return this.id;
+  }
 
-	@Override
-	public User getModifiedBy() {
-		return modifiedBy;
-	}
+  public Date getLastLogin() {
+    return this.lastLogin;
+  }
 
-	public String getPassword() {
-		return this.password;
-	}
+  public String getLastName() {
+    return this.lastName;
+  }
 
-	public String getUsername() {
-		return this.username;
-	}
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
+  }
 
-	public Set<UserRole> getUserRoles() {
-		return this.userRoles;
-	}
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
 
-	@Override
-	public boolean isActive() {
-		return active;
-	}
+  @Override
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
 
-	public boolean isAutoSave() {
-		return autoSave;
-	}
+  public String getPassword() {
+    return this.password;
+  }
 
-	public boolean isCgiarUser() {
-		return cgiarUser;
-	}
+  public String getUsername() {
+    return this.username;
+  }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+  public Set<UserRole> getUserRoles() {
+    return this.userRoles;
+  }
 
-	public void setActiveSince(Date activeSince) {
-		this.activeSince = activeSince;
-	}
+  @Override
+  public boolean isActive() {
+    return active;
+  }
 
-	public void setAutoSave(boolean autoSave) {
-		this.autoSave = autoSave;
-	}
+  public boolean isAutoSave() {
+    return autoSave;
+  }
 
-	public void setCgiarUser(boolean cgiarUser) {
-		this.cgiarUser = cgiarUser;
-	}
+  public boolean isCgiarUser() {
+    return cgiarUser;
+  }
 
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
+  public void setActive(boolean active) {
+    this.active = active;
+  }
 
-	public void setCrpUsers(Set<CrpUser> crpUsers) {
-		this.crpUsers = crpUsers;
-	}
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public void setAutoSave(boolean autoSave) {
+    this.autoSave = autoSave;
+  }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+  public void setCgiarUser(boolean cgiarUser) {
+    this.cgiarUser = cgiarUser;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
 
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
-	}
+  /**
+   * @param crpProgramLeaders the crpProgramLeaders to set
+   */
+  public void setCrpProgramLeaders(Set<CrpProgramLeader> crpProgramLeaders) {
+    this.crpProgramLeaders = crpProgramLeaders;
+  }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  public void setCrpUsers(Set<CrpUser> crpUsers) {
+    this.crpUsers = crpUsers;
+  }
 
-	public void setModificationJustification(String modificationJustification) {
-		this.modificationJustification = modificationJustification;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public void setModifiedBy(User modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public void setLastLogin(Date lastLogin) {
+    this.lastLogin = lastLogin;
+  }
 
-	public void setUserRoles(Set<UserRole> userRoles) {
-		this.userRoles = userRoles;
-	}
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-	@Override
-	public String toString() {
-		return id.toString();
-	}
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setUserRoles(Set<UserRole> userRoles) {
+    this.userRoles = userRoles;
+  }
+
+  @Override
+  public String toString() {
+    return id.toString();
+  }
 }
