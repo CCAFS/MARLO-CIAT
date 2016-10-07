@@ -20,9 +20,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cgiar.ccafs.marlo.data.db.LogDatabaseManager;
-import org.cgiar.ccafs.marlo.data.db.LogTableManager;
-import org.cgiar.ccafs.marlo.data.db.LogTriggersManager;
+import org.cgiar.ccafs.marlo.db.LogDatabaseManager;
+import org.cgiar.ccafs.marlo.db.LogTableManager;
+import org.cgiar.ccafs.marlo.db.LogTriggersManager;
+
 import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

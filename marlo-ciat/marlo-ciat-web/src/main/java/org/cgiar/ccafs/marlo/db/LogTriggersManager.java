@@ -13,7 +13,7 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.data.db;
+package org.cgiar.ccafs.marlo.db;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
