@@ -35,8 +35,8 @@
 		<com.google.code.gson-version>2.6.2</com.google.code.gson-version>
 		<pusher-http-java>1.0.0</pusher-http-java>
 		<log-properties>0.9.28</log-properties>
-      <javax-mail.version>1.5.5</javax-mail.version>
-      <com.sun.mail.version>1.5.5</com.sun.mail.version>
+		<javax-mail.version>1.5.5</javax-mail.version>
+		<com.sun.mail.version>1.5.5</com.sun.mail.version>
 	</properties>
 	<issueManagement>
 		<system>Github issue tracker</system>
@@ -110,22 +110,19 @@
 			<artifactId>guice-servlet</artifactId>
 			<version>${guice.version}</version>
 		</dependency>
-	  <!-- Java Mail API -->
-      <dependency>
-         <groupId>javax.mail</groupId>
-         <artifactId>javax.mail-api</artifactId>
-         <version>${javax-mail.version}</version>
-      </dependency>
-      <!-- Java Sun Mail API -->
-      <dependency>
-         <groupId>com.sun.mail</groupId>
-         <artifactId>javax.mail</artifactId>
-         <version>${com.sun.mail.version}</version>
-      </dependency>
-      
-      
-<!--       
-      
+		<!-- Java Mail API -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>${javax-mail.version}</version>
+		</dependency>
+		<!-- Java Sun Mail API -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${com.sun.mail.version}</version>
+		</dependency>
+		<!-- Google Guice -->
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-persist</artifactId>
@@ -150,14 +147,9 @@
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>0.9.9</version>
-		</dependency> -->
-		
-		
-		
-		
-		
-		
+		</dependency>
 		<!-- End of Google Guice -->
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -230,10 +222,10 @@
 			<version>${jta-version}</version>
 		</dependency>
 		<dependency>
-         <groupId>ch.qos.logback</groupId>
-         <artifactId>logback-classic</artifactId>
-         <version>${log-properties}</version>
-      </dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${log-properties}</version>
+		</dependency>
 		<!-- END Hibernate -->
 		<!-- jasper -->
 		<dependency>
@@ -404,7 +396,7 @@
 		</profile>
 		<!-- The configuration of the production profile -->
 		<profile>
-			<id>prod</id>
+			<id>pro</id>
 			<properties>
 				<build.profile.id>pro</build.profile.id>
 			</properties>
@@ -417,6 +409,7 @@
 			</properties>
 		</profile>
 	</profiles>
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<defaultGoal>tomcat7:run</defaultGoal>

@@ -60,17 +60,19 @@ import org.slf4j.LoggerFactory;
 // @SuppressWarnings("unused")
 public class BaseAction extends ActionSupport implements Preparable, SessionAware, ServletRequestAware {
 
+
   public static final String CANCEL = "cancel";
 
   // Loggin
   private static final Logger LOG = LoggerFactory.getLogger(BaseAction.class);
 
   public static final String NEXT = "next";
-  public static final String NOT_AUTHORIZED = "403";
 
+  public static final String NOT_AUTHORIZED = "403";
   public static final String NOT_FOUND = "404";
 
   public static final String NOT_LOGGED = "401";
+
   public static final String SAVED_STATUS = "savedStatus";
   private static final long serialVersionUID = -740360140511380630L;
   protected boolean add;
@@ -78,16 +80,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private IAuditLogService auditLogManager;
   private String basePermission;
   protected boolean cancel;
-
   private boolean canEdit; // If user is able to edit the form.
 
   protected APConfig config;
+
   private Long crpID;
-  // @Inject
-  // private ICrpProgramService crpProgramManager;
-  // @Inject
-  // private ICrpProgramLeaderService crpProgramLeaderManager;
-  // Variables
   private String crpSession;
   private Crp currentCrp;
   protected boolean dataSaved;
@@ -106,19 +103,18 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   protected boolean next;
   private Map<String, Object> parameters;
   private HttpServletRequest request;
-
   // button actions
   protected boolean save;
 
   private boolean saveable; // If user is able to see the save, cancel, delete
+
   // buttons
   // Config Variables
   @Inject
   protected BaseSecurityContext securityContext;
-
   private Map<String, Object> session;
-  protected boolean submit;
 
+  protected boolean submit;
   @Inject
   private ISectionStatusService sectionStatusManager;
 
@@ -157,7 +153,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return securityContext.hasPermission(permission);
   }
 
-
   public boolean canAcessImpactPathway() {
     String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCrpSession());
     LOG.debug(permission);
@@ -171,13 +166,14 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return CANCEL;
   }
 
+
   /**
    * This method clears the cache and re-load the user permissions in the next
    * iteration.
    */
   public void clearPermissionsCache() {
-    ((APCustomRealm) securityContext.getRealm()).clearCachedAuthorizationInfo(securityContext.getSubject()
-      .getPrincipals());
+    ((APCustomRealm) securityContext.getRealm())
+      .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
   }
 
   /* Override this method depending of the delete action. */
@@ -321,7 +317,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return false;
   }
 
-
   public List<Auditlog> getListLog(IAuditLog object) {
     try {
       return auditLogManager.listLogs(object.getClass(), Long.parseLong(object.getId().toString()),
@@ -330,6 +325,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return new ArrayList<Auditlog>();
     }
   }
+
 
   /**
    * Define default locale while we decide to support other languages in the
@@ -449,8 +445,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     if (sectionsBD == null) {
       return false;
     }
-    List<SectionStatus> sections =
-      sectionsBD.stream()
+    List<SectionStatus> sections = sectionsBD.stream()
       .filter(c -> (c.getCrpProgram() != null && c.getCrpProgram().getId().longValue() == crpProgramID))
       .collect(Collectors.toList());
 
@@ -464,6 +459,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
 
     return true;
+  }
+
+  public boolean isEditable() {
+    return isEditable;
   }
 
   protected boolean isHttpPost() {
