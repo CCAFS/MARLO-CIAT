@@ -16,8 +16,9 @@
 /**
  * 
  */
-package org.cgiar.ccafs.marlo.action;
+package org.cgiar.ccafs.marlo.action.impactpathway;
 
+import org.cgiar.ccafs.marlo.action.BaseImpactsPathwayAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 
 import com.google.inject.Inject;
