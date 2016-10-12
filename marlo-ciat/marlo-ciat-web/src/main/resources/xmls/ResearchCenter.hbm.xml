@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated May 17, 2016 9:53:47 AM by Hibernate Tools 4.3.1.Final -->
 <hibernate-mapping>
-	<class name="org.cgiar.ccafs.marlo.data.model.ResearchCenter" table="research_center"
+	<class name="org.cgiar.ccafs.marlo.data.model.ResearchCenter" table="research_centers"
 		optimistic-lock="version">
 		<id name="id" type="java.lang.Long">
 			<column name="id" />
