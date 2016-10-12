@@ -25,10 +25,10 @@
         <p class="title">[@s.text name="dashboard.decisionTree.typeProjectQuestion" /]</p>
         [#if action.hasPermission("addCoreProject") || action.hasPermission("addBilateralProject")]
           [#if action.hasPermission("addCoreProject")]
-            <a href="[@s.url namespace="/projects" action='${crpSession}/addNewCoreProject'/]"><div class="addProject"><p>[@s.text name="dashboard.decisionTree.coreProject" /]</p></div></a>
+            <a href="[@s.url namespace="/projects" action='${centerSession}/addNewCoreProject'/]"><div class="addProject"><p>[@s.text name="dashboard.decisionTree.coreProject" /]</p></div></a>
           [/#if]
           [#if action.hasPermission("addBilateralProject")]
-            <a href="[@s.url namespace="/projects" action='${crpSession}/addNewBilateralProject'/]"><div class="addProject"><p>[@s.text name="dashboard.decisionTree.bilateralProject" /]</p></div></a>
+            <a href="[@s.url namespace="/projects" action='${centerSession}/addNewBilateralProject'/]"><div class="addProject"><p>[@s.text name="dashboard.decisionTree.bilateralProject" /]</p></div></a>
           [/#if]
         [#else]
           <p>[@s.text name="dashboard.decisionTree.notPermissions" /]</p>
@@ -83,7 +83,7 @@
         
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="myProjects">
-            [#--@projectList.dashboardProjectsList projects=myProjects canValidate=true canEdit=true namespace="/projects" defaultAction="${(crpSession)!}/description" /--]
+            [#--@projectList.dashboardProjectsList projects=myProjects canValidate=true canEdit=true namespace="/projects" defaultAction="${(centerSession)!}/description" /--]
           </div>
           
           <div role="tabpanel" class="tab-pane fade" id="impactP">

@@ -55,7 +55,7 @@ public class LoginAction extends BaseAction {
   // Variables
   private User user;
   private String url;
-  private String crp;
+  private String center;
 
   // Managers
   private UserService userManager;
@@ -76,10 +76,6 @@ public class LoginAction extends BaseAction {
   @Override
   public String execute() throws Exception {
     return SUCCESS;
-  }
-
-  public String getCrp() {
-    return crp;
   }
 
   private void getLoginMessages() {
@@ -140,7 +136,7 @@ public class LoginAction extends BaseAction {
       this.getLoginMessages();
       if (loggedUser != null) {
 
-        // Obtain the crp selected
+        // Obtain the center selected
         // Obtain the only CRP Center CIAT
         // TODO: Modify CRP to represent Center
         // Crp loggedCrp = crpManager.findCrpByAcronym(this.crp);
@@ -246,10 +242,6 @@ public class LoginAction extends BaseAction {
     Color color = new Color(red, green, blue);
     String hex = "#" + Integer.toHexString(color.getRGB()).substring(2);
     return hex;
-  }
-
-  public void setCrp(String crp) {
-    this.crp = crp;
   }
 
   public void setUrl(String url) {

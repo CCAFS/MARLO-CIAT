@@ -51,7 +51,6 @@ public class DashboardAction extends BaseAction {
   public void prepare() throws Exception {
     loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
-
   }
 
   public void setLoggedCrp(ResearchCenter loggedCrp) {
