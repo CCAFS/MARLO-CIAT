@@ -17,11 +17,9 @@ package org.cgiar.ccafs.marlo.action;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
-import org.cgiar.ccafs.marlo.data.model.Crp;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -35,7 +33,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,12 +64,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private static final Logger LOG = LoggerFactory.getLogger(BaseAction.class);
 
   public static final String NEXT = "next";
-
   public static final String NOT_AUTHORIZED = "403";
   public static final String NOT_FOUND = "404";
-
   public static final String NOT_LOGGED = "401";
-
   public static final String SAVED_STATUS = "savedStatus";
   private static final long serialVersionUID = -740360140511380630L;
   protected boolean add;
@@ -81,12 +75,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private String basePermission;
   protected boolean cancel;
   private boolean canEdit; // If user is able to edit the form.
-
   protected APConfig config;
-
-  private Long crpID;
-  private String crpSession;
-  private Crp currentCrp;
+  private Long centerID;
+  private String centerSession;
+  private ResearchCenter currentCenter;
   protected boolean dataSaved;
   protected boolean delete;
   private boolean draft;
@@ -105,18 +97,15 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private HttpServletRequest request;
   // button actions
   protected boolean save;
-
   private boolean saveable; // If user is able to see the save, cancel, delete
 
   // buttons
   // Config Variables
   @Inject
   protected BaseSecurityContext securityContext;
-  private Map<String, Object> session;
 
+  private Map<String, Object> session;
   protected boolean submit;
-  @Inject
-  private ISectionStatusService sectionStatusManager;
 
   @Inject
   public BaseAction(APConfig config) {
@@ -146,20 +135,19 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return this.securityContext.hasAllPermissions(Permission.FULL_PRIVILEGES);
   }
 
-  public boolean canAcessCrpAdmin() {
-    String permission = this.generatePermission(Permission.CRP_ADMIN_VISIBLE_PRIVILEGES, this.getCrpSession());
+  public boolean canAcessCenterAdmin() {
+    String permission = this.generatePermission(Permission.CRP_ADMIN_VISIBLE_PRIVILEGES, this.getCenterSession());
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
     return securityContext.hasPermission(permission);
   }
 
   public boolean canAcessImpactPathway() {
-    String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCrpSession());
+    String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCenterSession());
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
     return securityContext.hasPermission(permission);
   }
-
 
   /* Override this method depending of the cancel action. */
   public String cancel() {
@@ -175,6 +163,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     ((APCustomRealm) securityContext.getRealm())
       .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
   }
+
 
   /* Override this method depending of the delete action. */
   public String delete() {
@@ -221,73 +210,73 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return config.getBaseUrl();
   }
 
+  /**
+   * Get the center that is currently save in the session, if the user access to
+   * the platform whit a diferent url, get the current action to catch the center
+   * 
+   * @return the center that the user has log in
+   */
+  public String getCenterSession() {
+    if (session != null && !session.isEmpty()) {
+      try {
+        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CRP) != null
+          ? (ResearchCenter) session.get(APConstants.SESSION_CRP) : null;
+        // Assumed there is only one center in the system, the default one.
+        this.centerSession = center.getAcronym();
+      } catch (Exception e) {
+        LOG.warn("There was a problem trying to find the user's center in the session.");
+      }
+    } else {
+      String actionName = this.getActionName();
+      if (actionName.split("/").length > 1) {
+        this.centerSession = actionName.split("/")[0];
+      }
+    }
+    return this.centerSession;
+  }
+
   public APConfig getConfig() {
     return config;
   }
 
   /**
-   * Get the crp that is currently save in the session, if the user access to
-   * the platform whit a diferent url, get the current action to catch the crp
+   * Get the center that is currently save in the session, if the user access to
+   * the platform whit a diferent url, get the current action to catch the center
    * 
-   * @return the crp that the user has log in
+   * @return the center that the user has log in
    */
   public Long getCrpID() {
     if (session != null && !session.isEmpty()) {
       try {
-        Crp crp =
-          (Crp) session.get(APConstants.SESSION_CRP) != null ? (Crp) session.get(APConstants.SESSION_CRP) : null;
-        this.crpID = crp.getId();
+        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CRP) != null
+          ? (ResearchCenter) session.get(APConstants.SESSION_CRP) : null;
+        this.centerID = center.getId();
       } catch (Exception e) {
-        LOG.warn("There was a problem trying to find the user crp in the session.");
+        LOG.warn("There was a problem trying to find the user center in the session.");
       }
     } else {
 
-      this.crpID = null;
+      this.centerID = null;
 
     }
-    return this.crpID;
+    return this.centerID;
   }
 
-  /**
-   * Get the crp that is currently save in the session, if the user access to
-   * the platform whit a diferent url, get the current action to catch the crp
-   * 
-   * @return the crp that the user has log in
-   */
-  public String getCrpSession() {
+  public ResearchCenter getCurrentCenter() {
     if (session != null && !session.isEmpty()) {
       try {
-        Crp crp =
-          (Crp) session.get(APConstants.SESSION_CRP) != null ? (Crp) session.get(APConstants.SESSION_CRP) : null;
-        // Assumed there is only one CRP in the system, the default one.
-        this.crpSession = crp.getAcronym();
+        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CRP) != null
+          ? (ResearchCenter) session.get(APConstants.SESSION_CRP) : null;
+        this.currentCenter = center;
       } catch (Exception e) {
-        LOG.warn("There was a problem trying to find the user's crp in the session.");
-      }
-    } else {
-      String actionName = this.getActionName();
-      if (actionName.split("/").length > 1) {
-        this.crpSession = actionName.split("/")[0];
-      }
-    }
-    return this.crpSession;
-  }
-
-  public Crp getCurrentCrp() {
-    if (session != null && !session.isEmpty()) {
-      try {
-        Crp crp =
-          (Crp) session.get(APConstants.SESSION_CRP) != null ? (Crp) session.get(APConstants.SESSION_CRP) : null;
-        this.currentCrp = crp;
-      } catch (Exception e) {
-        LOG.warn("There was a problem trying to find the user crp in the session.");
+        LOG.warn("There was a problem trying to find the user center in the session.");
       }
     } else {
 
-      this.currentCrp = null;
+      this.currentCenter = null;
 
     }
-    return this.currentCrp;
+    return this.currentCenter;
   }
 
   /**
@@ -307,16 +296,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return u;
   }
 
-  public boolean getImpactSectionStatus(String section, long crpProgramID) {
-    SectionStatus sectionStatus = sectionStatusManager.getSectionStatusByCrpProgam(crpProgramID, section);
-    if (sectionStatus != null) {
-      if (sectionStatus.getMissingFields().length() == 0) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public List<Auditlog> getListLog(IAuditLog object) {
     try {
       return auditLogManager.listLogs(object.getClass(), Long.parseLong(object.getId().toString()),
@@ -326,7 +305,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
   }
 
-
   /**
    * Define default locale while we decide to support other languages in the
    * future.
@@ -335,6 +313,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public Locale getLocale() {
     return Locale.ENGLISH;
   }
+
 
   public String getNamespace() {
     return ServletActionContext.getActionMapping().getNamespace();
@@ -439,28 +418,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return canEdit;
   }
 
-  public boolean isCompleteImpact(long crpProgramID) {
-
-    List<SectionStatus> sectionsBD = sectionStatusManager.findAll();
-    if (sectionsBD == null) {
-      return false;
-    }
-    List<SectionStatus> sections = sectionsBD.stream()
-      .filter(c -> (c.getCrpProgram() != null && c.getCrpProgram().getId().longValue() == crpProgramID))
-      .collect(Collectors.toList());
-
-    for (SectionStatus sectionStatus : sections) {
-      if (sectionStatus.getMissingFields().length() > 0) {
-        return false;
-      }
-    }
-    if (sections.size() == 0) {
-      return false;
-    }
-
-    return true;
-  }
-
   public boolean isEditable() {
     return isEditable;
   }
@@ -497,10 +454,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return submit;
   }
 
-
   public String next() {
     return NEXT;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -512,10 +469,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return SUCCESS;
   }
 
-
   public void setAdd(boolean add) {
     this.add = true;
   }
+
 
   public void setBasePermission(String basePermission) {
     this.basePermission = basePermission;
@@ -529,8 +486,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     this.canEdit = canEdit;
   }
 
-  public void setCrpSession(String crpSession) {
-    this.crpSession = crpSession;
+  public void setCenterSession(String centerSession) {
+    this.centerSession = centerSession;
   }
 
   public void setDataSaved(boolean dataSaved) {
