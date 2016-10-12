@@ -166,7 +166,7 @@ public class LoginAction extends BaseAction {
           } else {
 
             this.addFieldError("loginMessage", this.getText("login.error.invalidUserCrp"));
-            this.setCrpSession(loggedCrp.getAcronym());
+            this.setCenterSession(loggedCrp.getAcronym());
             this.getSession().clear();
             SecurityUtils.getSubject().logout();
             user.setPassword(null);
