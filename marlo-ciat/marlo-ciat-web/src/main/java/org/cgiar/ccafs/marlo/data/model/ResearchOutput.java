@@ -23,16 +23,22 @@ import java.util.Date;
 
 
 /**
- * Modified by @author nmatovu last on Oct 9, 2016
+ * @author nmatovu
+ * @author hjimenez
  */
 public class ResearchOutput implements Serializable {
 
 
   private static final long serialVersionUID = -185814169741386135L;
+
+
   private Long id;
+
+
   private String output;
   private Date dateAdded;
   private ResearchOutcome researchOutcome;
+  private Date activeSince;
 
   /**
    * 
@@ -47,13 +53,17 @@ public class ResearchOutput implements Serializable {
    * @param dateAdded
    * @param researchOutcome
    */
-  public ResearchOutput(String output, Date dateAdded, ResearchOutcome researchOutcome) {
+  public ResearchOutput(String output, Date dateAdded, ResearchOutcome researchOutcome, Date activeSince) {
     super();
     this.output = output;
     this.dateAdded = dateAdded;
     this.researchOutcome = researchOutcome;
+    this.activeSince = activeSince;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
 
   /**
    * @return the dateAdded
@@ -84,6 +94,11 @@ public class ResearchOutput implements Serializable {
    */
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
+  }
+
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
   }
 
 

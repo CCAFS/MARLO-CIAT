@@ -19,6 +19,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -28,13 +29,17 @@ public class ResearchOutcome implements Serializable {
 
 
   private static final long serialVersionUID = -5206789836821862166L;
+
+
   private Long id;
+
+
   private String description;
   private Integer targetYear;
   private Long outcome;
   private ResearchImpact researchImpact;
   private boolean active;
-  private boolean activeSince;
+  private Date activeSince;
   private ResearchTopic researchTopic;
 
   /**
@@ -55,7 +60,7 @@ public class ResearchOutcome implements Serializable {
    * @param researchTopic
    */
   public ResearchOutcome(String description, Integer targetYear, Long outcome, ResearchImpact researchImpact,
-    boolean active, boolean activeSince, ResearchTopic researchTopic) {
+    boolean active, Date activeSince, ResearchTopic researchTopic) {
     super();
     this.description = description;
     this.targetYear = targetYear;
@@ -66,6 +71,9 @@ public class ResearchOutcome implements Serializable {
     this.researchTopic = researchTopic;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
 
   /**
    * @return the description
@@ -124,25 +132,13 @@ public class ResearchOutcome implements Serializable {
 
 
   /**
-   * @return the activeSince
-   */
-  public boolean isActiveSince() {
-    return activeSince;
-  }
-
-
-  /**
    * @param active the active to set
    */
   public void setActive(boolean active) {
     this.active = active;
   }
 
-
-  /**
-   * @param activeSince the activeSince to set
-   */
-  public void setActiveSince(boolean activeSince) {
+  public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
 
