@@ -1,4 +1,4 @@
-Alter table research_center RENAME TO researchs_centers;
+Alter table research_center RENAME TO research_centers;
 Alter table research_area RENAME TO research_areas;
 Alter table research_program RENAME TO research_programs;
 Alter table research_impact RENAME TO reserach_impacts;
