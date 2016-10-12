@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,11 +15,11 @@
 
 package org.cgiar.ccafs.marlo.data.dao.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import org.cgiar.ccafs.marlo.data.dao.IUserDAO;
 import org.cgiar.ccafs.marlo.data.model.User;
+
+import java.util.List;
+import java.util.Map;
 
 import com.google.inject.Inject;
 
@@ -46,7 +46,7 @@ public class UserDAO implements IUserDAO {
 
   @Override
   public List<Map<String, Object>> getPermission(int userId, String crpId) {
-    String query = "select * from user_permissions where id=" + userId + " and crp_acronym='" + crpId + "'";
+    String query = "select * from user_permissions where id=" + userId + " and center_acronym='" + crpId + "'";
     return dao.findCustomQuery(query);
   }
 
