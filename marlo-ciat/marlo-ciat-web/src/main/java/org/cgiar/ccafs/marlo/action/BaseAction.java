@@ -136,6 +136,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean canAcessCenterAdmin() {
+
     String permission = this.generatePermission(Permission.CRP_ADMIN_VISIBLE_PRIVILEGES, this.getCenterSession());
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
@@ -143,6 +144,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean canAcessImpactPathway() {
+
     String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCenterSession());
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
