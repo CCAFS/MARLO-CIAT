@@ -2,8 +2,8 @@
 [#assign mainMenu= [
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'login',                                              'visible': !logged, 'active': true },
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'dashboard',                      'icon': 'home',     'visible': logged, 'active': true },
-  { 'slug': 'admin',          'name': 'menu.admin',         'namespace': '/admin',          'action': '${(crpSession)!}/management',    'icon': 'cog',      'visible': action.canAcessCrpAdmin(), 'active': true },
-  { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(crpSession)!}/outcomes',                          'visible': action.canAcessImpactPathway(), 'active': true }]/]
+  { 'slug': 'admin',          'name': 'menu.admin',         'namespace': '/admin',          'action': '${(centerSession)!}/management',    'icon': 'cog',      'visible': action.canAcessCenterAdmin(), 'active': true },
+  { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/outcomes',                          'visible': action.canAcessImpactPathway(), 'active': true }]/]
 
 [#macro mainMenuList]
   [#list mainMenu as item]
@@ -11,7 +11,7 @@
     <li id="${item.slug}" class="[#if currentSection?? && currentSection == item.slug ]currentSection[/#if] ${(item.active)?string('enabled','disabled')}">
       <a href="[@s.url namespace=item.namespace action='${item.action}'][#if logged][@s.param name="edit" value="true"/][/#if][/@s.url]" onclick="return ${item.active?string}">
         [#if item.icon?has_content]<span class="glyphicon glyphicon-${item.icon}"></span> [/#if]
-        [@s.text name=item.name ][@s.param]${(crpSession?upper_case)!'CRP'}[/@s.param] [/@s.text]
+        [@s.text name=item.name ][@s.param]${(centerSession?upper_case)!'CRP'}[/@s.param] [/@s.text]
       </a>
     </li>
     [/#if]
