@@ -1,0 +1,1 @@
+ALTER TABLE `research_milestones` CHANGE COLUMN `year` `target_year` INT(11) NULL DEFAULT NULL  , CHANGE COLUMN `value` `milestone` DECIMAL(10,2) NULL DEFAULT NULL  ;

@@ -1,0 +1,3 @@
+--ALTER TABLE `crp_users` DROP COLUMN `modification_justification` , CHANGE COLUMN `crp_id` `center_id` BIGINT(20) NOT NULL  
+--, DROP INDEX `crp_id` 
+--, ADD INDEX `crp_id` USING BTREE (`center_id` ASC) , RENAME TO  `center_users` ;

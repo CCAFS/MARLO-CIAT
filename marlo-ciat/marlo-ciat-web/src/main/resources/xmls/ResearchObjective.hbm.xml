@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 26, 2016 9:42:29 AM by Hibernate Tools 4.3.1.Final -->
+<hibernate-mapping>
+	<class name="org.cgiar.ccafs.marlo.data.model.ResearchOjective"
+		table="research_objectives" optimistic-lock="version">
+		<id name="id" type="java.lang.Long">
+			<column name="id" />
+			<generator class="identity" />
+		</id>
+		  <property name="name" type="string">
+      <column name="name" length="65535" not-null="true" />
+    </property>
+    <many-to-one name="researchArea" class="org.cgiar.ccafs.marlo.data.model.ResearchArea"
+      fetch="select">
+      <column name="research_area_id" not-null="true" />
+    </many-to-one>
+      <many-to-one name="researchCenter" class="org.cgiar.ccafs.marlo.data.model.ResearchCenter"
+      fetch="select">
+      <column name="research_center_id" not-null="true" />
+    </many-to-one>
+	
+		<many-to-one name="objectiveType"
+			class="org.cgiar.ccafs.marlo.data.model.EntityType" fetch="select">
+			<column name="type_id" not-null="true" />
+		</many-to-one>
+	</class>
+</hibernate-mapping>

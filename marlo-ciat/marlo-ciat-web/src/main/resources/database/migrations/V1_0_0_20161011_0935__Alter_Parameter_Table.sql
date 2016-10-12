@@ -1,0 +1,1 @@
+ALTER TABLE `crp_parameters` RENAME TO  `parameters` ;

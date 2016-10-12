@@ -1,0 +1,10 @@
+--ALTER TABLE `crp_parameters` DROP FOREIGN KEY `crp_parameters_ibfk_1` ;
+--ALTER TABLE `crp_parameters` CHANGE COLUMN `crp_id` `center_id` INT NOT NULL  , 
+--  ADD CONSTRAINT `crp_parameters_ibfk_1`
+--  FOREIGN KEY (`center_id` )
+--  REFERENCES `research_center` (`id` )
+--  ON DELETE CASCADE
+--  ON UPDATE CASCADE
+--, DROP INDEX `crp_id` 
+--, ADD INDEX `crp_id` USING BTREE (`center_id` ASC) , RENAME TO  `center_parameters` ;
+--
