@@ -14,23 +14,12 @@
 		<property name="acronym" type="string">
 			<column name="acronym" length="50" not-null="true" />
 		</property>
-		<many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User"
-			fetch="select">
-			<column name="created_by" not-null="false" />
-		</many-to-one>
-		<many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
-			fetch="select">
-			<column name="modified_by" not-null="true" />
-		</many-to-one>
-		<property name="active" type="boolean">
-			<column name="is_active" not-null="true" />
-		</property>
-		<set lazy="true" name="researchPrograms" table="crp_programs" order-by="id"
+		<set lazy="true" name="researchPrograms" table="research_program" order-by="id"
       cascade="save-update" fetch="select">
       <key>
         <column name="research_area_id" not-null="true" />
       </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.CrpProgram" />
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" />
     </set>
 		
 	</class>

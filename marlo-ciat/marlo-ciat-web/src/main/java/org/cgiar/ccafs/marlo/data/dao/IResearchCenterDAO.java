@@ -13,10 +13,10 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.data.service;
+package org.cgiar.ccafs.marlo.data.dao;
 
+import org.cgiar.ccafs.marlo.data.dao.impl.ResearchCenterDAO;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.service.impl.CenterService;
 
 import java.util.List;
 
@@ -25,9 +25,8 @@ import com.google.inject.ImplementedBy;
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
  */
-@ImplementedBy(CenterService.class)
-public interface ICenterService {
-
+@ImplementedBy(ResearchCenterDAO.class)
+public interface IResearchCenterDAO {
 
   /**
    * This method removes a specific crp value from the database.
@@ -37,7 +36,6 @@ public interface ICenterService {
    */
   public boolean deleteCrp(long crpId);
 
-
   /**
    * This method validate if the crp identify with the given id exists in the system.
    * 
@@ -46,6 +44,13 @@ public interface ICenterService {
    */
   public boolean existCrp(long crpID);
 
+  /**
+   * This method gets a crp object by a given crp identifier.
+   * 
+   * @param crpID is the crp identifier.
+   * @return a Crp object.
+   */
+  public ResearchCenter find(long id);
 
   /**
    * This method gets a list of crp that are active
@@ -55,20 +60,13 @@ public interface ICenterService {
   public List<ResearchCenter> findAll();
 
   /**
-   * This method get a crp by it acronym
+   * This method find a crp from it acronym
    * 
-   * @param acronym
-   * @return a Crp object or null if the input acronym is invalid.
+   * @param acronym - the crp acronym
+   * @return a Crp object or null if the Crp does not exist
    */
   public ResearchCenter findCrpByAcronym(String acronym);
 
-  /**
-   * This method gets a crp object by a given crp identifier.
-   * 
-   * @param crpID is the crp identifier.
-   * @return a Crp object.
-   */
-  public ResearchCenter getCrpById(long crpID);
 
   /**
    * This method saves the information of the given crp
@@ -78,6 +76,6 @@ public interface ICenterService {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long saveCrp(ResearchCenter crp);
+  public long save(ResearchCenter crp);
 
 }

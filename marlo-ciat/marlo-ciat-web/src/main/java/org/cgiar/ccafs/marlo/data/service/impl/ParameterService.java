@@ -12,64 +12,65 @@
  * You should have received a copy of the GNU General Public License
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
-
 package org.cgiar.ccafs.marlo.data.service.impl;
 
-import org.cgiar.ccafs.marlo.data.dao.IResearchCenterDAO;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.service.ICenterService;
+
+import org.cgiar.ccafs.marlo.data.dao.IParameterDAO;
+import org.cgiar.ccafs.marlo.data.model.Parameter;
+import org.cgiar.ccafs.marlo.data.service.IParameterService;
 
 import java.util.List;
 
 import com.google.inject.Inject;
 
-
 /**
- * @author Hermes Jiménez - CIAT/CCAFS
+ * @author Christian Garcia
  */
-public class CenterService implements ICenterService {
+public class ParameterService implements IParameterService {
 
-  private IResearchCenterDAO crpDAO;
+
+  private IParameterDAO crpParameterDAO;
+
+  // Managers
+
 
   @Inject
-  public CenterService(IResearchCenterDAO crpDAO) {
-    this.crpDAO = crpDAO;
-  }
+  public ParameterService(IParameterDAO crpParameterDAO) {
+    this.crpParameterDAO = crpParameterDAO;
 
-  @Override
-  public boolean deleteCrp(long crpId) {
-
-    return crpDAO.deleteCrp(crpId);
-  }
-
-  @Override
-  public boolean existCrp(long crpID) {
-
-    return crpDAO.existCrp(crpID);
-  }
-
-  @Override
-  public List<ResearchCenter> findAll() {
-
-    return crpDAO.findAll();
 
   }
 
   @Override
-  public ResearchCenter findCrpByAcronym(String acronym) {
-    return crpDAO.findCrpByAcronym(acronym);
+  public boolean deleteCrpParameter(long crpParameterId) {
+
+    return crpParameterDAO.deleteCrpParameter(crpParameterId);
   }
 
   @Override
-  public ResearchCenter getCrpById(long crpID) {
+  public boolean existCrpParameter(long crpParameterID) {
 
-    return crpDAO.find(crpID);
+    return crpParameterDAO.existCrpParameter(crpParameterID);
   }
 
   @Override
-  public long saveCrp(ResearchCenter crp) {
+  public List<Parameter> findAll() {
 
-    return crpDAO.save(crp);
+    return crpParameterDAO.findAll();
+
   }
+
+  @Override
+  public Parameter getCrpParameterById(long crpParameterID) {
+
+    return crpParameterDAO.find(crpParameterID);
+  }
+
+  @Override
+  public long saveCrpParameter(Parameter crpParameter) {
+
+    return crpParameterDAO.save(crpParameter);
+  }
+
 
 }

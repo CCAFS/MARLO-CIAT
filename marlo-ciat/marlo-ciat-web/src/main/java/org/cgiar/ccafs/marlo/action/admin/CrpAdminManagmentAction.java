@@ -19,12 +19,12 @@ package org.cgiar.ccafs.marlo.action.admin;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Crp;
-import org.cgiar.ccafs.marlo.data.model.CrpParameter;
+import org.cgiar.ccafs.marlo.data.model.Parameter;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.Role;
 import org.cgiar.ccafs.marlo.data.model.User;
-import org.cgiar.ccafs.marlo.data.service.ICRPService;
-import org.cgiar.ccafs.marlo.data.service.ICrpParameterService;
+import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IParameterService;
 import org.cgiar.ccafs.marlo.data.service.IRoleService;
 import org.cgiar.ccafs.marlo.data.service.IUserRoleService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
@@ -32,7 +32,6 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
@@ -43,16 +42,16 @@ public class CrpAdminManagmentAction extends BaseAction {
   private IRoleService roleManager;
   private IUserRoleService userRoleManager;
   // private CrpProgramManager crpProgramManager;
-  private ICRPService crpManager;
-  private ICrpParameterService crpParameterManager;
+  private ICenterService crpManager;
+  private IParameterService crpParameterManager;
   // Variables
-  private Crp loggedCrp;
+  private ResearchCenter loggedCrp;
   private Role rolePmu;
   private long pmuRol;
 
   // private List<CrpProgram> flagshipsPrograms;
 
-  private List<CrpParameter> parameters;
+  private List<Parameter> parameters;
   // private CrpProgramLeaderManager crpProgramLeaderManager;
   private IUserService userManager;
   private Role fplRole;
@@ -62,7 +61,7 @@ public class CrpAdminManagmentAction extends BaseAction {
 
   @Inject
   public CrpAdminManagmentAction(APConfig config, IRoleService roleManager, IUserRoleService userRoleManager,
-    ICRPService crpManager, ICrpParameterService crpParameterManager, IUserService userManager, SendMail sendMail) {
+    ICenterService crpManager, IParameterService crpParameterManager, IUserService userManager, SendMail sendMail) {
     super(config);
     this.roleManager = roleManager;
     this.userRoleManager = userRoleManager;
@@ -78,7 +77,7 @@ public class CrpAdminManagmentAction extends BaseAction {
   }
 
 
-  public Crp getLoggedCrp() {
+  public ResearchCenter getLoggedCrp() {
     return loggedCrp;
   }
 
@@ -108,7 +107,7 @@ public class CrpAdminManagmentAction extends BaseAction {
     // Building the Email message:
     message.append(this.getText("email.dear", new String[] {userAssigned.getFirstName()}));
     message
-    .append(this.getText("email.programManagement.assigned", new String[] {managementRole, loggedCrp.getName()}));
+      .append(this.getText("email.programManagement.assigned", new String[] {managementRole, loggedCrp.getName()}));
     message.append(this.getText("email.support"));
     message.append(this.getText("email.bye"));
 
@@ -177,25 +176,25 @@ public class CrpAdminManagmentAction extends BaseAction {
   public void prepare() throws Exception {
 
     // Get the Users list that have the pmu role in this crp.
-    loggedCrp = (Crp) this.getSession().get(APConstants.SESSION_CRP);
+    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
 
     pmuRol = Long.parseLong((String) this.getSession().get(APConstants.CRP_PMU_ROLE));
 
 
-    parameters =
-      loggedCrp
-        .getCrpParameters()
-        .stream()
-        .filter(
-          c -> c.getKey().equals(APConstants.CRP_HAS_REGIONS) && c.isActive()
-            && c.getCrp().getId().equals(loggedCrp.getId())).collect(Collectors.toList());
-    if (parameters.size() == 0) {
-      loggedCrp.setHasRegions(false);
-    } else {
-      boolean param = Boolean.parseBoolean(parameters.get(0).getValue());
-      loggedCrp.setHasRegions(param);
-    }
+    // parameters =
+    // loggedCrp
+    // .getCrpParameters()
+    // .stream()
+    // .filter(
+    // c -> c.getKey().equals(APConstants.CRP_HAS_REGIONS) && c.isActive()
+    // && c.getCrp().getId().equals(loggedCrp.getId())).collect(Collectors.toList());
+    // if (parameters.size() == 0) {
+    // loggedCrp.setHasRegions(false);
+    // } else {
+    // boolean param = Boolean.parseBoolean(parameters.get(0).getValue());
+    // loggedCrp.setHasRegions(param);
+    // }
 
 
   }
@@ -205,7 +204,7 @@ public class CrpAdminManagmentAction extends BaseAction {
     this.fplRole = fplRole;
   }
 
-  public void setLoggedCrp(Crp loggedCrp) {
+  public void setLoggedCrp(ResearchCenter loggedCrp) {
     this.loggedCrp = loggedCrp;
   }
 

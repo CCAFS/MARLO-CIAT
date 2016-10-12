@@ -14,7 +14,7 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.data.service;
 
-import org.cgiar.ccafs.marlo.data.model.CrpUser;
+import org.cgiar.ccafs.marlo.data.model.CenterUser;
 import org.cgiar.ccafs.marlo.data.service.impl.CenterUserService;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public interface ICenterUserService {
    * 
    * @return a list from CrpUser null if no exist records
    */
-  public List<CrpUser> findAll();
+  public List<CenterUser> findAll();
 
 
   /**
@@ -68,7 +68,7 @@ public interface ICenterUserService {
    * @param crpUserID is the crpUser identifier.
    * @return a CrpUser object.
    */
-  public CrpUser getCrpUserById(long crpUserID);
+  public CenterUser getCrpUserById(long crpUserID);
 
   /**
    * This method saves the information of the given crpUser
@@ -78,7 +78,7 @@ public interface ICenterUserService {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long saveCrpUser(CrpUser crpUser);
+  public long saveCrpUser(CenterUser crpUser);
 
 
 }

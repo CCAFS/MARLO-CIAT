@@ -18,8 +18,7 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
-import org.cgiar.ccafs.marlo.data.IAuditLog;
-
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,20 +29,15 @@ import com.google.gson.annotations.Expose;
  * This class represents the Research Area (such as DAPA, AgBio, Soils, etc) in the application
  * Modified by @author nmatovu last on Oct 6, 2016
  */
-public class ResearchArea implements IAuditLog {
+public class ResearchArea implements Serializable {
 
   private static final long serialVersionUID = -2457377813686256015L;
   @Expose
   private Long id;
-  @Expose
-  private boolean active;
-  @Expose
-  private User createdBy;
-  @Expose
-  private User modifiedBy;
   private String name;
   private String acronym;
-  private Set<CrpProgram> researchPrograms = new HashSet<CrpProgram>(0);
+  private Set<ResearchProgram> researchPrograms = new HashSet<ResearchProgram>(0);
+  private ResearchCenter researchCenter;
 
 
   /**
@@ -71,13 +65,10 @@ public class ResearchArea implements IAuditLog {
    * @param createdBy
    * @param modifiedBy
    */
-  public ResearchArea(String name, String acronym, boolean active, User createdBy, User modifiedBy) {
+  public ResearchArea(String name, String acronym, boolean active) {
     super();
     this.name = name;
     this.acronym = acronym;
-    this.active = active;
-    this.createdBy = createdBy;
-    this.modifiedBy = modifiedBy;
   }
 
 
@@ -88,44 +79,14 @@ public class ResearchArea implements IAuditLog {
     return acronym;
   }
 
-  /**
-   * @return the createdBy
-   */
-  public User getCreatedBy() {
-    return createdBy;
-  }
 
   /*
    * (non-Javadoc)
    * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
    */
-  @Override
+
   public Object getId() {
     return this.id;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getLogDeatil()
-   */
-  @Override
-  public String getLogDeatil() {
-    StringBuilder sb = new StringBuilder();
-
-    sb.append("Id : ").append(this.getId());
-
-
-    return sb.toString();
-  }
-
-
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getModifiedBy()
-   */
-  @Override
-  public User getModifiedBy() {
-    return this.modifiedBy;
   }
 
 
@@ -138,21 +99,18 @@ public class ResearchArea implements IAuditLog {
 
 
   /**
-   * @return the researchPrograms
+   * @return the researchCenter
    */
-  public Set<CrpProgram> getResearchPrograms() {
-    return researchPrograms;
+  public ResearchCenter getResearchCenter() {
+    return researchCenter;
   }
 
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#isActive()
+  /**
+   * @return the researchPrograms
    */
-  @Override
-  public boolean isActive() {
-
-    return active;
+  public Set<ResearchProgram> getResearchPrograms() {
+    return researchPrograms;
   }
 
 
@@ -165,22 +123,6 @@ public class ResearchArea implements IAuditLog {
 
 
   /**
-   * @param active the active to set
-   */
-  public void setActive(boolean active) {
-    this.active = active;
-  }
-
-
-  /**
-   * @param createdBy the createdBy to set
-   */
-  public void setCreatedBy(User createdBy) {
-    this.createdBy = createdBy;
-  }
-
-
-  /**
    * @param id the id to set
    */
   public void setId(Long id) {
@@ -189,23 +131,25 @@ public class ResearchArea implements IAuditLog {
 
 
   /**
-   * @param modifiedBy the modifiedBy to set
-   */
-  public void setModifiedBy(User modifiedBy) {
-    this.modifiedBy = modifiedBy;
-  }
-
-  /**
    * @param name the name to set
    */
   public void setName(String name) {
     this.name = name;
   }
 
+
+  /**
+   * @param researchCenter the researchCenter to set
+   */
+  public void setResearchCenter(ResearchCenter researchCenter) {
+    this.researchCenter = researchCenter;
+  }
+
+
   /**
    * @param researchPrograms the researchPrograms to set
    */
-  public void setResearchPrograms(Set<CrpProgram> researchPrograms) {
+  public void setResearchPrograms(Set<ResearchProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 

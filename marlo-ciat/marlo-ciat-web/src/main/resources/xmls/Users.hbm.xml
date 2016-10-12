@@ -58,52 +58,19 @@
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.UserRole" />
 		</set>
-		<set lazy="true" name="crpUsers" table="crp_users" inverse="true"
+		<set lazy="true" name="centerUsers" table="center_users" inverse="true"
 			fetch="select">
 			<key>
 				<column name="user_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CrpUser" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterUser" />
 		</set>
-		<set lazy="true" name="crpProgramLeaders" table="crp_program_leaders"
+		<set lazy="true" name="researchLeaders" table="research_leader"
 			inverse="true" fetch="select">
 			<key>
 				<column name="user_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CrpProgramLeader" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchLeader" />
 		</set>
-		<!-- <set lazy="true" name="crpSitesLeaders" table="crp_sites_leaders"
-			inverse="true" fetch="select">
-			<key>
-				<column name="user_id" not-null="true" />
-			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CrpSitesLeader" />
-		</set>
-
-		<set name="crpClusterActivityLeaders" order-by="id"
-			table="crp_cluster_activity_leaders" inverse="true" lazy="true"
-			fetch="select">
-			<key>
-				<column name="user_id" not-null="true" />
-			</key>
-			<one-to-many
-				class="org.cgiar.ccafs.marlo.data.model.CrpClusterActivityLeader" />
-		</set>
- -->		
-		
-		<!--  <set name="submissions" table="submissions" inverse="true" 
-		 order-by="id" lazy="true" fetch="select">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
-        </set>
-        
-        <set name="projectPartnerPersons" order-by="id" table="project_partner_persons" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.ProjectPartnerPerson" />
-        </set> -->
 	</class>
 </hibernate-mapping>

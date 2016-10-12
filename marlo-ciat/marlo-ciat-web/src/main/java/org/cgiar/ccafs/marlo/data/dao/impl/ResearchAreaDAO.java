@@ -45,7 +45,6 @@ public class ResearchAreaDAO implements IResearchAreaDAO {
   @Override
   public boolean deleteResearchArea(long researchAreaId) {
     ResearchArea researchArea = this.find(researchAreaId);
-    researchArea.setActive(false);
     return this.save(researchArea) > 0;
   }
 

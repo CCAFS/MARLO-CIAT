@@ -16,7 +16,7 @@ package org.cgiar.ccafs.marlo.data.service.impl;
 
 
 import org.cgiar.ccafs.marlo.data.dao.ICenterUserDAO;
-import org.cgiar.ccafs.marlo.data.model.CrpUser;
+import org.cgiar.ccafs.marlo.data.model.CenterUser;
 import org.cgiar.ccafs.marlo.data.service.ICenterUserService;
 
 import java.util.List;
@@ -59,20 +59,20 @@ public class CenterUserService implements ICenterUserService {
   }
 
   @Override
-  public List<CrpUser> findAll() {
+  public List<CenterUser> findAll() {
 
     return crpUserDAO.findAll();
 
   }
 
   @Override
-  public CrpUser getCrpUserById(long crpUserID) {
+  public CenterUser getCrpUserById(long crpUserID) {
 
     return crpUserDAO.find(crpUserID);
   }
 
   @Override
-  public long saveCrpUser(CrpUser crpUser) {
+  public long saveCrpUser(CenterUser crpUser) {
 
     return crpUserDAO.save(crpUser);
   }

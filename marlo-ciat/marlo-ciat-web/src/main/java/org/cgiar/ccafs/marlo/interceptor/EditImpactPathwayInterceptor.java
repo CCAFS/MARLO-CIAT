@@ -16,9 +16,9 @@
 package org.cgiar.ccafs.marlo.interceptor;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Crp;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.User;
-import org.cgiar.ccafs.marlo.data.service.ICRPService;
+import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -37,18 +37,18 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 public class EditImpactPathwayInterceptor extends AbstractInterceptor implements Serializable {
 
   private static final long serialVersionUID = 1217563340228252130L;
-  private ICRPService crpManager;
+  private ICenterService crpManager;
   private IUserService userManager;
   // private CrpProgramManager crpProgramManager;
 
   private BaseAction baseAction;
   private Map<String, Object> parameters;
   private Map<String, Object> session;
-  private Crp crp;
+  private ResearchCenter crp;
   private long crpProgramID = 0;
 
   @Inject
-  public EditImpactPathwayInterceptor(ICRPService crpManager, IUserService userManager) {
+  public EditImpactPathwayInterceptor(ICenterService crpManager, IUserService userManager) {
     this.crpManager = crpManager;
     this.userManager = userManager;
   }
@@ -57,7 +57,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     try {
       return Long.parseLong(((String[]) parameters.get(APConstants.CRP_PROGRAM_ID))[0]);
     } catch (Exception e) {
-      Crp loggedCrp = (Crp) session.get(APConstants.SESSION_CRP);
+      ResearchCenter loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CRP);
 
       loggedCrp = crpManager.getCrpById(loggedCrp.getId());
 
@@ -93,7 +93,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     baseAction = (BaseAction) invocation.getAction();
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
-    crp = (Crp) session.get(APConstants.SESSION_CRP);
+    crp = (ResearchCenter) session.get(APConstants.SESSION_CRP);
     crpProgramID = this.getCrpProgramId();
 
     if (!baseAction.hasPermission(baseAction.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES,

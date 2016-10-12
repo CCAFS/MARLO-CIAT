@@ -16,7 +16,7 @@
 package org.cgiar.ccafs.marlo.interceptor;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Crp;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 
 import com.google.inject.Inject;
@@ -46,7 +46,7 @@ public class ValidCrpActionInterceptor extends AbstractInterceptor {
     String[] actionMap = ActionContext.getContext().getName().split("/");
     if (actionMap.length > 1) {
       String enteredCrp = actionMap[0];
-      Crp crp = crpManager.findCrpByAcronym(enteredCrp);
+      ResearchCenter crp = crpManager.findCrpByAcronym(enteredCrp);
       if (crp != null) {
         return invocation.invoke();
       } else {

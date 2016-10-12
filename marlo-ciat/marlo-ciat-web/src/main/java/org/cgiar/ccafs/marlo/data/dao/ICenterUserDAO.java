@@ -17,7 +17,7 @@
 package org.cgiar.ccafs.marlo.data.dao;
 
 import org.cgiar.ccafs.marlo.data.dao.impl.CenterUserDAO;
-import org.cgiar.ccafs.marlo.data.model.CrpUser;
+import org.cgiar.ccafs.marlo.data.model.CenterUser;
 
 import java.util.List;
 
@@ -57,14 +57,14 @@ public interface ICenterUserDAO {
    * @param crpUserID is the crpUser identifier.
    * @return a CrpUser object.
    */
-  public CrpUser find(long id);
+  public CenterUser find(long id);
 
   /**
    * This method gets a list of crpUser that are active
    * 
    * @return a list from CrpUser null if no exist records
    */
-  public List<CrpUser> findAll();
+  public List<CenterUser> findAll();
 
 
   /**
@@ -75,5 +75,5 @@ public interface ICenterUserDAO {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long save(CrpUser crpUser);
+  public long save(CenterUser crpUser);
 }

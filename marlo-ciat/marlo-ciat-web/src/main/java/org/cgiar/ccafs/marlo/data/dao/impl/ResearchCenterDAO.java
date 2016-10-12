@@ -13,63 +13,78 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.data.service.impl;
+package org.cgiar.ccafs.marlo.data.dao.impl;
 
 import org.cgiar.ccafs.marlo.data.dao.IResearchCenterDAO;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.service.ICenterService;
 
 import java.util.List;
 
 import com.google.inject.Inject;
 
-
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
+ * @author Christian Garcia - CIAT/CCAFS
  */
-public class CenterService implements ICenterService {
+public class ResearchCenterDAO implements IResearchCenterDAO {
 
-  private IResearchCenterDAO crpDAO;
+  private StandardDAO dao;
 
   @Inject
-  public CenterService(IResearchCenterDAO crpDAO) {
-    this.crpDAO = crpDAO;
+  public ResearchCenterDAO(StandardDAO dao) {
+    this.dao = dao;
   }
 
   @Override
   public boolean deleteCrp(long crpId) {
-
-    return crpDAO.deleteCrp(crpId);
+    ResearchCenter crp = this.find(crpId);
+    return this.save(crp) > 0;
   }
 
   @Override
   public boolean existCrp(long crpID) {
+    ResearchCenter crp = this.find(crpID);
+    if (crp == null) {
+      return false;
+    }
+    return true;
 
-    return crpDAO.existCrp(crpID);
+  }
+
+  @Override
+  public ResearchCenter find(long id) {
+    return dao.find(ResearchCenter.class, id);
+
   }
 
   @Override
   public List<ResearchCenter> findAll() {
-
-    return crpDAO.findAll();
+    String query = "from " + ResearchCenter.class.getName() + " where is_active=1";
+    List<ResearchCenter> list = dao.findAll(query);
+    if (list.size() > 0) {
+      return list;
+    }
+    return null;
 
   }
 
   @Override
   public ResearchCenter findCrpByAcronym(String acronym) {
-    return crpDAO.findCrpByAcronym(acronym);
+    String query = "from " + ResearchCenter.class.getName() + " where acronym='" + acronym + "'";
+    List<ResearchCenter> list = dao.findAll(query);
+    if (list.size() > 0) {
+      return list.get(0);
+    }
+    return null;
   }
 
   @Override
-  public ResearchCenter getCrpById(long crpID) {
-
-    return crpDAO.find(crpID);
+  public long save(ResearchCenter crp) {
+    if (crp.getId() == null) {
+      dao.save(crp);
+    } else {
+      dao.update(crp);
+    }
+    return crp.getId();
   }
-
-  @Override
-  public long saveCrp(ResearchCenter crp) {
-
-    return crpDAO.save(crp);
-  }
-
 }

@@ -27,39 +27,51 @@ import com.google.gson.annotations.Expose;
 /**
  * Modified by @author nmatovu last on Sep 29, 2016
  */
-public class Role implements Serializable {
+public class ResearchCenter implements Serializable {
 
-  private static final long serialVersionUID = 5596676652614917686L;
+
+  private static final long serialVersionUID = -5311843838644643688L;
+
   @Expose
   private Long id;
 
-  private ResearchCenter researchCenter;
-
   @Expose
-  private String description;
+  private String name;
 
   @Expose
   private String acronym;
 
-  @Expose
-  private Set<UserRole> userRoles = new HashSet<UserRole>(0);
+  private Set<CenterUser> centerUsers = new HashSet<CenterUser>(0);
 
-  public Role() {
+  public ResearchCenter() {
   }
 
-  public Role(ResearchCenter researchCenter, String description, String acronym) {
-    this.researchCenter = researchCenter;
-    this.description = description;
-    this.acronym = acronym;
-
+  public ResearchCenter(String name) {
+    this.name = name;
   }
 
-  public Role(ResearchCenter researchCenter, String description, String acronym, Set<UserRole> userRoles) {
-    this.researchCenter = researchCenter;
-    this.description = description;
-    this.acronym = acronym;
 
-    this.userRoles = userRoles;
+  /**
+   * @param name
+   * @param acronym
+   * @param roles
+   */
+  public ResearchCenter(String name, String acronym) {
+    super();
+    this.name = name;
+    this.acronym = acronym;
+  }
+
+  /**
+   * @param name
+   * @param acronym
+   * @param centerUsers
+   */
+  public ResearchCenter(String name, String acronym, Set<CenterUser> centerUsers) {
+    super();
+    this.name = name;
+    this.acronym = acronym;
+    this.centerUsers = centerUsers;
   }
 
   @Override
@@ -73,7 +85,7 @@ public class Role implements Serializable {
     if (this.getClass() != obj.getClass()) {
       return false;
     }
-    Role other = (Role) obj;
+    ResearchCenter other = (ResearchCenter) obj;
     if (id == null) {
       if (other.id != null) {
         return false;
@@ -85,28 +97,27 @@ public class Role implements Serializable {
   }
 
   public String getAcronym() {
-    return this.acronym;
+    return acronym;
   }
 
 
-  public String getDescription() {
-    return this.description;
+  /**
+   * @return the centerUsers
+   */
+  public Set<CenterUser> getCenterUsers() {
+    return centerUsers;
   }
+
 
   public Long getId() {
     return this.id;
   }
 
-  /**
-   * @return the researchCenter
-   */
-  public ResearchCenter getResearchCenter() {
-    return researchCenter;
+
+  public String getName() {
+    return this.name;
   }
 
-  public Set<UserRole> getUserRoles() {
-    return this.userRoles;
-  }
 
   @Override
   public int hashCode() {
@@ -121,27 +132,26 @@ public class Role implements Serializable {
     this.acronym = acronym;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+
+  /**
+   * @param centerUsers the centerUsers to set
+   */
+  public void setCenterUsers(Set<CenterUser> centerUsers) {
+    this.centerUsers = centerUsers;
   }
+
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  /**
-   * @param researchCenter the researchCenter to set
-   */
-  public void setResearchCenter(ResearchCenter researchCenter) {
-    this.researchCenter = researchCenter;
-  }
-
-  public void setUserRoles(Set<UserRole> userRoles) {
-    this.userRoles = userRoles;
+  public void setName(String name) {
+    this.name = name;
   }
 
   @Override
   public String toString() {
     return id.toString();
   }
+
 }

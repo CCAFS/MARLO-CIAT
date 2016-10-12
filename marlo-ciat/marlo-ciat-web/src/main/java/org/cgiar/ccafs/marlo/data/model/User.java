@@ -67,8 +67,8 @@ public class User implements IAuditLog {
   private boolean active;
   private Date lastLogin;
   private Set<UserRole> userRoles = new HashSet<UserRole>(0);
-  private Set<CrpUser> crpUsers = new HashSet<CrpUser>(0);
-  private Set<CrpProgramLeader> crpProgramLeaders = new HashSet<CrpProgramLeader>(0);
+  private Set<CenterUser> centerUsers = new HashSet<CenterUser>(0);
+  private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
 
   public User() {
   }
@@ -81,7 +81,8 @@ public class User implements IAuditLog {
   }
 
   public User(String firstName, String lastName, String username, String email, String password, boolean cgiarUser,
-    User createdBy, boolean active, Date lastLogin, Set<UserRole> userRoles, Set<CrpUser> crpUsers) {
+    User createdBy, boolean active, Date lastLogin, Set<UserRole> userRoles, Set<CenterUser> centerUsers,
+    Set<ResearchLeader> researchLeaders) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
@@ -90,11 +91,12 @@ public class User implements IAuditLog {
     this.cgiarUser = cgiarUser;
     this.active = active;
     this.createdBy = createdBy;
-
+    this.researchLeaders = researchLeaders;
     this.lastLogin = lastLogin;
     this.userRoles = userRoles;
-    this.crpUsers = crpUsers;
+    this.centerUsers = centerUsers;
   }
+
 
   @Override
   public boolean equals(Object obj) {
@@ -120,6 +122,10 @@ public class User implements IAuditLog {
 
   public Date getActiveSince() {
     return activeSince;
+  }
+
+  public Set<CenterUser> getCenterUsers() {
+    return this.centerUsers;
   }
 
 
@@ -150,20 +156,10 @@ public class User implements IAuditLog {
     return createdBy;
   }
 
-  /**
-   * @return the crpProgramLeaders
-   */
-  public Set<CrpProgramLeader> getCrpProgramLeaders() {
-    return crpProgramLeaders;
-  }
-
-  public Set<CrpUser> getCrpUsers() {
-    return this.crpUsers;
-  }
-
   public String getEmail() {
     return this.email;
   }
+
 
   public String getFirstName() {
     return this.firstName;
@@ -202,6 +198,13 @@ public class User implements IAuditLog {
     return this.password;
   }
 
+  /**
+   * @return the researchLeaders
+   */
+  public Set<ResearchLeader> getResearchLeaders() {
+    return researchLeaders;
+  }
+
   public String getUsername() {
     return this.username;
   }
@@ -235,6 +238,13 @@ public class User implements IAuditLog {
     this.autoSave = autoSave;
   }
 
+  /**
+   * @param centerUsers the centerUsers to set
+   */
+  public void setCenterUsers(Set<CenterUser> centerUsers) {
+    this.centerUsers = centerUsers;
+  }
+
   public void setCgiarUser(boolean cgiarUser) {
     this.cgiarUser = cgiarUser;
   }
@@ -243,15 +253,9 @@ public class User implements IAuditLog {
     this.createdBy = createdBy;
   }
 
-  /**
-   * @param crpProgramLeaders the crpProgramLeaders to set
-   */
-  public void setCrpProgramLeaders(Set<CrpProgramLeader> crpProgramLeaders) {
-    this.crpProgramLeaders = crpProgramLeaders;
-  }
 
-  public void setCrpUsers(Set<CrpUser> crpUsers) {
-    this.crpUsers = crpUsers;
+  public void setCrpUsers(Set<CenterUser> centerUsers) {
+    this.centerUsers = centerUsers;
   }
 
   public void setEmail(String email) {
@@ -284,6 +288,13 @@ public class User implements IAuditLog {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  /**
+   * @param researchLeaders the researchLeaders to set
+   */
+  public void setResearchLeaders(Set<ResearchLeader> researchLeaders) {
+    this.researchLeaders = researchLeaders;
   }
 
   public void setUsername(String username) {

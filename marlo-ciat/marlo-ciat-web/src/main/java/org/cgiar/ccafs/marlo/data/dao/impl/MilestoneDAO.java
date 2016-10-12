@@ -16,33 +16,33 @@
 
 package org.cgiar.ccafs.marlo.data.dao.impl;
 
-import org.cgiar.ccafs.marlo.data.dao.ICenterUserDAO;
-import org.cgiar.ccafs.marlo.data.model.CenterUser;
+import org.cgiar.ccafs.marlo.data.dao.IMilestoneDAO;
+import org.cgiar.ccafs.marlo.data.model.ResearchMilestone;
 
 import java.util.List;
 
 import com.google.inject.Inject;
 
-public class CenterUserDAO implements ICenterUserDAO {
+public class MilestoneDAO implements IMilestoneDAO {
 
   private StandardDAO dao;
 
   @Inject
-  public CenterUserDAO(StandardDAO dao) {
+  public MilestoneDAO(StandardDAO dao) {
     this.dao = dao;
   }
 
   @Override
-  public boolean deleteCrpUser(long crpUserId) {
-    CenterUser crpUser = this.find(crpUserId);
-    crpUser.setActive(false);
-    return this.save(crpUser) > 0;
+  public boolean deleteMilestone(long milestoneId) {
+    ResearchMilestone milestone = this.find(milestoneId);
+    milestone.setActive(false);
+    return this.save(milestone) > 0;
   }
 
   @Override
-  public boolean existCrpUser(long crpUserID) {
-    CenterUser crpUser = this.find(crpUserID);
-    if (crpUser == null) {
+  public boolean existMilestone(long milestoneId) {
+    ResearchMilestone milestone = this.find(milestoneId);
+    if (milestone == null) {
       return false;
     }
     return true;
@@ -50,25 +50,15 @@ public class CenterUserDAO implements ICenterUserDAO {
   }
 
   @Override
-  public boolean existCrpUser(long userId, long crpId) {
-    String query = "from " + CenterUser.class.getName() + " where user_id=" + userId + " and crp_id=" + crpId;
-    List<CenterUser> crpUser = dao.findAll(query);
-    if (crpUser != null && crpUser.size() > 0) {
-      return true;
-    }
-    return false;
-  }
-
-  @Override
-  public CenterUser find(long id) {
-    return dao.find(CenterUser.class, id);
+  public ResearchMilestone find(long id) {
+    return dao.find(ResearchMilestone.class, id);
 
   }
 
   @Override
-  public List<CenterUser> findAll() {
-    String query = "from " + CenterUser.class.getName() + " where is_active=1";
-    List<CenterUser> list = dao.findAll(query);
+  public List<ResearchMilestone> findAll() {
+    String query = "from " + ResearchMilestone.class.getName() + " where is_active=1";
+    List<ResearchMilestone> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;
     }
@@ -77,13 +67,13 @@ public class CenterUserDAO implements ICenterUserDAO {
   }
 
   @Override
-  public long save(CenterUser crpUser) {
-    if (crpUser.getId() == null) {
-      dao.save(crpUser);
+  public long save(ResearchMilestone milestone) {
+    if (milestone.getId() == null) {
+      dao.save(milestone);
     } else {
-      dao.update(crpUser);
+      dao.update(milestone);
     }
-    return crpUser.getId();
+    return milestone.getId();
   }
 
 
