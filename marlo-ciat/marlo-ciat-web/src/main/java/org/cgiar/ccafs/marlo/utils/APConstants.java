@@ -54,7 +54,7 @@ public final class APConstants {
   public static final String CRP_REPORTING_ACTIVE = "crp_reporting_active";
   public static final String CRP_LESSONS_ACTIVE = "crp_lessons_active";
 
-  public static final String CRP_CENTER = "ciat";
+  public static final String CRP_CENTER = "CIAT";
 
   public static final String CRP_PROGRAM_ID = "crpProgramID";
   public static final String CRP_ID = "crpID";
@@ -130,59 +130,5 @@ public final class APConstants {
 
   // Institutions Types
   public static final long INSTITUTION_DONOR_TYPE = 5;
-
-  // Relations Name
-  public static final String PROGRAM_OUTCOMES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CrpProgram.crpProgramOutcomes)";
-
-
-  public static final String PROGRAM_ACTIVITIES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CrpProgram.crpClusterOfActivities)";
-
-
-  public static final String PROJECT_FOCUSES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectFocuses)";
-
-  public static final String PROJECT_BUDGETS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectBudgets)";
-
-  public static final String PROJECT_BUDGETS_ACTVITIES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectBudgetsCluserActvities)";
-  public static final String PROJECT_OUTCOMES_MILESTONE_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ProjectOutcome.projectMilestones)";
-
-  public static final String PROJECT_OUTCOMES_COMMUNICATION_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ProjectOutcome.projectCommunications)";
-
-  public static final String PROJECT_NEXT_USERS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ProjectOutcome.projectNextusers)";
-
-  public static final String PROJECT_CLUSTER_ACTIVITIES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectClusterActivities)";
-
-  public static final String PROJECT_LOCATIONS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectLocations)";
-
-  public static final String PROJECT_DELIVERABLES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.deliverables)";
-
-  public static final String PROJECT_DELIVERABLE_PARTNERSHIPS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Deliverable.deliverablePartnerships)";
-
-  public static final String PROJECT_ACTIVITIES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.activities)";
-
-  public static final String PROJECT_SCOPES_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectScopes)";
-
-  public static final String PROJECT_PARTNERS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectPartners)";
-
-  public static final String PROJECT_LESSONS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectComponentLessons)";
-
-  public static final String PROJECT_OUTCOME_LESSONS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ProjectOutcome.projectComponentLessons)";
-
 
 }
