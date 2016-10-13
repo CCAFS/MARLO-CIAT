@@ -9,7 +9,7 @@
 			<column name="id" />
 			<generator class="identity" />
 		</id>
-		<many-to-one name="allTypes"
+		<many-to-one name="partnerType"
 			class="org.cgiar.ccafs.marlo.data.model.EntityType" fetch="select">
 			<column name="type_id" not-null="true">
 				<comment>Type such as Internal or external</comment>

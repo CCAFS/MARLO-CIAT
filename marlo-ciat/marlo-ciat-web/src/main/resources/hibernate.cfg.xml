@@ -50,6 +50,8 @@
 		<mapping resource="xmls/Roles.hbm.xml" />
 		<mapping resource="xmls/UserRoles.hbm.xml" />
 		<mapping resource="xmls/Users.hbm.xml" />
+		<mapping resource="xmls/ResearchPartners.hbm.xml" />
+		<mapping resource="xmls/ResearchImpactObjectives.hbm.xml" />		
 	</session-factory>
 
 </hibernate-configuration>

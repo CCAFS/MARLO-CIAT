@@ -21,6 +21,8 @@ package org.cgiar.ccafs.marlo.data.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
+
 
 /**
  * Modified by @author nmatovu last on Oct 9, 2016
@@ -31,16 +33,38 @@ public class ResearchOutcome implements Serializable {
   private static final long serialVersionUID = -5206789836821862166L;
 
 
+  @Expose
   private Long id;
 
 
+  @Expose
   private String description;
+
+
+  @Expose
   private Integer targetYear;
+
+
+  @Expose
   private Long outcome;
+
+
   private ResearchImpact researchImpact;
+
+
+  @Expose
   private boolean active;
+
+  @Expose
   private Date activeSince;
+  @Expose
   private ResearchTopic researchTopic;
+  @Expose
+  private User createdBy;
+  @Expose
+  private User modifiedBy;
+  @Expose
+  private String modificationJustification;
 
   /**
    * 
@@ -75,13 +99,16 @@ public class ResearchOutcome implements Serializable {
     return activeSince;
   }
 
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
   /**
    * @return the description
    */
   public String getDescription() {
     return description;
   }
-
 
   /**
    * @return the id
@@ -90,6 +117,13 @@ public class ResearchOutcome implements Serializable {
     return id;
   }
 
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
 
   /**
    * @return the outcome
@@ -97,7 +131,6 @@ public class ResearchOutcome implements Serializable {
   public Long getOutcome() {
     return outcome;
   }
-
 
   /**
    * @return the researchImpact
@@ -138,8 +171,14 @@ public class ResearchOutcome implements Serializable {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
+  }
+
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
   }
 
 
@@ -150,12 +189,21 @@ public class ResearchOutcome implements Serializable {
     this.description = description;
   }
 
-
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

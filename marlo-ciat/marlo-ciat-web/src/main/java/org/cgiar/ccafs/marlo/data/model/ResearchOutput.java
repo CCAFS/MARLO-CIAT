@@ -21,6 +21,8 @@ package org.cgiar.ccafs.marlo.data.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
+
 
 /**
  * @author nmatovu
@@ -32,13 +34,39 @@ public class ResearchOutput implements Serializable {
   private static final long serialVersionUID = -185814169741386135L;
 
 
+  @Expose
   private Long id;
 
 
+  @Expose
   private String output;
+
+
+  @Expose
   private Date dateAdded;
+
+
+  @Expose
   private ResearchOutcome researchOutcome;
+
+
+  @Expose
   private Date activeSince;
+
+
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+  @Expose
+  private String modificationJustification;
 
   /**
    * 
@@ -65,13 +93,16 @@ public class ResearchOutput implements Serializable {
     return activeSince;
   }
 
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
   /**
    * @return the dateAdded
    */
   public Date getDateAdded() {
     return dateAdded;
   }
-
 
   /**
    * @return the id
@@ -80,6 +111,13 @@ public class ResearchOutput implements Serializable {
     return id;
   }
 
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
 
   /**
    * @return the output
@@ -88,7 +126,6 @@ public class ResearchOutput implements Serializable {
     return output;
   }
 
-
   /**
    * @return the researchOutcome
    */
@@ -96,9 +133,22 @@ public class ResearchOutput implements Serializable {
     return researchOutcome;
   }
 
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
+  }
+
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
   }
 
 
@@ -115,6 +165,16 @@ public class ResearchOutput implements Serializable {
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

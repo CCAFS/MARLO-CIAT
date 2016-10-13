@@ -12,6 +12,18 @@
 		<property name="activeSince" type="timestamp">
 			<column name="active_since" length="19" not-null="true" />
 		</property>
+		<many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User"
+      fetch="select">
+      <column name="created_by" not-null="false" />
+    </many-to-one>
+    <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
+      fetch="select">
+      <column name="modified_by" not-null="false" />
+    </many-to-one>
+    <property name="modificationJustification" type="string">
+      <column name="modification_justification" length="65535"
+        not-null="true" />
+    </property>
 		<many-to-one name="researchImpact"
 			class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" fetch="select">
 			<column name="research_impact_id" not-null="true" />
