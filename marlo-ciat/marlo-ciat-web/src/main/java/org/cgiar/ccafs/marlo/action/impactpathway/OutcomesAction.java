@@ -13,8 +13,9 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.action;
+package org.cgiar.ccafs.marlo.action.impactpathway;
 
+import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;

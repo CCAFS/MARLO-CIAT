@@ -62,6 +62,14 @@ public interface IProgramService {
   public List<ResearchProgram> findCrpProgramsByType(long id, int programType);
 
   /**
+   * Lists all the research programs for the research area with the given id
+   * 
+   * @param researchAreaId the research area id or primary key
+   * @return List of research programs for the given research area id or else an empty list will be returned.
+   */
+  public List<ResearchProgram> findProgramsByResearchArea(Long researchAreaId);
+
+  /**
    * This method gets a crpProgram object by a given crpProgram identifier.
    * 
    * @param crpProgramID is the crpProgram identifier.
@@ -78,6 +86,7 @@ public interface IProgramService {
    *         or -1 is some error occurred.
    */
   public long saveCrpProgram(ResearchProgram crpProgram);
+
 
   /**
    * This method saves the information of the given crpProgram

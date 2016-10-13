@@ -82,8 +82,24 @@ public class ResearchProgramDAO implements IResearchProgramDAO {
 
   @Override
   public List<ResearchProgram> findCrpProgramsByType(long id, int programType) {
-    String query = "from " + ResearchProgram.class.getName() + " where crp_id=" + id + " and program_type=" + programType
-      + " and is_active=1";
+    String query =
+      "from " + ResearchProgram.class.getName() + " where crp_id=" + id + " and program_type=" + programType
+        + " and is_active=1";
+    List<ResearchProgram> list = dao.findAll(query);
+    if (list.size() > 0) {
+      return list;
+    }
+    return null;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO#findProgramsByResearchArea(java.lang.Long)
+   */
+  @Override
+  public List<ResearchProgram> findProgramsByResearchArea(Long researchAreaId) {
+    String query =
+      "from " + ResearchProgram.class.getName() + " where research_area_id=" + researchAreaId + " and is_active=1";
     List<ResearchProgram> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;

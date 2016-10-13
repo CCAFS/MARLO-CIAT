@@ -66,6 +66,14 @@ public interface IResearchProgramDAO {
 
 
   /**
+   * Lists all the research programs for the research area with the given id
+   * 
+   * @param researchAreaId the research area id or primary key
+   * @return List of research programs for the given research area id or else an empty list will be returned.
+   */
+  public List<ResearchProgram> findProgramsByResearchArea(Long researchAreaId);
+
+  /**
    * This method saves the information of the given crpProgram
    * 
    * @param crpProgram - is the crpProgram object with the new information to be added/updated.
@@ -84,5 +92,4 @@ public interface IResearchProgramDAO {
    *         or -1 is some error occurred.
    */
   public long save(ResearchProgram crpProgram, String actionName, List<String> relationsName);
-
 }

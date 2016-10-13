@@ -65,18 +65,28 @@ public class ProgramService implements IProgramService {
     return crpProgramDAO.findCrpProgramsByType(id, programType);
   }
 
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.service.IProgramService#findProgramsByResearchArea(java.lang.Long)
+   */
+  @Override
+  public List<ResearchProgram> findProgramsByResearchArea(Long researchAreaId) {
+
+    return crpProgramDAO.findProgramsByResearchArea(researchAreaId);
+  }
+
   @Override
   public ResearchProgram getCrpProgramById(long crpProgramID) {
 
     return crpProgramDAO.find(crpProgramID);
   }
 
+
   @Override
   public long saveCrpProgram(ResearchProgram crpProgram) {
 
     return crpProgramDAO.save(crpProgram);
   }
-
 
   @Override
   public long saveCrpProgram(ResearchProgram crpProgram, String actionName, List<String> relationsName) {
