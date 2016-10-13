@@ -19,6 +19,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,14 +33,38 @@ public class ResearchCenter implements Serializable {
 
   private static final long serialVersionUID = -5311843838644643688L;
 
+
   @Expose
   private Long id;
+
 
   @Expose
   private String name;
 
+
   @Expose
   private String acronym;
+
+
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+
+  @Expose
+  private String modificationJustification;
+
 
   private Set<CenterUser> centerUsers = new HashSet<CenterUser>(0);
 
@@ -49,7 +74,6 @@ public class ResearchCenter implements Serializable {
   public ResearchCenter(String name) {
     this.name = name;
   }
-
 
   /**
    * @param name
@@ -96,8 +120,14 @@ public class ResearchCenter implements Serializable {
     return true;
   }
 
+
   public String getAcronym() {
     return acronym;
+  }
+
+
+  public Date getActiveSince() {
+    return activeSince;
   }
 
 
@@ -109,15 +139,26 @@ public class ResearchCenter implements Serializable {
   }
 
 
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
   public Long getId() {
     return this.id;
+  }
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
   }
 
 
   public String getName() {
     return this.name;
   }
-
 
   @Override
   public int hashCode() {
@@ -127,9 +168,22 @@ public class ResearchCenter implements Serializable {
     return result;
   }
 
+  public boolean isActive() {
+    return active;
+  }
 
   public void setAcronym(String acronym) {
     this.acronym = acronym;
+  }
+
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
   }
 
 
@@ -141,8 +195,23 @@ public class ResearchCenter implements Serializable {
   }
 
 
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
   public void setName(String name) {

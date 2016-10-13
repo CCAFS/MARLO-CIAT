@@ -20,19 +20,47 @@ package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.Expose;
+
 
 /**
  * Modified by @author nmatovu last on Oct 9, 2016
  */
 public class ResearchMilestone implements Serializable {
 
+
   private static final long serialVersionUID = -338676464720877306L;
+
+
+  @Expose
   private Long id;
+
+
+  @Expose
   private String title;
+
+
+  @Expose
   private Integer targetYear;
+
+
+  @Expose
   private Long milestone;
+
+
+  @Expose
   private boolean active;
+
+
+  @Expose
   private boolean activeSince;
+  @Expose
+  private User createdBy;
+  @Expose
+  private User modifiedBy;
+  @Expose
+  private String modificationJustification;
+  @Expose
   private ResearchOutcome researchOutcome;
 
   /**
@@ -62,6 +90,9 @@ public class ResearchMilestone implements Serializable {
     this.researchOutcome = researchOutcome;
   }
 
+  public User getCreatedBy() {
+    return createdBy;
+  }
 
   /**
    * @return the id
@@ -70,7 +101,6 @@ public class ResearchMilestone implements Serializable {
     return id;
   }
 
-
   /**
    * @return the milestone
    */
@@ -78,6 +108,13 @@ public class ResearchMilestone implements Serializable {
     return milestone;
   }
 
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
 
   /**
    * @return the impactOutcome
@@ -135,6 +172,11 @@ public class ResearchMilestone implements Serializable {
   }
 
 
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
   /**
    * @param id the id to set
    */
@@ -148,6 +190,16 @@ public class ResearchMilestone implements Serializable {
    */
   public void setMilestone(Long milestone) {
     this.milestone = milestone;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

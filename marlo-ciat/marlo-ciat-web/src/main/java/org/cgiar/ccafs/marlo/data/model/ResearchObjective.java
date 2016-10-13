@@ -19,6 +19,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
@@ -29,21 +30,49 @@ import com.google.gson.annotations.Expose;
  */
 public class ResearchObjective implements Serializable {
 
+
   private static final long serialVersionUID = -3618614156720044325L;
+
+
   /**
    * The id or identifier for the research objective.
    */
   private Long id;
+
   /**
    * The research objective
    */
   private String name;
 
+
   @Expose
   private ResearchArea researchArea;
+
+
   @Expose
   private ResearchCenter researchCenter;
+
+
   private EntityType objectiveType;
+
+
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+  @Expose
+  private String modificationJustification;
 
   /**
    * 
@@ -68,11 +97,27 @@ public class ResearchObjective implements Serializable {
     this.objectiveType = objectiveType;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
+
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
   /**
    * @return the id
    */
   public Long getId() {
     return id;
+  }
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
   }
 
   /**
@@ -82,14 +127,12 @@ public class ResearchObjective implements Serializable {
     return name;
   }
 
-
   /**
    * @return the objectiveType
    */
   public EntityType getObjectiveType() {
     return objectiveType;
   }
-
 
   /**
    * @return the researchArea
@@ -98,12 +141,28 @@ public class ResearchObjective implements Serializable {
     return researchArea;
   }
 
-
   /**
    * @return the researchCenter
    */
   public ResearchCenter getResearchCenter() {
     return researchCenter;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
+
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
   }
 
 
@@ -112,6 +171,16 @@ public class ResearchObjective implements Serializable {
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

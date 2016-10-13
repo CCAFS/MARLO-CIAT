@@ -14,8 +14,9 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.data.model;
 
-// Generated May 26, 2016 9:42:28 AM by Hibernate Tools 4.3.1.Final
+import java.util.Date;
 
+// Generated May 26, 2016 9:42:28 AM by Hibernate Tools 4.3.1.Final
 
 import java.util.List;
 
@@ -29,23 +30,44 @@ public class ResearchProgram implements java.io.Serializable {
 
   private static final long serialVersionUID = -7720585854691931655L;
 
+
   @Expose
   private Long id;
-  // @Expose
-  // private ResearchCenter researchCenter;
+
+
   @Expose
   private ResearchArea researchArea;
+
+
   @Expose
   private String name;
+
+
   @Expose
   private String acronym;
+
+
   @Expose
   private EntityType programType;
-  @Expose
-  private boolean active;
+
+
   private List<ResearchLeader> researchLeaders;
+
+
   @Expose
   private String color;
+
+  @Expose
+  private boolean active;
+
+  @Expose
+  private Date activeSince;
+  @Expose
+  private User createdBy;
+  @Expose
+  private User modifiedBy;
+  @Expose
+  private String modificationJustification;
 
   public ResearchProgram() {
   }
@@ -71,7 +93,6 @@ public class ResearchProgram implements java.io.Serializable {
     this.researchArea = researchArea;
     this.researchLeaders = researchLeaders;
   }
-
 
   public ResearchProgram(String name, String acronym, EntityType programType, ResearchArea researchArea) {
     this.name = name;
@@ -102,11 +123,13 @@ public class ResearchProgram implements java.io.Serializable {
     return true;
   }
 
-
   public String getAcronym() {
     return this.acronym;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
 
   public String getColor() {
     return color;
@@ -117,8 +140,21 @@ public class ResearchProgram implements java.io.Serializable {
   }
 
 
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
   public Long getId() {
     return this.id;
+  }
+
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
   }
 
 
@@ -159,9 +195,13 @@ public class ResearchProgram implements java.io.Serializable {
     this.acronym = acronym;
   }
 
-
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
   }
 
 
@@ -170,8 +210,23 @@ public class ResearchProgram implements java.io.Serializable {
   }
 
 
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

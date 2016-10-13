@@ -19,6 +19,9 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.google.gson.annotations.Expose;
 
 
 /**
@@ -26,17 +29,44 @@ import java.io.Serializable;
  */
 public class ResearchTopic implements Serializable {
 
+
   private static final long serialVersionUID = 365817271325565483L;
 
+
   private Long id;
+
+
   /**
    * The research topic description text.
    */
   private String researchTopic;
+
+
   /**
    * The research program related to this research topic or flagship project.
    */
   private ResearchProgram researchProgram;
+
+
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+
+  @Expose
+  private String modificationJustification;
+
 
   /**
    * 
@@ -45,6 +75,7 @@ public class ResearchTopic implements Serializable {
     super();
     // TODO Auto-generated constructor stub
   }
+
 
   /**
    * @param researchTopic
@@ -56,12 +87,28 @@ public class ResearchTopic implements Serializable {
     this.researchProgram = researchProgram;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
+
+  public User getCreatedBy() {
+    return createdBy;
+  }
 
   /**
    * @return the id
    */
   public Long getId() {
     return id;
+  }
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+
+  public User getModifiedBy() {
+    return modifiedBy;
   }
 
 
@@ -81,11 +128,39 @@ public class ResearchTopic implements Serializable {
   }
 
 
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
+
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

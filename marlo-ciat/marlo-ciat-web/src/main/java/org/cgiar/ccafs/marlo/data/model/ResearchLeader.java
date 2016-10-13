@@ -14,6 +14,8 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.data.model;
 
+import java.util.Date;
+
 // Generated May 26, 2016 9:42:28 AM by Hibernate Tools 4.3.1.Final
 
 import com.google.gson.annotations.Expose;
@@ -23,26 +25,51 @@ import com.google.gson.annotations.Expose;
  */
 public class ResearchLeader implements java.io.Serializable {
 
+
   private static final long serialVersionUID = 7345327536072331541L;
+
 
   @Expose
   private Long id;
+
+
   @Expose
   private ResearchProgram researchProgram;
+
+
   @Expose
   private ResearchCenter researchCenter;
+
+
   @Expose
   private ResearchArea researchArea;
+
+
   @Expose
   private User user;
 
-  // @Expose
-  // private boolean active;
 
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+
+  @Expose
+  private String modificationJustification;
 
   public ResearchLeader() {
   }
-
 
   /**
    * @param researchArea
@@ -54,7 +81,6 @@ public class ResearchLeader implements java.io.Serializable {
     this.user = user;
   }
 
-
   /**
    * @param researchCenter
    * @param user
@@ -64,7 +90,6 @@ public class ResearchLeader implements java.io.Serializable {
     this.researchCenter = researchCenter;
     this.user = user;
   }
-
 
   /**
    * @param researchProgram
@@ -81,7 +106,6 @@ public class ResearchLeader implements java.io.Serializable {
     this.user = user;
   }
 
-
   /**
    * @param researchProgram
    * @param user
@@ -91,7 +115,6 @@ public class ResearchLeader implements java.io.Serializable {
     this.researchProgram = researchProgram;
     this.user = user;
   }
-
 
   @Override
   public boolean equals(Object obj) {
@@ -114,9 +137,24 @@ public class ResearchLeader implements java.io.Serializable {
     return true;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
+
+  public User getCreatedBy() {
+    return createdBy;
+  }
 
   public Long getId() {
     return this.id;
+  }
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
   }
 
   /**
@@ -125,6 +163,7 @@ public class ResearchLeader implements java.io.Serializable {
   public ResearchArea getResearchArea() {
     return researchArea;
   }
+
 
   /**
    * @return the researchCenter
@@ -141,13 +180,41 @@ public class ResearchLeader implements java.io.Serializable {
     return researchProgram;
   }
 
+
   public User getUser() {
     return this.user;
   }
 
 
+  public boolean isActive() {
+    return active;
+  }
+
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

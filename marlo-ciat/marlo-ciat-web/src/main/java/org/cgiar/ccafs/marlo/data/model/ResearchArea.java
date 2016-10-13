@@ -19,6 +19,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,14 +32,47 @@ import com.google.gson.annotations.Expose;
  */
 public class ResearchArea implements Serializable {
 
+
   private static final long serialVersionUID = -2457377813686256015L;
+
+
   @Expose
   private Long id;
+
+
+  @Expose
   private String name;
+
+
+  @Expose
   private String acronym;
-  private Set<ResearchProgram> researchPrograms = new HashSet<ResearchProgram>(0);
+
+
+  @Expose
   private ResearchCenter researchCenter;
 
+
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+
+  @Expose
+  private String modificationJustification;
+
+
+  private Set<ResearchProgram> researchPrograms = new HashSet<ResearchProgram>(0);
 
   /**
    * 
@@ -48,7 +82,6 @@ public class ResearchArea implements Serializable {
     // TODO Auto-generated constructor stub
   }
 
-
   /**
    * @param name
    */
@@ -56,7 +89,6 @@ public class ResearchArea implements Serializable {
     super();
     this.name = name;
   }
-
 
   /**
    * @param name
@@ -71,7 +103,6 @@ public class ResearchArea implements Serializable {
     this.acronym = acronym;
   }
 
-
   /**
    * @return the acronym
    */
@@ -79,16 +110,25 @@ public class ResearchArea implements Serializable {
     return acronym;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
-   */
+  public User getCreatedBy() {
+    return createdBy;
+  }
 
   public Object getId() {
     return this.id;
   }
 
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
 
   /**
    * @return the name
@@ -96,7 +136,6 @@ public class ResearchArea implements Serializable {
   public String getName() {
     return name;
   }
-
 
   /**
    * @return the researchCenter
@@ -114,6 +153,11 @@ public class ResearchArea implements Serializable {
   }
 
 
+  public boolean isActive() {
+    return active;
+  }
+
+
   /**
    * @param acronym the acronym to set
    */
@@ -122,11 +166,41 @@ public class ResearchArea implements Serializable {
   }
 
 
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
+   */
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
+
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
   }
 
 

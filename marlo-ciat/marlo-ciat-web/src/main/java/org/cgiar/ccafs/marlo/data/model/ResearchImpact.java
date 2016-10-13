@@ -19,8 +19,11 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.google.gson.annotations.Expose;
 
 
 /**
@@ -28,21 +31,54 @@ import java.util.Set;
  */
 public class ResearchImpact implements Serializable {
 
+
   private static final long serialVersionUID = -5150082139088832748L;
 
+
+  @Expose
   private Long id;
+
+
   /**
    * The impact description text.
    */
+  @Expose
   private String impact;
+
+
   /**
    * The research impact target year.
    */
+  @Expose
   private Integer targetYear;
+
+
   /**
    * The research Program to which this research impact relates to.
    */
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+
+  @Expose
+  private String modificationJustification;
+
+
+  @Expose
   private ResearchProgram researchProgram;
+
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
 
   /**
@@ -65,6 +101,15 @@ public class ResearchImpact implements Serializable {
     this.researchProgram = researchProgram;
   }
 
+  public Date getActiveSince() {
+    return activeSince;
+  }
+
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
+
   /**
    * @return the id
    */
@@ -72,11 +117,28 @@ public class ResearchImpact implements Serializable {
     return id;
   }
 
+
   /**
    * @return the impact
    */
   public String getImpact() {
     return impact;
+  }
+
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
+
+  /**
+   * @return the researchOutcomes
+   */
+  public Set<ResearchOutcome> getResearchOutcomes() {
+    return researchOutcomes;
   }
 
   /**
@@ -93,6 +155,22 @@ public class ResearchImpact implements Serializable {
     return targetYear;
   }
 
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
   /**
    * @param id the id to set
    */
@@ -107,6 +185,21 @@ public class ResearchImpact implements Serializable {
     this.impact = impact;
   }
 
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
+  }
+
+  /**
+   * @param researchOutcomes the researchOutcomes to set
+   */
+  public void setResearchOutcomes(Set<ResearchOutcome> researchOutcomes) {
+    this.researchOutcomes = researchOutcomes;
+  }
+
   /**
    * @param researchProgram the researchProgram to set
    */
@@ -119,20 +212,6 @@ public class ResearchImpact implements Serializable {
    */
   public void setTargetYear(Integer targetYear) {
     this.targetYear = targetYear;
-  }
-
-  /**
-   * @return the researchOutcomes
-   */
-  public Set<ResearchOutcome> getResearchOutcomes() {
-    return researchOutcomes;
-  }
-
-  /**
-   * @param researchOutcomes the researchOutcomes to set
-   */
-  public void setResearchOutcomes(Set<ResearchOutcome> researchOutcomes) {
-    this.researchOutcomes = researchOutcomes;
   }
 
 

@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated May 17, 2016 9:53:47 AM by Hibernate Tools 4.3.1.Final -->
 <hibernate-mapping>
 	<class name="org.cgiar.ccafs.marlo.data.model.ResearchCenter" table="research_centers"
 		optimistic-lock="version">
@@ -15,6 +14,24 @@
 		<property name="acronym" type="string">
 			<column name="acronym" length="50" not-null="true" />
 		</property>
+		<property name="active" type="boolean">
+      <column name="is_active" not-null="true" />
+    </property>
+    <property name="activeSince" type="timestamp">
+      <column name="active_since" length="19" not-null="true" />
+    </property>
+    <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User"
+      fetch="select">
+      <column name="created_by" not-null="false" />
+    </many-to-one>
+    <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
+      fetch="select">
+      <column name="modified_by" not-null="false" />
+    </many-to-one>
+    <property name="modificationJustification" type="string">
+      <column name="modification_justification" length="65535"
+        not-null="true" />
+    </property>
 		<set lazy="true" name="centerUsers" table="center_users" inverse="true"
 			fetch="select">
 			<key>
@@ -22,18 +39,5 @@
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterUser" />
 		</set>
-		<!-- <set lazy="true" name="roles" table="roles" inverse="true" fetch="select">
-			<key>
-				<column name="role_id" not-null="true" />
-			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Role" />
-		</set>
-	 	<set lazy="true" name="centerParameters" table="center_parameters"
-			order-by="id" inverse="true" fetch="select">
-			<key>
-				<column name="center_id" not-null="true" />
-			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Parameter" />
-		</set> -->
 	</class>
 </hibernate-mapping>
