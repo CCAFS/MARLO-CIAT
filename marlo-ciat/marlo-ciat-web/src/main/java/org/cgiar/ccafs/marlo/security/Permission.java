@@ -27,56 +27,7 @@ package org.cgiar.ccafs.marlo.security;
 public class Permission {
 
   public static final String FULL_PRIVILEGES = "*"; // path full privileges
-  public static final String CRP_ADMIN_VISIBLE_PRIVILEGES = "admin:canAcess"; // path
-  // Full privileges
-  public static final String CRP_ADMIN_EDIT_PRIVILEGES = "admin:*"; // path
-  // Full privileges
-  public static final String CRP_ADMIN_BASE_PERMISSION = "admin";
-  public static final String IMPACT_PATHWAY_BASE_PERMISSION = "impactPathway:{0}";
-  public static final String IMPACT_PATHWAY_EDIT_PRIVILEGES = "impactPathway:{0}:*";
-  public static final String IMPACT_PATHWAY_VISIBLE_PRIVILEGES = "impactPathway:canAcess";
-
-  /** Has full access and control of research area and programs. */
-  public static final String RESEARCH_AREA_SUPERADMIN = "research:*";
-  /** Has full access and control of Research Area */
-  public static final String RESEARCH_AREA_ADMIN = "research:area:*";
-  /** Can only Access or View Research Area */
-  public static final String RESEARCH_AREA_ACCESS = "research:area:canAccess";
-  /** Can Edit Research Area */
-  public static final String RESEARCH_AREA_EDIT = "research:area:canEdit";
-  /** Has full access and control of research program */
-  public static final String RESEARCH_PROGRAM_ADMIN = "research:program:*";
-  /** Can view and edit the research program */
-  public static final String RESEARCH_PROGRAM_EDIT = "research:program:canEdit";
-  /** Can only view research area program */
-  public static final String RESEARCH_PROGRAM_ACCESS = "research:program:canAccess";
-
-  public static final String PROJECT_DESCRIPTION_BASE_PERMISSION = "project:{0}:description";
-  public static final String PROJECT_LIST_BASE_PERMISSION = "project:projectsList";
-  public static final String PROJECT_CONTRIBRUTIONCRP_BASE_PERMISSION = "project:{0}:contributionCrp";
-  public static final String PROJECT_DESCRIPTION_PERMISSION = "project:{0}:description:*";
-  public static final String PROJECT_PARTNER_BASE_PERMISSION = "project:{0}:partners";
-  public static final String PROJECT_BUDGET_BASE_PERMISSION = "project:{0}:budget";
-  public static final String PROJECT_BUDGET_CLUSTER_BASE_PERMISSION = "project:{0}:budgetByCluster";
-  public static final String PROJECT_MANAGE_BASE_PERMISSION = "project:{0}:manage";
-  public static final String PROJECT_SUBMISSION_PERMISSION = "project:{0}:manage:submitProject";
-  public static final String PROJECT_LOCATION_BASE_PERMISSION = "project:{0}:location";
-
-  public static final String PROJECT__PERMISSION = "project:{0}:{1}:canEdit";
-
-  public static final String PROJECT__SWITCH = "project:{0}:projectSwitch";
-  public static final String PROJECT_CONTRIBRUTIONCRP_EDIT_PERMISSION = "project:{0}:contributionCrp:canEdit";
-  public static final String PROJECT_DELIVERABLE_LIST_EDIT_PERMISSION = "project:{0}:deliverablesList:canEdit";
-  public static final String PROJECT_DELIVERABLE_LIST_ADD_PERMISSION = "project:{0}:deliverablesList:addDeliverable";
-  public static final String PROJECT_DELIVERABLE_LIST_REMOVE_PERMISSION =
-    "project:{0}:deliverablesList:removeOldDeliverables";
-  public static final String PROJECT_DELIVERABLE_BASE_PERMISSION = "project:{0}:deliverable";
-  public static final String PROJECT_DELIVERABLE_EDIT_PERMISSION = "project:{0}:deliverable:canEdit";
-  public static final String PROJECT_ACTIVITIES_BASE_PERMISSION = "project:{0}:activities";
-  public static final String PROJECT_W3_COFUNDED_BASE_PERMISSION = "projectCofunded:{0}:canEdit";
-
-  // Create Projects Permissions
-  public static final String PROJECT_CORE_ADD = "project:projectsList:addCoreProject";
-  public static final String PROJECT_BILATERAL_ADD = "project:projectsList:addBilateralProject";
+  public static final String RESEARCH_AREA_FULL_PRIVILEGES = "center:{0}:area:{1}:*";
+  public static final String RESEARCH_PROGRAM_FULL_PRIVILEGES = "center:{0}:area:{1}:program:{2}:*";
 
 }

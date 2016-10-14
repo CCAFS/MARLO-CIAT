@@ -96,8 +96,8 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     crp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
     crpProgramID = this.getCrpProgramId();
 
-    if (!baseAction.hasPermission(baseAction.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES,
-      crp.getAcronym()))) {
+    if (!baseAction
+      .hasPermission(baseAction.generatePermission(Permission.RESEARCH_AREA_FULL_PRIVILEGES, crp.getAcronym()))) {
       return BaseAction.NOT_AUTHORIZED;
     }
 

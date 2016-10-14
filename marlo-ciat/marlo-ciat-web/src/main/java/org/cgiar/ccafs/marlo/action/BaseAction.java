@@ -135,17 +135,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return this.securityContext.hasAllPermissions(Permission.FULL_PRIVILEGES);
   }
 
-  public boolean canAcessCenterAdmin() {
-
-    String permission = this.generatePermission(Permission.CRP_ADMIN_VISIBLE_PRIVILEGES, this.getCenterSession());
-    LOG.debug(permission);
-    LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
-    return securityContext.hasPermission(permission);
-  }
-
   public boolean canAcessImpactPathway() {
 
-    String permission = this.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES, this.getCenterSession());
+    String permission = this.generatePermission(Permission.RESEARCH_AREA_FULL_PRIVILEGES, this.getCenterSession());
     LOG.debug(permission);
     LOG.debug(String.valueOf(securityContext.hasPermission(permission)));
     return securityContext.hasPermission(permission);
@@ -162,8 +154,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
    * iteration.
    */
   public void clearPermissionsCache() {
-    ((APCustomRealm) securityContext.getRealm()).clearCachedAuthorizationInfo(securityContext.getSubject()
-      .getPrincipals());
+    ((APCustomRealm) securityContext.getRealm())
+      .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
   }
 
 
@@ -221,11 +213,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public String getCenterSession() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center =
-          (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null ? (ResearchCenter) session
-            .get(APConstants.SESSION_CENTER) : null;
-            // Assumed there is only one center in the system, the default one.
-            this.centerSession = center.getAcronym();
+        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null
+          ? (ResearchCenter) session.get(APConstants.SESSION_CENTER) : null;
+        // Assumed there is only one center in the system, the default one.
+        this.centerSession = center.getAcronym();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user's center in the session.");
       }
@@ -251,10 +242,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public Long getCrpID() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center =
-          (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null ? (ResearchCenter) session
-            .get(APConstants.SESSION_CENTER) : null;
-            this.centerID = center.getId();
+        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null
+          ? (ResearchCenter) session.get(APConstants.SESSION_CENTER) : null;
+        this.centerID = center.getId();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user center in the session.");
       }
@@ -269,10 +259,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public ResearchCenter getCurrentCenter() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center =
-          (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null ? (ResearchCenter) session
-            .get(APConstants.SESSION_CENTER) : null;
-            this.currentCenter = center;
+        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null
+          ? (ResearchCenter) session.get(APConstants.SESSION_CENTER) : null;
+        this.currentCenter = center;
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user center in the session.");
       }
@@ -349,11 +338,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return ((String[]) paramObj)[0];
   }
 
-  public int getPlanningYear() {
-    return Integer.parseInt(this.getSession().get(APConstants.CRP_PLANNING_YEAR).toString());
-
-  }
-
   public HttpServletRequest getRequest() {
     return request;
   }
@@ -403,14 +387,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return permissions;
   }
 
-  public boolean hasProgramnsRegions() {
-    try {
-      return Boolean.parseBoolean(this.getSession().get(APConstants.CRP_HAS_REGIONS).toString());
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
   /**
    * @param role
    * @return true if is the user role
@@ -434,10 +410,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return false;
   }
 
-  public boolean isLessonsActive() {
-    return Integer.parseInt(this.getSession().get(APConstants.CRP_LESSONS_ACTIVE).toString()) == 1;
-  }
-
   /**
    * Validate if the user is already logged in or not.
    * 
@@ -448,11 +420,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return false;
     }
     return true;
-  }
-
-  public boolean isPlanningActive() {
-    return Integer.parseInt(this.getSession().get(APConstants.CRP_PLANNING_ACTIVE).toString()) == 1;
-
   }
 
   public boolean isSubmit() {

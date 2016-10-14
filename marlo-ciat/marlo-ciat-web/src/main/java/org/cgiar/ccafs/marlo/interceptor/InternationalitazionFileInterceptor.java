@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -40,15 +40,15 @@ public class InternationalitazionFileInterceptor extends AbstractInterceptor {
     String language = APConstants.CUSTOM_LAGUAGE;
     String pathFile = APConstants.PATH_CUSTOM_FILES;
     Map<String, Object> session = invocation.getInvocationContext().getSession();
-    if (session.containsKey(APConstants.CRP_LANGUAGE)) {
-      language = (String) session.get(APConstants.CRP_LANGUAGE);
+    if (session.containsKey(APConstants.CENTER_LANGUAGE)) {
+      language = (String) session.get(APConstants.CENTER_LANGUAGE);
     }
     Locale locale = new Locale(language);
     LocalizedTextUtil.reset();
     LocalizedTextUtil.addDefaultResourceBundle(APConstants.CUSTOM_FILE);
     ServletActionContext.getContext().setLocale(locale);
-    if (session.containsKey(APConstants.CRP_CUSTOM_FILE)) {
-      pathFile = pathFile + session.get(APConstants.CRP_CUSTOM_FILE);
+    if (session.containsKey(APConstants.CENTER_CUSTOM_FILE)) {
+      pathFile = pathFile + session.get(APConstants.CENTER_CUSTOM_FILE);
       LocalizedTextUtil.addDefaultResourceBundle(pathFile);
     }
 

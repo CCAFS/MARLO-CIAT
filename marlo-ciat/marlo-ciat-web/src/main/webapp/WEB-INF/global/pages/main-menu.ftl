@@ -2,8 +2,7 @@
 [#assign mainMenu= [
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'login',                                              'visible': !logged, 'active': true },
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'dashboard',                      'icon': 'home',     'visible': logged, 'active': true },
-  { 'slug': 'admin',          'name': 'menu.admin',         'namespace': '/admin',          'action': '${(centerSession)!}/management',    'icon': 'cog',      'visible': action.canAcessCenterAdmin(), 'active': true },
-  { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/programimpacts',                          'visible': action.canAcessImpactPathway(), 'active': true }]/]
+  { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/programimpacts',                          'visible': logged, 'active': true }]/]
 
 [#macro mainMenuList]
   [#list mainMenu as item]

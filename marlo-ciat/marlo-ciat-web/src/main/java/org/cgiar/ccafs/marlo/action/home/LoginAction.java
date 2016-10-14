@@ -154,12 +154,6 @@ public class LoginAction extends BaseAction {
             userManager.saveLastLogin(loggedUser);
             this.getSession().put(APConstants.SESSION_USER, loggedUser);
             this.getSession().put(APConstants.SESSION_CENTER, loggedCrp);
-            // put the crp parameters in the session
-            // for (CrpParameter parameter : loggedCrp.getCrpParameters()) {
-            // if (parameter.isActive()) {
-            // this.getSession().put(parameter.getKey(), parameter.getValue());
-            // }
-            // }
             this.getSession().put("color", this.randomColor());
           } else {
 
@@ -172,16 +166,7 @@ public class LoginAction extends BaseAction {
             return BaseAction.INPUT;
           }
         }
-        /*
-         * else {
-         * this.addFieldError("loginMessage", this.getText("login.error.selectCrp"));
-         * user.setPassword(null);
-         * this.getSession().clear();
-         * SecurityUtils.getSubject().logout();
-         * user.setPassword(null);
-         * return BaseAction.INPUT;
-         * }
-         */
+
         LOG.info("User " + user.getEmail() + " logged in successfully.");
         /*
          * Save the user url with trying to enter the system to redirect after
