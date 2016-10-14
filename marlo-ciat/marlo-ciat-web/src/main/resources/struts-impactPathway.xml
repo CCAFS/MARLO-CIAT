@@ -4,7 +4,7 @@
   <!-- Add addition packages and configuration here. -->
   <package name="impactPathway" namespace="/impactPathway" extends="marlo-default">
     <action name="{center}/programimpacts" class="org.cgiar.ccafs.marlo.action.impactpathway.ProgramImpactsAction">
-      <interceptor-ref name="impactPathwayStack" />     
+     <!--  <interceptor-ref name="impactPathwayStack" />      -->
       <result name="input">/WEB-INF/views/impactPathway/programImpacts.ftl</result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/programimpacts</param>
@@ -19,7 +19,7 @@
       </result>
     </action>
        <action name="{center}/outcomes" class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">
-      <interceptor-ref name="impactPathwayStack" />     
+     <!--  <interceptor-ref name="impactPathwayStack" />    -->  
       <result name="input">/WEB-INF/views/impactPathway/outcomes.ftl</result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/outcomes</param>

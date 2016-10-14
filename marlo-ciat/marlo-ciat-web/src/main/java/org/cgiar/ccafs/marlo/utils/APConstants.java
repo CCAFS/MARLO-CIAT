@@ -33,7 +33,7 @@ public final class APConstants {
 
   // Session variables
   public static final String SESSION_USER = "current_user";
-  public static final String SESSION_CRP = "current_crp";
+  public static final String SESSION_CENTER = "current_center";
   public static final String USER_TOKEN = "user_token";
   public static final String SESSION_RESEARCH_AREA = "current_research_area";
   public static final String SESSION_RESEARCH_PROGRAM = "current_research_program";
@@ -57,7 +57,7 @@ public final class APConstants {
 
   public static final String CRP_CENTER = "CIAT";
 
-  public static final String CRP_PROGRAM_ID = "crpProgramID";
+  public static final String CRP_PROGRAM_ID = "programID";
   public static final String CRP_ID = "crpID";
   public static final String TRANSACTION_ID = "transactionId";
   public static final String CRP_ADMIN_ACTIVE = "crp_admin_active";

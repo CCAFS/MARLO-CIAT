@@ -67,7 +67,7 @@ public class ValidSessionInterceptor extends AbstractInterceptor {
   public String intercept(ActionInvocation invocation) throws Exception {
     Map<String, Object> session = invocation.getInvocationContext().getSession();
 
-    loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CRP);
+    loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
 
     String[] actionMap = ActionContext.getContext().getName().split("/");
@@ -86,7 +86,7 @@ public class ValidSessionInterceptor extends AbstractInterceptor {
             // session.remove(parameter.getKey());
             // }
             // }
-            session.replace(APConstants.SESSION_CRP, crp);
+            session.replace(APConstants.SESSION_CENTER, crp);
             // put the crp parameters in the session
             // for (CrpParameter parameter : crp.getCrpParameters()) {
             // if (parameter.isActive()) {

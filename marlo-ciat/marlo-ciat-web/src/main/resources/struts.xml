@@ -22,13 +22,21 @@
 				class="org.cgiar.ccafs.marlo.interceptor.RequireUserInterceptor" />
 			<interceptor name="i18nFile"
 				class="org.cgiar.ccafs.marlo.interceptor.InternationalitazionFileInterceptor" />
-
+  <!-- validating if the url is valid in the open session -->
+      <interceptor name="validSession"
+        class="org.cgiar.ccafs.marlo.interceptor.ValidSessionInterceptor" />
 			<!-- stack from home packgae -->
 			<interceptor-stack name="homeStack">
 				<interceptor-ref name="i18nFile" />
 				<interceptor-ref name="requireUser" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
+			 <interceptor-stack name="impactPathwayStack">
+        <interceptor-ref name="i18nFile" />
+        <interceptor-ref name="requireUser" />
+        <interceptor-ref name="validSession" />
+        <interceptor-ref name="defaultStack" />
+      </interceptor-stack>
 		</interceptors>
 		
 		<default-action-ref name="login" />
@@ -68,5 +76,6 @@
 	</package>
 
 	<include file="struts-home.xml" />
+	<include file="struts-impactPathway.xml"/>
 
 </struts>
