@@ -18,7 +18,7 @@
  */
 package org.cgiar.ccafs.marlo.action.impactpathway;
 
-import org.cgiar.ccafs.marlo.action.BaseImpactsPathwayAction;
+import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * The action class for handling the Program Impacts
  * Modified by @author nmatovu last on Oct 3, 2016
  */
-public class ProgramImpactsAction extends BaseImpactsPathwayAction {
+public class ProgramImpactsAction extends BaseAction {
 
 
   private static final long serialVersionUID = -2261790056574973080L;
@@ -183,14 +183,10 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
         programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CRP_PROGRAM_ID)));
       } catch (Exception e) {
         User user = userService.getUser(this.getCurrentUser().getId());
-        List<ResearchLeader> userLeads =
-          user
-            .getResearchLeaders()
-            .stream()
-            .filter(
-              c -> c.isActive() && c.getResearchProgram().isActive()
-                && c.getResearchProgram().getProgramType().getTypeName() == ProgramType.FLAGSHIP_PROGRAM_TYPE.name())
-            .collect(Collectors.toList());
+        List<ResearchLeader> userLeads = user.getResearchLeaders().stream()
+          .filter(c -> c.isActive() && c.getResearchProgram().isActive()
+            && c.getResearchProgram().getProgramType().getTypeName() == ProgramType.FLAGSHIP_PROGRAM_TYPE.name())
+          .collect(Collectors.toList());
         if (!userLeads.isEmpty()) {
           programID = userLeads.get(0).getResearchProgram().getId();
         } else {

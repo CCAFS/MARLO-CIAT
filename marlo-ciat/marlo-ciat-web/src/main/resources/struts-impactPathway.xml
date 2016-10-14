@@ -33,5 +33,22 @@
         <param name="cancel">true</param>
       </result>
     </action>
+    
+    <action name="{center}/topics" class="org.cgiar.ccafs.marlo.action.impactpathway.ResearchTopicsAction">
+     <!--  <interceptor-ref name="impactPathwayStack" />      -->
+      <result name="input">/WEB-INF/views/impactPathway/topics.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/topics</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+      </result>
+      <result name="cancel" type="redirectAction">
+        <param name="actionName">${centerSession}/topics</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+        <param name="cancel">true</param>
+      </result>
+    </action>
+    
   </package>
 </struts>
