@@ -92,7 +92,9 @@
     <script type="text/javascript" src="${baseUrl}/js/global/utils.js" ></script>
     <script type="text/javascript" src="${baseUrl}/js/global/global.js" ></script>
     [#if logged]
+    <!--
       <script type="text/javascript" src="${baseUrl}/js/global/pusher-app.js" ></script>
+      -->
     [/#if]
     [#-- import the custom JS and CSS --]
     [#if customJS??][#list customJS as js]<script src="${js}"></script>[/#list][/#if]

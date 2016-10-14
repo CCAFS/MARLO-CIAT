@@ -27,12 +27,13 @@
   <p class="readPrivileges">[@s.text name="saving.read.privileges.section" /]</p>
 [/#if] 
 
-[#-- Program completed Message--]
-[#if canSubmit && !submission?has_content && completed]
+[#-- Program completed Message
+[#if canSubmit && !submission?has_content && completed ]
   <div class="completed-mode text-center animated flipInX">
     <p>[@s.text name="CrpProgram.message.completed" /]</p>
   </div>
 [/#if]
+--]
 
 [#-- Concurrence Message --]
 <div id="concurrenceMessage" class="text-center" style="display:none">

@@ -37,7 +37,6 @@ public class ResearchCenter implements Serializable {
   @Expose
   private Long id;
 
-
   @Expose
   private String name;
 
@@ -67,6 +66,10 @@ public class ResearchCenter implements Serializable {
 
 
   private Set<CenterUser> centerUsers = new HashSet<CenterUser>(0);
+
+
+  private Set<ResearchArea> researchAreas = new HashSet<ResearchArea>(0);
+
 
   public ResearchCenter() {
   }
@@ -120,11 +123,9 @@ public class ResearchCenter implements Serializable {
     return true;
   }
 
-
   public String getAcronym() {
     return acronym;
   }
-
 
   public Date getActiveSince() {
     return activeSince;
@@ -143,9 +144,11 @@ public class ResearchCenter implements Serializable {
     return createdBy;
   }
 
+
   public Long getId() {
     return this.id;
   }
+
 
   public String getModificationJustification() {
     return modificationJustification;
@@ -155,10 +158,14 @@ public class ResearchCenter implements Serializable {
     return modifiedBy;
   }
 
-
   public String getName() {
     return this.name;
   }
+
+  public Set<ResearchArea> getResearchAreas() {
+    return researchAreas;
+  }
+
 
   @Override
   public int hashCode() {
@@ -175,7 +182,6 @@ public class ResearchCenter implements Serializable {
   public void setAcronym(String acronym) {
     this.acronym = acronym;
   }
-
 
   public void setActive(boolean active) {
     this.active = active;
@@ -214,8 +220,13 @@ public class ResearchCenter implements Serializable {
     this.modifiedBy = modifiedBy;
   }
 
+
   public void setName(String name) {
     this.name = name;
+  }
+
+  public void setResearchAreas(Set<ResearchArea> researchAreas) {
+    this.researchAreas = researchAreas;
   }
 
   @Override
