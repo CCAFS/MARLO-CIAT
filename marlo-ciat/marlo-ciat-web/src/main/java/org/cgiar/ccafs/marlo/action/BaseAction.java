@@ -162,8 +162,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
    * iteration.
    */
   public void clearPermissionsCache() {
-    ((APCustomRealm) securityContext.getRealm())
-      .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
+    ((APCustomRealm) securityContext.getRealm()).clearCachedAuthorizationInfo(securityContext.getSubject()
+      .getPrincipals());
   }
 
 
@@ -221,10 +221,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public String getCenterSession() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CRP) != null
-          ? (ResearchCenter) session.get(APConstants.SESSION_CRP) : null;
-        // Assumed there is only one center in the system, the default one.
-        this.centerSession = center.getAcronym();
+        ResearchCenter center =
+          (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null ? (ResearchCenter) session
+            .get(APConstants.SESSION_CENTER) : null;
+            // Assumed there is only one center in the system, the default one.
+            this.centerSession = center.getAcronym();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user's center in the session.");
       }
@@ -250,9 +251,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public Long getCrpID() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CRP) != null
-          ? (ResearchCenter) session.get(APConstants.SESSION_CRP) : null;
-        this.centerID = center.getId();
+        ResearchCenter center =
+          (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null ? (ResearchCenter) session
+            .get(APConstants.SESSION_CENTER) : null;
+            this.centerID = center.getId();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user center in the session.");
       }
@@ -267,9 +269,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public ResearchCenter getCurrentCenter() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CRP) != null
-          ? (ResearchCenter) session.get(APConstants.SESSION_CRP) : null;
-        this.currentCenter = center;
+        ResearchCenter center =
+          (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null ? (ResearchCenter) session
+            .get(APConstants.SESSION_CENTER) : null;
+            this.currentCenter = center;
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user center in the session.");
       }

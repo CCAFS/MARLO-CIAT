@@ -57,7 +57,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     try {
       return Long.parseLong(((String[]) parameters.get(APConstants.CRP_PROGRAM_ID))[0]);
     } catch (Exception e) {
-      ResearchCenter loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CRP);
+      ResearchCenter loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
 
       loggedCrp = crpManager.getCrpById(loggedCrp.getId());
 
@@ -93,7 +93,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     baseAction = (BaseAction) invocation.getAction();
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
-    crp = (ResearchCenter) session.get(APConstants.SESSION_CRP);
+    crp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
     crpProgramID = this.getCrpProgramId();
 
     if (!baseAction.hasPermission(baseAction.generatePermission(Permission.IMPACT_PATHWAY_VISIBLE_PRIVILEGES,

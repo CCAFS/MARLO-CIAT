@@ -77,7 +77,7 @@ public class ResearchAreaDAO implements IResearchAreaDAO {
    */
   @Override
   public List<ResearchArea> findAll() {
-    String query = "from " + ResearchArea.class.getName() + " where is_active=1";
+    String query = "from " + ResearchArea.class.getName();
     List<ResearchArea> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;

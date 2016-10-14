@@ -231,7 +231,7 @@ public class OutcomesAction extends BaseAction {
 
 
     // IAuditLog ia = auditLogManager.getHistory(4);
-    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
+    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     outcomes = new ArrayList<ResearchOutcome>();
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
     targetUnitList = new HashMap<>();

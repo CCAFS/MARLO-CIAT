@@ -16,14 +16,15 @@
 package org.cgiar.ccafs.marlo.security;
 
 
-import org.cgiar.ccafs.marlo.security.authentication.Authenticator;
-import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.data.model.ADLoginMessages;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.model.UserRole;
 import org.cgiar.ccafs.marlo.data.service.impl.RoleService;
 import org.cgiar.ccafs.marlo.data.service.impl.UserService;
+import org.cgiar.ccafs.marlo.security.authentication.Authenticator;
+import org.cgiar.ccafs.marlo.utils.APConstants;
+
 import org.cgiar.ciat.auth.LDAPService;
 import org.cgiar.ciat.auth.LDAPUser;
 
@@ -32,7 +33,6 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -172,7 +172,7 @@ public class APCustomRealm extends AuthorizingRealm {
     Session session = SecurityUtils.getSubject().getSession();
 
     User user = userManager.getUser((Long) principals.getPrimaryPrincipal());
-    ResearchCenter crp = (ResearchCenter) session.getAttribute(APConstants.SESSION_CRP);
+    ResearchCenter crp = (ResearchCenter) session.getAttribute(APConstants.SESSION_CENTER);
 
     for (UserRole userRole : user.getUserRoles()) {
       authorizationInfo.addRole(userRole.getRole().getAcronym());

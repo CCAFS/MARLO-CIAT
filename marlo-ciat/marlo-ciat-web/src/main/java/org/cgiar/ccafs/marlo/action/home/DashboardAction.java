@@ -49,7 +49,7 @@ public class DashboardAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
+    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
   }
 

@@ -176,7 +176,7 @@ public class CrpAdminManagmentAction extends BaseAction {
   public void prepare() throws Exception {
 
     // Get the Users list that have the pmu role in this crp.
-    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
+    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
 
     pmuRol = Long.parseLong((String) this.getSession().get(APConstants.CRP_PMU_ROLE));

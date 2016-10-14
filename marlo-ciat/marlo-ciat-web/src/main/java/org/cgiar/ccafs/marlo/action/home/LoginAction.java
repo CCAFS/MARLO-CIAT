@@ -144,14 +144,16 @@ public class LoginAction extends BaseAction {
 
         // Validate if the user belongs to the selected crp
         if (loggedCrp != null) {
+
           // TODO: Assumed there is only one CRP/Center
           // TODO: Should the logged in user be subjected to another check for the CIAT crp?
           // TODO: Assume the login is enough
           if (crpUserManager.existCrpUser(loggedUser.getId(), loggedCrp.getId())) {
+
             loggedUser.setLastLogin(new Date());
             userManager.saveLastLogin(loggedUser);
             this.getSession().put(APConstants.SESSION_USER, loggedUser);
-            this.getSession().put(APConstants.SESSION_CRP, loggedCrp);
+            this.getSession().put(APConstants.SESSION_CENTER, loggedCrp);
             // put the crp parameters in the session
             // for (CrpParameter parameter : loggedCrp.getCrpParameters()) {
             // if (parameter.isActive()) {

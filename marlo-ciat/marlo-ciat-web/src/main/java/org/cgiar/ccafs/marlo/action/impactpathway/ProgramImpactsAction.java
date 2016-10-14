@@ -22,7 +22,9 @@ import org.cgiar.ccafs.marlo.action.BaseImpactsPathwayAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.ICenterUserService;
@@ -31,10 +33,16 @@ import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.ProgramType;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -45,6 +53,7 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
 
 
   private static final long serialVersionUID = -2261790056574973080L;
+  private static final Logger LOG = LoggerFactory.getLogger(ProgramImpactsAction.class);
   private ICenterService centerService;
   private IProgramService programService;
   private IResearchAreaService researchAreaService;
@@ -58,17 +67,8 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private ResearchProgram selectedProgram;
-  private Long programID;
-  private Long areaID;
-
-  /**
-   * @param config
-   */
-  @Inject
-  public ProgramImpactsAction(APConfig config) {
-    super(config);
-    // TODO Auto-generated constructor stub
-  }
+  private long programID;
+  private long areaID;
 
   /**
    * @param config
@@ -92,6 +92,14 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
     this.userService = userService;
     this.centerUserService = centerUserService;
     this.auditLogManager = auditLogManager;
+  }
+
+
+  /**
+   * @return the areaID
+   */
+  public Long getAreaID() {
+    return areaID;
   }
 
 
@@ -142,13 +150,15 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
     return selectedResearchArea;
   }
 
-
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
+
+    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    LOG.debug("Found this crp center session value: " + loggedCenter.getAcronym());
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
     // Load all available research areas
     reseachAreas = researchAreaService.findAll();
+
     selectedResearchArea = (ResearchArea) this.getSession().get(APConstants.SESSION_RESEARCH_AREA);
     // TODO: Consider user permissions
     if (selectedResearchArea != null) {
@@ -160,8 +170,58 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
         // Retrieve the research program based on the selected research area.
         researchPrograms = programService.findProgramsByResearchArea((Long) selectedResearchArea.getId());
       }
+    } else {
+      if (reseachAreas != null && !reseachAreas.isEmpty()) {
+        selectedResearchArea = reseachAreas.get(0);
+        areaID = (long) selectedResearchArea.getId();
+        researchPrograms = programService.findProgramsByResearchArea((Long) reseachAreas.get(0).getId());
+      }
     }
+    programID = -1;
+    if (researchPrograms != null) {
+      try {
+        programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CRP_PROGRAM_ID)));
+      } catch (Exception e) {
+        User user = userService.getUser(this.getCurrentUser().getId());
+        List<ResearchLeader> userLeads =
+          user
+            .getResearchLeaders()
+            .stream()
+            .filter(
+              c -> c.isActive() && c.getResearchProgram().isActive()
+                && c.getResearchProgram().getProgramType().getTypeName() == ProgramType.FLAGSHIP_PROGRAM_TYPE.name())
+            .collect(Collectors.toList());
+        if (!userLeads.isEmpty()) {
+          programID = userLeads.get(0).getResearchProgram().getId();
+        } else {
+          if (!this.researchPrograms.isEmpty()) {
+            programID = this.researchPrograms.get(0).getId();
+          }
+        }
+
+      }
+    } else {
+      researchPrograms = new ArrayList<>();
+    }
+
+
   }
+
+
+  /**
+   * @param areaID the areaID to set
+   */
+  public void setAreaID(long areaID) {
+    this.areaID = areaID;
+  }
+
+  /**
+   * @param areaID the areaID to set
+   */
+  public void setAreaID(Long areaID) {
+    this.areaID = areaID;
+  }
+
 
   /**
    * @param loggedCenter the loggedCenter to set
@@ -170,6 +230,12 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
     this.loggedCenter = loggedCenter;
   }
 
+  /**
+   * @param programID the programID to set
+   */
+  public void setProgramID(long programID) {
+    this.programID = programID;
+  }
 
   /**
    * @param programID the programID to set
@@ -185,13 +251,13 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
     this.reseachAreas = reseachAreas;
   }
 
-
   /**
    * @param researchPrograms the researchPrograms to set
    */
   public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
+
 
   /**
    * @param selectedProgram the selectedProgram to set
@@ -200,25 +266,12 @@ public class ProgramImpactsAction extends BaseImpactsPathwayAction {
     this.selectedProgram = selectedProgram;
   }
 
+
   /**
    * @param selectedResearchArea the selectedResearchArea to set
    */
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
-  }
-
-  /**
-   * @return the areaID
-   */
-  public Long getAreaID() {
-    return areaID;
-  }
-
-  /**
-   * @param areaID the areaID to set
-   */
-  public void setAreaID(Long areaID) {
-    this.areaID = areaID;
   }
 
 }

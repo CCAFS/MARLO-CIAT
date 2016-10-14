@@ -180,13 +180,13 @@ public class CenterActivitiesAction extends BaseAction {
     // BBC will be our gmail notification email.
     String bbcEmails = this.config.getEmailNotification();
     sendMail.send(toEmail, ccEmail, bbcEmails, "TODO",
-      // this.getText("email.cluster.assigned.subject", new String[] {loggedCrp.getName(), ClusterRoleAcronym,
-      // crpClusterPreview.getCrpProgram().getAcronym()}),
+    // this.getText("email.cluster.assigned.subject", new String[] {loggedCrp.getName(), ClusterRoleAcronym,
+    // crpClusterPreview.getCrpProgram().getAcronym()}),
       message.toString(),
 
       null, null, null, true
 
-    );
+      );
   }
 
 
@@ -217,8 +217,8 @@ public class CenterActivitiesAction extends BaseAction {
     // BBC will be our gmail notification email.
     String bbcEmails = this.config.getEmailNotification();
     sendMail.send(toEmail, ccEmail, bbcEmails, "Sub"
-    // this.getText("email.cluster.unassigned.subject", new String[] {loggedCrp.getName(), ClusterRoleAcronym,
-    // crpClusterOfActivity.getCrpProgram().getAcronym()})
+      // this.getText("email.cluster.unassigned.subject", new String[] {loggedCrp.getName(), ClusterRoleAcronym,
+      // crpClusterOfActivity.getCrpProgram().getAcronym()})
 
       , message.toString(), null, null, null, true);
   }
@@ -227,7 +227,7 @@ public class CenterActivitiesAction extends BaseAction {
   public void prepare() throws Exception {
     // TODO:Update this method.
     // Get the Users list that have the pmu role in this crp.
-    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CRP);
+    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCrp = crpService.getCrpById(loggedCrp.getId());
     clRol = Long.parseLong((String) this.getSession().get(APConstants.CRP_CL_ROLE));
 
