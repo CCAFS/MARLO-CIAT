@@ -55,7 +55,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
 
   long getCrpProgramId() {
     try {
-      return Long.parseLong(((String[]) parameters.get(APConstants.CRP_PROGRAM_ID))[0]);
+      return Long.parseLong(((String[]) parameters.get(APConstants.CENTER_PROGRAM_ID))[0]);
     } catch (Exception e) {
       ResearchCenter loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
 

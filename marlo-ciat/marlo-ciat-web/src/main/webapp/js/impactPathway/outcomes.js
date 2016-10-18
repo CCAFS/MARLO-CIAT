@@ -167,7 +167,7 @@ function attachEvents() {
 
 function addOutcome() {
   var $list = $('.outcomes-list');
-  var $item = $('#outcome-template').clone(true).removeAttr("id");
+  var $item = $('#researchTopic-template').clone(true).removeAttr("id");
   // $item.find('select').select2({
   // width: '100%'
   // });
@@ -317,43 +317,11 @@ function removeAssumption() {
 
 function updateAllIndexes() {
   // All Outcomes List
-  $('.outcomes-list').find('.outcome').each(function(i,outcome) {
-    var outcomesName = 'outcomes' + '[' + i + '].';
+  $('.outcomes-list').find('.researchTopic').each(function(i,outcome) {
+    var outcomesName = 'researchTopics' + '[' + i + '].';
     $(outcome).find('span.index').html(i + 1);
-    $(outcome).find('.outcome-statement').attr('name', outcomesName + 'description');
-    $(outcome).find('.targetValue').attr('name', outcomesName + 'value');
-    $(outcome).find('.targetYear').attr('name', outcomesName + 'year');
-    $(outcome).find('.targetUnit').attr('name', outcomesName + 'srfTargetUnit.id');
-    $(outcome).find('.outcomeId').attr('name', outcomesName + 'id');
+    $(outcome).find('.researchTopicInput').attr('name', outcomesName + 'researchTopic');
 
-    // Update Milestones
-    $(outcome).find('.milestone').each(function(i,milestone) {
-      var milestoneName = outcomesName + 'milestones' + '[' + i + '].';
-      $(milestone).find('span.index').text(i + 1);
-      $(milestone).find('.milestone-statement').attr('name', milestoneName + 'title');
-      $(milestone).find('.targetValue').attr('name', milestoneName + 'value');
-      $(milestone).find('.targetYear').attr('name', milestoneName + 'year');
-      $(milestone).find('.targetUnit').attr('name', milestoneName + 'srfTargetUnit.id');
-      $(milestone).find('.mileStoneId').attr('name', milestoneName + 'id');
-    });
-
-    // Update SubIdos
-    $(outcome).find('.subIdo').each(function(i,subIdo) {
-      var subIdoName = outcomesName + 'subIdos' + '[' + i + '].';
-      $(subIdo).find('span.index').text(i + 1);
-      $(subIdo).find('.subIdoId').attr('name', subIdoName + 'srfSubIdo.id');
-      $(subIdo).find('.idoId').attr('name', subIdoName + 'srfSubIdo.srfIdo.id');
-      $(subIdo).find('.contribution').attr('name', subIdoName + 'contribution');
-      $(subIdo).find('.programSubIDOId').attr('name', subIdoName + 'id');
-
-      // Update Assumptions
-      $(subIdo).find('.assumption').each(function(i,assumption) {
-        var assumptionName = subIdoName + 'assumptions' + '[' + i + '].';
-        $(assumption).find('.assumptionId').attr('name', assumptionName + 'id');
-        $(assumption).find('.statement').attr('placeholder', 'Assumption statement #' + (i + 1));
-        $(assumption).find('.statement').attr('name', assumptionName + 'description');
-      });
-    });
   });
 
   // Update component event

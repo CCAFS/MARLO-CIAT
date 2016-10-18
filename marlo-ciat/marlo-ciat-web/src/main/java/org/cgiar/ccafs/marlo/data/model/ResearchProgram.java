@@ -15,6 +15,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -33,14 +34,12 @@ public class ResearchProgram implements java.io.Serializable {
   @Expose
   private Long id;
 
-
   @Expose
   private ResearchArea researchArea;
 
 
   @Expose
   private String name;
-
 
   @Expose
   private String acronym;
@@ -50,21 +49,29 @@ public class ResearchProgram implements java.io.Serializable {
   private EntityType programType;
 
 
-  private Set<ResearchLeader> researchLeaders;
+  private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
+
+
+  private Set<ResearchTopic> researchTopics = new HashSet<ResearchTopic>(0);
 
 
   @Expose
   private String color;
 
+
   @Expose
   private boolean active;
+
 
   @Expose
   private Date activeSince;
   @Expose
   private User createdBy;
+
+
   @Expose
   private User modifiedBy;
+
   @Expose
   private String modificationJustification;
 
@@ -82,7 +89,7 @@ public class ResearchProgram implements java.io.Serializable {
    * @param researchLeaders
    */
   public ResearchProgram(String name, String acronym, EntityType programType, boolean active, String color,
-    ResearchArea researchArea, Set<ResearchLeader> researchLeaders) {
+    ResearchArea researchArea, Set<ResearchLeader> researchLeaders, Set<ResearchTopic> researchTopics) {
     super();
     this.name = name;
     this.acronym = acronym;
@@ -91,6 +98,7 @@ public class ResearchProgram implements java.io.Serializable {
     this.color = color;
     this.researchArea = researchArea;
     this.researchLeaders = researchLeaders;
+    this.researchTopics = researchTopics;
   }
 
   public ResearchProgram(String name, String acronym, EntityType programType, ResearchArea researchArea) {
@@ -138,7 +146,6 @@ public class ResearchProgram implements java.io.Serializable {
     return this.acronym + ": " + this.name;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
@@ -146,7 +153,6 @@ public class ResearchProgram implements java.io.Serializable {
   public Long getId() {
     return this.id;
   }
-
 
   public String getModificationJustification() {
     return modificationJustification;
@@ -161,13 +167,13 @@ public class ResearchProgram implements java.io.Serializable {
     return this.name;
   }
 
-
   /**
    * @return the programType
    */
   public EntityType getProgramType() {
     return programType;
   }
+
 
   /**
    * @return the researchArea
@@ -176,12 +182,16 @@ public class ResearchProgram implements java.io.Serializable {
     return researchArea;
   }
 
-
   /**
    * @return the researchLeaders
    */
   public Set<ResearchLeader> getResearchLeaders() {
     return researchLeaders;
+  }
+
+
+  public Set<ResearchTopic> getResearchTopics() {
+    return researchTopics;
   }
 
 
@@ -197,7 +207,6 @@ public class ResearchProgram implements java.io.Serializable {
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -255,6 +264,11 @@ public class ResearchProgram implements java.io.Serializable {
    */
   public void setResearchLeaders(Set<ResearchLeader> researchLeaders) {
     this.researchLeaders = researchLeaders;
+  }
+
+
+  public void setResearchTopics(Set<ResearchTopic> researchTopics) {
+    this.researchTopics = researchTopics;
   }
 
   @Override

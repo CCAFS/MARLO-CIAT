@@ -51,12 +51,13 @@ public final class APConstants {
   public static final String OUTLOOK_EMAIL = "cgiar.org";
 
   // Request variables
-  public static final String CRP_PROGRAM_ID = "programID";
+  public static final String CENTER_PROGRAM_ID = "programID";
   public static final String EDITABLE_REQUEST = "edit";
   public static final String CENTER_REQUEST = "center";
   public static final String YEAR_REQUEST = "year";
   public static final String AUTOSAVE_REQUEST = "autoSave";
   public static final String SECTION_NAME = "sectionName";
+  public static final String CENTER_AREA_ID = "areaID";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";

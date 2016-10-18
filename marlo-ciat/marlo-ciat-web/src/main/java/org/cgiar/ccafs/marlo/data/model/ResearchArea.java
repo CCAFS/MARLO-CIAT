@@ -118,7 +118,7 @@ public class ResearchArea implements Serializable {
     return createdBy;
   }
 
-  public Object getId() {
+  public Long getId() {
     return this.id;
   }
 

@@ -168,19 +168,19 @@ public class ProgramImpactsAction extends BaseAction {
         // TODO: Handle the existing program
       } else {
         // Retrieve the research program based on the selected research area.
-        researchPrograms = programService.findProgramsByResearchArea((Long) selectedResearchArea.getId());
+        researchPrograms = programService.findProgramsByResearchArea(selectedResearchArea.getId());
       }
     } else {
       if (reseachAreas != null && !reseachAreas.isEmpty()) {
         selectedResearchArea = reseachAreas.get(0);
-        areaID = (long) selectedResearchArea.getId();
-        researchPrograms = programService.findProgramsByResearchArea((Long) reseachAreas.get(0).getId());
+        areaID = selectedResearchArea.getId();
+        researchPrograms = programService.findProgramsByResearchArea(reseachAreas.get(0).getId());
       }
     }
     programID = -1;
     if (researchPrograms != null) {
       try {
-        programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CRP_PROGRAM_ID)));
+        programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
       } catch (Exception e) {
         User user = userService.getUser(this.getCurrentUser().getId());
         List<ResearchLeader> userLeads = user.getResearchLeaders().stream()

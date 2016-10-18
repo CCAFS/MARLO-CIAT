@@ -22,18 +22,24 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
+import org.cgiar.ccafs.marlo.data.service.IUserService;
+import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -54,11 +60,14 @@ public class ResearchTopicsAction extends BaseAction {
   private IResearchAreaService researchAreaService;
 
   private IResearchTopicService researchTopicService;
+
+  private IUserService userService;
   // Local Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
 
   private List<ResearchTopic> researchTopics;
+  private List<ResearchProgram> reserachPrograms;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
   private long programID;
@@ -66,12 +75,13 @@ public class ResearchTopicsAction extends BaseAction {
 
   @Inject
   public ResearchTopicsAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService) {
+    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService, IUserService userService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.researchAreaService = researchAreaService;
     this.researchTopicService = researchTopicService;
+    this.userService = userService;
   }
 
   public long getAreaID() {
@@ -109,20 +119,73 @@ public class ResearchTopicsAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    // Temporal Static Variables to inital functionality
-    areaID = 1;
-    programID = 1;
+    areaID = -1;
+    programID = -1;
 
-
-    loggedCenter = (ResearchCenter) this.getSession().get(org.cgiar.ccafs.marlo.utils.APConstants.SESSION_CENTER);
+    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
 
-    selectedResearchArea = researchAreaService.find(areaID);
+    Collections.sort(researchAreas, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
 
-    selectedProgram = programService.getCrpProgramById(programID);
+    if (researchAreas != null) {
+      try {
+        areaID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
+      } catch (Exception e) {
+        User user = userService.getUser(this.getCurrentUser().getId());
+
+        List<ResearchLeader> userLeads =
+          new ArrayList<>(user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+
+        if (!userLeads.isEmpty()) {
+          areaID = userLeads.get(0).getResearchArea().getId();
+        } else {
+          if (!researchAreas.isEmpty()) {
+            areaID = researchAreas.get(0).getId();
+          }
+        }
+      }
+    }
+
+    if (areaID != -1) {
+      selectedResearchArea = researchAreaService.find(areaID);
+      reserachPrograms = new ArrayList<>(
+        selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
+      Collections.sort(reserachPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
+      if (reserachPrograms != null) {
+        try {
+          programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+        } catch (Exception e) {
+          User user = userService.getUser(this.getCurrentUser().getId());
+
+          List<ResearchLeader> userLeads = new ArrayList<>(
+            user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+
+          if (!userLeads.isEmpty()) {
+            programID = userLeads.get(0).getResearchProgram().getId();
+          } else {
+            if (!reserachPrograms.isEmpty()) {
+              programID = reserachPrograms.get(0).getId();
+            }
+          }
+        }
+      }
+
+      if (programID != -1) {
+        selectedProgram = programService.getCrpProgramById(programID);
+
+        if (selectedProgram != null) {
+          researchTopics = new ArrayList<>(
+            selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+
+          System.out.println("TEST");
+        }
+
+      }
+    }
+
 
   }
 
