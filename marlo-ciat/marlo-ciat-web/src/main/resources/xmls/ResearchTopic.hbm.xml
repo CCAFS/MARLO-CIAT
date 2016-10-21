@@ -16,7 +16,7 @@
       <column name="is_active" not-null="true" />
     </property>
     <property name="activeSince" type="timestamp">
-      <column name="active_since" length="19" not-null="true" />
+      <column name="active_since" length="19" not-null="false" />
     </property>
     <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User"
       fetch="select">
@@ -28,7 +28,7 @@
     </many-to-one>
     <property name="modificationJustification" type="string">
       <column name="modification_justification" length="65535"
-        not-null="true" />
+        not-null="false" />
     </property>
     <many-to-one name="researchProgram" class="org.cgiar.ccafs.marlo.data.model.ResearchProgram"
       fetch="select">

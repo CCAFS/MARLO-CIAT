@@ -264,7 +264,7 @@ public class ResearchTopicsAction extends BaseAction {
           researchTopicService.saveResearchTopic(newResearchTopic);
         } else {
           ResearchTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
-          if (!researchTopic.getResearchTopic().equals(researchTopic.getResearchTopic())) {
+          if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic())) {
 
             researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic());
             researchTopicPrew.setModifiedBy(this.getCurrentUser());
