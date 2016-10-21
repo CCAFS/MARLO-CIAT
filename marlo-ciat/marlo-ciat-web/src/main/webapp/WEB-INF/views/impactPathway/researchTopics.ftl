@@ -27,21 +27,36 @@
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
         
         [#-- Research Areas --]
-        <ul id="liaisonInstitutions" class="horizontalSubMenu text-left">
-          [#list researchAreas as areas]
-            [#assign isActive = (areas.id == areaID)/]
-            
-            <li class="${isActive?string('active','')}">
-              <a href="[@s.url][@s.param name ="areaID"]${areas.id}[/@s.param][@s.param name ="edit"]true[/@s.param][/@s.url]">${areas.acronym}</a>
-              
+        <div class="sectionSubMenu">
+          [#-- Nav tabs --]
+          <ul class="nav nav-tabs" role="tablist">
+            [#list researchAreas as area]
+            [#assign isActive = (area.id == areaID)/]
+            <li role="areas" class="${isActive?string('active','')}"><a href="#area-${area.id}" aria-controls="home" role="tab" data-toggle="tab">${area.acronym}</a></li>
+            [/#list]
+          </ul>
+          [#-- Tab panes --]
+          <div class="tab-content">
+            [#list researchAreas as area ]
+            [#assign isActive = (area.id == areaID)/]
+            <div role="tabpanel" class="tab-pane ${isActive?string('active','')}" id="area-${area.id}">
+              [#if area.researchPrograms?has_content]
               <ul>
-                [#list areas.researchPrograms as programs]                
-                <li>${programs.name}</li>
+                [#list area.researchPrograms as program]
+                  [#assign isProgramActive = (program.id == programID)/]           
+                  <li class="${isProgramActive?string('active','')}"> <a href="[@s.url][@s.param name="programID" value=program.id /][/@s.url]">${program.name}</a> </li>
                 [/#list]
-              </ul>           
-            </li>
-          [/#list]
-        </ul>
+              </ul>
+              [#else]
+                <p class="emptyMessage text-center">No programs added.</p>
+              [/#if]
+            </div>
+            [/#list]
+          </div>
+        </div>
+        
+        
+        
                 
         [@s.form action=actionName enctype="multipart/form-data" ]     
         
