@@ -68,6 +68,11 @@ public class ResearchLeader implements java.io.Serializable {
   @Expose
   private String modificationJustification;
 
+
+  @Expose
+  private EntityType type;
+
+
   public ResearchLeader() {
   }
 
@@ -164,7 +169,6 @@ public class ResearchLeader implements java.io.Serializable {
     return researchArea;
   }
 
-
   /**
    * @return the researchCenter
    */
@@ -172,12 +176,16 @@ public class ResearchLeader implements java.io.Serializable {
     return researchCenter;
   }
 
-
   /**
    * @return the researchProgram
    */
   public ResearchProgram getResearchProgram() {
     return researchProgram;
+  }
+
+
+  public EntityType getType() {
+    return type;
   }
 
 
@@ -195,6 +203,7 @@ public class ResearchLeader implements java.io.Serializable {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
@@ -203,15 +212,14 @@ public class ResearchLeader implements java.io.Serializable {
     this.createdBy = createdBy;
   }
 
-
   public void setId(Long id) {
     this.id = id;
   }
 
+
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
-
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
@@ -239,6 +247,11 @@ public class ResearchLeader implements java.io.Serializable {
    */
   public void setResearchProgram(ResearchProgram researchProgram) {
     this.researchProgram = researchProgram;
+  }
+
+
+  public void setType(EntityType type) {
+    this.type = type;
   }
 
 

@@ -29,5 +29,7 @@ public class Permission {
   public static final String FULL_PRIVILEGES = "*"; // path full privileges
   public static final String RESEARCH_AREA_FULL_PRIVILEGES = "center:{0}:area:{1}:*";
   public static final String RESEARCH_PROGRAM_FULL_PRIVILEGES = "center:{0}:area:{1}:program:{2}:*";
+  public static final String RESEARCH_AREA_BASE_PERMISSION = "center:{0}:area:{1}";
+  public static final String RESEARCH_PROGRAM_BASE_PERMISSION = "center:{0}:area:{1}:program:{2}";
 
 }

@@ -31,10 +31,13 @@ import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +65,7 @@ public class ResearchTopicsAction extends BaseAction {
   private IResearchTopicService researchTopicService;
 
   private IUserService userService;
+
   // Local Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
@@ -131,61 +135,162 @@ public class ResearchTopicsAction extends BaseAction {
     Collections.sort(researchAreas, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
 
     if (researchAreas != null) {
+
       try {
         areaID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
       } catch (Exception e) {
-        User user = userService.getUser(this.getCurrentUser().getId());
-
-        List<ResearchLeader> userLeads =
-          new ArrayList<>(user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
-
-        if (!userLeads.isEmpty()) {
-          areaID = userLeads.get(0).getResearchArea().getId();
-        } else {
-          if (!researchAreas.isEmpty()) {
-            areaID = researchAreas.get(0).getId();
-          }
-        }
-      }
-    }
-
-    if (areaID != -1) {
-      selectedResearchArea = researchAreaService.find(areaID);
-      reserachPrograms = new ArrayList<>(
-        selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
-      Collections.sort(reserachPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-      if (reserachPrograms != null) {
         try {
           programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
-        } catch (Exception e) {
+        } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          List<ResearchLeader> userLeads = new ArrayList<>(
-            user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+          List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
 
           if (!userLeads.isEmpty()) {
             programID = userLeads.get(0).getResearchProgram().getId();
           } else {
-            if (!reserachPrograms.isEmpty()) {
-              programID = reserachPrograms.get(0).getId();
+            if (!researchAreas.isEmpty()) {
+              ResearchProgram rp = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+                .collect(Collectors.toList()).get(0);
+              programID = rp.getId();
             }
           }
         }
       }
 
-      if (programID != -1) {
-        selectedProgram = programService.getCrpProgramById(programID);
+      if (areaID != -1 && programID == -1) {
+        selectedResearchArea = researchAreaService.find(areaID);
+        reserachPrograms = new ArrayList<>(
+          selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
+        Collections.sort(reserachPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
+        if (reserachPrograms != null) {
+          try {
+            programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+          } catch (Exception e) {
+            User user = userService.getUser(this.getCurrentUser().getId());
 
-        if (selectedProgram != null) {
-          researchTopics = new ArrayList<>(
-            selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+            List<ResearchLeader> userLeads = new ArrayList<>(
+              user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
-          System.out.println("TEST");
+            if (!userLeads.isEmpty()) {
+              programID = userLeads.get(0).getResearchProgram().getId();
+            } else {
+              if (!reserachPrograms.isEmpty()) {
+                programID = reserachPrograms.get(0).getId();
+              }
+            }
+          }
+        }
+
+        if (programID != -1) {
+          selectedProgram = programService.getProgramById(programID);
+
+          if (selectedProgram != null) {
+            if (selectedProgram.getResearchTopics() != null) {
+              researchTopics = new ArrayList<>(
+                selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+            }
+          }
+
+        }
+      } else {
+        if (programID != -1) {
+
+          selectedProgram = programService.getProgramById(programID);
+          areaID = selectedProgram.getResearchArea().getId();
+          selectedResearchArea = researchAreaService.find(areaID);
+
+          reserachPrograms = new ArrayList<>(selectedResearchArea.getResearchPrograms().stream()
+            .filter(rp -> rp.isActive()).collect(Collectors.toList()));
+          if (selectedProgram != null) {
+            if (selectedProgram.getResearchTopics() != null) {
+              researchTopics = new ArrayList<>(
+                selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+            }
+          }
+        }
+      }
+
+
+    }
+
+
+    String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+    this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
+
+    if (this.isHttpPost()) {
+      if (researchAreas != null) {
+        researchAreas.clear();
+      }
+      if (reserachPrograms != null) {
+        reserachPrograms.clear();
+      }
+      if (researchTopics != null) {
+        researchTopics.clear();
+      }
+    }
+  }
+
+  @Override
+  public String save() {
+    if (this.hasPermission("*")) {
+
+      List<ResearchTopic> researchTopicsPrew;
+
+      selectedProgram = programService.getProgramById(programID);
+
+      if (selectedProgram.getResearchTopics() != null) {
+        researchTopicsPrew =
+          selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList());
+
+        for (ResearchTopic researchTopic : researchTopicsPrew) {
+          if (!researchTopics.contains(researchTopic)) {
+            researchTopicService.deleteResearchTopic(researchTopic.getId());
+          }
+        }
+      }
+
+
+      for (ResearchTopic researchTopic : researchTopics) {
+        if (researchTopic.getId() == null || researchTopic.getId() == -1) {
+          ResearchTopic newResearchTopic = new ResearchTopic();
+          newResearchTopic.setActive(true);
+          newResearchTopic.setActiveSince(new Date());
+          newResearchTopic.setCreatedBy(this.getCurrentUser());
+          newResearchTopic.setResearchTopic(researchTopic.getResearchTopic());
+          newResearchTopic.setResearchProgram(selectedProgram);
+
+          researchTopicService.saveResearchTopic(newResearchTopic);
+        } else {
+          ResearchTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
+          if (!researchTopic.getResearchTopic().equals(researchTopic.getResearchTopic())) {
+
+            researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic());
+            researchTopicPrew.setModifiedBy(this.getCurrentUser());
+            researchTopicPrew.setModificationJustification("Modified on " + new Date().toString());
+
+            researchTopicService.saveResearchTopic(researchTopicPrew);
+          }
         }
 
       }
-    }
 
+      Collection<String> messages = this.getActionMessages();
+      if (!messages.isEmpty()) {
+        String validationMessage = messages.iterator().next();
+        this.setActionMessages(null);
+        this.addActionWarning(this.getText("saving.saved") + validationMessage);
+      } else {
+        this.addActionMessage(this.getText("saving.saved"));
+      }
+      messages = this.getActionMessages();
+
+      return SUCCESS;
+    } else {
+      this.setActionMessages(null);
+      return NOT_AUTHORIZED;
+    }
 
   }
 
