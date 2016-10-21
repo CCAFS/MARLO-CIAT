@@ -107,6 +107,7 @@
 [#-- MACROS --]
 [#macro topicMacro element name index template=false]
   <div id="researchTopic-${template?string('template','')}" class="borderBox researchTopic col-md-12" style="display:${template?string('none','block')}">
+    [#local customName = "${name}[${index}]" /]
     [#-- Remove Button --]
     <div class=" removeElement removeResearchTopic" title="Remove Research Topic"></div>
     
@@ -116,10 +117,12 @@
     </div>
     <br />
     
+    <input type="hidden" name="${customName}.id" value="${(element.id)!}"/>
+    
     [#-- Program Acronym & Name --]
     <div class="form-group"> 
       <div class="row">
-        <div class="col-sm-12">[@customForm.input name="${name}[${index}].researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
+        <div class="col-sm-12">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
       </div>
     </div>
   </div>  

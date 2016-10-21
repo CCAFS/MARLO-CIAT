@@ -34,7 +34,6 @@ function addResearchTopic() {
 }
 
 function removeResearchTopic() {
-  console.log('asdasd');
   var $list = $(this).parents('.outcomes-list');
   var $item = $(this).parents('.researchTopic');
   $item.hide(function() {
@@ -52,7 +51,8 @@ function updateAllIndexes() {
   $('.outcomes-list').find('.researchTopic').each(function(i,outcome) {
     var outcomesName = 'researchTopics' + '[' + i + '].';
     $(outcome).find('span.index').html(i + 1);
-    $(outcome).find('.researchTopicInput').attr('name', outcomesName + 'researchTopic');
+    $(outcome).setNameIndexes(1, i);
+
   });
 
   // Update component event
