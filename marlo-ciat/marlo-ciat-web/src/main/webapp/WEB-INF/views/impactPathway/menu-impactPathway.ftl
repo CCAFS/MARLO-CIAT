@@ -9,24 +9,17 @@
 
 [#assign submission = (action.submission)! /]
 [#assign canSubmit = (action.hasPersmissionSubmit())!false /]
-[#-- ]#assign completed = action.isCompleteImpact(programID) -- /]
+[#-- ]#assign completed = action.isCompleteImpact(programID) --]
 
 
 [#-- Menu  ${action.getImpactSectionStatus(actionName, crpProgramID)?string("","hasMissingFields")} --]
 <nav id="secondaryMenu" class="">
   <p>[@s.text name="impactPathway.menu.title"/]</p>
-  <div class="menuList">
-  [#-- Research Areas --]
-    [#list researchAreas as area]
-      [#assign isActive = (area.id == areaID)/]
-      <p class="${isActive?string('active','')}"><a href="[@s.url][@s.param name ="areaID"]${area.id}[/@s.param][@s.param name ="edit"]true[/@s.param][/@s.url]">[@s.text name="research.area.menu"/] ${area.acronym}</a></p>
-    [/#list]
-  </div>
   <ul>
     <li>
       <ul>
         [#list items as item]
-          <li id="menu-${item.action}" class="[#if item.slug == currentStage]currentSection[/#if]${(item.active)?string('enabled','disabled')}">
+          <li id="menu-${item.action}" class="[#if item.slug == currentStage]currentSection[/#if] ${(item.active)?string('enabled','disabled')}">
             <a href="[@s.url action="${centerSession}/${item.action}"][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]" onclick="return ${item.active?string}">
               [@s.text name=item.name/]
             </a>

@@ -2,11 +2,15 @@
 [#assign title = "Impact Pathway - Research Topics" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/outcomes.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
 [#assign currentSection = "impactPathway" /]
-[#assign currentStage = "clusterActivities" /]
+[#assign currentStage = "researchTopics" /]
+
+[#-- TODO: delete assignment below --]
 [#assign editable = true]
+
+
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"", "action":"topics"}
 ]/]
@@ -73,7 +77,7 @@
           <div class="clearfix"></div>
           [#-- Add Outcome Button --]
           [#if editable]
-            <div class="addOutcome bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addOutcome"/]</div>
+            <div class="addResearchTopic bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addOutcome"/]</div>
           [/#if]
         
           [#-- Section Buttons--]
@@ -104,7 +108,7 @@
 [#macro topicMacro element name index template=false]
   <div id="researchTopic-${template?string('template','')}" class="borderBox researchTopic col-md-12" style="display:${template?string('none','block')}">
     [#-- Remove Button --]
-    <div class=" removeElement removeCountry" title="Remove Country"></div>
+    <div class=" removeElement removeResearchTopic" title="Remove Research Topic"></div>
     
     <div class="leftHead">
       <span class="index">${index+1}</span>
@@ -115,10 +119,9 @@
     [#-- Program Acronym & Name --]
     <div class="form-group"> 
       <div class="row">
-        <div class="col-sm-12">[@customForm.input name="${name}[${index}].researchTopic" type="text"  i18nkey="research topic name" className="researchTopicInput" required=true editable=editable /]</div>
+        <div class="col-sm-12">[@customForm.input name="${name}[${index}].researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
       </div>
     </div>
-
   </div>  
 [/#macro]
 
