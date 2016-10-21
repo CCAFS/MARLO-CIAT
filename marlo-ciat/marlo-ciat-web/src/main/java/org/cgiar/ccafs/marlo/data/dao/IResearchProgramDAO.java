@@ -27,69 +27,69 @@ import com.google.inject.ImplementedBy;
 public interface IResearchProgramDAO {
 
   /**
-   * This method removes a specific crpProgram value from the database.
+   * This method removes a specific ResearchProgram value from the database.
    * 
-   * @param crpProgramId is the crpProgram identifier.
-   * @return true if the crpProgram was successfully deleted, false otherwise.
+   * @param programId is the ResearchProgram identifier.
+   * @return true if the ResearchProgram was successfully deleted, false otherwise.
    */
-  public boolean deleteCrpProgram(long crpProgramId);
+  public boolean deleteProgram(long programId);
 
   /**
-   * This method validate if the crpProgram identify with the given id exists in the system.
+   * This method validate if the ResearchProgram identify with the given id exists in the system.
    * 
-   * @param crpProgramID is a crpProgram identifier.
-   * @return true if the crpProgram exists, false otherwise.
+   * @param programID is a ResearchProgram identifier.
+   * @return true if the ResearchProgram exists, false otherwise.
    */
-  public boolean existCrpProgram(long crpProgramID);
+  public boolean existProgram(long programID);
 
   /**
-   * This method gets a crpProgram object by a given crpProgram identifier.
+   * This method gets a ResearchProgram object by a given program identifier.
    * 
-   * @param crpProgramID is the crpProgram identifier.
-   * @return a CrpProgram object.
+   * @param programID is the ResearchProgram identifier.
+   * @return a ResearchProgram object.
    */
   public ResearchProgram find(long id);
 
   /**
-   * This method gets a list of crpProgram that are active
+   * This method gets a list of ResearchProgram that are active
    * 
-   * @return a list from CrpProgram null if no exist records
+   * @return a list from ResearchProgram null if no exist records
    */
   public List<ResearchProgram> findAll();
 
   /**
-   * This method gets a list of crpProgram of a specific program type
-   * 
-   * @return a CrpProgram list
-   */
-  public List<ResearchProgram> findCrpProgramsByType(long id, int programType);
-
-
-  /**
-   * Lists all the research programs for the research area with the given id
+   * Lists all the ResearchProgram for the research area with the given id
    * 
    * @param researchAreaId the research area id or primary key
    * @return List of research programs for the given research area id or else an empty list will be returned.
    */
   public List<ResearchProgram> findProgramsByResearchArea(Long researchAreaId);
 
-  /**
-   * This method saves the information of the given crpProgram
-   * 
-   * @param crpProgram - is the crpProgram object with the new information to be added/updated.
-   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the crpProgram was
-   *         updated
-   *         or -1 is some error occurred.
-   */
-  public long save(ResearchProgram crpProgram);
 
   /**
-   * This method saves the information of the given crpProgram
+   * This method gets a list of ResearchProgram of a specific program type
    * 
-   * @param crpProgram - is the crpProgram object with the new information to be added/updated.
-   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the crpProgram was
+   * @return a ResearchProgram list
+   */
+  public List<ResearchProgram> findProgramsByType(long id, int programType);
+
+  /**
+   * This method saves the information of the given ResearchProgram
+   * 
+   * @param researchProgram - is the ResearchProgram object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the ResearchProgram was
    *         updated
    *         or -1 is some error occurred.
    */
-  public long save(ResearchProgram crpProgram, String actionName, List<String> relationsName);
+  public long save(ResearchProgram researchProgram);
+
+  /**
+   * This method saves the information of the given ResearchProgram
+   * 
+   * @param researchProgram - is the ResearchProgram object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the ResearchProgram was
+   *         updated
+   *         or -1 is some error occurred.
+   */
+  public long save(ResearchProgram researchProgram, String actionName, List<String> relationsName);
 }

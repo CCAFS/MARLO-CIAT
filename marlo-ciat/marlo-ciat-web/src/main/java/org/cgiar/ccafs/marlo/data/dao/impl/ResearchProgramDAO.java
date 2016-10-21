@@ -33,16 +33,16 @@ public class ResearchProgramDAO implements IResearchProgramDAO {
   }
 
   @Override
-  public boolean deleteCrpProgram(long crpProgramId) {
-    ResearchProgram crpProgram = this.find(crpProgramId);
-    crpProgram.setActive(false);
-    return this.save(crpProgram) > 0;
+  public boolean deleteProgram(long programId) {
+    ResearchProgram researchProgram = this.find(programId);
+    researchProgram.setActive(false);
+    return this.save(researchProgram) > 0;
   }
 
   @Override
-  public boolean existCrpProgram(long crpProgramID) {
-    ResearchProgram crpProgram = this.find(crpProgramID);
-    if (crpProgram == null) {
+  public boolean existProgram(long programID) {
+    ResearchProgram researchProgram = this.find(programID);
+    if (researchProgram == null) {
       return false;
     }
     return true;
@@ -57,34 +57,7 @@ public class ResearchProgramDAO implements IResearchProgramDAO {
 
   @Override
   public List<ResearchProgram> findAll() {
-
-
     String query = "from " + ResearchProgram.class.getName() + " where is_active=1";
-    List<ResearchProgram> list = dao.findAll(query);
-    if (list.size() > 0) {
-      return list;
-    }
-    return null;
-
-    /*
-     * Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-     * List<CrpProgram> programs = new ArrayList<CrpProgram>();
-     * String query = "select * from auditlog";
-     * List<Map<String, Object>> lst = dao.findCustomQuery(query);
-     * for (Map<String, Object> map : lst) {
-     * String json = (String) map.get("Entity_json");
-     * CrpProgram prog = gson.fromJson(json, CrpProgram.class);
-     * programs.add(prog);
-     * }
-     * return programs;
-     */
-  }
-
-  @Override
-  public List<ResearchProgram> findCrpProgramsByType(long id, int programType) {
-    String query =
-      "from " + ResearchProgram.class.getName() + " where crp_id=" + id + " and program_type=" + programType
-        + " and is_active=1";
     List<ResearchProgram> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;
@@ -108,23 +81,34 @@ public class ResearchProgramDAO implements IResearchProgramDAO {
   }
 
   @Override
-  public long save(ResearchProgram crpProgram) {
-    if (crpProgram.getId() == null) {
-      dao.save(crpProgram);
-    } else {
-      dao.update(crpProgram);
+  public List<ResearchProgram> findProgramsByType(long id, int programType) {
+    String query = "from " + ResearchProgram.class.getName() + " where research_area_id=" + id + " and program_type="
+      + programType + " and is_active=1";
+    List<ResearchProgram> list = dao.findAll(query);
+    if (list.size() > 0) {
+      return list;
     }
-    return crpProgram.getId();
+    return null;
   }
 
   @Override
-  public long save(ResearchProgram crpProgram, String actionName, List<String> relationsName) {
-    if (crpProgram.getId() == null) {
-      dao.save(crpProgram, actionName, relationsName);
+  public long save(ResearchProgram researchProgram) {
+    if (researchProgram.getId() == null) {
+      dao.save(researchProgram);
     } else {
-      dao.update(crpProgram, actionName, relationsName);
+      dao.update(researchProgram);
     }
-    return crpProgram.getId();
+    return researchProgram.getId();
+  }
+
+  @Override
+  public long save(ResearchProgram researchProgram, String actionName, List<String> relationsName) {
+    if (researchProgram.getId() == null) {
+      dao.save(researchProgram, actionName, relationsName);
+    } else {
+      dao.update(researchProgram, actionName, relationsName);
+    }
+    return researchProgram.getId();
   }
 
 

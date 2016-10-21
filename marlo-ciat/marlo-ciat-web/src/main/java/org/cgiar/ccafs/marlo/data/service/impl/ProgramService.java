@@ -42,15 +42,15 @@ public class ProgramService implements IProgramService {
   }
 
   @Override
-  public boolean deleteCrpProgram(long crpProgramId) {
+  public boolean deleteProgram(long programId) {
 
-    return crpProgramDAO.deleteCrpProgram(crpProgramId);
+    return crpProgramDAO.deleteProgram(programId);
   }
 
   @Override
-  public boolean existCrpProgram(long crpProgramID) {
+  public boolean existProgram(long programID) {
 
-    return crpProgramDAO.existCrpProgram(crpProgramID);
+    return crpProgramDAO.existProgram(programID);
   }
 
   @Override
@@ -58,11 +58,6 @@ public class ProgramService implements IProgramService {
 
     return crpProgramDAO.findAll();
 
-  }
-
-  @Override
-  public List<ResearchProgram> findCrpProgramsByType(long id, int programType) {
-    return crpProgramDAO.findCrpProgramsByType(id, programType);
   }
 
   /*
@@ -76,22 +71,27 @@ public class ProgramService implements IProgramService {
   }
 
   @Override
-  public ResearchProgram getCrpProgramById(long crpProgramID) {
+  public List<ResearchProgram> findProgramsByType(long id, int programType) {
+    return crpProgramDAO.findProgramsByType(id, programType);
+  }
 
-    return crpProgramDAO.find(crpProgramID);
+  @Override
+  public ResearchProgram getProgramById(long programID) {
+
+    return crpProgramDAO.find(programID);
   }
 
 
   @Override
-  public long saveCrpProgram(ResearchProgram crpProgram) {
+  public long saveProgram(ResearchProgram researchProgram) {
 
-    return crpProgramDAO.save(crpProgram);
+    return crpProgramDAO.save(researchProgram);
   }
 
   @Override
-  public long saveCrpProgram(ResearchProgram crpProgram, String actionName, List<String> relationsName) {
+  public long saveProgram(ResearchProgram researchProgram, String actionName, List<String> relationsName) {
 
-    return crpProgramDAO.save(crpProgram, actionName, relationsName);
+    return crpProgramDAO.save(researchProgram, actionName, relationsName);
   }
 
 }
