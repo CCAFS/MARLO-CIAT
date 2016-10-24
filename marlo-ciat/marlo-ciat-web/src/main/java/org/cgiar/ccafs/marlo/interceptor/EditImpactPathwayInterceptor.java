@@ -129,7 +129,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
         canEdit = true;
       } else {
 
-        if (!baseAction
+        if (baseAction
           .hasPermission(baseAction.generatePermission(Permission.RESEARCH_PROGRAM_FULL_PRIVILEGES, params))) {
           canEdit = true;
         }

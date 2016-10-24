@@ -7,10 +7,6 @@
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "researchTopics" /]
 
-[#-- TODO: delete assignment below --]
-[#assign editable = true]
-
-
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"", "action":"topics"}
 ]/]
