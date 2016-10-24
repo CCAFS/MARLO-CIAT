@@ -63,8 +63,6 @@
         
                 
         [@s.form action=actionName enctype="multipart/form-data" ]     
-        
-        
          <div class="outcomes-list" listname="outcomes">
           [#if researchTopics?has_content]
             [#list researchTopics as outcome]
@@ -77,7 +75,7 @@
           <div class="clearfix"></div>
           [#-- Add Outcome Button --]
           [#if editable]
-            <div class="addResearchTopic bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addOutcome"/]</div>
+            <div class="addResearchTopic bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addResearchTopic"/]</div>
           [/#if]
         
           [#-- Section Buttons--]
@@ -89,8 +87,6 @@
               [/#if]
             </div>
           </div>
-        
-        
         [/@s.form]
       </div>
     </div>

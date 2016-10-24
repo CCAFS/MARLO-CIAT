@@ -12,7 +12,6 @@
 [#-- ]#assign completed = action.isCompleteImpact(programID) --]
 
 
-[#-- Menu  ${action.getImpactSectionStatus(actionName, crpProgramID)?string("","hasMissingFields")} --]
 <nav id="secondaryMenu" class="">
   <p>[@s.text name="impactPathway.menu.title"/]</p>
   <ul>
