@@ -85,6 +85,7 @@
                 [#-- Save Button --]
                 [@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="form.buttons.save" /][/@s.submit]
               [/#if]
+              <input type="hidden" name="programID" value="${programID}" />
             </div>
           </div>
         [/@s.form]
@@ -96,7 +97,7 @@
   </div>
 </section>
 [#-- Outcome Template --]
-[@topicMacro element={} name="" index=0 template=true /]
+[@topicMacro element={} name="researchTopics" index=-1 template=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
