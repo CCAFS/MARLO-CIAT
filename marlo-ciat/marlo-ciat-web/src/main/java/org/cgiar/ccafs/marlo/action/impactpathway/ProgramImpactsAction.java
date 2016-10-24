@@ -25,9 +25,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
-import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.ICenterUserService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
@@ -62,10 +60,7 @@ public class ProgramImpactsAction extends BaseAction {
   private ICenterService centerService;
   private IProgramService programService;
   private IResearchAreaService researchAreaService;
-  private IResearchLeaderService researchLeaderService;
   private IUserService userService;
-  private ICenterUserService centerUserService;
-  private IAuditLogService auditLogManager;
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
 
@@ -75,28 +70,15 @@ public class ProgramImpactsAction extends BaseAction {
   private long programID;
   private long areaID;
 
-  /**
-   * @param config
-   * @param centerService
-   * @param programService
-   * @param researchAreaService
-   * @param researchLeaderService
-   * @param userService
-   * @param centerUserService
-   * @param auditLogManager
-   */
+
   @Inject
   public ProgramImpactsAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService,
-    ICenterUserService centerUserService, IAuditLogService auditLogManager) {
+    IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.researchAreaService = researchAreaService;
-    this.researchLeaderService = researchLeaderService;
     this.userService = userService;
-    this.centerUserService = centerUserService;
-    this.auditLogManager = auditLogManager;
   }
 
   /**
@@ -173,6 +155,7 @@ public class ProgramImpactsAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
+          // TODO - Create Enum to Research Leaders Type
           List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
             .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
 
@@ -199,8 +182,9 @@ public class ProgramImpactsAction extends BaseAction {
           } catch (Exception e) {
             User user = userService.getUser(this.getCurrentUser().getId());
 
-            List<ResearchLeader> userLeads = new ArrayList<>(
-              user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+            // TODO - Create Enum to Research Leaders Type
+            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+              .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
 
             if (!userLeads.isEmpty()) {
               programID = userLeads.get(0).getResearchProgram().getId();
@@ -238,7 +222,6 @@ public class ProgramImpactsAction extends BaseAction {
       if (researchPrograms != null) {
         researchPrograms.clear();
       }
-
     }
   }
 

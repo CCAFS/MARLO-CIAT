@@ -208,8 +208,6 @@ public class ResearchTopicsAction extends BaseAction {
           }
         }
       }
-
-
     }
 
 

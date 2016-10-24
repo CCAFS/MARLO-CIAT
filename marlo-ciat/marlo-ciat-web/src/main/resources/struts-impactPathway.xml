@@ -1,54 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-  <!-- Add addition packages and configuration here. -->
-  <package name="impactPathway" namespace="/impactPathway" extends="marlo-default">
-    <action name="{center}/programimpacts" class="org.cgiar.ccafs.marlo.action.impactpathway.ProgramImpactsAction">
-     <!--  <interceptor-ref name="impactPathwayStack" />      -->
-      <result name="input">/WEB-INF/views/impactPathway/programImpacts.ftl</result>
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/programimpacts</param>
-        <param name="impactID">${impactID}</param>
-        <param name="edit">true</param>
-      </result>
-      <result name="cancel" type="redirectAction">
-        <param name="actionName">${centerSession}/programimpacts</param>
-        <param name="impactID">${impactID}</param>
-        <param name="edit">true</param>
-        <param name="cancel">true</param>
-      </result>
-    </action>
-       <action name="{center}/outcomes" class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">
-     <!--  <interceptor-ref name="impactPathwayStack" />    -->  
-      <result name="input">/WEB-INF/views/impactPathway/outcomes.ftl</result>
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/outcomes</param>
-        <param name="impactID">${impactID}</param>
-        <param name="edit">true</param>
-      </result>
-      <result name="cancel" type="redirectAction">
-        <param name="actionName">${centerSession}/outcomes</param>
-        <param name="impactID">${impactID}</param>
-        <param name="edit">true</param>
-        <param name="cancel">true</param>
-      </result>
-    </action>
-    
-    <action name="{center}/researchTopics" class="org.cgiar.ccafs.marlo.action.impactpathway.ResearchTopicsAction">
-     <!--  <interceptor-ref name="impactPathwayStack" />      -->
-      <result name="input">/WEB-INF/views/impactPathway/researchTopics.ftl</result>
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/researchTopics</param>
-        <param name="programID">${programID}</param>
-        <param name="edit">true</param>
-      </result>
-      <result name="cancel" type="redirectAction">
-        <param name="actionName">${centerSession}/researchTopics</param>
-        <param name="programID">${programID}</param>
-        <param name="edit">true</param>
-        <param name="cancel">true</param>
-      </result>
-    </action>
-    
-  </package>
+	<!-- Add addition packages and configuration here. -->
+	<package name="impactPathway" namespace="/impactPathway"
+		extends="marlo-default">
+		<action name="{center}/programimpacts"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.ProgramImpactsAction">
+			<interceptor-ref name="impactPathwayStack" />
+			<result name="input">/WEB-INF/views/impactPathway/programImpacts.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/programimpacts</param>
+				<param name="impactID">${impactID}</param>
+				<param name="edit">true</param>
+			</result>
+			<result name="cancel" type="redirectAction">
+				<param name="actionName">${centerSession}/programimpacts</param>
+				<param name="impactID">${impactID}</param>
+				<param name="edit">true</param>
+				<param name="cancel">true</param>
+			</result>
+		</action>
+		
+		<action name="{center}/outcomes"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">
+			<interceptor-ref name="impactPathwayStack" />
+			<result name="input">/WEB-INF/views/impactPathway/outcomes.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/outcomes</param>
+				<param name="impactID">${impactID}</param>
+				<param name="edit">true</param>
+			</result>
+			<result name="cancel" type="redirectAction">
+				<param name="actionName">${centerSession}/outcomes</param>
+				<param name="impactID">${impactID}</param>
+				<param name="edit">true</param>
+				<param name="cancel">true</param>
+			</result>
+		</action>
+
+		<action name="{center}/researchTopics"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.ResearchTopicsAction">
+			<interceptor-ref name="impactPathwayStack" />
+			<result name="input">/WEB-INF/views/impactPathway/researchTopics.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/researchTopics</param>
+				<param name="programID">${programID}</param>
+				<param name="edit">true</param>
+			</result>
+			<result name="cancel" type="redirectAction">
+				<param name="actionName">${centerSession}/researchTopics</param>
+				<param name="programID">${programID}</param>
+				<param name="edit">true</param>
+				<param name="cancel">true</param>
+			</result>
+		</action>
+
+	</package>
 </struts>
