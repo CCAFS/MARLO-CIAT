@@ -37,9 +37,8 @@ public class ResearchOutput implements Serializable {
   @Expose
   private Long id;
 
-
   @Expose
-  private String output;
+  private String title;
 
 
   @Expose
@@ -65,8 +64,10 @@ public class ResearchOutput implements Serializable {
   @Expose
   private User modifiedBy;
 
+
   @Expose
   private String modificationJustification;
+
 
   /**
    * 
@@ -81,9 +82,9 @@ public class ResearchOutput implements Serializable {
    * @param dateAdded
    * @param researchOutcome
    */
-  public ResearchOutput(String output, Date dateAdded, ResearchOutcome researchOutcome, Date activeSince) {
+  public ResearchOutput(String title, Date dateAdded, ResearchOutcome researchOutcome, Date activeSince) {
     super();
-    this.output = output;
+    this.title = title;
     this.dateAdded = dateAdded;
     this.researchOutcome = researchOutcome;
     this.activeSince = activeSince;
@@ -120,17 +121,14 @@ public class ResearchOutput implements Serializable {
   }
 
   /**
-   * @return the output
-   */
-  public String getOutput() {
-    return output;
-  }
-
-  /**
    * @return the researchOutcome
    */
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
+  }
+
+  public String getTitle() {
+    return title;
   }
 
   public boolean isActive() {
@@ -140,7 +138,6 @@ public class ResearchOutput implements Serializable {
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -179,18 +176,14 @@ public class ResearchOutput implements Serializable {
 
 
   /**
-   * @param output the output to set
-   */
-  public void setOutput(String output) {
-    this.output = output;
-  }
-
-
-  /**
    * @param researchOutcome the researchOutcome to set
    */
   public void setResearchOutcome(ResearchOutcome researchOutcome) {
     this.researchOutcome = researchOutcome;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
 }

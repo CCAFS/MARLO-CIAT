@@ -51,27 +51,20 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ResearchTopicsAction extends BaseAction {
 
-
   private static final long serialVersionUID = -3428452128710971531L;
-
 
   // Services (Managers)
   private ICenterService centerService;
-
   private IProgramService programService;
-
   private IResearchAreaService researchAreaService;
-
   private IResearchTopicService researchTopicService;
-
   private IUserService userService;
 
   // Local Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
-
   private List<ResearchTopic> researchTopics;
-  private List<ResearchProgram> reserachPrograms;
+  private List<ResearchProgram> researchPrograms;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
   private long programID;
@@ -92,11 +85,9 @@ public class ResearchTopicsAction extends BaseAction {
     return areaID;
   }
 
-
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
   }
-
 
   public long getProgramID() {
     return programID;
@@ -108,6 +99,11 @@ public class ResearchTopicsAction extends BaseAction {
   }
 
 
+  public List<ResearchProgram> getResearchPrograms() {
+    return researchPrograms;
+  }
+
+
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;
   }
@@ -116,6 +112,7 @@ public class ResearchTopicsAction extends BaseAction {
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
+
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
@@ -161,10 +158,10 @@ public class ResearchTopicsAction extends BaseAction {
 
       if (areaID != -1 && programID == -1) {
         selectedResearchArea = researchAreaService.find(areaID);
-        reserachPrograms = new ArrayList<>(
+        researchPrograms = new ArrayList<>(
           selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
-        Collections.sort(reserachPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-        if (reserachPrograms != null) {
+        Collections.sort(researchPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
+        if (researchPrograms != null) {
           try {
             programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
           } catch (Exception e) {
@@ -176,8 +173,8 @@ public class ResearchTopicsAction extends BaseAction {
             if (!userLeads.isEmpty()) {
               programID = userLeads.get(0).getResearchProgram().getId();
             } else {
-              if (!reserachPrograms.isEmpty()) {
-                programID = reserachPrograms.get(0).getId();
+              if (!researchPrograms.isEmpty()) {
+                programID = researchPrograms.get(0).getId();
               }
             }
           }
@@ -201,7 +198,7 @@ public class ResearchTopicsAction extends BaseAction {
           areaID = selectedProgram.getResearchArea().getId();
           selectedResearchArea = researchAreaService.find(areaID);
 
-          reserachPrograms = new ArrayList<>(selectedResearchArea.getResearchPrograms().stream()
+          researchPrograms = new ArrayList<>(selectedResearchArea.getResearchPrograms().stream()
             .filter(rp -> rp.isActive()).collect(Collectors.toList()));
           if (selectedProgram != null) {
             if (selectedProgram.getResearchTopics() != null) {
@@ -223,8 +220,8 @@ public class ResearchTopicsAction extends BaseAction {
       if (researchAreas != null) {
         researchAreas.clear();
       }
-      if (reserachPrograms != null) {
-        reserachPrograms.clear();
+      if (researchPrograms != null) {
+        researchPrograms.clear();
       }
       if (researchTopics != null) {
         researchTopics.clear();
@@ -308,6 +305,10 @@ public class ResearchTopicsAction extends BaseAction {
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
+  }
+
+  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+    this.researchPrograms = researchPrograms;
   }
 
   public void setResearchTopics(List<ResearchTopic> researchTopics) {

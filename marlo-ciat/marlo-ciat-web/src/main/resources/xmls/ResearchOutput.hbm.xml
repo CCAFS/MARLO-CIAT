@@ -27,8 +27,8 @@
       <column name="modification_justification" length="65535"
         not-null="true" />
     </property>
-		<property name="output" type="string">
-			<column name="output" length="65535" not-null="false" />
+		<property name="title" type="string">
+			<column name="title" length="65535" not-null="false" />
 		</property>
 		  <property name="dateAdded" type="timestamp">
       <column name="date_added" length="19" not-null="true" />

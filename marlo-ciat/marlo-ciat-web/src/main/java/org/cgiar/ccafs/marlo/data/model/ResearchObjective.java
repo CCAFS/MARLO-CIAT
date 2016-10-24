@@ -48,10 +48,6 @@ public class ResearchObjective implements Serializable {
   @Expose
   private ResearchCenter researchCenter;
 
-
-  private EntityType objectiveType;
-
-
   @Expose
   private boolean active;
 
@@ -83,11 +79,10 @@ public class ResearchObjective implements Serializable {
    * @param researchCenter
    * @param entityType
    */
-  public ResearchObjective(String name, ResearchCenter researchCenter, EntityType objectiveType) {
+  public ResearchObjective(String name, ResearchCenter researchCenter) {
     super();
     this.name = name;
     this.researchCenter = researchCenter;
-    this.objectiveType = objectiveType;
   }
 
   public Date getActiveSince() {
@@ -118,13 +113,6 @@ public class ResearchObjective implements Serializable {
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * @return the objectiveType
-   */
-  public EntityType getObjectiveType() {
-    return objectiveType;
   }
 
   /**
@@ -169,19 +157,11 @@ public class ResearchObjective implements Serializable {
     this.modifiedBy = modifiedBy;
   }
 
-
   /**
    * @param name the name to set
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * @param objectiveType the objectiveType to set
-   */
-  public void setObjectiveType(EntityType objectiveType) {
-    this.objectiveType = objectiveType;
   }
 
   /**

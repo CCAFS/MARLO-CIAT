@@ -32,10 +32,11 @@ import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
-import org.cgiar.ccafs.marlo.utils.ProgramType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,11 @@ public class ProgramImpactsAction extends BaseAction {
 
 
   private static final long serialVersionUID = -2261790056574973080L;
+
+
   private static final Logger LOG = LoggerFactory.getLogger(ProgramImpactsAction.class);
+
+
   private ICenterService centerService;
   private IProgramService programService;
   private IResearchAreaService researchAreaService;
@@ -61,9 +66,9 @@ public class ProgramImpactsAction extends BaseAction {
   private IUserService userService;
   private ICenterUserService centerUserService;
   private IAuditLogService auditLogManager;
-
   private ResearchCenter loggedCenter;
-  private List<ResearchArea> reseachAreas;
+  private List<ResearchArea> researchAreas;
+
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private ResearchProgram selectedProgram;
@@ -94,14 +99,12 @@ public class ProgramImpactsAction extends BaseAction {
     this.auditLogManager = auditLogManager;
   }
 
-
   /**
    * @return the areaID
    */
   public Long getAreaID() {
     return areaID;
   }
-
 
   /**
    * @return the loggedCenter
@@ -119,11 +122,8 @@ public class ProgramImpactsAction extends BaseAction {
   }
 
 
-  /**
-   * @return the reseachAreas
-   */
-  public List<ResearchArea> getReseachAreas() {
-    return reseachAreas;
+  public List<ResearchArea> getResearchAreas() {
+    return researchAreas;
   }
 
 
@@ -133,7 +133,6 @@ public class ProgramImpactsAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
-
 
   /**
    * @return the selectedProgram
@@ -150,59 +149,98 @@ public class ProgramImpactsAction extends BaseAction {
     return selectedResearchArea;
   }
 
+
   @Override
   public void prepare() throws Exception {
+    areaID = -1;
+    programID = -1;
 
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
-    LOG.debug("Found this crp center session value: " + loggedCenter.getAcronym());
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
-    // Load all available research areas
-    reseachAreas = researchAreaService.findAll();
 
-    selectedResearchArea = (ResearchArea) this.getSession().get(APConstants.SESSION_RESEARCH_AREA);
-    // TODO: Consider user permissions
-    if (selectedResearchArea != null) {
-      selectedProgram = (ResearchProgram) this.getSession().get(APConstants.SESSION_RESEARCH_PROGRAM);
-      if (selectedProgram != null) {
-        // If the research program exists in the session
-        // TODO: Handle the existing program
-      } else {
-        // Retrieve the research program based on the selected research area.
-        researchPrograms = programService.findProgramsByResearchArea(selectedResearchArea.getId());
-      }
-    } else {
-      if (reseachAreas != null && !reseachAreas.isEmpty()) {
-        selectedResearchArea = reseachAreas.get(0);
-        areaID = selectedResearchArea.getId();
-        researchPrograms = programService.findProgramsByResearchArea(reseachAreas.get(0).getId());
-      }
-    }
-    programID = -1;
-    if (researchPrograms != null) {
+    researchAreas = new ArrayList<>(
+      loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
+
+    Collections.sort(researchAreas, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
+
+    if (researchAreas != null) {
+
       try {
-        programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+        areaID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
       } catch (Exception e) {
-        User user = userService.getUser(this.getCurrentUser().getId());
-        List<ResearchLeader> userLeads = user.getResearchLeaders().stream()
-          .filter(c -> c.isActive() && c.getResearchProgram().isActive()
-            && c.getResearchProgram().getProgramType().getTypeName() == ProgramType.FLAGSHIP_PROGRAM_TYPE.name())
-          .collect(Collectors.toList());
-        if (!userLeads.isEmpty()) {
-          programID = userLeads.get(0).getResearchProgram().getId();
-        } else {
-          if (!this.researchPrograms.isEmpty()) {
-            programID = this.researchPrograms.get(0).getId();
+        try {
+          programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+        } catch (Exception ex) {
+          User user = userService.getUser(this.getCurrentUser().getId());
+
+          List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
+
+          if (!userLeads.isEmpty()) {
+            programID = userLeads.get(0).getResearchProgram().getId();
+          } else {
+            if (!researchAreas.isEmpty()) {
+              ResearchProgram rp = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+                .collect(Collectors.toList()).get(0);
+              programID = rp.getId();
+            }
+          }
+        }
+      }
+
+      if (areaID != -1 && programID == -1) {
+        selectedResearchArea = researchAreaService.find(areaID);
+        researchPrograms = new ArrayList<>(
+          selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
+        Collections.sort(researchPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
+        if (researchPrograms != null) {
+          try {
+            programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+          } catch (Exception e) {
+            User user = userService.getUser(this.getCurrentUser().getId());
+
+            List<ResearchLeader> userLeads = new ArrayList<>(
+              user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+
+            if (!userLeads.isEmpty()) {
+              programID = userLeads.get(0).getResearchProgram().getId();
+            } else {
+              if (!researchPrograms.isEmpty()) {
+                programID = researchPrograms.get(0).getId();
+              }
+            }
           }
         }
 
+        if (programID != -1) {
+          selectedProgram = programService.getProgramById(programID);
+
+
+        }
+      } else {
+        if (programID != -1) {
+
+
+        }
       }
-    } else {
-      researchPrograms = new ArrayList<>();
+
+
     }
 
 
-  }
+    String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+    this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
 
+    if (this.isHttpPost()) {
+      if (researchAreas != null) {
+        researchAreas.clear();
+      }
+      if (researchPrograms != null) {
+        researchPrograms.clear();
+      }
+
+    }
+  }
 
   /**
    * @param areaID the areaID to set
@@ -211,6 +249,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
+
   /**
    * @param areaID the areaID to set
    */
@@ -218,13 +257,13 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
-
   /**
    * @param loggedCenter the loggedCenter to set
    */
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
+
 
   /**
    * @param programID the programID to set
@@ -240,11 +279,8 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
-  /**
-   * @param reseachAreas the reseachAreas to set
-   */
-  public void setReseachAreas(List<ResearchArea> reseachAreas) {
-    this.reseachAreas = reseachAreas;
+  public void setResearchAreas(List<ResearchArea> researchAreas) {
+    this.researchAreas = researchAreas;
   }
 
   /**

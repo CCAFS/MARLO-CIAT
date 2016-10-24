@@ -34,9 +34,5 @@
       fetch="select">
       <column name="research_center_id" not-null="true" />
     </many-to-one>	
-		<many-to-one name="objectiveType"
-			class="org.cgiar.ccafs.marlo.data.model.EntityType" fetch="select">
-			<column name="type_id" not-null="true" />
-		</many-to-one>
 	</class>
 </hibernate-mapping>

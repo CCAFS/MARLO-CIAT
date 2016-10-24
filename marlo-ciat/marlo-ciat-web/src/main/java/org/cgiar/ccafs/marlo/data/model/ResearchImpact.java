@@ -38,12 +38,11 @@ public class ResearchImpact implements Serializable {
   @Expose
   private Long id;
 
-
   /**
    * The impact description text.
    */
   @Expose
-  private String impact;
+  private String description;
 
 
   /**
@@ -79,7 +78,9 @@ public class ResearchImpact implements Serializable {
   @Expose
   private ResearchProgram researchProgram;
 
+
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
+
 
   /**
    * 
@@ -94,9 +95,9 @@ public class ResearchImpact implements Serializable {
    * @param targetYear
    * @param researchProgram
    */
-  public ResearchImpact(String impact, Integer targetYear, ResearchProgram researchProgram) {
+  public ResearchImpact(String description, Integer targetYear, ResearchProgram researchProgram) {
     super();
-    this.impact = impact;
+    this.description = description;
     this.targetYear = targetYear;
     this.researchProgram = researchProgram;
   }
@@ -109,6 +110,9 @@ public class ResearchImpact implements Serializable {
     return createdBy;
   }
 
+  public String getDescription() {
+    return description;
+  }
 
   /**
    * @return the id
@@ -118,17 +122,10 @@ public class ResearchImpact implements Serializable {
   }
 
 
-  /**
-   * @return the impact
-   */
-  public String getImpact() {
-    return impact;
-  }
-
-
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   public User getModifiedBy() {
     return modifiedBy;
@@ -171,18 +168,15 @@ public class ResearchImpact implements Serializable {
     this.createdBy = createdBy;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
-  }
-
-  /**
-   * @param impact the impact to set
-   */
-  public void setImpact(String impact) {
-    this.impact = impact;
   }
 
   public void setModificationJustification(String modificationJustification) {
