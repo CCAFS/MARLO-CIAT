@@ -46,10 +46,6 @@ public class ResearchObjective implements Serializable {
 
 
   @Expose
-  private ResearchArea researchArea;
-
-
-  @Expose
   private ResearchCenter researchCenter;
 
 
@@ -84,15 +80,12 @@ public class ResearchObjective implements Serializable {
 
   /**
    * @param name
-   * @param researchArea
    * @param researchCenter
    * @param entityType
    */
-  public ResearchObjective(String name, ResearchArea researchArea, ResearchCenter researchCenter,
-    EntityType objectiveType) {
+  public ResearchObjective(String name, ResearchCenter researchCenter, EntityType objectiveType) {
     super();
     this.name = name;
-    this.researchArea = researchArea;
     this.researchCenter = researchCenter;
     this.objectiveType = objectiveType;
   }
@@ -132,13 +125,6 @@ public class ResearchObjective implements Serializable {
    */
   public EntityType getObjectiveType() {
     return objectiveType;
-  }
-
-  /**
-   * @return the researchArea
-   */
-  public ResearchArea getResearchArea() {
-    return researchArea;
   }
 
   /**
@@ -191,19 +177,11 @@ public class ResearchObjective implements Serializable {
     this.name = name;
   }
 
-
   /**
    * @param objectiveType the objectiveType to set
    */
   public void setObjectiveType(EntityType objectiveType) {
     this.objectiveType = objectiveType;
-  }
-
-  /**
-   * @param researchArea the researchArea to set
-   */
-  public void setResearchArea(ResearchArea researchArea) {
-    this.researchArea = researchArea;
   }
 
   /**
