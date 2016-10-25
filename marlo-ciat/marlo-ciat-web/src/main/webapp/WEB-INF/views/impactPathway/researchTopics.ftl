@@ -39,7 +39,7 @@
           [/#if]          
           </div>
           <div class="clearfix"></div>
-          [#-- Add Outcome Button --]
+          [#-- Add Research Impact Button --]
           [#if editable]
             <div class="addResearchTopic bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addResearchTopic"/]</div>
           [/#if]
@@ -72,7 +72,9 @@
   <div id="researchTopic-${template?string('template','')}" class="borderBox researchTopic col-md-12" style="display:${template?string('none','block')}">
     [#local customName = "${name}[${index}]" /]
     [#-- Remove Button --]
-    <div class=" removeElement removeResearchTopic" title="Remove Research Topic"></div>
+    [#if editable]
+      <div class=" removeElement removeResearchTopic" title="Remove Research Topic"></div>
+    [/#if]
     
     <div class="leftHead">
       <span class="index">${index+1}</span>
