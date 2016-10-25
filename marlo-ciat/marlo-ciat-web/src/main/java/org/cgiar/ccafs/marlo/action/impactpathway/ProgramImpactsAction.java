@@ -22,13 +22,19 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
+import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
+import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.IResearchImpactObjectiveService;
+import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
+import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -58,27 +64,48 @@ public class ProgramImpactsAction extends BaseAction {
 
 
   private ICenterService centerService;
+
+
   private IProgramService programService;
+
+
   private IResearchAreaService researchAreaService;
+
+
   private IUserService userService;
+
+  private IResearchObjectiveService objectiveService;
+
+  private IResearchImpactService impactService;
+
+  private IResearchImpactObjectiveService impactObjectiveService;
+
+
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
-
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
+  private List<ResearchObjective> researchObjectives;
   private ResearchProgram selectedProgram;
+  private ResearchImpact researchImpact;
+
   private long programID;
   private long areaID;
 
-
   @Inject
   public ProgramImpactsAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService) {
+    IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService,
+    IResearchObjectiveService objectiveService, IResearchImpactService impactService,
+    IResearchImpactObjectiveService impactObjectiveService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.researchAreaService = researchAreaService;
     this.userService = userService;
+    this.objectiveService = objectiveService;
+    this.impactService = impactService;
+    this.impactObjectiveService = impactObjectiveService;
+
   }
 
   /**
@@ -95,7 +122,6 @@ public class ProgramImpactsAction extends BaseAction {
     return loggedCenter;
   }
 
-
   /**
    * @return the programID
    */
@@ -108,6 +134,14 @@ public class ProgramImpactsAction extends BaseAction {
     return researchAreas;
   }
 
+  public ResearchImpact getResearchImpact() {
+    return researchImpact;
+  }
+
+  public List<ResearchObjective> getResearchObjectives() {
+    return researchObjectives;
+  }
+
 
   /**
    * @return the researchPrograms
@@ -115,6 +149,7 @@ public class ProgramImpactsAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
+
 
   /**
    * @return the selectedProgram
@@ -130,7 +165,6 @@ public class ProgramImpactsAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -198,18 +232,30 @@ public class ProgramImpactsAction extends BaseAction {
 
         if (programID != -1) {
           selectedProgram = programService.getProgramById(programID);
-
-
         }
       } else {
         if (programID != -1) {
           selectedProgram = programService.getProgramById(programID);
           areaID = selectedProgram.getResearchArea().getId();
           selectedResearchArea = researchAreaService.find(areaID);
-
         }
       }
 
+      researchImpact =
+        selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()).get(0);
+
+
+      researchObjectives =
+        new ArrayList<>(objectiveService.findAll().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+      researchImpact.setObjectives(new ArrayList<>());
+      if (impactObjectiveService.findAll() != null) {
+        for (ResearchImpactObjective impactObjective : impactObjectiveService.findAll().stream()
+          .filter(ro -> ro.isActive() && ro.getResearchImpact().getId() == researchImpact.getId())
+          .collect(Collectors.toList())) {
+          researchImpact.getObjectives().add(impactObjective.getResearchObjective());
+        }
+      }
 
     }
 
@@ -224,8 +270,15 @@ public class ProgramImpactsAction extends BaseAction {
       if (researchPrograms != null) {
         researchPrograms.clear();
       }
+      if (researchObjectives != null) {
+        researchObjectives.clear();
+      }
+      if (researchImpact.getObjectives() != null) {
+        researchImpact.getObjectives().clear();
+      }
     }
   }
+
 
   /**
    * @param areaID the areaID to set
@@ -264,8 +317,17 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
+
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
+  }
+
+  public void setResearchImpact(ResearchImpact researchImpact) {
+    this.researchImpact = researchImpact;
+  }
+
+  public void setResearchObjectives(List<ResearchObjective> researchObjectives) {
+    this.researchObjectives = researchObjectives;
   }
 
   /**
