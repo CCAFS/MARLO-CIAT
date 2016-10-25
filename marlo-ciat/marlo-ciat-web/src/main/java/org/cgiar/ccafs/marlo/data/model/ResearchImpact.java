@@ -21,6 +21,7 @@ package org.cgiar.ccafs.marlo.data.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -38,6 +39,7 @@ public class ResearchImpact implements Serializable {
   @Expose
   private Long id;
 
+
   /**
    * The impact description text.
    */
@@ -51,7 +53,6 @@ public class ResearchImpact implements Serializable {
   @Expose
   private Integer targetYear;
 
-
   /**
    * The research Program to which this research impact relates to.
    */
@@ -61,7 +62,6 @@ public class ResearchImpact implements Serializable {
 
   @Expose
   private Date activeSince;
-
 
   @Expose
   private User createdBy;
@@ -82,6 +82,11 @@ public class ResearchImpact implements Serializable {
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
 
 
+  private List<ResearchObjective> objectives;
+
+
+  private String objectiveValue;
+
   /**
    * 
    */
@@ -89,6 +94,7 @@ public class ResearchImpact implements Serializable {
     super();
     // TODO Auto-generated constructor stub
   }
+
 
   /**
    * @param impact
@@ -110,6 +116,7 @@ public class ResearchImpact implements Serializable {
     return createdBy;
   }
 
+
   public String getDescription() {
     return description;
   }
@@ -121,15 +128,22 @@ public class ResearchImpact implements Serializable {
     return id;
   }
 
-
   public String getModificationJustification() {
     return modificationJustification;
   }
 
-
   public User getModifiedBy() {
     return modifiedBy;
   }
+
+  public List<ResearchObjective> getObjectives() {
+    return objectives;
+  }
+
+  public String getObjectiveValue() {
+    return objectiveValue;
+  }
+
 
   /**
    * @return the researchOutcomes
@@ -137,6 +151,7 @@ public class ResearchImpact implements Serializable {
   public Set<ResearchOutcome> getResearchOutcomes() {
     return researchOutcomes;
   }
+
 
   /**
    * @return the researchProgram
@@ -185,6 +200,14 @@ public class ResearchImpact implements Serializable {
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
+  }
+
+  public void setObjectives(List<ResearchObjective> objectives) {
+    this.objectives = objectives;
+  }
+
+  public void setObjectiveValue(String objectiveValue) {
+    this.objectiveValue = objectiveValue;
   }
 
   /**

@@ -44,30 +44,26 @@ public class ResearchProgram implements java.io.Serializable {
   @Expose
   private String acronym;
 
-
   @Expose
   private EntityType programType;
 
-
   private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
-
 
   private Set<ResearchTopic> researchTopics = new HashSet<ResearchTopic>(0);
 
+  private Set<ResearchImpact> researchImpacts = new HashSet<ResearchImpact>(0);
 
   @Expose
   private String color;
 
-
   @Expose
   private boolean active;
 
-
   @Expose
   private Date activeSince;
+
   @Expose
   private User createdBy;
-
 
   @Expose
   private User modifiedBy;
@@ -100,6 +96,7 @@ public class ResearchProgram implements java.io.Serializable {
     this.researchLeaders = researchLeaders;
     this.researchTopics = researchTopics;
   }
+
 
   public ResearchProgram(String name, String acronym, EntityType programType, ResearchArea researchArea) {
     this.name = name;
@@ -162,7 +159,6 @@ public class ResearchProgram implements java.io.Serializable {
     return modifiedBy;
   }
 
-
   public String getName() {
     return this.name;
   }
@@ -174,13 +170,17 @@ public class ResearchProgram implements java.io.Serializable {
     return programType;
   }
 
-
   /**
    * @return the researchArea
    */
   public ResearchArea getResearchArea() {
     return researchArea;
   }
+
+  public Set<ResearchImpact> getResearchImpacts() {
+    return researchImpacts;
+  }
+
 
   /**
    * @return the researchLeaders
@@ -189,15 +189,14 @@ public class ResearchProgram implements java.io.Serializable {
     return researchLeaders;
   }
 
-
   public Set<ResearchTopic> getResearchTopics() {
     return researchTopics;
   }
 
-
   public boolean isActive() {
     return active;
   }
+
 
   public void setAcronym(String acronym) {
     this.acronym = acronym;
@@ -216,7 +215,6 @@ public class ResearchProgram implements java.io.Serializable {
   public void setColor(String color) {
     this.color = color;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -258,6 +256,10 @@ public class ResearchProgram implements java.io.Serializable {
     this.researchArea = researchArea;
   }
 
+
+  public void setResearchImpacts(Set<ResearchImpact> researchImpacts) {
+    this.researchImpacts = researchImpacts;
+  }
 
   /**
    * @param researchLeaders the researchLeaders to set
