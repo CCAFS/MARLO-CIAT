@@ -76,21 +76,24 @@ public class ProgramImpactsAction extends BaseAction {
 
   private IUserService userService;
 
+
   private IResearchObjectiveService objectiveService;
+
 
   private IResearchImpactService impactService;
 
   private IResearchImpactObjectiveService impactObjectiveService;
 
-
   private ResearchCenter loggedCenter;
+
   private List<ResearchArea> researchAreas;
+
+
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private List<ResearchObjective> researchObjectives;
   private ResearchProgram selectedProgram;
   private List<ResearchImpact> researchImpacts;
-
   private long programID;
   private long areaID;
 
@@ -131,15 +134,18 @@ public class ProgramImpactsAction extends BaseAction {
     return programID;
   }
 
-
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
 
+  public List<ResearchImpact> getResearchImpacts() {
+    return researchImpacts;
+  }
+
+
   public List<ResearchObjective> getResearchObjectives() {
     return researchObjectives;
   }
-
 
   /**
    * @return the researchPrograms
@@ -163,6 +169,7 @@ public class ProgramImpactsAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -239,11 +246,10 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
-      if (!selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList())
-        .isEmpty()) {
-        researchImpacts =
-          selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList());
-      }
+
+      researchImpacts =
+        selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList());
+
 
       if (objectiveService.findAll() != null) {
         researchObjectives =
@@ -262,9 +268,7 @@ public class ProgramImpactsAction extends BaseAction {
             }
           }
         }
-
       }
-
 
     }
 
@@ -293,7 +297,7 @@ public class ProgramImpactsAction extends BaseAction {
     if (this.hasPermission("*")) {
 
       ResearchProgram programDb = programService.getProgramById(selectedProgram.getId());
-      selectedProgram.setModifiedBy(this.getCurrentUser());
+
 
       for (ResearchImpact researchImpact : programDb.getResearchImpacts().stream().filter(ri -> ri.isActive())
         .collect(Collectors.toList())) {
@@ -312,13 +316,13 @@ public class ProgramImpactsAction extends BaseAction {
       }
 
       for (ResearchImpact researchImpact : researchImpacts) {
-        if (researchImpact.getId() != null || researchImpact.getId() == -1) {
+        if (researchImpact.getId() == null || researchImpact.getId() == -1) {
           ResearchImpact researchImpactNew = new ResearchImpact();
           researchImpactNew.setActive(true);
           researchImpactNew.setActiveSince(new Date());
           researchImpactNew.setCreatedBy(this.getCurrentUser());
           researchImpactNew.setDescription(researchImpact.getDescription());
-          researchImpactNew.setResearchProgram(selectedProgram);
+          researchImpactNew.setResearchProgram(programDb);
           researchImpactNew.setTargetYear(researchImpact.getTargetYear());
 
           impactService.saveResearchImpact(researchImpactNew);
@@ -341,6 +345,8 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
+      selectedProgram = programService.getProgramById(programDb.getId());
+      programService.saveProgram(selectedProgram);
 
       Collection<String> messages = this.getActionMessages();
       if (!messages.isEmpty()) {
@@ -359,7 +365,6 @@ public class ProgramImpactsAction extends BaseAction {
 
   }
 
-
   /**
    * @param areaID the areaID to set
    */
@@ -375,13 +380,13 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
+
   /**
    * @param loggedCenter the loggedCenter to set
    */
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
-
 
   /**
    * @param programID the programID to set
@@ -390,6 +395,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
+
   /**
    * @param programID the programID to set
    */
@@ -397,9 +403,13 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
-
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
+  }
+
+
+  public void setResearchImpacts(List<ResearchImpact> researchImpacts) {
+    this.researchImpacts = researchImpacts;
   }
 
   public void setResearchObjectives(List<ResearchObjective> researchObjectives) {

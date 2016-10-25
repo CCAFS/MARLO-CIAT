@@ -77,7 +77,7 @@
     [#-- Program Impact & Target Year--]
     <div class="form-group"> 
       <div class="row">
-        <div class="col-md-12">[@customForm.textArea name="${customName}.name" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
+        <div class="col-md-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
         <div class="col-md-4">[@customForm.input name="${customName}.targetYear" i18nkey="programImpact.targetYear" className="" required=true editable=editable /]</div>
       </div>
     </div>
