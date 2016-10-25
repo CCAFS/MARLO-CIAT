@@ -29,41 +29,11 @@
       <div class="col-md-9">
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
+        [#-- Impact pathway sub menu --]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
         
-        [#-- Research Areas --]
-        <div class="sectionSubMenu">
-          [#-- Nav tabs --]
-          <ul class="nav nav-tabs" role="tablist">
-            [#list researchAreas as area]
-            [#assign isActive = (area.id == areaID)/]
-            <li role="areas" class="${isActive?string('active','')}"><a href="#area-${area.id}" aria-controls="home" role="tab" data-toggle="tab">${area.acronym}</a></li>
-            [/#list]
-          </ul>
-          [#-- Tab panes --]
-          <div class="tab-content">
-            [#list researchAreas as area ]
-            [#assign isActive = (area.id == areaID)/]
-            <div role="tabpanel" class="tab-pane ${isActive?string('active','')}" id="area-${area.id}">
-              [#if area.researchPrograms?has_content]
-              <ul>
-                [#list area.researchPrograms as program]
-                  [#assign isProgramActive = (program.id == programID)/]           
-                  <li class="${isProgramActive?string('active','')}"> <a href="[@s.url][@s.param name="programID" value=program.id /][/@s.url]">${program.name}</a> </li>
-                [/#list]
-              </ul>
-              [#else]
-                <p class="emptyMessage text-center">No programs added.</p>
-              [/#if]
-            </div>
-            [/#list]
-          </div>
-        </div>
-        
-        
-        
-                
         [@s.form action=actionName enctype="multipart/form-data" ]     
-         <div class="outcomes-list" listname="outcomes">
+          <div class="outcomes-list" listname="outcomes">
           [#if researchTopics?has_content]
             [#list researchTopics as outcome]
               [@topicMacro element=outcome name="researchTopics" index=outcome_index /]
@@ -71,7 +41,7 @@
           [#else]
             [@topicMacro element={} name="researchTopics" index=0 /]
           [/#if]          
-         </div>
+          </div>
           <div class="clearfix"></div>
           [#-- Add Outcome Button --]
           [#if editable]

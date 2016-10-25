@@ -5,7 +5,7 @@
 [#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/clusterActivities.js", "${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/impactGraphic.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css","${baseUrl}/css/global/impactGraphic.css" ] /]
 [#assign currentSection = "impactPathway" /]
-[#assign currentStage = "clusterActivities" /]
+[#assign currentStage = "programImpacts" /]
 
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"", "action":"programimpacts"}
@@ -17,7 +17,7 @@
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
-    [#if researchAreas?has_content]
+    
     <div class="row">
       <div class="col-md-3">
         [#include "/WEB-INF/views/impactPathway/menu-impactPathway.ftl" /]
@@ -25,15 +25,15 @@
       <div class="col-md-9">
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
-        [@s.form action=actionName enctype="multipart/form-data" ]  
-      
-     
+        [#-- Impact pathway sub menu --]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
+        
+        [@s.form action=actionName enctype="multipart/form-data" ]
+          
+          
         [/@s.form]
       </div>
     </div>
-    [#else]
-      <p class="text-center borderBox inf">Program impacts are not available in for the selected research area</p>
-    [/#if]
   </div>
 </section>
 [#-- Search users Interface --]
