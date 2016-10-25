@@ -44,6 +44,7 @@ public class ResearchProgram implements java.io.Serializable {
   @Expose
   private String acronym;
 
+
   @Expose
   private EntityType programType;
 
@@ -97,7 +98,6 @@ public class ResearchProgram implements java.io.Serializable {
     this.researchTopics = researchTopics;
   }
 
-
   public ResearchProgram(String name, String acronym, EntityType programType, ResearchArea researchArea) {
     this.name = name;
     this.acronym = acronym;
@@ -126,6 +126,7 @@ public class ResearchProgram implements java.io.Serializable {
     }
     return true;
   }
+
 
   public String getAcronym() {
     return this.acronym;
@@ -181,13 +182,13 @@ public class ResearchProgram implements java.io.Serializable {
     return researchImpacts;
   }
 
-
   /**
    * @return the researchLeaders
    */
   public Set<ResearchLeader> getResearchLeaders() {
     return researchLeaders;
   }
+
 
   public Set<ResearchTopic> getResearchTopics() {
     return researchTopics;
@@ -196,7 +197,6 @@ public class ResearchProgram implements java.io.Serializable {
   public boolean isActive() {
     return active;
   }
-
 
   public void setAcronym(String acronym) {
     this.acronym = acronym;
@@ -207,19 +207,19 @@ public class ResearchProgram implements java.io.Serializable {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setColor(String color) {
     this.color = color;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
-
 
   public void setId(Long id) {
     this.id = id;
@@ -239,7 +239,6 @@ public class ResearchProgram implements java.io.Serializable {
   public void setName(String name) {
     this.name = name;
   }
-
 
   /**
    * @param programType the programType to set
