@@ -1,9 +1,8 @@
 [#ftl]
 [#assign title = "Impact Pathway - Program Impacts" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
-[#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/clusterActivities.js", "${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/impactGraphic.js"] /]
-[#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css","${baseUrl}/css/global/impactGraphic.css" ] /]
+[#assign pageLibs = ["select2"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "programImpacts" /]
 
@@ -51,6 +50,9 @@
   </div>
 </section>
 
+[#-- Templates --]
+[@programImpactMacro element={} name="" index=-1 template=true /]
+
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
 [#macro programImpactMacro element name index template=false]
@@ -63,18 +65,39 @@
     
     <div class="leftHead">
       <span class="index">${index+1}</span>
-      <span class="elementId">[@s.text name="programImpactAction.programImpact" /]</span>
+      <span class="elementId">[@s.text name="programImpact.programImpact" /]</span>
     </div>
     <br />
     
     <input type="hidden" name="${customName}.id" value="${(element.id)!}"/>
     
-    [#-- Program Impact --]
+    [#-- Program Impact & Target Year--]
     <div class="form-group"> 
       <div class="row">
         <div class="col-md-12">[@customForm.textArea name="${customName}.name" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
         <div class="col-md-4">[@customForm.input name="${customName}.targetYear" i18nkey="programImpact.targetYear" className="" required=true editable=editable /]</div>
       </div>
     </div>
+    
+    [#-- Startegic Objectives --]
+    <div class="form-group">
+      <h5>[@customForm.text name="programImpact.objectives" readText=!editable /]:[@customForm.req required=editable /]</h5>
+      [#if editable ]
+        [@s.fielderror cssClass="fieldError" fieldName="${customName}.objectives"/]
+        [@s.checkboxlist name="${customName}.objectives" list="researchObjectives" listKey="id" listValue="objective" cssClass="checkboxInput"  value="objectivesIds" /]
+      [#else]
+        <input type="hidden" name="${customName}.strategicObjectives" value="${(element.strategicObjectives)!}"/>
+        [#if element.strategicObjectives?has_content]
+          [#list element.strategicObjectives as element]<p class="checked">${element.objective}</p>[/#list]
+        [/#if]
+      [/#if]
+    </div>
+    
+    [#-- Beneficiaries--]
+    <div class="form-group">
+      
+    </div>
+    
+    
   </div>
 [/#macro]
