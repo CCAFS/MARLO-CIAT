@@ -44,16 +44,11 @@
             <div class="addResearchTopic bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addResearchTopic"/]</div>
           [/#if]
         
+          
           [#-- Section Buttons--]
-          <div class="buttons">
-            <div class="buttons-content">
-              [#if editable]
-                [#-- Save Button --]
-                [@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="form.buttons.save" /][/@s.submit]
-              [/#if]
-              <input type="hidden" name="programID" value="${programID}" />
-            </div>
-          </div>
+          [#include "/WEB-INF/views/impactPathway/buttons-impactPathway.ftl" /]
+          
+          
         [/@s.form]
       </div>
     </div>

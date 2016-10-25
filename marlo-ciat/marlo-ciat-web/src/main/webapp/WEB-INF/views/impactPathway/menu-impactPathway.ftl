@@ -2,8 +2,8 @@
 [#assign items= [
   { 'slug': 'programImpacts',           'name': 'impactPathway.menu.hrefProgramImpacts',  'action': 'programimpacts',           'active': true  },
   { 'slug': 'researchTopics',  'name': 'impactPathway.menu.hrefResearchTopics',       'action': 'researchTopics',  'active': true },
-  { 'slug': 'outcomes',           'name': 'impactPathway.menu.hrefOutcomes',  'action': 'outcomes',           'active': true  },
-  { 'slug': 'outputs',  'name': 'impactPathway.menu.hrefOutputs',       'action': 'outputs',  'active': true }
+  { 'slug': 'outcomes',           'name': 'impactPathway.menu.hrefOutcomes',  'action': 'outcomes',           'active': false  },
+  { 'slug': 'outputs',  'name': 'impactPathway.menu.hrefOutputs',       'action': 'outputs',  'active': false }
 ]/]
 
 

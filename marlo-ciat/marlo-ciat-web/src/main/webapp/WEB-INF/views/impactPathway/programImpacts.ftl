@@ -30,12 +30,12 @@
         [@s.form action=actionName enctype="multipart/form-data" ]
           
           <div class="elements-list">
-          [#if programImpacts?has_content]
-            [#list programImpacts as impact]
-              [@programImpactMacro element={} name="" index=impact_index /]
+          [#if researchImpacts?has_content]
+            [#list researchImpacts as impact]
+              [@programImpactMacro element={} name="researchImpacts" index=impact_index /]
             [/#list]
           [#else]
-            [@programImpactMacro element={} name="" index=0 /]
+            [@programImpactMacro element={} name="researchImpacts" index=0 /]
           [/#if]
           </div>
           
@@ -44,6 +44,9 @@
             <div class="addImpact bigAddButton text-center"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>[@s.text name="form.buttons.addImpact"/]</div>
           [/#if]
           
+          [#-- Section Buttons--]
+          [#include "/WEB-INF/views/impactPathway/buttons-impactPathway.ftl" /]
+          
         [/@s.form]
       </div>
     </div>
@@ -51,7 +54,7 @@
 </section>
 
 [#-- Templates --]
-[@programImpactMacro element={} name="" index=-1 template=true /]
+[@programImpactMacro element={} name="researchImpacts" index=-1 template=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
