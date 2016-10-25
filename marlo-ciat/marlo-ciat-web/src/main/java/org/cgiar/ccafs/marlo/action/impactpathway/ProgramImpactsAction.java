@@ -203,7 +203,9 @@ public class ProgramImpactsAction extends BaseAction {
         }
       } else {
         if (programID != -1) {
-
+          selectedProgram = programService.getProgramById(programID);
+          areaID = selectedProgram.getResearchArea().getId();
+          selectedResearchArea = researchAreaService.find(areaID);
 
         }
       }
