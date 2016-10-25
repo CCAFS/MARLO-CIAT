@@ -18,25 +18,32 @@
 		</result-types>
 
 		<interceptors>
+		
 			<interceptor name="requireUser"
 				class="org.cgiar.ccafs.marlo.interceptor.RequireUserInterceptor" />
 			<interceptor name="i18nFile"
 				class="org.cgiar.ccafs.marlo.interceptor.InternationalitazionFileInterceptor" />
-  <!-- validating if the url is valid in the open session -->
+      <!-- validating if the url is valid in the open session -->
       <interceptor name="validSession"
         class="org.cgiar.ccafs.marlo.interceptor.ValidSessionInterceptor" />
+      <!-- validating if the user have edit privileges to impact pathway -->
+      <interceptor name="editImpactPathway"
+        class="org.cgiar.ccafs.marlo.interceptor.EditImpactPathwayInterceptor" />
+        
 			<!-- stack from home packgae -->
 			<interceptor-stack name="homeStack">
 				<interceptor-ref name="i18nFile" />
 				<interceptor-ref name="requireUser" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
+			
 			 <interceptor-stack name="impactPathwayStack">
         <interceptor-ref name="i18nFile" />
         <interceptor-ref name="requireUser" />
-        <interceptor-ref name="validSession" />
+        <interceptor-ref name="editImpactPathway" />
         <interceptor-ref name="defaultStack" />
       </interceptor-stack>
+      
 		</interceptors>
 		
 		<default-action-ref name="login" />

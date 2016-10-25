@@ -39,15 +39,15 @@ public class ValidSessionInterceptor extends AbstractInterceptor {
 
   private static final long serialVersionUID = -3706764472200123669L;
 
-  private ICenterService crpManager;
-  private ICenterUserService crpUserManager;
-  private ResearchCenter loggedCrp;
+  private ICenterService centerService;
+  private ICenterUserService userService;
+  private ResearchCenter looggedCenter;
 
 
   @Inject
-  public ValidSessionInterceptor(ICenterService crpManager, ICenterUserService crpUserManager) {
-    this.crpManager = crpManager;
-    this.crpUserManager = crpUserManager;
+  public ValidSessionInterceptor(ICenterService centerService, ICenterUserService userService) {
+    this.centerService = centerService;
+    this.userService = userService;
   }
 
   private void changeSessionSection(Map<String, Object> session) {
@@ -67,20 +67,20 @@ public class ValidSessionInterceptor extends AbstractInterceptor {
   public String intercept(ActionInvocation invocation) throws Exception {
     Map<String, Object> session = invocation.getInvocationContext().getSession();
 
-    loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
-    loggedCrp = crpManager.getCrpById(loggedCrp.getId());
+    looggedCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+    looggedCenter = centerService.getCrpById(looggedCenter.getId());
 
     String[] actionMap = ActionContext.getContext().getName().split("/");
     if (actionMap.length > 1) {
       String enteredCrp = actionMap[0];
-      ResearchCenter crp = crpManager.findCrpByAcronym(enteredCrp);
+      ResearchCenter crp = centerService.findCrpByAcronym(enteredCrp);
       if (crp != null) {
-        if (crp.equals(loggedCrp)) {
+        if (crp.equals(looggedCenter)) {
           this.changeSessionSection(session);
           return invocation.invoke();
         } else {
           User user = (User) session.get(APConstants.SESSION_USER);
-          if (crpUserManager.existCrpUser(user.getId(), crp.getId())) {
+          if (userService.existCrpUser(user.getId(), crp.getId())) {
             // for (CrpParameter parameter : loggedCrp.getCrpParameters()) {
             // if (parameter.isActive()) {
             // session.remove(parameter.getKey());

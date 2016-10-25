@@ -17,14 +17,20 @@ package org.cgiar.ccafs.marlo.interceptor;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
+import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import com.opensymphony.xwork2.ActionInvocation;
@@ -33,57 +39,51 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
  */
-@SuppressWarnings("unused")
 public class EditImpactPathwayInterceptor extends AbstractInterceptor implements Serializable {
 
   private static final long serialVersionUID = 1217563340228252130L;
-  private ICenterService crpManager;
-  private IUserService userManager;
-  // private CrpProgramManager crpProgramManager;
+  private ICenterService centerService;
+  private IUserService userService;
+  private IProgramService programService;
 
   private BaseAction baseAction;
   private Map<String, Object> parameters;
   private Map<String, Object> session;
-  private ResearchCenter crp;
-  private long crpProgramID = 0;
+  private ResearchCenter researchCenter;
+  private long programID = -1;
+  private long areaID = -1;
 
   @Inject
-  public EditImpactPathwayInterceptor(ICenterService crpManager, IUserService userManager) {
-    this.crpManager = crpManager;
-    this.userManager = userManager;
+  public EditImpactPathwayInterceptor(ICenterService centerService, IUserService userService,
+    IProgramService programService) {
+    this.centerService = centerService;
+    this.userService = userService;
+    this.programService = programService;
   }
 
-  long getCrpProgramId() {
+  void getprogramId() {
     try {
-      return Long.parseLong(((String[]) parameters.get(APConstants.CENTER_PROGRAM_ID))[0]);
+      programID = Long.parseLong(((String[]) parameters.get(APConstants.CENTER_PROGRAM_ID))[0]);
     } catch (Exception e) {
-      ResearchCenter loggedCrp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
-
-      loggedCrp = crpManager.getCrpById(loggedCrp.getId());
-
+      ResearchCenter loggedCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+      loggedCenter = centerService.getCrpById(loggedCenter.getId());
       User user = (User) session.get(APConstants.SESSION_USER);
-      user = userManager.getUser(user.getId());
-      // List<CrpProgramLeader> userLeads =
-      // user
-      // .getCrpProgramLeaders()
-      // .stream()
-      // .filter(
-      // c -> c.isActive() && c.getCrpProgram().isActive()
-      // && c.getCrpProgram().getProgramType() == ProgramType.FLAGSHIP_PROGRAM_TYPE.getValue())
-      // .collect(Collectors.toList());
-      // if (!userLeads.isEmpty()) {
-      // return userLeads.get(0).getCrpProgram().getId();
-      // } else {
-      // List<CrpProgram> allPrograms =
-      // loggedCrp.getCrpPrograms().stream()
-      // .filter(c -> c.getProgramType() == ProgramType.FLAGSHIP_PROGRAM_TYPE.getValue() && c.isActive())
-      // .collect(Collectors.toList());
-      // if (!allPrograms.isEmpty()) {
-      // return allPrograms.get(0).getId();
-      // }
-      // }
+      user = userService.getUser(user.getId());
+
+      // TODO - Create Enum to Research Leaders Type
+      List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+        .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
+
+      if (!userLeads.isEmpty()) {
+        programID = userLeads.get(0).getResearchProgram().getId();
+      } else {
+        ResearchProgram rp =
+          loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
+            .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
+        programID = rp.getId();
+        areaID = rp.getResearchArea().getId();
+      }
     }
-    return 0;
   }
 
 
@@ -93,14 +93,14 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     baseAction = (BaseAction) invocation.getAction();
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
-    crp = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
-    crpProgramID = this.getCrpProgramId();
+    researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+    this.getprogramId();
 
-    if (!baseAction
-      .hasPermission(baseAction.generatePermission(Permission.RESEARCH_AREA_FULL_PRIVILEGES, crp.getAcronym()))) {
-      return BaseAction.NOT_AUTHORIZED;
-    }
-
+    // String params[] = {researchCenter.getAcronym(), areaID + "", programID + ""};
+    // if (!baseAction.hasPermission(baseAction.generatePermission(Permission.RESEARCH_PROGRAM_FULL_PRIVILEGES,
+    // params))) {
+    // return BaseAction.NOT_AUTHORIZED;
+    // }
 
     try {
       this.setPermissionParameters(invocation);
@@ -111,52 +111,52 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
   }
 
 
-  public void setPermissionParameters(ActionInvocation invocation) {
+  public void setPermissionParameters(ActionInvocation invocation) throws Exception {
 
     boolean canEdit = false;
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
 
+    ResearchProgram researchProgram = programService.getProgramById(programID);
 
-    // CrpProgram crpProgram = crpProgramManager.getCrpProgramById(crpProgramID);
+    if (researchProgram != null) {
 
-    // if (crpProgram != null) {
-    //
-    // if (crpProgram.getProgramType() == ProgramType.FLAGSHIP_PROGRAM_TYPE.getValue()) {
-    //
-    // // If user is admin, it should have privileges to edit all projects.
-    // if (baseAction.isAdmin()) {
-    // canEdit = true;
-    // } else {
-    // if (baseAction.hasPermission(baseAction.generatePermission(Permission.IMPACT_PATHWAY_EDIT_PRIVILEGES,
-    // crp.getAcronym(), crpProgramID + ""))) {
-    // canEdit = true;
-    // }
-    // }
-    //
-    // if (parameters.get(APConstants.EDITABLE_REQUEST) != null) {
-    // String stringEditable = ((String[]) parameters.get(APConstants.EDITABLE_REQUEST))[0];
-    // editParameter = stringEditable.equals("true");
-    // // If the user is not asking for edition privileges we don't need to validate them.
-    // if (!editParameter) {
-    // baseAction.setEditableParameter(hasPermissionToEdit);
-    // }
-    // }
-    //
-    // // Check the permission if user want to edit or save the form
-    // if (editParameter || parameters.get("save") != null) {
-    // hasPermissionToEdit =
-    // (baseAction.isAdmin()) ? true : baseAction.hasPermission(baseAction.generatePermission(
-    // Permission.IMPACT_PATHWAY_EDIT_PRIVILEGES, crp.getAcronym(), crpProgramID + ""));
-    // }
-    //
-    // // Set the variable that indicates if the user can edit the section
-    // baseAction.setEditableParameter(hasPermissionToEdit && canEdit);
-    // baseAction.setCanEdit(canEdit);
-    // } else {
-    // throw new NullPointerException();
-    // }
-    // }
+      if (areaID != -1) {
+        areaID = researchProgram.getResearchArea().getId();
+      }
+      String params[] = {researchCenter.getAcronym(), areaID + "", programID + ""};
+      if (baseAction.canAccessSuperAdmin()) {
+        canEdit = true;
+      } else {
+
+        if (baseAction
+          .hasPermission(baseAction.generatePermission(Permission.RESEARCH_PROGRAM_FULL_PRIVILEGES, params))) {
+          canEdit = true;
+        }
+      }
+
+      if (parameters.get(APConstants.EDITABLE_REQUEST) != null) {
+        String stringEditable = ((String[]) parameters.get(APConstants.EDITABLE_REQUEST))[0];
+        editParameter = stringEditable.equals("true");
+        // If the user is not asking for edition privileges we don't need to validate them.
+        if (!editParameter) {
+          baseAction.setEditableParameter(hasPermissionToEdit);
+        }
+      }
+
+      // Check the permission if user want to edit or save the form
+      if (editParameter || parameters.get("save") != null) {
+        hasPermissionToEdit = (baseAction.isAdmin()) ? true : baseAction
+          .hasPermission(baseAction.generatePermission(Permission.RESEARCH_PROGRAM_FULL_PRIVILEGES, params));
+      }
+
+      // Set the variable that indicates if the user can edit the section
+      baseAction.setEditableParameter(hasPermissionToEdit && canEdit);
+      baseAction.setCanEdit(canEdit);
+
+    } else {
+      throw new Exception();
+    }
   }
 
 }
