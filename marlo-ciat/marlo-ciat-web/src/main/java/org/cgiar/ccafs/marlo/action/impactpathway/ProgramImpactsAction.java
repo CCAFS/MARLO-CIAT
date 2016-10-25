@@ -41,6 +41,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -241,12 +242,27 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
-      researchImpact =
-        selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()).get(0);
+      if (!selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList())
+        .isEmpty()) {
+        researchImpact =
+          selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()).get(0);
+      } else {
+        ResearchImpact researchImpactNew = new ResearchImpact();
+        researchImpactNew.setActive(true);
+        researchImpactNew.setActiveSince(new Date());
+        researchImpactNew.setCreatedBy(this.getCurrentUser());
+        researchImpactNew.setDescription("");
+        researchImpactNew.setResearchProgram(selectedProgram);
 
+        long impactId = impactService.saveResearchImpact(researchImpactNew);
 
-      researchObjectives =
-        new ArrayList<>(objectiveService.findAll().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+        researchImpact = impactService.getResearchImpactById(impactId);
+      }
+
+      if (objectiveService.findAll() != null) {
+        researchObjectives =
+          new ArrayList<>(objectiveService.findAll().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+      }
 
       researchImpact.setObjectives(new ArrayList<>());
       if (impactObjectiveService.findAll() != null) {

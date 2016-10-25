@@ -41,7 +41,7 @@
       <key>
         <column name="research_program_id" not-null="true" />
       </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchTopic" />
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" />
     </set>
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
