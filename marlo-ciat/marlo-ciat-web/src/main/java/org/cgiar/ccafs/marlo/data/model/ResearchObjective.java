@@ -42,7 +42,7 @@ public class ResearchObjective implements Serializable {
   /**
    * The research objective
    */
-  private String name;
+  private String objective;
 
 
   @Expose
@@ -55,7 +55,6 @@ public class ResearchObjective implements Serializable {
   @Expose
   private Date activeSince;
 
-
   @Expose
   private User createdBy;
 
@@ -63,8 +62,10 @@ public class ResearchObjective implements Serializable {
   @Expose
   private User modifiedBy;
 
+
   @Expose
   private String modificationJustification;
+
 
   /**
    * 
@@ -79,9 +80,9 @@ public class ResearchObjective implements Serializable {
    * @param researchCenter
    * @param entityType
    */
-  public ResearchObjective(String name, ResearchCenter researchCenter) {
+  public ResearchObjective(String objective, ResearchCenter researchCenter) {
     super();
-    this.name = name;
+    this.objective = objective;
     this.researchCenter = researchCenter;
   }
 
@@ -108,11 +109,8 @@ public class ResearchObjective implements Serializable {
     return modifiedBy;
   }
 
-  /**
-   * @return the name
-   */
-  public String getName() {
-    return name;
+  public String getObjective() {
+    return objective;
   }
 
   /**
@@ -133,7 +131,6 @@ public class ResearchObjective implements Serializable {
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -157,11 +154,9 @@ public class ResearchObjective implements Serializable {
     this.modifiedBy = modifiedBy;
   }
 
-  /**
-   * @param name the name to set
-   */
-  public void setName(String name) {
-    this.name = name;
+
+  public void setObjective(String objective) {
+    this.objective = objective;
   }
 
   /**
