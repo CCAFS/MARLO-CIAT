@@ -84,12 +84,12 @@
     
     [#-- Startegic Objectives --]
     <div class="form-group">
-      <h5>[@customForm.text name="programImpact.objectives" readText=!editable /]:[@customForm.req required=editable /]</h5>
+      <h5>[@customForm.text name="programImpact.objectiveValue" readText=!editable /]:[@customForm.req required=editable /]</h5>
       [#if editable ]
-        [@s.fielderror cssClass="fieldError" fieldName="${customName}.objectives"/]
-        [@s.checkboxlist name="${customName}.objectives" list="researchObjectives" listKey="id" listValue="objective" cssClass="checkboxInput"  value="objectivesIds" /]
+        [@s.fielderror cssClass="fieldError" fieldName="${customName}.objectiveValue"/]
+        [@s.checkboxlist name="${customName}.objectiveValue" list="researchObjectives" listKey="id" listValue="objective" cssClass="checkboxInput"  value="${customName}.objectivesIds" /]
       [#else]
-        <input type="hidden" name="${customName}.strategicObjectives" value="${(element.strategicObjectives)!}"/>
+        <input type="hidden" name="${customName}.objectiveValue" value="${(element.objectiveValue)!}"/>
         [#if element.strategicObjectives?has_content]
           [#list element.strategicObjectives as element]<p class="checked">${element.objective}</p>[/#list]
         [/#if]

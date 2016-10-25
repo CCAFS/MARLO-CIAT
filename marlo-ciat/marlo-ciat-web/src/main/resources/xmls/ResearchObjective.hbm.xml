@@ -33,6 +33,13 @@
       <many-to-one name="researchCenter" class="org.cgiar.ccafs.marlo.data.model.ResearchCenter"
       fetch="select">
       <column name="research_center_id" not-null="true" />
-    </many-to-one>	
+    </many-to-one>
+    <set lazy="true" name="researchImpactObjectives" table="research_impact_objectives" order-by="id"
+      cascade="save-update" fetch="select">
+      <key>
+        <column name="objective_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective" />
+    </set>	
 	</class>
 </hibernate-mapping>

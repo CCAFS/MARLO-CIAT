@@ -39,7 +39,6 @@ public class ResearchImpact implements Serializable {
   @Expose
   private Long id;
 
-
   /**
    * The impact description text.
    */
@@ -63,13 +62,13 @@ public class ResearchImpact implements Serializable {
   @Expose
   private Date activeSince;
 
+
   @Expose
   private User createdBy;
 
 
   @Expose
   private User modifiedBy;
-
 
   @Expose
   private String modificationJustification;
@@ -78,14 +77,17 @@ public class ResearchImpact implements Serializable {
   @Expose
   private ResearchProgram researchProgram;
 
-
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
+
+
+  private Set<ResearchImpactObjective> researchImpactObjectives = new HashSet<>(0);
 
 
   private List<ResearchObjective> objectives;
 
 
   private String objectiveValue;
+
 
   /**
    * 
@@ -94,7 +96,6 @@ public class ResearchImpact implements Serializable {
     super();
     // TODO Auto-generated constructor stub
   }
-
 
   /**
    * @param impact
@@ -108,18 +109,42 @@ public class ResearchImpact implements Serializable {
     this.researchProgram = researchProgram;
   }
 
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchImpact other = (ResearchImpact) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
   public Date getActiveSince() {
     return activeSince;
   }
+
 
   public User getCreatedBy() {
     return createdBy;
   }
 
-
   public String getDescription() {
     return description;
   }
+
 
   /**
    * @return the id
@@ -136,14 +161,34 @@ public class ResearchImpact implements Serializable {
     return modifiedBy;
   }
 
+
   public List<ResearchObjective> getObjectives() {
     return objectives;
+  }
+
+  /**
+   * @return an array of integers.
+   */
+  public long[] getObjectivesIds() {
+
+    List<ResearchObjective> researchObjectives = this.getObjectives();
+    if (researchObjectives != null) {
+      long[] ids = new long[researchObjectives.size()];
+      for (int i = 0; i < ids.length; i++) {
+        ids[i] = researchObjectives.get(i).getId();
+      }
+      return ids;
+    }
+    return null;
   }
 
   public String getObjectiveValue() {
     return objectiveValue;
   }
 
+  public Set<ResearchImpactObjective> getResearchImpactObjectives() {
+    return researchImpactObjectives;
+  }
 
   /**
    * @return the researchOutcomes
@@ -152,7 +197,6 @@ public class ResearchImpact implements Serializable {
     return researchOutcomes;
   }
 
-
   /**
    * @return the researchProgram
    */
@@ -160,11 +204,21 @@ public class ResearchImpact implements Serializable {
     return researchProgram;
   }
 
+
   /**
    * @return the targetYear
    */
   public Integer getTargetYear() {
     return targetYear;
+  }
+
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   public boolean isActive() {
@@ -208,6 +262,10 @@ public class ResearchImpact implements Serializable {
 
   public void setObjectiveValue(String objectiveValue) {
     this.objectiveValue = objectiveValue;
+  }
+
+  public void setResearchImpactObjectives(Set<ResearchImpactObjective> researchImpactObjectives) {
+    this.researchImpactObjectives = researchImpactObjectives;
   }
 
   /**

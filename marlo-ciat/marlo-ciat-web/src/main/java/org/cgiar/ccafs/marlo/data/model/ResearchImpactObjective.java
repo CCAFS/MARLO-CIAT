@@ -9,13 +9,16 @@ import com.google.gson.annotations.Expose;
 
 public class ResearchImpactObjective implements java.io.Serializable {
 
+
   private static final long serialVersionUID = -8979609328318401070L;
 
+
   @Expose
-  private Integer id;
+  private Long id;
 
   @Expose
   private User modifiedBy;
+
 
   @Expose
   private ResearchObjective researchObjective;
@@ -35,10 +38,8 @@ public class ResearchImpactObjective implements java.io.Serializable {
   @Expose
   private String modificationJustification;
 
-
   public ResearchImpactObjective() {
   }
-
 
   public ResearchImpactObjective(ResearchObjective researchObjective, ResearchImpact researchImpact, boolean active) {
     this.researchObjective = researchObjective;
@@ -57,21 +58,53 @@ public class ResearchImpactObjective implements java.io.Serializable {
     this.modificationJustification = modificationJustification;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchImpactObjective other = (ResearchImpactObjective) obj;
+    if (researchImpact == null) {
+      if (other.researchImpact != null) {
+        return false;
+      }
+    } else if (!researchImpact.equals(other.researchImpact)) {
+      return false;
+    }
+    if (researchObjective == null) {
+      if (other.researchObjective != null) {
+        return false;
+      }
+    } else if (!researchObjective.equals(other.researchObjective)) {
+      return false;
+    }
+    return true;
+  }
+
+
   public Date getActiveSince() {
     return this.activeSince;
   }
+
 
   public User getCreatedBy() {
     return createdBy;
   }
 
-  public Integer getId() {
-    return this.id;
+  public Long getId() {
+    return id;
   }
 
   public String getModificationJustification() {
     return this.modificationJustification;
   }
+
 
   public User getModifiedBy() {
     return modifiedBy;
@@ -85,14 +118,23 @@ public class ResearchImpactObjective implements java.io.Serializable {
     return researchObjective;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((researchImpact == null) ? 0 : researchImpact.hashCode());
+    result = prime * result + ((researchObjective == null) ? 0 : researchObjective.hashCode());
+    return result;
+  }
+
   public boolean isActive() {
     return active;
   }
 
-
   public void setActive(boolean active) {
     this.active = active;
   }
+
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -102,9 +144,10 @@ public class ResearchImpactObjective implements java.io.Serializable {
     this.createdBy = createdBy;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;

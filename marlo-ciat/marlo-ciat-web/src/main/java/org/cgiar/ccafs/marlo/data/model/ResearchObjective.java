@@ -20,6 +20,8 @@ package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
@@ -32,7 +34,6 @@ public class ResearchObjective implements Serializable {
 
 
   private static final long serialVersionUID = -3618614156720044325L;
-
 
   /**
    * The id or identifier for the research objective.
@@ -62,10 +63,11 @@ public class ResearchObjective implements Serializable {
   @Expose
   private User modifiedBy;
 
-
   @Expose
   private String modificationJustification;
 
+
+  private Set<ResearchImpactObjective> researchImpactObjectives = new HashSet<>(0);
 
   /**
    * 
@@ -74,6 +76,7 @@ public class ResearchObjective implements Serializable {
     super();
     // TODO Auto-generated constructor stub
   }
+
 
   /**
    * @param name
@@ -86,9 +89,33 @@ public class ResearchObjective implements Serializable {
     this.researchCenter = researchCenter;
   }
 
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchObjective other = (ResearchObjective) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
   public Date getActiveSince() {
     return activeSince;
   }
+
 
   public User getCreatedBy() {
     return createdBy;
@@ -120,6 +147,18 @@ public class ResearchObjective implements Serializable {
     return researchCenter;
   }
 
+  public Set<ResearchImpactObjective> getResearchImpactObjectives() {
+    return researchImpactObjectives;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
   public boolean isActive() {
     return active;
   }
@@ -135,7 +174,6 @@ public class ResearchObjective implements Serializable {
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
-
 
   /**
    * @param id the id to set
@@ -159,11 +197,16 @@ public class ResearchObjective implements Serializable {
     this.objective = objective;
   }
 
+
   /**
    * @param researchCenter the researchCenter to set
    */
   public void setResearchCenter(ResearchCenter researchCenter) {
     this.researchCenter = researchCenter;
+  }
+
+  public void setResearchImpactObjectives(Set<ResearchImpactObjective> researchImpactObjectives) {
+    this.researchImpactObjectives = researchImpactObjectives;
   }
 
 

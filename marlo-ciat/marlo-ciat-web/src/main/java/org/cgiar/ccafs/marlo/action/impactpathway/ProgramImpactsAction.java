@@ -138,14 +138,15 @@ public class ProgramImpactsAction extends BaseAction {
     return researchAreas;
   }
 
+
   public List<ResearchImpact> getResearchImpacts() {
     return researchImpacts;
   }
 
-
   public List<ResearchObjective> getResearchObjectives() {
     return researchObjectives;
   }
+
 
   /**
    * @return the researchPrograms
@@ -169,7 +170,6 @@ public class ProgramImpactsAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -260,16 +260,22 @@ public class ProgramImpactsAction extends BaseAction {
       if (researchImpacts != null) {
         for (ResearchImpact researchImpact : researchImpacts) {
           researchImpact.setObjectives(new ArrayList<>());
-          if (impactObjectiveService.findAll() != null) {
-            for (ResearchImpactObjective impactObjective : impactObjectiveService.findAll().stream()
-              .filter(ro -> ro.isActive() && ro.getResearchImpact().getId() == researchImpact.getId())
-              .collect(Collectors.toList())) {
+          if (researchImpact.getResearchImpactObjectives() != null) {
+            for (ResearchImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
+              .filter(ro -> ro.isActive()).collect(Collectors.toList())) {
               researchImpact.getObjectives().add(impactObjective.getResearchObjective());
             }
           }
+          // if (impactObjectiveService.findAll() != null) {
+          // for (ResearchImpactObjective impactObjective : impactObjectiveService.findAll().stream()
+          // .filter(ro -> ro.isActive() && ro.getResearchImpact().getId() == researchImpact.getId())
+          // .collect(Collectors.toList())) {
+          // researchImpact.getObjectives().add(impactObjective.getResearchObjective());
+          // }
+          // }
         }
       }
-
+      System.out.println("Test");
     }
 
 
@@ -298,7 +304,6 @@ public class ProgramImpactsAction extends BaseAction {
 
       ResearchProgram programDb = programService.getProgramById(selectedProgram.getId());
 
-
       for (ResearchImpact researchImpact : programDb.getResearchImpacts().stream().filter(ri -> ri.isActive())
         .collect(Collectors.toList())) {
         if (!researchImpacts.contains(researchImpact)) {
@@ -325,7 +330,24 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setResearchProgram(programDb);
           researchImpactNew.setTargetYear(researchImpact.getTargetYear());
 
-          impactService.saveResearchImpact(researchImpactNew);
+          long impactId = impactService.saveResearchImpact(researchImpactNew);
+
+          researchImpactNew = impactService.getResearchImpactById(impactId);
+
+          if (researchImpact.getObjectiveValue() != null && researchImpact.getObjectiveValue().length() > 0) {
+            for (String objectiveId : researchImpact.getObjectiveValue().trim().split(",")) {
+              ResearchObjective researchObjective =
+                objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId));
+              ResearchImpactObjective impactObjectiveNew = new ResearchImpactObjective();
+              impactObjectiveNew.setActive(true);
+              impactObjectiveNew.setActiveSince(new Date());
+              impactObjectiveNew.setCreatedBy(this.getCurrentUser());
+              impactObjectiveNew.setResearchObjective(researchObjective);
+              impactObjectiveNew.setResearchImpact(researchImpactNew);
+
+              impactObjectiveService.saveResearchImpactObjective(impactObjectiveNew);
+            }
+          }
         } else {
           boolean hasChanges = false;
           ResearchImpact researchImpactRew = impactService.getResearchImpactById(researchImpact.getId());
@@ -340,7 +362,37 @@ public class ProgramImpactsAction extends BaseAction {
             researchImpactRew.setTargetYear(researchImpact.getTargetYear());
           }
 
-          impactService.saveResearchImpact(researchImpactRew);
+          if (hasChanges) {
+            long impactId = impactService.saveResearchImpact(researchImpactRew);
+            researchImpactRew = impactService.getResearchImpactById(impactId);
+          }
+
+          if (researchImpact.getObjectiveValue() != null && researchImpact.getObjectiveValue().length() > 0) {
+            for (ResearchImpactObjective impactObjective : researchImpactRew.getResearchImpactObjectives().stream()
+              .filter(rio -> rio.isActive()).collect(Collectors.toList())) {
+              if (!researchImpact.getObjectiveValue()
+                .contains(impactObjective.getResearchObjective().getId().toString())) {
+                impactObjectiveService.deleteResearchImpactObjective(impactObjective.getId());
+              }
+            }
+
+            for (String objectiveId : researchImpact.getObjectiveValue().trim().split(",")) {
+              ResearchObjective researchObjective =
+                objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId));
+              ResearchImpactObjective impactObjectiveNew = new ResearchImpactObjective();
+              impactObjectiveNew.setResearchObjective(researchObjective);
+              impactObjectiveNew.setResearchImpact(researchImpactRew);
+
+              if (!researchImpactRew.getResearchImpactObjectives().stream().filter(rio -> rio.isActive())
+                .collect(Collectors.toList()).contains(impactObjectiveNew)) {
+                impactObjectiveNew.setActive(true);
+                impactObjectiveNew.setActiveSince(new Date());
+                impactObjectiveNew.setCreatedBy(this.getCurrentUser());
+                impactObjectiveService.saveResearchImpactObjective(impactObjectiveNew);
+              }
+
+            }
+          }
 
         }
       }
@@ -365,6 +417,7 @@ public class ProgramImpactsAction extends BaseAction {
 
   }
 
+
   /**
    * @param areaID the areaID to set
    */
@@ -380,13 +433,13 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
-
   /**
    * @param loggedCenter the loggedCenter to set
    */
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
+
 
   /**
    * @param programID the programID to set
@@ -395,7 +448,6 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
-
   /**
    * @param programID the programID to set
    */
@@ -403,10 +455,10 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
+
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
-
 
   public void setResearchImpacts(List<ResearchImpact> researchImpacts) {
     this.researchImpacts = researchImpacts;
@@ -415,6 +467,7 @@ public class ProgramImpactsAction extends BaseAction {
   public void setResearchObjectives(List<ResearchObjective> researchObjectives) {
     this.researchObjectives = researchObjectives;
   }
+
 
   /**
    * @param researchPrograms the researchPrograms to set
@@ -430,7 +483,6 @@ public class ProgramImpactsAction extends BaseAction {
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
-
 
   /**
    * @param selectedResearchArea the selectedResearchArea to set

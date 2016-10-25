@@ -44,5 +44,12 @@
       </key>
       <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome" />
     </set>
+    <set lazy="true" name="researchImpactObjectives" table="research_impact_objectives" order-by="id"
+      cascade="save-update" fetch="select">
+      <key>
+        <column name="impact_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective" />
+    </set>    
 	</class>
 </hibernate-mapping>
