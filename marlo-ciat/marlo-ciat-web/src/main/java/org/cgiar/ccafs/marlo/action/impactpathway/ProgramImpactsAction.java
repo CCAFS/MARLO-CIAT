@@ -303,7 +303,7 @@ public class ProgramImpactsAction extends BaseAction {
             for (ResearchImpactObjective impactObjective : impactObjectiveService.findAll().stream()
               .filter(io -> io.isActive() && io.getResearchImpact().getId() == researchImpact.getId())
               .collect(Collectors.toList())) {
-
+              impactObjectiveService.deleteResearchImpactObjective(impactObjective.getId());
             }
           }
 
