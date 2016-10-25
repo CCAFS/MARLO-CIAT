@@ -5,7 +5,11 @@
   <ul class="nav nav-tabs" role="tablist">
     [#list researchAreas as area]
     [#assign isActive = (area.id == areaID)/]
-    <li role="areas" class="${isActive?string('active','')}"><a href="#area-${area.id}" aria-controls="home" role="tab" data-toggle="tab">${area.acronym}</a></li>
+    [#assign link = "#area-${area.id}" /]
+      <li role="areas" class="${isActive?string('active','')}">
+        [#list area.researchPrograms as program][#if program_index == 0][#assign link][@s.url][@s.param name="programID" value=program.id /][/@s.url][/#assign][/#if][/#list]
+        <a href="${link}" aria-controls="home" role="tab" [#-- data-toggle="tab" --]>${area.acronym}</a>
+      </li>
     [/#list]
   </ul>
   [#-- Tab panes --]
