@@ -336,6 +336,7 @@ public class ProgramImpactsAction extends BaseAction {
             researchImpactRew.setTargetYear(researchImpact.getTargetYear());
           }
 
+          impactService.saveResearchImpact(researchImpactRew);
 
         }
       }
