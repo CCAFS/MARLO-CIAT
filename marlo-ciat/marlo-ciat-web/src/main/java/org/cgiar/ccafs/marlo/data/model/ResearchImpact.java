@@ -289,5 +289,10 @@ public class ResearchImpact implements Serializable {
     this.targetYear = targetYear;
   }
 
+  @Override
+  public String toString() {
+    return id.toString();
+  }
+
 
 }

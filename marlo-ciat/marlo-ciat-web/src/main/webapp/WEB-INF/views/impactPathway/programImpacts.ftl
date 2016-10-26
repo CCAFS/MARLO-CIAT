@@ -32,7 +32,7 @@
           <div class="elements-list">
           [#if researchImpacts?has_content]
             [#list researchImpacts as impact]
-              [@programImpactMacro element={} name="researchImpacts" index=impact_index /]
+              [@programImpactMacro element=impact name="researchImpacts" index=impact_index /]
             [/#list]
           [#else]
             [@programImpactMacro element={} name="researchImpacts" index=0 /]

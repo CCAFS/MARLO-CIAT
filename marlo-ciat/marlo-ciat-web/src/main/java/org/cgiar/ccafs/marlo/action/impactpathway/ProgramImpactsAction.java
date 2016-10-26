@@ -275,7 +275,8 @@ public class ProgramImpactsAction extends BaseAction {
           // }
         }
       }
-      System.out.println("Test");
+
+
     }
 
 
@@ -295,6 +296,10 @@ public class ProgramImpactsAction extends BaseAction {
       if (researchImpacts != null) {
         researchImpacts.clear();
       }
+    }
+
+    for (ResearchImpact ri : researchImpacts) {
+      System.out.println(ri.getId());
     }
   }
 
@@ -378,13 +383,15 @@ public class ProgramImpactsAction extends BaseAction {
 
             for (String objectiveId : researchImpact.getObjectiveValue().trim().split(",")) {
               ResearchObjective researchObjective =
-                objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId));
+                objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId.trim()));
               ResearchImpactObjective impactObjectiveNew = new ResearchImpactObjective();
               impactObjectiveNew.setResearchObjective(researchObjective);
               impactObjectiveNew.setResearchImpact(researchImpactRew);
 
-              if (!researchImpactRew.getResearchImpactObjectives().stream().filter(rio -> rio.isActive())
-                .collect(Collectors.toList()).contains(impactObjectiveNew)) {
+              List<ResearchImpactObjective> impactObjectives = researchImpactRew.getResearchImpactObjectives().stream()
+                .filter(rio -> rio.isActive()).collect(Collectors.toList());
+
+              if (!impactObjectives.contains(impactObjectiveNew)) {
                 impactObjectiveNew.setActive(true);
                 impactObjectiveNew.setActiveSince(new Date());
                 impactObjectiveNew.setCreatedBy(this.getCurrentUser());

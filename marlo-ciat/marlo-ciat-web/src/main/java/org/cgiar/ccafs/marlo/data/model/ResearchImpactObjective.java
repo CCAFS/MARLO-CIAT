@@ -70,18 +70,18 @@ public class ResearchImpactObjective implements java.io.Serializable {
       return false;
     }
     ResearchImpactObjective other = (ResearchImpactObjective) obj;
-    if (researchImpact == null) {
-      if (other.researchImpact != null) {
+    if (this.getResearchImpact() == null) {
+      if (other.getResearchImpact() != null) {
         return false;
       }
-    } else if (!researchImpact.equals(other.researchImpact)) {
+    } else if (!this.getResearchImpact().equals(other.getResearchImpact())) {
       return false;
     }
-    if (researchObjective == null) {
-      if (other.researchObjective != null) {
+    if (this.getResearchObjective() == null) {
+      if (other.getResearchObjective() != null) {
         return false;
       }
-    } else if (!researchObjective.equals(other.researchObjective)) {
+    } else if (!this.getResearchObjective().getId().equals(other.getResearchObjective().getId())) {
       return false;
     }
     return true;
@@ -122,6 +122,7 @@ public class ResearchImpactObjective implements java.io.Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + (active ? 1231 : 1237);
     result = prime * result + ((researchImpact == null) ? 0 : researchImpact.hashCode());
     result = prime * result + ((researchObjective == null) ? 0 : researchObjective.hashCode());
     return result;
