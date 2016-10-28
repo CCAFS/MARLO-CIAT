@@ -1,0 +1,74 @@
+#configuration for developer machine
+# BD
+mysql.host=localhost
+mysql.user=user
+mysql.password=password
+mysql.database=database_name
+mysql.url=jdbc:mysql://localhost:3306/database_name
+mysql.port=3306
+# -----------------------------
+marlo.baseUrl=172.22.33.55
+# ----------------------------------------------------
+#                   Sections Variables
+# ----------------------------------------------------
+# Is Admin Section active? 
+marlo.admin.active=true
+marlo.impactPathway.active=true
+#---------------------------------------------------
+#                   Google API Key
+#---------------------------------------------------
+google.api.key=AIzaSyANidBt0o_XOsaqzzFuNKeTMexo_nzLk_s
+#---------------------------------------------------
+#                   Pusher API Key
+#---------------------------------------------------
+pusher.api.key=9f4ad43b96463f80e5cd
+pusher.api.appid=229145
+pusher.api.privatekey=73eebff805d2b772130c
+#---------------------------------------------------
+#                   Tawk.to API Key
+#---------------------------------------------------
+tawkto.api.key=57864c4b7e9d57372d381198
+# ----------------------------------------------------
+#                   AutoSave Properties
+# ----------------------------------------------------
+autosave.active=true
+autosave.folder=/home/marlociatdv_admin/marloFiles/tempFiles/
+# ------------------------------------------------
+# Email account
+# ------------------------------------------------
+email.notification=ccafsap@gmail.com
+#gmail.password=emailpassword
+email.user=ccafs-pr
+email.password=tauMaiC8
+email.host=testweb.ciat.cgiar.org
+email.port=25
+# ----------------------------------------------------
+#                   File Configuration
+# ----------------------------------------------------
+# URL where the files uploaded can be downloaded
+file.downloads=172.22.33.55
+file.uploads.projectsFolder=projects/
+# folder to upload project work plans
+file.uploads.project.WorkplanFolder=workplan/
+# folder to upload bilateral project contract proposal
+file.uploads.project.bilateralProposalFolder=bilateralProposal/
+file.uploads.project.bilateralPAnualReport=anualReport/
+# Maximum size allowed
+file.maxSizeAllowed.bytes=3145728
+# Base folder where files will be moved
+file.uploads.baseFolder=/home/marlociatdv_admin/marloFiles/marlo
+# -----------------------------------------------
+# TEST MODE
+# ------------------------------------------------
+marlo.production=false
+marlo.debug=false
+# ------------------------------------------------
+# Logger properties
+# ------------------------------------------------
+log.folder=/home/marlociatdv_admin/marloFiles/logs
+log.console=true
+log.file=false
+!Production log only shows logs of type info, warn and error 
+log.production=false
+!Test log shows logs of all types trace, debug, info, warn and error 
+log.test=true
