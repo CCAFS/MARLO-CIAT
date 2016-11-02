@@ -16,12 +16,14 @@
     [#-- What do you want to do --]
     <div class="homeTitle"><b>[@s.text name="dashboard.decisionTree.title" /]</b></div>
     <div id="decisionTree" class="borderBox">
-      <div id="impactPathway" class="option"><p>[@s.text name="dashboard.decisionTree.defineImpact" /]</p></div>
-      <div class="clearfix"></div>
-      <div class="addProjectButtons clearfix" style="display:none">
-        <p class="title">[@s.text name="dashboard.decisionTree.typeProjectQuestion" /]</p>
-            <a href="[@s.url namespace="/impactPathway" action='${(centerSession)!}/programimpacts'/]"><div class="impactPathway"><p>[@s.text name="dashboard.decisionTree.coreProject" /]</p></div></a>
+      <div id="newImpactPathway" class="option">
+        <a href="[@s.url action="impactPathway/${centerSession}/programimpacts"][@s.param name="edit" value="true"/][/@s.url]">
+          <p>[@s.text name="dashboard.decisionTree.defineImpact" /]</p>
+        </a>
       </div>
+      <div id="startMonitoring" class="option disabled" title="This link is disabled"><p>[@s.text name="dashboard.decisionTree.startMonitoring" /]</p></div>
+      <div id="finalDes" class="option disabled" title="This link is disabled"><p>[@s.text name="dashboard.decisionTree.finishDes" /]</p></div>
+      <div class="clearfix"></div>
     </div>
 </section>
 

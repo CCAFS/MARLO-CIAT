@@ -29,6 +29,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -60,11 +61,14 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public static final String CANCEL = "cancel";
 
+
   // Loggin
   private static final Logger LOG = LoggerFactory.getLogger(BaseAction.class);
 
   public static final String NEXT = "next";
+
   public static final String NOT_AUTHORIZED = "403";
+
   public static final String NOT_FOUND = "404";
   public static final String NOT_LOGGED = "401";
   public static final String SAVED_STATUS = "savedStatus";
@@ -98,13 +102,15 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   // button actions
   protected boolean save;
   private boolean saveable; // If user is able to see the save, cancel, delete
-
+  // Set the invalid fields
+  private HashMap<String, String> invalidFields;
   // buttons
   // Config Variables
   @Inject
   protected BaseSecurityContext securityContext;
 
   private Map<String, Object> session;
+
   protected boolean submit;
 
   @Inject
@@ -148,7 +154,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return CANCEL;
   }
 
-
   /**
    * This method clears the cache and re-load the user permissions in the next
    * iteration.
@@ -158,11 +163,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
   }
 
-
   /* Override this method depending of the delete action. */
   public String delete() {
     return SUCCESS;
   }
+
 
   @Override
   public String execute() throws Exception {
@@ -181,6 +186,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
     return INPUT;
   }
+
 
   public String generatePermission(String permission, String... params) {
     // TODO: Update the permission
@@ -290,6 +296,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return u;
   }
 
+  public HashMap<String, String> getInvalidFields() {
+    return invalidFields;
+  }
+
   public List<Auditlog> getListLog(IAuditLog object) {
     try {
       return auditLogManager.listLogs(object.getClass(), Long.parseLong(object.getId().toString()),
@@ -308,10 +318,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return Locale.ENGLISH;
   }
 
-
   public String getNamespace() {
     return ServletActionContext.getActionMapping().getNamespace();
   }
+
 
   /**
    * get the number of users log in in the application
@@ -430,11 +440,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return NEXT;
   }
 
-
   @Override
   public void prepare() throws Exception {
     // So far, do nothing here!
   }
+
 
   /* Override this method depending of the save action. */
   public String save() {
@@ -445,10 +455,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     this.add = true;
   }
 
-
   public void setBasePermission(String basePermission) {
     this.basePermission = basePermission;
   }
+
 
   public void setCancel(boolean cancel) {
     this.cancel = true;
@@ -484,6 +494,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public void setFullEditable(boolean fullEditable) {
     this.fullEditable = fullEditable;
+  }
+
+  public void setInvalidFields(HashMap<String, String> invalidFields) {
+    this.invalidFields = invalidFields;
   }
 
   public void setJustification(String justification) {
