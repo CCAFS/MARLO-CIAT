@@ -2593,14 +2593,14 @@ input.userName {
   left: 29%;
 }
 
-#newProject{
+#newImpactPathway{
   cursor: pointer;
   background-image: url(../../images/global/decision-tree-1.png);
 }
-#updatePlanning{
+#startMonitoring{
   background-image: url(../../images/global/decision-tree-2.png);
 }
-#reportProject{
+#finalDes{
   background-image: url(../../images/global/decision-tree-3.png);
 }
 
@@ -6092,7 +6092,22 @@ input.fieldChecked {
   color: #b1afaf;
 }
 
+.relVal{
+  position: relative;
+}
 
+span.errorTag {
+    position: absolute;
+    text-align: center;
+    color: rgb(148, 125, 3);
+    background: url(./../../images/global/errorTag.png);
+    background-size: 100% 100%;
+    width: 50px;
+    cursor: help;
+    height: 22px;
+    padding: 3px;
+    z-index: 99;
+}
 
 .sectionSubMenu .nav-tabs>li.active:after, 
 .sectionSubMenu .nav-tabs>li.active:before {
