@@ -2,12 +2,13 @@
 [#assign title = "Impact Pathway - Program Impacts" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["select2"] /]
-[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "programImpacts" /]
 
 [#assign breadCrumb = [
-  {"label":"impactPathway", "nameSpace":"", "action":"programimpacts"}
+  {"label":"impactPathway", "nameSpace":"", "action":"programimpacts"},
+  {"label":"programImpacts", "nameSpace":"", "action":"programimpacts"}
 ]/]
 [#assign leadersName = "leaders"/]
 [#include "/WEB-INF/global/pages/header.ftl" /]
@@ -83,7 +84,7 @@
     </div>
     
     [#-- Startegic Objectives --]
-    <div class="form-group">
+    <div class="form-group relVal" >
       <h5>[@customForm.text name="programImpact.objectiveValue" readText=!editable /]:[@customForm.req required=editable /]</h5>
       [#if editable ]
         [@s.fielderror cssClass="fieldError" fieldName="${customName}.objectiveValue"/]
