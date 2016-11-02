@@ -21,6 +21,9 @@
 		
 			<interceptor name="requireUser"
 				class="org.cgiar.ccafs.marlo.interceptor.RequireUserInterceptor" />
+				<!-- custom interceptor to preserve action messages across redirects -->
+      <interceptor name="keepRedirectMessages"
+        class="org.cgiar.ccafs.marlo.interceptor.RedirectMessageInterceptor" />
 			<interceptor name="i18nFile"
 				class="org.cgiar.ccafs.marlo.interceptor.InternationalitazionFileInterceptor" />
       <!-- validating if the url is valid in the open session -->
@@ -29,6 +32,7 @@
       <!-- validating if the user have edit privileges to impact pathway -->
       <interceptor name="editImpactPathway"
         class="org.cgiar.ccafs.marlo.interceptor.EditImpactPathwayInterceptor" />
+        
         
 			<!-- stack from home packgae -->
 			<interceptor-stack name="homeStack">
@@ -41,6 +45,7 @@
         <interceptor-ref name="i18nFile" />
         <interceptor-ref name="requireUser" />
         <interceptor-ref name="editImpactPathway" />
+        <interceptor-ref name="keepRedirectMessages" />
         <interceptor-ref name="defaultStack" />
       </interceptor-stack>
       

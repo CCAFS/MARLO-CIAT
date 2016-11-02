@@ -33,6 +33,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.validation.impactpathway.ResearchTopicsValidator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +61,7 @@ public class ResearchTopicsAction extends BaseAction {
   private IResearchTopicService researchTopicService;
   private IUserService userService;
 
+  private ResearchTopicsValidator validator;
   // Local Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
@@ -72,13 +74,15 @@ public class ResearchTopicsAction extends BaseAction {
 
   @Inject
   public ResearchTopicsAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService, IUserService userService) {
+    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService, IUserService userService,
+    ResearchTopicsValidator validator) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.researchAreaService = researchAreaService;
     this.researchTopicService = researchTopicService;
     this.userService = userService;
+    this.validator = validator;
   }
 
   public long getAreaID() {
@@ -272,13 +276,19 @@ public class ResearchTopicsAction extends BaseAction {
       }
 
       Collection<String> messages = this.getActionMessages();
-      if (!messages.isEmpty()) {
-        String validationMessage = messages.iterator().next();
+
+      if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
-        this.addActionWarning(this.getText("saving.saved") + validationMessage);
+
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+
       } else {
-        this.addActionMessage(this.getText("saving.saved"));
+        this.addActionMessage("message:" + this.getText("saving.saved"));
       }
+
       messages = this.getActionMessages();
 
       return SUCCESS;
@@ -321,4 +331,10 @@ public class ResearchTopicsAction extends BaseAction {
     this.selectedResearchArea = selectedResearchArea;
   }
 
+  @Override
+  public void validate() {
+    if (save) {
+      validator.validate(this, researchTopics, selectedProgram, true);
+    }
+  }
 }

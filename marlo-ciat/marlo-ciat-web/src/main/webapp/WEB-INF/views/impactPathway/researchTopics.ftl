@@ -2,7 +2,7 @@
 [#assign title = "Impact Pathway - Research Topics" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "researchTopics" /]
@@ -76,10 +76,10 @@
       <span class="elementId">Research Topic</span>
     </div>
     <br />
-    
+            
     <input type="hidden" name="${customName}.id" value="${(element.id)!}"/>
     
-    [#-- Program Acronym & Name --]
+    [#-- Research Topic Name --]
     <div class="form-group"> 
       <div class="row">
         <div class="col-sm-12">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>

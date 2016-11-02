@@ -38,6 +38,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.validation.impactpathway.ProgramImpactsValidator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,34 +62,18 @@ public class ProgramImpactsAction extends BaseAction {
 
   private static final long serialVersionUID = -2261790056574973080L;
 
-
   private static final Logger LOG = LoggerFactory.getLogger(ProgramImpactsAction.class);
 
-
   private ICenterService centerService;
-
-
   private IProgramService programService;
-
-
   private IResearchAreaService researchAreaService;
-
-
   private IUserService userService;
-
-
   private IResearchObjectiveService objectiveService;
-
-
   private IResearchImpactService impactService;
-
   private IResearchImpactObjectiveService impactObjectiveService;
 
   private ResearchCenter loggedCenter;
-
   private List<ResearchArea> researchAreas;
-
-
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private List<ResearchObjective> researchObjectives;
@@ -97,11 +82,13 @@ public class ProgramImpactsAction extends BaseAction {
   private long programID;
   private long areaID;
 
+  private ProgramImpactsValidator validator;
+
   @Inject
   public ProgramImpactsAction(APConfig config, ICenterService centerService, IProgramService programService,
     IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService,
     IResearchObjectiveService objectiveService, IResearchImpactService impactService,
-    IResearchImpactObjectiveService impactObjectiveService) {
+    IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -110,7 +97,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.objectiveService = objectiveService;
     this.impactService = impactService;
     this.impactObjectiveService = impactObjectiveService;
-
+    this.validator = validator;
   }
 
   /**
@@ -362,9 +349,16 @@ public class ProgramImpactsAction extends BaseAction {
             researchImpactRew.setDescription(researchImpact.getDescription());
           }
 
-          if (!researchImpactRew.getTargetYear().equals(researchImpact.getTargetYear())) {
-            hasChanges = true;
-            researchImpactRew.setTargetYear(researchImpact.getTargetYear());
+          if (researchImpact.getTargetYear() != null) {
+            if (researchImpactRew.getTargetYear() != null) {
+              if (!researchImpactRew.getTargetYear().equals(researchImpact.getTargetYear())) {
+                hasChanges = true;
+                researchImpactRew.setTargetYear(researchImpact.getTargetYear());
+              }
+            } else {
+              hasChanges = true;
+              researchImpactRew.setTargetYear(researchImpact.getTargetYear());
+            }
           }
 
           if (hasChanges) {
@@ -399,6 +393,14 @@ public class ProgramImpactsAction extends BaseAction {
               }
 
             }
+          } else {
+            for (ResearchImpactObjective impactObjective : researchImpactRew.getResearchImpactObjectives().stream()
+              .filter(rio -> rio.isActive()).collect(Collectors.toList())) {
+              if (!researchImpact.getObjectiveValue()
+                .contains(impactObjective.getResearchObjective().getId().toString())) {
+                impactObjectiveService.deleteResearchImpactObjective(impactObjective.getId());
+              }
+            }
           }
 
         }
@@ -406,19 +408,24 @@ public class ProgramImpactsAction extends BaseAction {
 
       selectedProgram = programService.getProgramById(programDb.getId());
       programService.saveProgram(selectedProgram);
-
       Collection<String> messages = this.getActionMessages();
-      if (!messages.isEmpty()) {
-        String validationMessage = messages.iterator().next();
-        this.setActionMessages(null);
-        this.addActionWarning(this.getText("saving.saved") + validationMessage);
-      } else {
-        this.addActionMessage(this.getText("saving.saved"));
-      }
-      messages = this.getActionMessages();
 
+      if (!this.getInvalidFields().isEmpty()) {
+        this.setActionMessages(null);
+
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+
+      } else {
+        this.addActionMessage("message:" + this.getText("saving.saved"));
+      }
+
+      messages = this.getActionMessages();
       return SUCCESS;
     } else {
+      this.setActionMessages(null);
       return NOT_AUTHORIZED;
     }
 
@@ -496,6 +503,13 @@ public class ProgramImpactsAction extends BaseAction {
    */
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  @Override
+  public void validate() {
+    if (save) {
+      validator.validate(this, researchImpacts, selectedProgram, true);
+    }
   }
 
 }
