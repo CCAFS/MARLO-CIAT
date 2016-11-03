@@ -34,5 +34,12 @@
       fetch="select">
       <column name="research_program_id" not-null="true" />
     </many-to-one>
+    <set lazy="true" name="researchOutcomes" table="reserach_outcomes" order-by="id"
+      cascade="save-update" fetch="select">
+      <key>
+        <column name="research_topic_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome" />
+    </set>      
 	</class>
 </hibernate-mapping>

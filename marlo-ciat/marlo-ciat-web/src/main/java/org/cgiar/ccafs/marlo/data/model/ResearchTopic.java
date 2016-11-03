@@ -20,6 +20,8 @@ package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
@@ -68,6 +70,9 @@ public class ResearchTopic implements Serializable {
   private String modificationJustification;
 
 
+  private Set<ResearchOutcome> researchOutcomes = new HashSet<>(0);
+
+
   /**
    * 
    */
@@ -75,7 +80,6 @@ public class ResearchTopic implements Serializable {
     super();
     // TODO Auto-generated constructor stub
   }
-
 
   /**
    * @param researchTopic
@@ -115,9 +119,11 @@ public class ResearchTopic implements Serializable {
     return activeSince;
   }
 
+
   public User getCreatedBy() {
     return createdBy;
   }
+
 
   /**
    * @return the id
@@ -134,6 +140,9 @@ public class ResearchTopic implements Serializable {
     return modifiedBy;
   }
 
+  public Set<ResearchOutcome> getResearchOutcomes() {
+    return researchOutcomes;
+  }
 
   /**
    * @return the researchProgram
@@ -164,6 +173,7 @@ public class ResearchTopic implements Serializable {
     return active;
   }
 
+
   public void setActive(boolean active) {
     this.active = active;
   }
@@ -171,7 +181,6 @@ public class ResearchTopic implements Serializable {
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -193,6 +202,11 @@ public class ResearchTopic implements Serializable {
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
+  }
+
+
+  public void setResearchOutcomes(Set<ResearchOutcome> researchOutcomes) {
+    this.researchOutcomes = researchOutcomes;
   }
 
 
