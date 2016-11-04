@@ -29,19 +29,22 @@
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
         
+        [#if researchTopics?has_content]
+        
         <span id="programSelected" class="hidden">${selectedProgram.id}</span>
         
         [@s.form action=actionName enctype="multipart/form-data" ]
         
+        
           <div class="simpleBox col-md-12">
             <label for="">Research Topics:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
-              <option value="-1">Select an option</option>
-              [#if researchTopics?has_content]
+              <option value="-1" >Select an option</option>
+              
                 [#list researchTopics as researchTopic]
-                  <option value="${researchTopic.id}">${researchTopic.researchTopic}</option>
+                  <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
                 [/#list]
-              [/#if]
+              
             </select>
           </div>
           
@@ -60,6 +63,9 @@
           </div>
           
         [/@s.form]
+        [#else]
+         <p class="text-center borderBox inf">Outcomes are not available in for the selected program</p>
+        [/#if]
       </div>
     </div>
     [#else]
