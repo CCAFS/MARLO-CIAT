@@ -31,8 +31,8 @@
 		<property name="targetYear" type="java.lang.Integer">
 			<column name="target_year" not-null="false" />
 		</property>
-		<property name="milestone" type="java.math.BigDecimal">
-			<column name="milestone" precision="10" not-null="false" />
+		<property name="value" type="java.math.BigDecimal">
+			<column name="value" precision="10" not-null="false" />
 		</property>
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />

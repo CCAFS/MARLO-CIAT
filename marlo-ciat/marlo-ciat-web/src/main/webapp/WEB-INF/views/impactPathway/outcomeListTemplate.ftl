@@ -31,10 +31,10 @@
           </td>
           [#-- outcome Year --]
           <td class="text-center">
-          [#if outcome.year== -1]
+          [#if outcome.targetYear== -1]
           none
           [#else]
-          ${(outcome.year)!'none'}
+          ${(outcome.targetYear)!'none'}
           [/#if]
             
           </td>

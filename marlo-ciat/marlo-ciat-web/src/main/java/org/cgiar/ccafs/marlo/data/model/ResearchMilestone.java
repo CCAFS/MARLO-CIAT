@@ -19,6 +19,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.google.gson.annotations.Expose;
 
@@ -45,7 +46,7 @@ public class ResearchMilestone implements Serializable {
 
 
   @Expose
-  private Long milestone;
+  private BigDecimal value;
 
 
   @Expose
@@ -54,8 +55,12 @@ public class ResearchMilestone implements Serializable {
 
   @Expose
   private boolean activeSince;
+
+
   @Expose
   private User createdBy;
+
+
   @Expose
   private User modifiedBy;
   @Expose
@@ -63,12 +68,8 @@ public class ResearchMilestone implements Serializable {
   @Expose
   private ResearchOutcome researchOutcome;
 
-  /**
-   * 
-   */
   public ResearchMilestone() {
     super();
-    // TODO Auto-generated constructor stub
   }
 
   /**
@@ -79,15 +80,15 @@ public class ResearchMilestone implements Serializable {
    * @param activeSince
    * @param impactOutcome
    */
-  public ResearchMilestone(String title, Integer targetYear, Long milestone, boolean active, boolean activeSince,
+  public ResearchMilestone(String title, Integer targetYear, BigDecimal value, boolean active, boolean activeSince,
     ResearchOutcome researchOutcome) {
     super();
     this.title = title;
     this.targetYear = targetYear;
-    this.milestone = milestone;
     this.active = active;
     this.activeSince = activeSince;
     this.researchOutcome = researchOutcome;
+    this.value = value;
   }
 
   public User getCreatedBy() {
@@ -101,13 +102,6 @@ public class ResearchMilestone implements Serializable {
     return id;
   }
 
-  /**
-   * @return the milestone
-   */
-  public Long getMilestone() {
-    return milestone;
-  }
-
   public String getModificationJustification() {
     return modificationJustification;
   }
@@ -116,13 +110,13 @@ public class ResearchMilestone implements Serializable {
     return modifiedBy;
   }
 
+
   /**
    * @return the impactOutcome
    */
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
   }
-
 
   /**
    * @return the targetYear
@@ -131,12 +125,16 @@ public class ResearchMilestone implements Serializable {
     return targetYear;
   }
 
-
   /**
    * @return the title
    */
   public String getTitle() {
     return title;
+  }
+
+
+  public BigDecimal getValue() {
+    return value;
   }
 
 
@@ -185,14 +183,6 @@ public class ResearchMilestone implements Serializable {
   }
 
 
-  /**
-   * @param milestone the milestone to set
-   */
-  public void setMilestone(Long milestone) {
-    this.milestone = milestone;
-  }
-
-
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
@@ -224,6 +214,11 @@ public class ResearchMilestone implements Serializable {
    */
   public void setTitle(String title) {
     this.title = title;
+  }
+
+
+  public void setValue(BigDecimal value) {
+    this.value = value;
   }
 
 

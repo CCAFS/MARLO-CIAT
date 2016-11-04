@@ -19,6 +19,7 @@
 package org.cgiar.ccafs.marlo.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.google.gson.annotations.Expose;
@@ -46,9 +47,10 @@ public class ResearchOutcome implements Serializable {
 
 
   @Expose
-  private Long outcome;
+  private BigDecimal value;
 
 
+  @Expose
   private ResearchImpact researchImpact;
 
 
@@ -57,8 +59,11 @@ public class ResearchOutcome implements Serializable {
 
   @Expose
   private Date activeSince;
+
+
   @Expose
   private ResearchTopic researchTopic;
+
   @Expose
   private User createdBy;
   @Expose
@@ -83,16 +88,16 @@ public class ResearchOutcome implements Serializable {
    * @param activeSince
    * @param researchTopic
    */
-  public ResearchOutcome(String description, Integer targetYear, Long outcome, ResearchImpact researchImpact,
+  public ResearchOutcome(String description, Integer targetYear, BigDecimal value, ResearchImpact researchImpact,
     boolean active, Date activeSince, ResearchTopic researchTopic) {
     super();
     this.description = description;
     this.targetYear = targetYear;
-    this.outcome = outcome;
     this.researchImpact = researchImpact;
     this.active = active;
     this.activeSince = activeSince;
     this.researchTopic = researchTopic;
+    this.value = value;
   }
 
   public Date getActiveSince() {
@@ -126,19 +131,11 @@ public class ResearchOutcome implements Serializable {
   }
 
   /**
-   * @return the outcome
-   */
-  public Long getOutcome() {
-    return outcome;
-  }
-
-  /**
    * @return the researchImpact
    */
   public ResearchImpact getResearchImpact() {
     return researchImpact;
   }
-
 
   /**
    * @return the researchTopic
@@ -147,12 +144,16 @@ public class ResearchOutcome implements Serializable {
     return researchTopic;
   }
 
-
   /**
    * @return the targetYear
    */
   public Integer getTargetYear() {
     return targetYear;
+  }
+
+
+  public BigDecimal getValue() {
+    return value;
   }
 
 
@@ -189,13 +190,13 @@ public class ResearchOutcome implements Serializable {
     this.description = description;
   }
 
+
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
   }
-
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
@@ -208,20 +209,11 @@ public class ResearchOutcome implements Serializable {
 
 
   /**
-   * @param outcome the outcome to set
-   */
-  public void setOutcome(Long outcome) {
-    this.outcome = outcome;
-  }
-
-
-  /**
    * @param researchImpact the researchImpact to set
    */
   public void setResearchImpact(ResearchImpact researchImpact) {
     this.researchImpact = researchImpact;
   }
-
 
   /**
    * @param researchTopic the researchTopic to set
@@ -236,6 +228,11 @@ public class ResearchOutcome implements Serializable {
    */
   public void setTargetYear(Integer targetYear) {
     this.targetYear = targetYear;
+  }
+
+
+  public void setValue(BigDecimal value) {
+    this.value = value;
   }
 
 }
