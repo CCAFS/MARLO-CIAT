@@ -25,7 +25,7 @@
 		
 		<action name="{center}/outcomesList"
       class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesListAction">
-      <interceptor-ref name="editProjectsStack" />
+      <interceptor-ref name="impactPathwayStack" />
       <result name="input">/WEB-INF/views/projects/outcomesList.ftl
       </result>
     </action>
