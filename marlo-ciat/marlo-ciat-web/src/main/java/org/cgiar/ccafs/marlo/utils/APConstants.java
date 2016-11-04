@@ -58,6 +58,7 @@ public final class APConstants {
   public static final String AUTOSAVE_REQUEST = "autoSave";
   public static final String SECTION_NAME = "sectionName";
   public static final String CENTER_AREA_ID = "areaID";
+  public static final String RESEARCH_TOPIC_ID = "topicID";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";

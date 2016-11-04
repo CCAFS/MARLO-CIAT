@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -48,20 +49,15 @@ public class OutcomesListAction extends BaseAction {
 
 
   private ICenterService centerService;
-
   private IProgramService programService;
-
-
   private IResearchAreaService researchAreaService;
-
   private IUserService userService;
-
+  private IResearchTopicService researchTopicService;
 
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
-  private IResearchTopicService researchTopicService;
   private ResearchProgram selectedProgram;
   private long programID;
   private long areaID;
@@ -70,6 +66,7 @@ public class OutcomesListAction extends BaseAction {
   private List<ResearchOutcome> outcomes;
   private ResearchTopic selectedResearchTopic;
 
+  @Inject
   public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
     IResearchAreaService researchAreaService, IUserService userService, IResearchTopicService researchTopicService) {
     super(config);
@@ -207,13 +204,12 @@ public class OutcomesListAction extends BaseAction {
       if (selectedProgram.getResearchTopics() != null) {
         researchTopics = new ArrayList<>(
           selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-        if (topicID != -1) {
-          selectedResearchTopic = researchTopics.get(0);
-        } else {
+        try {
+          topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
           selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
-
+        } catch (Exception e) {
+          selectedResearchTopic = researchTopics.get(0);
         }
-
         if (selectedResearchTopic != null) {
           if (selectedResearchTopic.getResearchOutcomes() != null) {
             outcomes = selectedResearchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
