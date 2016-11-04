@@ -45,12 +45,13 @@
       var production = ${config.production?string};
       var baseURL = "${baseUrl}";
       var debugMode = ${config.debug?string};
-     [#-- var editable = ${editable?string};--]
+      var editable = ${editable?string};
       var canEdit = ${canEdit?string};
       var autoSaveActive = ${((currentUser.autoSave)!false)?string};
       var currentCrpID=${(crpID)!'-1'};
       var currentCycleYear = ${(currentCycleYear)!1999};
       var reportingActive= ${((reportingActive)!false)?string};
+      var centerSession="${(centerSession)!}";
       
       
       

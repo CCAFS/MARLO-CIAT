@@ -1,9 +1,9 @@
 [#ftl]
 [#assign title = "Outcomes List" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
-[#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
-[#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
+[#assign pageLibs = ["datatables.net", "datatables.net-bs","select2"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/outcomeList.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outcomeList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outcomes" /]
 
@@ -14,6 +14,7 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
+[#import "/WEB-INF/views/impactPathway/outcomeListTemplate.ftl" as outcomesList /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
@@ -28,12 +29,26 @@
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
         
+        <span id="programSelected" class="hidden">${selectedProgram.id}</span>
+        
         [@s.form action=actionName enctype="multipart/form-data" ]
         
-          <label for="">Research Topics</label>
-          [@customForm.select name="deliverable.deliverableType.id" label="" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="" editable=editable/]
+          <div class="simpleBox col-md-12">
+            <label for="">Research Topics:<span class="red">*</span></label>
+            <select name="researchTopics" id="researchTopics">
+              <option value="-1">Select an option</option>
+              [#if researchTopics?has_content]
+                [#list researchTopics as researchTopic]
+                  <option value="${researchTopic.id}">${researchTopic.researchTopic}</option>
+                [/#list]
+              [/#if]
+            </select>
+          </div>
           
-          <h3 class="subTitle headTitle">Ecosystem Services - Outcomes</h3>
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outcomes</h3>
+            <hr />
+          </div>
           
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=candit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
         

@@ -48,23 +48,23 @@ public class OutcomesListAction extends BaseAction {
   private static final long serialVersionUID = 2639447995874299013L;
 
 
-  private ICenterService centerService;
-  private IProgramService programService;
-  private IResearchAreaService researchAreaService;
-  private IUserService userService;
-  private IResearchTopicService researchTopicService;
-
-  private ResearchCenter loggedCenter;
-  private List<ResearchArea> researchAreas;
-  private ResearchArea selectedResearchArea;
-  private List<ResearchProgram> researchPrograms;
-  private ResearchProgram selectedProgram;
-  private long programID;
   private long areaID;
-  private long topicID;
-  private List<ResearchTopic> researchTopics;
+  private ICenterService centerService;
+  private ResearchCenter loggedCenter;
   private List<ResearchOutcome> outcomes;
+  private long programID;
+
+  private IProgramService programService;
+  private List<ResearchArea> researchAreas;
+  private IResearchAreaService researchAreaService;
+  private List<ResearchProgram> researchPrograms;
+  private List<ResearchTopic> researchTopics;
+  private IResearchTopicService researchTopicService;
+  private ResearchProgram selectedProgram;
+  private ResearchArea selectedResearchArea;
   private ResearchTopic selectedResearchTopic;
+  private long topicID;
+  private IUserService userService;
 
   @Inject
   public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -208,7 +208,9 @@ public class OutcomesListAction extends BaseAction {
           topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
           selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
         } catch (Exception e) {
-          selectedResearchTopic = researchTopics.get(0);
+          if(!researchTopics.isEmpty()) {
+            selectedResearchTopic = researchTopics.get(0);
+          }
         }
         if (selectedResearchTopic != null) {
           if (selectedResearchTopic.getResearchOutcomes() != null) {
