@@ -35,7 +35,7 @@
           
           <h3 class="subTitle headTitle">Ecosystem Services - Outcomes</h3>
           
-          <div style="">[@outcomesList.deliverablesList deliverables=action.getDeliverables(true) canValidate=true canEdit=candit namespace="/projects" defaultAction="${(crpSession)!}/deliverable"/]</div>
+          <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=candit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
         
           
           [#-- Section Buttons--]
