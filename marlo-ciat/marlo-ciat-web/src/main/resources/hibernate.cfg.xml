@@ -52,7 +52,8 @@
 		<mapping resource="xmls/Users.hbm.xml" />
 		<mapping resource="xmls/ResearchPartners.hbm.xml" />
 		<mapping resource="xmls/ResearchImpactObjectives.hbm.xml" />
-		<mapping resource="xmls/SectionStatuses.hbm.xml" />			
+		<mapping resource="xmls/SectionStatuses.hbm.xml" />		
+		<mapping resource="xmls/TargetUnits.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

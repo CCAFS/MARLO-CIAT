@@ -329,7 +329,7 @@ public class ProgramImpactsAction extends BaseAction {
           if (researchImpact.getObjectiveValue() != null && researchImpact.getObjectiveValue().length() > 0) {
             for (String objectiveId : researchImpact.getObjectiveValue().trim().split(",")) {
               ResearchObjective researchObjective =
-                objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId));
+                objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId.trim()));
               ResearchImpactObjective impactObjectiveNew = new ResearchImpactObjective();
               impactObjectiveNew.setActive(true);
               impactObjectiveNew.setActiveSince(new Date());
