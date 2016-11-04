@@ -51,11 +51,13 @@
           </div>
           
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=candit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
-        
-          
-          [#-- Section Buttons--]
-          [#include "/WEB-INF/views/impactPathway/buttons-impactPathway.ftl" /]
-          
+          <div class="text-right">
+            [#if editable]
+            <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param][/@s.url]">
+              <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
+            </a></div>
+            [/#if]
+          </div>
           
         [/@s.form]
       </div>
