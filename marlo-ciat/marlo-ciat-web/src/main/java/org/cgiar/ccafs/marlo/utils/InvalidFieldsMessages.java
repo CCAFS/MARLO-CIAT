@@ -25,6 +25,6 @@ public class InvalidFieldsMessages {
   public static String EMPTYFIELD = "Required Field";
   public static String INVALID_NUMBER = "Invalid Number";
   public static String EMPTYUSERLIST = "There must be at least one person here.";
-  public static String CHECKBOX = "Select one option";
+  public static String CHECKBOX = "Select an option";
 
 }

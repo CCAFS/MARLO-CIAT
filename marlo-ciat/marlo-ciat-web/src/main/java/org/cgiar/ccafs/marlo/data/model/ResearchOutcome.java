@@ -21,6 +21,9 @@ package org.cgiar.ccafs.marlo.data.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
@@ -36,44 +39,32 @@ public class ResearchOutcome implements Serializable {
 
   @Expose
   private Long id;
-
-
   @Expose
   private String description;
-
-
   @Expose
   private Integer targetYear;
-
-
   @Expose
   private BigDecimal value;
-
-
   @Expose
   private ResearchImpact researchImpact;
-
-
   @Expose
   private boolean active;
-
   @Expose
   private Date activeSince;
-
-
   @Expose
   private ResearchTopic researchTopic;
-
   @Expose
   private User createdBy;
   @Expose
   private User modifiedBy;
+
   @Expose
   private String modificationJustification;
 
-  /**
-   * 
-   */
+  private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
+
+  private List<ResearchMilestone> milestones;
+
   public ResearchOutcome() {
     super();
     // TODO Auto-generated constructor stub
@@ -122,6 +113,10 @@ public class ResearchOutcome implements Serializable {
     return id;
   }
 
+  public List<ResearchMilestone> getMilestones() {
+    return milestones;
+  }
+
   public String getModificationJustification() {
     return modificationJustification;
   }
@@ -135,6 +130,10 @@ public class ResearchOutcome implements Serializable {
    */
   public ResearchImpact getResearchImpact() {
     return researchImpact;
+  }
+
+  public Set<ResearchMilestone> getResearchMilestones() {
+    return researchMilestones;
   }
 
   /**
@@ -151,11 +150,9 @@ public class ResearchOutcome implements Serializable {
     return targetYear;
   }
 
-
   public BigDecimal getValue() {
     return value;
   }
-
 
   /**
    * @return the active
@@ -198,10 +195,15 @@ public class ResearchOutcome implements Serializable {
     this.id = id;
   }
 
+
+  public void setMilestones(List<ResearchMilestone> milestones) {
+    this.milestones = milestones;
+  }
+
+
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
-
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
@@ -213,6 +215,11 @@ public class ResearchOutcome implements Serializable {
    */
   public void setResearchImpact(ResearchImpact researchImpact) {
     this.researchImpact = researchImpact;
+  }
+
+
+  public void setResearchMilestones(Set<ResearchMilestone> researchMilestones) {
+    this.researchMilestones = researchMilestones;
   }
 
   /**

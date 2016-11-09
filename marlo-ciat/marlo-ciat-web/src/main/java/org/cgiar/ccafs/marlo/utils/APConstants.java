@@ -59,6 +59,7 @@ public final class APConstants {
   public static final String SECTION_NAME = "sectionName";
   public static final String CENTER_AREA_ID = "areaID";
   public static final String RESEARCH_TOPIC_ID = "topicID";
+  public static final String OUTCOME_ID = "outcomeID";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";

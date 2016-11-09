@@ -29,6 +29,20 @@
       <result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
       </result>
     </action>
+    
+    <action name="{center}/addNewOutcome" method="add"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesListAction">
+      <interceptor-ref name="impactPathwayStack" />
+      <result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${center}/outcomesList</param>
+        <param name="programID">${programID}</param>
+        <param name="topicID">${topicID}</param>
+        <param name="outcomeID">${outcomeID}</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
 		
 		<action name="{center}/outcomes"
 			class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">
@@ -37,7 +51,6 @@
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">${centerSession}/outcomes</param>
-				<param name="programID">${programID}</param>
 				<param name="outcomeID">${outcomeID}</param>
 				<param name="edit">true</param>
 			</result>

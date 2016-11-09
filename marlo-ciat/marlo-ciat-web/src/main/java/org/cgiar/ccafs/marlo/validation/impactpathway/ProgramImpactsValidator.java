@@ -76,10 +76,10 @@ public class ProgramImpactsValidator extends BaseValidator {
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (!this.isValidNumber(String.valueOf(researchImpact.getTargetYear())) || (researchImpact.getTargetYear() <= 0)) {
+    if (researchImpact.getTargetYear() == -1) {
       this.addMessage(baseAction.getText("programImpact.action.year.required", params));
       baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].targetYear",
-        InvalidFieldsMessages.INVALID_NUMBER);
+        InvalidFieldsMessages.EMPTYFIELD);
     }
 
     if (researchImpact.getObjectiveValue().length() < 1) {

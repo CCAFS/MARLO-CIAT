@@ -44,5 +44,11 @@
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
 		</property>
+		<set name="researchMilestones" table="research_milestones" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="impact_outcome_id" not-null="true" />
+            </key>
+            <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchMilestone" />
+        </set>
 	</class>
 </hibernate-mapping>

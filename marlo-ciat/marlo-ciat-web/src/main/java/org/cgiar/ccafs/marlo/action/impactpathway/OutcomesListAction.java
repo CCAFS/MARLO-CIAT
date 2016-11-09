@@ -47,15 +47,13 @@ public class OutcomesListAction extends BaseAction {
 
   private static final long serialVersionUID = 2639447995874299013L;
 
-
-  private long areaID;
   private ICenterService centerService;
+
   private ResearchCenter loggedCenter;
   private List<ResearchOutcome> outcomes;
-  private long programID;
-
   private IProgramService programService;
   private List<ResearchArea> researchAreas;
+
   private IResearchAreaService researchAreaService;
   private List<ResearchProgram> researchPrograms;
   private List<ResearchTopic> researchTopics;
@@ -63,8 +61,12 @@ public class OutcomesListAction extends BaseAction {
   private ResearchProgram selectedProgram;
   private ResearchArea selectedResearchArea;
   private ResearchTopic selectedResearchTopic;
-  private long topicID;
   private IUserService userService;
+
+  private long topicID;
+  private long programID;
+  private long outcomeID;
+  private long areaID;
 
   @Inject
   public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -85,10 +87,13 @@ public class OutcomesListAction extends BaseAction {
     return loggedCenter;
   }
 
+  public long getOutcomeID() {
+    return outcomeID;
+  }
+
   public List<ResearchOutcome> getOutcomes() {
     return outcomes;
   }
-
 
   public long getProgramID() {
     return programID;
@@ -108,6 +113,7 @@ public class OutcomesListAction extends BaseAction {
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;
   }
+
 
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
@@ -208,7 +214,7 @@ public class OutcomesListAction extends BaseAction {
           topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
           selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
         } catch (Exception e) {
-          if(!researchTopics.isEmpty()) {
+          if (!researchTopics.isEmpty()) {
             selectedResearchTopic = researchTopics.get(0);
           }
         }
@@ -230,6 +236,10 @@ public class OutcomesListAction extends BaseAction {
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
+  }
+
+  public void setOutcomeID(long outcomeID) {
+    this.outcomeID = outcomeID;
   }
 
   public void setOutcomes(List<ResearchOutcome> outcomes) {

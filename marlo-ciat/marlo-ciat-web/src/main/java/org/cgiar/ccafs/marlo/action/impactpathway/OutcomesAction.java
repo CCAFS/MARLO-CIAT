@@ -19,19 +19,23 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
+import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.model.TargetUnit;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
-import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
-import org.cgiar.ccafs.marlo.data.service.IUserService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.ITargetUnitService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,58 +50,71 @@ public class OutcomesAction extends BaseAction {
 
   private static final long serialVersionUID = 286014380343262534L;
 
-  private ICenterService centerService;
-  private IProgramService programService;
-  private IResearchAreaService researchAreaService;
-  private IUserService userService;
-  private IResearchTopicService researchTopicService;
 
+  // Services - Managers
+  private ICenterService centerService;
+  private IResearchOutcomeService outcomeService;
+  private ITargetUnitService targetUnitService;
+
+  // Front Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private ResearchProgram selectedProgram;
+  private ResearchOutcome outcome;
+  private List<ResearchTopic> researchTopics;
+  private ResearchTopic selectedResearchTopic;
+  private List<ResearchImpact> researchImpacts;
+  private HashMap<Long, String> targetUnitList;
+
+  // Parameter Variables
   private long programID;
   private long areaID;
   private long topicID;
-  private List<ResearchTopic> researchTopics;
-  private ResearchTopic selectedResearchTopic;
+  private long outcomeID;
 
   @Inject
-  public OutcomesAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IUserService userService, IResearchTopicService researchTopicService) {
+  public OutcomesAction(APConfig config, ICenterService centerService, IResearchOutcomeService outcomeService,
+    ITargetUnitService targetUnitService) {
     super(config);
     this.centerService = centerService;
-    this.programService = programService;
-    this.researchAreaService = researchAreaService;
-    this.userService = userService;
-    this.researchTopicService = researchTopicService;
+    this.outcomeService = outcomeService;
+    this.targetUnitService = targetUnitService;
   }
 
   public long getAreaID() {
     return areaID;
   }
 
-
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
   }
 
+  public ResearchOutcome getOutcome() {
+    return outcome;
+  }
+
+
+  public long getOutcomeID() {
+    return outcomeID;
+  }
 
   public long getProgramID() {
     return programID;
   }
 
-
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
 
+  public List<ResearchImpact> getResearchImpacts() {
+    return researchImpacts;
+  }
 
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
-
 
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;
@@ -113,13 +130,21 @@ public class OutcomesAction extends BaseAction {
     return selectedResearchArea;
   }
 
+
   public ResearchTopic getSelectedResearchTopic() {
     return selectedResearchTopic;
   }
 
+
+  public HashMap<Long, String> getTargetUnitList() {
+    return targetUnitList;
+  }
+
+
   public long getTopicID() {
     return topicID;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -130,86 +155,58 @@ public class OutcomesAction extends BaseAction {
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
+    try {
+      outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
+    } catch (Exception e) {
+
+    }
+
+    outcome = outcomeService.getResearchOutcomeById(outcomeID);
+
+
     researchAreas = new ArrayList<>(
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
 
     Collections.sort(researchAreas, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
 
-    if (researchAreas != null) {
+    if (researchAreas != null && outcome != null) {
 
-      try {
-        areaID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
-      } catch (Exception e) {
-        try {
-          programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
-        } catch (Exception ex) {
-          User user = userService.getUser(this.getCurrentUser().getId());
+      selectedProgram = outcome.getResearchImpact().getResearchProgram();
+      programID = selectedProgram.getId();
+      selectedResearchTopic = outcome.getResearchTopic();
+      topicID = selectedResearchTopic.getId();
+      selectedResearchArea = selectedProgram.getResearchArea();
+      areaID = selectedResearchArea.getId();
 
-          // TODO - Create Enum to Research Leaders Type
-          List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
-            .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
+      researchPrograms = new ArrayList<>(
+        selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-          if (!userLeads.isEmpty()) {
-            programID = userLeads.get(0).getResearchProgram().getId();
-          } else {
-            if (!researchAreas.isEmpty()) {
-              ResearchProgram rp = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
-                .collect(Collectors.toList()).get(0);
-              programID = rp.getId();
-            }
-          }
+      researchImpacts = new ArrayList<>(
+        selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()));
+
+      targetUnitList = new HashMap<>();
+      if (targetUnitService.findAll() != null) {
+
+        List<TargetUnit> targetUnits =
+          targetUnitService.findAll().stream().filter(c -> c.isActive()).collect(Collectors.toList());
+
+        Collections.sort(targetUnits,
+          (tu1, tu2) -> tu1.getName().toLowerCase().trim().compareTo(tu2.getName().toLowerCase().trim()));
+
+        for (TargetUnit srfTargetUnit : targetUnits) {
+          targetUnitList.put(srfTargetUnit.getId(), srfTargetUnit.getName());
         }
+
+        targetUnitList = this.sortByComparator(targetUnitList);
       }
 
-      if (areaID != -1 && programID == -1) {
-        selectedResearchArea = researchAreaService.find(areaID);
-        researchPrograms = new ArrayList<>(
-          selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
-        Collections.sort(researchPrograms, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-        if (researchPrograms != null) {
-          try {
-            programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
-          } catch (Exception e) {
-            User user = userService.getUser(this.getCurrentUser().getId());
+      outcome.setMilestones(new ArrayList<>(
+        outcome.getResearchMilestones().stream().filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
-            // TODO - Create Enum to Research Leaders Type
-            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
-              .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
-
-            if (!userLeads.isEmpty()) {
-              programID = userLeads.get(0).getResearchProgram().getId();
-            } else {
-              if (!researchPrograms.isEmpty()) {
-                programID = researchPrograms.get(0).getId();
-              }
-            }
-          }
-        }
-
-        if (programID != -1) {
-          selectedProgram = programService.getProgramById(programID);
-        }
-      } else {
-        if (programID != -1) {
-          selectedProgram = programService.getProgramById(programID);
-          areaID = selectedProgram.getResearchArea().getId();
-          selectedResearchArea = researchAreaService.find(areaID);
-        }
-      }
-
-      if (selectedProgram.getResearchTopics() != null) {
-        researchTopics = new ArrayList<>(
-          selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-        try {
-          topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
-          selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
-        } catch (Exception e) {
-          selectedResearchTopic = researchTopics.get(0);
-        }
-      }
     }
 
   }
+
 
   public void setAreaID(long areaID) {
     this.areaID = areaID;
@@ -219,12 +216,24 @@ public class OutcomesAction extends BaseAction {
     this.loggedCenter = loggedCenter;
   }
 
+  public void setOutcome(ResearchOutcome outcome) {
+    this.outcome = outcome;
+  }
+
+  public void setOutcomeID(long outcomeID) {
+    this.outcomeID = outcomeID;
+  }
+
   public void setProgramID(long programID) {
     this.programID = programID;
   }
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
+  }
+
+  public void setResearchImpacts(List<ResearchImpact> researchImpacts) {
+    this.researchImpacts = researchImpacts;
   }
 
   public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
@@ -247,8 +256,41 @@ public class OutcomesAction extends BaseAction {
     this.selectedResearchTopic = selectedResearchTopic;
   }
 
+  public void setTargetUnitList(HashMap<Long, String> targetUnitList) {
+    this.targetUnitList = targetUnitList;
+  }
+
   public void setTopicID(long topicID) {
     this.topicID = topicID;
+  }
+
+  /**
+   * method that sort a map list alphabetical
+   * 
+   * @param unsortMap - map to sort
+   * @return
+   */
+  private HashMap<Long, String> sortByComparator(HashMap<Long, String> unsortMap) {
+
+    // Convert Map to List
+    List<HashMap.Entry<Long, String>> list = new LinkedList<HashMap.Entry<Long, String>>(unsortMap.entrySet());
+
+    // Sort list with comparator, to compare the Map values
+    Collections.sort(list, new Comparator<HashMap.Entry<Long, String>>() {
+
+      @Override
+      public int compare(HashMap.Entry<Long, String> o1, HashMap.Entry<Long, String> o2) {
+        return (o1.getValue().toLowerCase().trim()).compareTo(o2.getValue().toLowerCase().trim());
+      }
+    });
+
+    // Convert sorted map back to a Map
+    HashMap<Long, String> sortedMap = new LinkedHashMap<Long, String>();
+    for (Iterator<HashMap.Entry<Long, String>> it = list.iterator(); it.hasNext();) {
+      HashMap.Entry<Long, String> entry = it.next();
+      sortedMap.put(entry.getKey(), entry.getValue());
+    }
+    return sortedMap;
   }
 
 }
