@@ -29,6 +29,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -202,6 +203,29 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return ServletActionContext.getActionMapping().getName();
   }
 
+  /**
+   * This method calculates all the years between the start date and the end date.
+   * 
+   * @return a List of numbers representing all the years, or an empty list if nothing found.
+   */
+  public List<Integer> getAllYears() {
+    List<Integer> allYears = new ArrayList<>();
+
+    Calendar calendarStart = Calendar.getInstance();
+    calendarStart.set(Calendar.YEAR, 2016);
+    Calendar calendarEnd = Calendar.getInstance();
+    calendarEnd.set(Calendar.YEAR, 2050);
+
+    while (calendarStart.get(Calendar.YEAR) <= calendarEnd.get(Calendar.YEAR)) {
+      // Adding the year to the list.
+      allYears.add(calendarStart.get(Calendar.YEAR));
+      // Adding a year (365 days) to the start date.
+      calendarStart.add(Calendar.YEAR, 1);
+    }
+
+    return allYears;
+  }
+
   public String getBasePermission() {
     return basePermission;
   }
@@ -318,10 +342,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return Locale.ENGLISH;
   }
 
+
   public String getNamespace() {
     return ServletActionContext.getActionMapping().getNamespace();
   }
-
 
   /**
    * get the number of users log in in the application
@@ -440,11 +464,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return NEXT;
   }
 
+
   @Override
   public void prepare() throws Exception {
     // So far, do nothing here!
   }
-
 
   /* Override this method depending of the save action. */
   public String save() {
@@ -455,10 +479,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     this.add = true;
   }
 
+
   public void setBasePermission(String basePermission) {
     this.basePermission = basePermission;
   }
-
 
   public void setCancel(boolean cancel) {
     this.cancel = true;
