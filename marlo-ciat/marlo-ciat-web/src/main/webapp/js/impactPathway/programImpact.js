@@ -1,6 +1,10 @@
 $(document).ready(init);
 
 function init() {
+  /* Init Select2 plugin */
+  $('form select').select2({
+    width: '100%'
+  });
   /* Declaring Events */
   attachEvents();
 }

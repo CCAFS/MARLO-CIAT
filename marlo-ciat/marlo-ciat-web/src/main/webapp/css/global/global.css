@@ -6096,6 +6096,10 @@ input.fieldChecked {
   position: relative;
 }
 
+.missingSelect{
+  border-bottom: 1px solid #F44;
+}
+
 span.errorTag {
     position: absolute;
     text-align: center;
