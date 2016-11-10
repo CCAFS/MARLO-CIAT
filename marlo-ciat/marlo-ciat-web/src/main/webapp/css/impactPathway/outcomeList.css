@@ -7,3 +7,7 @@
 table tr{
   height: 30px;
 }
+
+.milestone.simpleBox {
+  padding-top: 20px;
+}
