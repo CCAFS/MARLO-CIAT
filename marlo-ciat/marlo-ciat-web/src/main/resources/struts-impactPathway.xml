@@ -47,7 +47,7 @@
 		<action name="{center}/outcomes"
 			class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">
 			<interceptor-ref name="impactPathwayStack" />
-			<result name="input">/WEB-INF/views/impactPathway/outcomes.ftl
+			<result name="input">/WEB-INF/views/impactPathway/outcome.ftl
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">${centerSession}/outcomes</param>
