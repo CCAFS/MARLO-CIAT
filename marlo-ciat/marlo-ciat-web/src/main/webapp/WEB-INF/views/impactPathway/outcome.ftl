@@ -9,6 +9,7 @@
 
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"", "action":"topics"},
+  {"label":"outcomesList", "nameSpace":"", "action":"outcomesList"},
   {"label":"outcome", "nameSpace":"", "action":""}
 ]/]
 [#assign leadersName = "leaders"/]
@@ -31,6 +32,9 @@
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
+        <br />
+        <br />
+        
         [#-- Back --]
         <small class="pull-right">
           <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][/@s.url]">
@@ -45,6 +49,11 @@
         <div class="borderBox">
           <h5 class="sectionSubTitle"> Outcome Information</h5>
           [#assign outcomeCustomName= "outcome" /]
+          
+          [#-- Research impact --]
+          <div class="form-group">
+            [@customForm.select name="${outcomeCustomName}.researchImpact"  i18nkey="outcome.researchImpact" listName="researchImpactsList"  required=true  className=""  disabled=!editable/]
+          </div>
           [#-- Outcome Statement --]
           <div class="form-group">
             [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=true className="outcome-statement limitWords-100" editable=editable /]
