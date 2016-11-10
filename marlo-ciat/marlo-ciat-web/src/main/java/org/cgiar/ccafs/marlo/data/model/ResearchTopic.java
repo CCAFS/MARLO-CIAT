@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -29,7 +31,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Modified by @author nmatovu last on Oct 9, 2016
  */
-public class ResearchTopic implements Serializable {
+public class ResearchTopic implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = 365817271325565483L;
@@ -128,14 +130,23 @@ public class ResearchTopic implements Serializable {
   /**
    * @return the id
    */
+  @Override
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -143,6 +154,7 @@ public class ResearchTopic implements Serializable {
   public Set<ResearchOutcome> getResearchOutcomes() {
     return researchOutcomes;
   }
+
 
   /**
    * @return the researchProgram
@@ -169,10 +181,10 @@ public class ResearchTopic implements Serializable {
   }
 
 
+  @Override
   public boolean isActive() {
     return active;
   }
-
 
   public void setActive(boolean active) {
     this.active = active;
@@ -181,6 +193,7 @@ public class ResearchTopic implements Serializable {
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
+
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -216,7 +229,6 @@ public class ResearchTopic implements Serializable {
   public void setResearchProgram(ResearchProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
-
 
   /**
    * @param researchTopic the researchTopic to set

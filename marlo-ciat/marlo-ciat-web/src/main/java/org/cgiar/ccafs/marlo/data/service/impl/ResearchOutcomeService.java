@@ -12,73 +12,69 @@
  * You should have received a copy of the GNU General Public License
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
-
-/**
- * 
- */
 package org.cgiar.ccafs.marlo.data.service.impl;
 
+
+import org.cgiar.ccafs.marlo.data.dao.IResearchOutcomeDAO;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 
 import java.util.List;
 
+import com.google.inject.Inject;
 
 /**
- * Modified by @author nmatovu last on Oct 10, 2016
+ * @author Christian Garcia
  */
 public class ResearchOutcomeService implements IResearchOutcomeService {
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService#deleteResearchOutcome(long)
-   */
+
+  private IResearchOutcomeDAO researchOutcomeDAO;
+
+  // Managers
+
+
+  @Inject
+  public ResearchOutcomeService(IResearchOutcomeDAO researchOutcomeDAO) {
+    this.researchOutcomeDAO = researchOutcomeDAO;
+
+
+  }
+
   @Override
   public boolean deleteResearchOutcome(long researchOutcomeId) {
-    // TODO Auto-generated method stub
-    return false;
+
+    return researchOutcomeDAO.deleteResearchOutcome(researchOutcomeId);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService#existResearchOutcome(long)
-   */
   @Override
-  public boolean existResearchOutcome(long researchOutcomeId) {
-    // TODO Auto-generated method stub
-    return false;
+  public boolean existResearchOutcome(long researchOutcomeID) {
+
+    return researchOutcomeDAO.existResearchOutcome(researchOutcomeID);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService#findAll()
-   */
   @Override
   public List<ResearchOutcome> findAll() {
-    // TODO Auto-generated method stub
-    return null;
+
+    return researchOutcomeDAO.findAll();
+
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService#getResearchOutcomeById(long)
-   */
   @Override
-  public ResearchOutcome getResearchOutcomeById(long researchOutcomeId) {
-    // TODO Auto-generated method stub
-    return null;
+  public ResearchOutcome getResearchOutcomeById(long researchOutcomeID) {
+
+    return researchOutcomeDAO.find(researchOutcomeID);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see
-   * org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService#saveResearchOutcome(org.cgiar.ccafs.marlo.data.model
-   * .ResearchOutcome)
-   */
+  @Override
+  public List<ResearchOutcome> getResearchOutcomesByUserId(Long userId) {
+    return researchOutcomeDAO.getResearchOutcomesByUserId(userId);
+  }
+
   @Override
   public long saveResearchOutcome(ResearchOutcome researchOutcome) {
-    // TODO Auto-generated method stub
-    return 0;
+
+    return researchOutcomeDAO.save(researchOutcome);
   }
 
 

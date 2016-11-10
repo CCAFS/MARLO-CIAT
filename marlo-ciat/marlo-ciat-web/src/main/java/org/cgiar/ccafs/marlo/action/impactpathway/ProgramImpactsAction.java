@@ -406,8 +406,11 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.RESEARCH_PROGRAM_IMPACT_RELATION);
       selectedProgram = programService.getProgramById(programDb.getId());
-      programService.saveProgram(selectedProgram);
+      selectedProgram.setModifiedBy(this.getCurrentUser());
+      programService.saveProgram(selectedProgram, this.getActionName(), relationsName);
       Collection<String> messages = this.getActionMessages();
 
       if (!this.getInvalidFields().isEmpty()) {

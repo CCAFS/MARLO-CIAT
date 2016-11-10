@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -30,7 +32,7 @@ import com.google.gson.annotations.Expose;
  * This class represents the Research Area (such as DAPA, AgBio, Soils, etc) in the application
  * Modified by @author nmatovu last on Oct 6, 2016
  */
-public class ResearchArea implements Serializable {
+public class ResearchArea implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -2457377813686256015L;
@@ -118,14 +120,23 @@ public class ResearchArea implements Serializable {
     return createdBy;
   }
 
+  @Override
   public Long getId() {
     return this.id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -136,6 +147,7 @@ public class ResearchArea implements Serializable {
   public String getName() {
     return name;
   }
+
 
   /**
    * @return the researchCenter
@@ -153,10 +165,16 @@ public class ResearchArea implements Serializable {
   }
 
 
+  @Override
   public boolean isActive() {
     return active;
   }
 
+
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
+   */
 
   /**
    * @param acronym the acronym to set
@@ -165,11 +183,6 @@ public class ResearchArea implements Serializable {
     this.acronym = acronym;
   }
 
-
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
-   */
 
   public void setActive(boolean active) {
     this.active = active;
@@ -218,7 +231,6 @@ public class ResearchArea implements Serializable {
   public void setResearchCenter(ResearchCenter researchCenter) {
     this.researchCenter = researchCenter;
   }
-
 
   /**
    * @param researchPrograms the researchPrograms to set

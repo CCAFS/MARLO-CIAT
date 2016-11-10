@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -28,7 +30,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Modified by @author nmatovu last on Sep 29, 2016
  */
-public class ResearchCenter implements Serializable {
+public class ResearchCenter implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -5311843838644643688L;
@@ -145,15 +147,24 @@ public class ResearchCenter implements Serializable {
   }
 
 
+  @Override
   public Long getId() {
     return this.id;
   }
 
 
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
+  }
+
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -162,10 +173,10 @@ public class ResearchCenter implements Serializable {
     return this.name;
   }
 
+
   public Set<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
-
 
   @Override
   public int hashCode() {
@@ -175,6 +186,7 @@ public class ResearchCenter implements Serializable {
     return result;
   }
 
+  @Override
   public boolean isActive() {
     return active;
   }
@@ -182,6 +194,7 @@ public class ResearchCenter implements Serializable {
   public void setAcronym(String acronym) {
     this.acronym = acronym;
   }
+
 
   public void setActive(boolean active) {
     this.active = active;
@@ -219,7 +232,6 @@ public class ResearchCenter implements Serializable {
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
-
 
   public void setName(String name) {
     this.name = name;

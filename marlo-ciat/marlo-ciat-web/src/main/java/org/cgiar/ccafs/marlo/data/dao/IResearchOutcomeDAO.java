@@ -12,21 +12,19 @@
  * You should have received a copy of the GNU General Public License
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
-package org.cgiar.ccafs.marlo.data.service;
 
+
+package org.cgiar.ccafs.marlo.data.dao;
+
+import org.cgiar.ccafs.marlo.data.dao.impl.ResearchOutcomeDAO;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.service.impl.ResearchOutcomeService;
 
 import java.util.List;
 
 import com.google.inject.ImplementedBy;
 
-/**
- * @author Christian Garcia
- */
-@ImplementedBy(ResearchOutcomeService.class)
-public interface IResearchOutcomeService {
-
+@ImplementedBy(ResearchOutcomeDAO.class)
+public interface IResearchOutcomeDAO {
 
   /**
    * This method removes a specific researchOutcome value from the database.
@@ -36,7 +34,6 @@ public interface IResearchOutcomeService {
    */
   public boolean deleteResearchOutcome(long researchOutcomeId);
 
-
   /**
    * This method validate if the researchOutcome identify with the given id exists in the system.
    * 
@@ -45,6 +42,13 @@ public interface IResearchOutcomeService {
    */
   public boolean existResearchOutcome(long researchOutcomeID);
 
+  /**
+   * This method gets a researchOutcome object by a given researchOutcome identifier.
+   * 
+   * @param researchOutcomeID is the researchOutcome identifier.
+   * @return a ResearchOutcome object.
+   */
+  public ResearchOutcome find(long id);
 
   /**
    * This method gets a list of researchOutcome that are active
@@ -55,20 +59,12 @@ public interface IResearchOutcomeService {
 
 
   /**
-   * This method gets a researchOutcome object by a given researchOutcome identifier.
-   * 
-   * @param researchOutcomeID is the researchOutcome identifier.
-   * @return a ResearchOutcome object.
-   */
-  public ResearchOutcome getResearchOutcomeById(long researchOutcomeID);
-
-  /**
    * This method gets a list of researchOutcomes belongs of the user
    * 
    * @param userId - the user id
    * @return List of ResearchOutcomes or null if the user is invalid or not have roles.
    */
-  public List<ResearchOutcome> getResearchOutcomesByUserId(Long userId);
+  public List<ResearchOutcome> getResearchOutcomesByUserId(long userId);
 
   /**
    * This method saves the information of the given researchOutcome
@@ -78,7 +74,5 @@ public interface IResearchOutcomeService {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long saveResearchOutcome(ResearchOutcome researchOutcome);
-
-
+  public long save(ResearchOutcome researchOutcome);
 }

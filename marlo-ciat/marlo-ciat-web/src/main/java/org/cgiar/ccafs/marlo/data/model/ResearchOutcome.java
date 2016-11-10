@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,7 +33,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Modified by @author nmatovu last on Oct 9, 2016
  */
-public class ResearchOutcome implements Serializable {
+public class ResearchOutcome implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -5206789836821862166L;
@@ -39,8 +41,11 @@ public class ResearchOutcome implements Serializable {
 
   @Expose
   private Long id;
+
   @Expose
   private String description;
+
+
   @Expose
   private Integer targetYear;
   @Expose
@@ -57,7 +62,8 @@ public class ResearchOutcome implements Serializable {
   private User createdBy;
   @Expose
   private User modifiedBy;
-
+  @Expose
+  private TargetUnit targetUnit;
   @Expose
   private String modificationJustification;
 
@@ -109,8 +115,16 @@ public class ResearchOutcome implements Serializable {
   /**
    * @return the id
    */
+  @Override
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public List<ResearchMilestone> getMilestones() {
@@ -121,6 +135,7 @@ public class ResearchOutcome implements Serializable {
     return modificationJustification;
   }
 
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -143,6 +158,10 @@ public class ResearchOutcome implements Serializable {
     return researchTopic;
   }
 
+  public TargetUnit getTargetUnit() {
+    return targetUnit;
+  }
+
   /**
    * @return the targetYear
    */
@@ -157,6 +176,7 @@ public class ResearchOutcome implements Serializable {
   /**
    * @return the active
    */
+  @Override
   public boolean isActive() {
     return active;
   }
@@ -230,13 +250,17 @@ public class ResearchOutcome implements Serializable {
   }
 
 
+  public void setTargetUnit(TargetUnit targetUnit) {
+    this.targetUnit = targetUnit;
+  }
+
+
   /**
    * @param targetYear the targetYear to set
    */
   public void setTargetYear(Integer targetYear) {
     this.targetYear = targetYear;
   }
-
 
   public void setValue(BigDecimal value) {
     this.value = value;

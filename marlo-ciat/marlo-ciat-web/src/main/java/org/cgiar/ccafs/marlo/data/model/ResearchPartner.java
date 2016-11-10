@@ -18,12 +18,14 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
-public class ResearchPartner implements Serializable {
+public class ResearchPartner implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = 7774818062880949190L;
@@ -92,14 +94,23 @@ public class ResearchPartner implements Serializable {
   /**
    * @return the id
    */
+  @Override
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -125,9 +136,11 @@ public class ResearchPartner implements Serializable {
     return partnerType;
   }
 
+  @Override
   public boolean isActive() {
     return active;
   }
+
 
   public void setActive(boolean active) {
     this.active = active;
@@ -176,7 +189,6 @@ public class ResearchPartner implements Serializable {
   public void setOrganization(String organization) {
     this.organization = organization;
   }
-
 
   /**
    * @param partnerType the partnerType to set

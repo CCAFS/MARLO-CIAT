@@ -86,4 +86,11 @@ public final class APConstants {
   // Date Formats
   public static final String DATE_FORMAT = "yyyy-MM-dd";
 
+  // Relations Name
+  public static final String RESEARCH_PROGRAM_IMPACT_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchProgram.researchImpacts)";
+
+  public static final String RESEARCH_IMPACT_OBJECTIVE_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchImpact.researchImpactObjectives)";
+
 }

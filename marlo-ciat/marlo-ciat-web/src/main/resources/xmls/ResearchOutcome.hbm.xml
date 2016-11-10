@@ -20,6 +20,10 @@
       fetch="select">
       <column name="modified_by" not-null="false" />
     </many-to-one>
+    <many-to-one name="targetUnit" class="org.cgiar.ccafs.marlo.data.model.TargetUnit"
+      fetch="select">
+      <column name="target_unit_id" not-null="false" />
+    </many-to-one>
     <property name="modificationJustification" type="string">
       <column name="modification_justification" length="65535"
         not-null="true" />

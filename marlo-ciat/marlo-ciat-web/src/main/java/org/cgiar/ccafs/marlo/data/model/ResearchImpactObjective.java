@@ -2,12 +2,14 @@ package org.cgiar.ccafs.marlo.data.model;
 // Generated Oct 13, 2016 1:24:28 PM by Hibernate Tools 3.4.0.CR1
 
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
 
-public class ResearchImpactObjective implements java.io.Serializable {
+public class ResearchImpactObjective implements java.io.Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -8979609328318401070L;
@@ -97,15 +99,24 @@ public class ResearchImpactObjective implements java.io.Serializable {
     return createdBy;
   }
 
+  @Override
   public Long getId() {
     return id;
   }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
+  }
+
 
   public String getModificationJustification() {
     return this.modificationJustification;
   }
 
-
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -128,14 +139,15 @@ public class ResearchImpactObjective implements java.io.Serializable {
     return result;
   }
 
+  @Override
   public boolean isActive() {
     return active;
   }
 
+
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -145,10 +157,10 @@ public class ResearchImpactObjective implements java.io.Serializable {
     this.createdBy = createdBy;
   }
 
+
   public void setId(Long id) {
     this.id = id;
   }
-
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;

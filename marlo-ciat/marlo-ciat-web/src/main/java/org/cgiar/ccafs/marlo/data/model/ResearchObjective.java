@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -30,7 +32,7 @@ import com.google.gson.annotations.Expose;
  * Represents the research objective in the systems for the research area/research program.
  * Modified by @author nmatovu last on Oct 7, 2016
  */
-public class ResearchObjective implements Serializable {
+public class ResearchObjective implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -3618614156720044325L;
@@ -124,14 +126,23 @@ public class ResearchObjective implements Serializable {
   /**
    * @return the id
    */
+  @Override
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
@@ -159,6 +170,7 @@ public class ResearchObjective implements Serializable {
     return result;
   }
 
+  @Override
   public boolean isActive() {
     return active;
   }
@@ -174,6 +186,7 @@ public class ResearchObjective implements Serializable {
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
+
 
   /**
    * @param id the id to set
@@ -197,13 +210,13 @@ public class ResearchObjective implements Serializable {
     this.objective = objective;
   }
 
-
   /**
    * @param researchCenter the researchCenter to set
    */
   public void setResearchCenter(ResearchCenter researchCenter) {
     this.researchCenter = researchCenter;
   }
+
 
   public void setResearchImpactObjectives(Set<ResearchImpactObjective> researchImpactObjectives) {
     this.researchImpactObjectives = researchImpactObjectives;

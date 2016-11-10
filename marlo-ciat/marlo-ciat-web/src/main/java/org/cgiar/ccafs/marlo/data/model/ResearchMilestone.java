@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -27,7 +29,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Modified by @author nmatovu last on Oct 9, 2016
  */
-public class ResearchMilestone implements Serializable {
+public class ResearchMilestone implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -338676464720877306L;
@@ -98,18 +100,27 @@ public class ResearchMilestone implements Serializable {
   /**
    * @return the id
    */
+  @Override
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
-
 
   /**
    * @return the impactOutcome
@@ -124,6 +135,7 @@ public class ResearchMilestone implements Serializable {
   public Integer getTargetYear() {
     return targetYear;
   }
+
 
   /**
    * @return the title
@@ -141,6 +153,7 @@ public class ResearchMilestone implements Serializable {
   /**
    * @return the active
    */
+  @Override
   public boolean isActive() {
     return active;
   }
@@ -215,7 +228,6 @@ public class ResearchMilestone implements Serializable {
   public void setTitle(String title) {
     this.title = title;
   }
-
 
   public void setValue(BigDecimal value) {
     this.value = value;

@@ -18,6 +18,8 @@
  */
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -30,7 +32,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Modified by @author nmatovu last on Oct 9, 2016
  */
-public class ResearchImpact implements Serializable {
+public class ResearchImpact implements Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -5150082139088832748L;
@@ -73,12 +75,10 @@ public class ResearchImpact implements Serializable {
   @Expose
   private String modificationJustification;
 
-
   @Expose
   private ResearchProgram researchProgram;
 
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
-
 
   private Set<ResearchImpactObjective> researchImpactObjectives = new HashSet<>(0);
 
@@ -149,18 +149,27 @@ public class ResearchImpact implements Serializable {
   /**
    * @return the id
    */
+  @Override
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
+
+  @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
-
 
   public List<ResearchObjective> getObjectives() {
     return objectives;
@@ -197,6 +206,7 @@ public class ResearchImpact implements Serializable {
     return researchOutcomes;
   }
 
+
   /**
    * @return the researchProgram
    */
@@ -212,7 +222,6 @@ public class ResearchImpact implements Serializable {
     return targetYear;
   }
 
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -221,6 +230,7 @@ public class ResearchImpact implements Serializable {
     return result;
   }
 
+  @Override
   public boolean isActive() {
     return active;
   }
