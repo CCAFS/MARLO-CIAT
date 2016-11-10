@@ -65,18 +65,18 @@
           
           [#-- Research impact --]
           <div class="form-group">
-            [@customForm.select name="${outcomeCustomName}.researchImpact"  i18nkey="outcome.researchImpact" listName="researchImpactsList"  required=true  className=""  disabled=!editable/]
+            [@customForm.select name="${outcomeCustomName}.researchImpact.id"  i18nkey="outcome.researchImpact" listName="researchImpacts" keyFieldName="id"  displayFieldName="description" required=true  className=""  disabled=!editable/]
           </div>
           [#-- Outcome Statement --]
           <div class="form-group">
             [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=true className="outcome-statement limitWords-100" editable=editable /]
           </div>
           <div class="row form-group target-block">
-            [#-- Target Year --]
-            <div class="col-md-4">[@customForm.input name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!2022}" type="text" i18nkey="outcome.year"  placeholder="outcome.inputTargetYear.placeholder" className="targetYear outcomeYear" required=true editable=editable /]</div>
+            [#-- Target Year --]            
+            <div class="col-md-4">[@customForm.select name="${outcomeCustomName}.targetYear" label=""  i18nkey="outcome.year" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]</div>
             [#-- Target Unit --]
             <div class="col-md-4">
-              [@customForm.select name="${outcomeCustomName}.srfTargetUnit.id" i18nkey="outcome.selectTargetUnit"  placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
+              [@customForm.select name="${outcomeCustomName}.targetUnit.id" i18nkey="outcome.selectTargetUnit"  placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
               [#-- If you dont find the target unit in the list, please add a new one clicking here --]
               [#--  --if editable]<div class="addOtherTargetUnit text-center"><a href="#">([@s.text name = "outcomes.addNewTargetUnit" /])</a></div>[/#if --]
             </div>
