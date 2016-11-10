@@ -38,7 +38,6 @@ public class ResearchMilestone implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
-
   @Expose
   private String title;
 
@@ -65,10 +64,16 @@ public class ResearchMilestone implements Serializable, IAuditLog {
 
   @Expose
   private User modifiedBy;
+
+
   @Expose
   private String modificationJustification;
+
+
   @Expose
   private ResearchOutcome researchOutcome;
+  @Expose
+  private TargetUnit targetUnit;
 
   public ResearchMilestone() {
     super();
@@ -116,7 +121,6 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return modificationJustification;
   }
 
-
   @Override
   public User getModifiedBy() {
     return modifiedBy;
@@ -129,13 +133,17 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return researchOutcome;
   }
 
+
+  public TargetUnit getTargetUnit() {
+    return targetUnit;
+  }
+
   /**
    * @return the targetYear
    */
   public Integer getTargetYear() {
     return targetYear;
   }
-
 
   /**
    * @return the title
@@ -211,6 +219,11 @@ public class ResearchMilestone implements Serializable, IAuditLog {
    */
   public void setResearchOutcome(ResearchOutcome researchOutcome) {
     this.researchOutcome = researchOutcome;
+  }
+
+
+  public void setTargetUnit(TargetUnit targetUnit) {
+    this.targetUnit = targetUnit;
   }
 
 
