@@ -8,7 +8,8 @@
 [#assign currentStage = "outcomes" /]
 
 [#assign breadCrumb = [
-  {"label":"impactPathway", "nameSpace":"", "action":"topics"}
+  {"label":"impactPathway", "nameSpace":"", "action":"topics"},
+  {"label":"outcomesList", "nameSpace":"", "action":""}
 ]/]
 [#assign leadersName = "leaders"/]
 [#include "/WEB-INF/global/pages/header.ftl" /]
