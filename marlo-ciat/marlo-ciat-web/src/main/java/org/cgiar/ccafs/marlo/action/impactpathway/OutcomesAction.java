@@ -26,6 +26,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.TargetUnit;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.ITargetUnitService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -55,6 +56,7 @@ public class OutcomesAction extends BaseAction {
   private ICenterService centerService;
   private IResearchOutcomeService outcomeService;
   private ITargetUnitService targetUnitService;
+  private IResearchTopicService researchTopicService;
 
   // Front Variables
   private ResearchCenter loggedCenter;
@@ -76,11 +78,12 @@ public class OutcomesAction extends BaseAction {
 
   @Inject
   public OutcomesAction(APConfig config, ICenterService centerService, IResearchOutcomeService outcomeService,
-    ITargetUnitService targetUnitService) {
+    ITargetUnitService targetUnitService, IResearchTopicService researchTopicService) {
     super(config);
     this.centerService = centerService;
     this.outcomeService = outcomeService;
     this.targetUnitService = targetUnitService;
+    this.researchTopicService = researchTopicService;
   }
 
   public long getAreaID() {
@@ -177,6 +180,19 @@ public class OutcomesAction extends BaseAction {
       topicID = selectedResearchTopic.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
+
+      if (selectedProgram.getResearchTopics() != null) {
+        researchTopics = new ArrayList<>(
+          selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+        try {
+          topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
+          selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
+        } catch (Exception e) {
+          if (!researchTopics.isEmpty()) {
+            selectedResearchTopic = researchTopics.get(0);
+          }
+        }
+      }
 
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));

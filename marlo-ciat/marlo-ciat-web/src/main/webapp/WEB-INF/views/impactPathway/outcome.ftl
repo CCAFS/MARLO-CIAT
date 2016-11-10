@@ -28,9 +28,22 @@
       <div class="col-md-9">
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
-         
+        [#-- Impact pathway sub menu --]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
+        
+        <div class="simpleBox col-md-12">
+            <label for="">Research Topics:<span class="red">*</span></label>
+            <select name="researchTopics" id="researchTopics">
+              <option value="-1" >Select an option</option>
+              
+                [#list researchTopics as researchTopic]
+                  <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
+                [/#list]
+              
+            </select>
+         </div>
         
         <br />
         <br />
