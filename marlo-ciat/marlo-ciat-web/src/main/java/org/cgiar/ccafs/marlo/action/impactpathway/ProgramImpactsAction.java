@@ -28,6 +28,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
@@ -62,18 +63,22 @@ public class ProgramImpactsAction extends BaseAction {
 
   private static final long serialVersionUID = -2261790056574973080L;
 
+
   private static final Logger LOG = LoggerFactory.getLogger(ProgramImpactsAction.class);
 
   private ICenterService centerService;
+
   private IProgramService programService;
+
   private IResearchAreaService researchAreaService;
   private IUserService userService;
   private IResearchObjectiveService objectiveService;
   private IResearchImpactService impactService;
   private IResearchImpactObjectiveService impactObjectiveService;
-
+  private IAuditLogService auditLogService;
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
+
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private List<ResearchObjective> researchObjectives;
@@ -81,14 +86,15 @@ public class ProgramImpactsAction extends BaseAction {
   private List<ResearchImpact> researchImpacts;
   private long programID;
   private long areaID;
-
+  private String transaction;
   private ProgramImpactsValidator validator;
 
   @Inject
   public ProgramImpactsAction(APConfig config, ICenterService centerService, IProgramService programService,
     IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService,
     IResearchObjectiveService objectiveService, IResearchImpactService impactService,
-    IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator) {
+    IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator,
+    IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -98,6 +104,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.impactService = impactService;
     this.impactObjectiveService = impactObjectiveService;
     this.validator = validator;
+    this.auditLogService = auditLogService;
   }
 
   /**
@@ -125,7 +132,6 @@ public class ProgramImpactsAction extends BaseAction {
     return researchAreas;
   }
 
-
   public List<ResearchImpact> getResearchImpacts() {
     return researchImpacts;
   }
@@ -142,7 +148,6 @@ public class ProgramImpactsAction extends BaseAction {
     return researchPrograms;
   }
 
-
   /**
    * @return the selectedProgram
    */
@@ -157,6 +162,12 @@ public class ProgramImpactsAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
+
+
+  public String getTransaction() {
+    return transaction;
+  }
+
 
   @Override
   public void prepare() throws Exception {
@@ -222,14 +233,46 @@ public class ProgramImpactsAction extends BaseAction {
           }
         }
 
-        if (programID != -1) {
-          selectedProgram = programService.getProgramById(programID);
+        if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+          transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+
+          if (history != null) {
+            selectedProgram = history;
+          } else {
+            this.transaction = null;
+            this.setTransaction("-1");
+          }
+
+        } else {
+          if (programID != -1) {
+            selectedProgram = programService.getProgramById(programID);
+          }
         }
       } else {
-        if (programID != -1) {
-          selectedProgram = programService.getProgramById(programID);
-          areaID = selectedProgram.getResearchArea().getId();
-          selectedResearchArea = researchAreaService.find(areaID);
+
+        if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+          transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+
+          if (history != null) {
+            selectedProgram = history;
+            areaID = selectedProgram.getResearchArea().getId();
+            selectedResearchArea = researchAreaService.find(areaID);
+          } else {
+            this.transaction = null;
+            this.setTransaction("-1");
+          }
+
+        } else {
+
+          if (programID != -1) {
+            selectedProgram = programService.getProgramById(programID);
+            areaID = selectedProgram.getResearchArea().getId();
+            selectedResearchArea = researchAreaService.find(areaID);
+          }
         }
       }
 
@@ -408,7 +451,7 @@ public class ProgramImpactsAction extends BaseAction {
 
       List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.RESEARCH_PROGRAM_IMPACT_RELATION);
-      selectedProgram = programService.getProgramById(programDb.getId());
+      selectedProgram.setActiveSince(new Date());
       selectedProgram.setModifiedBy(this.getCurrentUser());
       programService.saveProgram(selectedProgram, this.getActionName(), relationsName);
       Collection<String> messages = this.getActionMessages();
@@ -434,7 +477,6 @@ public class ProgramImpactsAction extends BaseAction {
 
   }
 
-
   /**
    * @param areaID the areaID to set
    */
@@ -450,13 +492,13 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
+
   /**
    * @param loggedCenter the loggedCenter to set
    */
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
-
 
   /**
    * @param programID the programID to set
@@ -465,6 +507,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
+
   /**
    * @param programID the programID to set
    */
@@ -472,10 +515,10 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
-
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
+
 
   public void setResearchImpacts(List<ResearchImpact> researchImpacts) {
     this.researchImpacts = researchImpacts;
@@ -484,7 +527,6 @@ public class ProgramImpactsAction extends BaseAction {
   public void setResearchObjectives(List<ResearchObjective> researchObjectives) {
     this.researchObjectives = researchObjectives;
   }
-
 
   /**
    * @param researchPrograms the researchPrograms to set
@@ -501,11 +543,16 @@ public class ProgramImpactsAction extends BaseAction {
     this.selectedProgram = selectedProgram;
   }
 
+
   /**
    * @param selectedResearchArea the selectedResearchArea to set
    */
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
   }
 
   @Override

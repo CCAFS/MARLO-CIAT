@@ -54,16 +54,17 @@ public class User implements IAuditLog {
 
   @Expose
   private boolean cgiarUser;
-
+  @Expose
   private boolean autoSave;
-
+  @Expose
   private User createdBy;
-
+  @Expose
   private Date activeSince;
-
+  @Expose
   private User modifiedBy;
-
+  @Expose
   private String modificationJustification;
+
   private boolean active;
   private Date lastLogin;
   private Set<UserRole> userRoles = new HashSet<UserRole>(0);

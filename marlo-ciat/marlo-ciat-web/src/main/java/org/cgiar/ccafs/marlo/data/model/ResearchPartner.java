@@ -30,16 +30,16 @@ public class ResearchPartner implements Serializable, IAuditLog {
 
   private static final long serialVersionUID = 7774818062880949190L;
 
-
+  @Expose
   private Long id;
 
-
+  @Expose
   private String name;
 
-
+  @Expose
   private EntityType partnerType;
 
-
+  @Expose
   private String organization;
 
 

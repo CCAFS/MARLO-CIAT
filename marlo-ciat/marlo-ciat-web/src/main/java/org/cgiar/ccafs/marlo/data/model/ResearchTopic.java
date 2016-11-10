@@ -36,19 +36,21 @@ public class ResearchTopic implements Serializable, IAuditLog {
 
   private static final long serialVersionUID = 365817271325565483L;
 
-
+  @Expose
   private Long id;
 
 
   /**
    * The research topic description text.
    */
+  @Expose
   private String researchTopic;
 
 
   /**
    * The research program related to this research topic or flagship project.
    */
+  @Expose
   private ResearchProgram researchProgram;
 
 

@@ -17,7 +17,7 @@
 package org.cgiar.ccafs.marlo.data;
 
 import org.cgiar.ccafs.marlo.data.dao.impl.StandardDAO;
-import org.cgiar.ccafs.marlo.data.IAuditLog;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -100,7 +100,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
         HashMap<String, Object> objects = new HashMap<>();
         Set<IAuditLog> listRelation = new HashSet<>();
 
-        Set<IAuditLog> entityRelation =  (Set<IAuditLog>) propertyValue;
+        Set<IAuditLog> entityRelation = (Set<IAuditLog>) propertyValue;
         for (IAuditLog iAuditLog : entityRelation) {
 
           if (iAuditLog.isActive()) {
@@ -136,7 +136,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
         if (propertyValue != null && propertyType instanceof ManyToOneType) {
 
           if (loadUsers) {
-            IAuditLog entityRelation =   (IAuditLog) propertyValue;
+            IAuditLog entityRelation = (IAuditLog) propertyValue;
 
 
             Object obj = dao.find(propertyType.getReturnedClass(), (Serializable) entityRelation.getId());
@@ -145,7 +145,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
             classMetadata.setPropertyValue(entity, name, obj, EntityMode.POJO);
           } else {
             if (!(name.equals("createdBy") || name.equals("modifiedBy"))) {
-              IAuditLog entityRelation =   (IAuditLog) propertyValue;
+              IAuditLog entityRelation = (IAuditLog) propertyValue;
 
               Object obj = dao.find(propertyType.getReturnedClass(), (Serializable) entityRelation.getId());
               if (level == 2) {
@@ -174,7 +174,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
     for (Iterator<Map<String, Object>> it = elements.iterator(); it.hasNext();) {
       Map<String, Object> map = it.next();
       if (map.get(PRINCIPAL).toString().equals("1")) {
-        IAuditLog entity =   (IAuditLog) map.get(ENTITY);
+        IAuditLog entity = (IAuditLog) map.get(ENTITY);
         this.loadRelations(entity, true, 1);
         String json = gson.toJson(entity);
 
@@ -207,16 +207,14 @@ public class AuditLogInterceptor extends EmptyInterceptor {
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 
-    System.out.println("onDelete");
-
     HashMap<String, Object> objects = new HashMap<>();
 
     if (entity instanceof IAuditLog) {
       objects.put(ENTITY, entity);
       objects.put("PRINCIPAL", new Long(1));
 
-      deletes.add(objects);
-      deletes.addAll(this.relations(state, types, propertyNames, ((IAuditLog) entity).getId(), true));
+      // deletes.add(objects);
+      // deletes.addAll(this.relations(state, types, propertyNames, ((IAuditLog) entity).getId(), true));
     }
   }
 
@@ -279,7 +277,7 @@ public class AuditLogInterceptor extends EmptyInterceptor {
 
       this.logSaveAndUpdate("Saved", inserts);
       this.logSaveAndUpdate("Updated", updates);
-      this.logSaveAndUpdate("Deleted", deletes);
+      // this.logSaveAndUpdate("Deleted", deletes);
     } catch (Exception e) {
       e.printStackTrace();
       LOG.error(e.getLocalizedMessage());

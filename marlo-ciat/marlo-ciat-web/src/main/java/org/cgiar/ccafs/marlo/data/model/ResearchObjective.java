@@ -40,11 +40,13 @@ public class ResearchObjective implements Serializable, IAuditLog {
   /**
    * The id or identifier for the research objective.
    */
+  @Expose
   private Long id;
 
   /**
    * The research objective
    */
+  @Expose
   private String objective;
 
 

@@ -85,7 +85,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   private List<ResearchObjective> objectives;
 
-
   private String objectiveValue;
 
 

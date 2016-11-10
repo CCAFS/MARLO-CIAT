@@ -51,6 +51,7 @@ public final class APConstants {
   public static final String OUTLOOK_EMAIL = "cgiar.org";
 
   // Request variables
+  public static final String TRANSACTION_ID = "transactionId";
   public static final String CENTER_PROGRAM_ID = "programID";
   public static final String EDITABLE_REQUEST = "edit";
   public static final String CENTER_REQUEST = "center";
