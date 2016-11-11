@@ -20,19 +20,28 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
+import org.cgiar.ccafs.marlo.data.model.ResearchMilestone;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.TargetUnit;
+import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
+import org.cgiar.ccafs.marlo.data.service.IResearchMilestoneService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.ITargetUnitService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.validation.impactpathway.OutcomesValidator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -54,13 +63,18 @@ public class OutcomesAction extends BaseAction {
 
   // Services - Managers
   private ICenterService centerService;
+
   private IResearchOutcomeService outcomeService;
+  private IAuditLogService auditLogService;
   private ITargetUnitService targetUnitService;
   private IResearchTopicService researchTopicService;
-
+  private IProgramService programService;
+  private IResearchImpactService impactService;
+  private IResearchMilestoneService milestoneService;
   // Front Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
+
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private ResearchProgram selectedProgram;
@@ -69,21 +83,31 @@ public class OutcomesAction extends BaseAction {
   private ResearchTopic selectedResearchTopic;
   private List<ResearchImpact> researchImpacts;
   private HashMap<Long, String> targetUnitList;
-
   // Parameter Variables
   private long programID;
   private long areaID;
+
   private long topicID;
   private long outcomeID;
+  private String transaction;
+  // Validator
+  private OutcomesValidator validator;
 
   @Inject
   public OutcomesAction(APConfig config, ICenterService centerService, IResearchOutcomeService outcomeService,
-    ITargetUnitService targetUnitService, IResearchTopicService researchTopicService) {
+    ITargetUnitService targetUnitService, IResearchTopicService researchTopicService, IProgramService programService,
+    IResearchImpactService impactService, IResearchMilestoneService milestoneService, OutcomesValidator validator,
+    IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.outcomeService = outcomeService;
     this.targetUnitService = targetUnitService;
     this.researchTopicService = researchTopicService;
+    this.programService = programService;
+    this.impactService = impactService;
+    this.milestoneService = milestoneService;
+    this.validator = validator;
+    this.auditLogService = auditLogService;
   }
 
   public long getAreaID() {
@@ -98,7 +122,6 @@ public class OutcomesAction extends BaseAction {
     return outcome;
   }
 
-
   public long getOutcomeID() {
     return outcomeID;
   }
@@ -106,6 +129,7 @@ public class OutcomesAction extends BaseAction {
   public long getProgramID() {
     return programID;
   }
+
 
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
@@ -123,11 +147,9 @@ public class OutcomesAction extends BaseAction {
     return researchTopics;
   }
 
-
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
-
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
@@ -149,6 +171,11 @@ public class OutcomesAction extends BaseAction {
   }
 
 
+  public String getTransaction() {
+    return transaction;
+  }
+
+
   @Override
   public void prepare() throws Exception {
     areaID = -1;
@@ -161,11 +188,25 @@ public class OutcomesAction extends BaseAction {
     try {
       outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
     } catch (Exception e) {
-
+      e.printStackTrace();
     }
 
-    outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
+    if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+      transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+      ResearchOutcome history = (ResearchOutcome) auditLogService.getHistory(transaction);
+
+      if (history != null) {
+        outcome = history;
+      } else {
+        this.transaction = null;
+        this.setTransaction("-1");
+      }
+
+    } else {
+      outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    }
 
     researchAreas = new ArrayList<>(
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
@@ -174,8 +215,8 @@ public class OutcomesAction extends BaseAction {
 
     if (researchAreas != null && outcome != null) {
 
-      selectedProgram = outcome.getResearchImpact().getResearchProgram();
-      programID = selectedProgram.getId();
+      programID = outcome.getResearchTopic().getResearchProgram().getId();
+      selectedProgram = programService.getProgramById(programID);
       selectedResearchTopic = outcome.getResearchTopic();
       topicID = selectedResearchTopic.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
@@ -221,8 +262,166 @@ public class OutcomesAction extends BaseAction {
 
     }
 
+    String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+    this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
+
+    if (this.isHttpPost()) {
+      if (targetUnitList != null) {
+        targetUnitList.clear();
+      }
+
+      if (researchImpacts != null) {
+        researchImpacts.clear();
+      }
+
+      if (researchTopics != null) {
+        researchTopics.clear();
+      }
+
+      if (outcome.getMilestones() != null) {
+        outcome.getMilestones().clear();
+      }
+    }
+
   }
 
+
+  @Override
+  public String save() {
+    if (this.hasPermission("*")) {
+
+      ResearchOutcome outcomeDb = outcomeService.getResearchOutcomeById(outcomeID);
+
+      ResearchImpact impact = impactService.getResearchImpactById(outcome.getResearchImpact().getId());
+
+      TargetUnit targetUnit = targetUnitService.getTargetUnitById(outcome.getTargetUnit().getId());
+
+      outcomeDb.setDescription(outcome.getDescription());
+      outcomeDb.setTargetYear(outcome.getTargetYear());
+
+      outcomeDb.setTargetUnit(targetUnit);
+      if (targetUnit.getId() != -1) {
+        outcomeDb.setValue(outcome.getValue());
+      } else {
+        outcomeDb.setValue(null);
+      }
+
+      outcomeDb.setResearchImpact(impact);
+
+      outcomeDb.setModifiedBy(this.getCurrentUser());
+      Long outcomeSaveId = outcomeService.saveResearchOutcome(outcomeDb);
+
+      ResearchOutcome outcomeSave = outcomeService.getResearchOutcomeById(outcomeSaveId);
+
+      this.saveMilestones(outcomeSave);
+
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.RESEARCH_OUTCOME_MILESTONE_RELATION);
+      outcome = outcomeService.getResearchOutcomeById(outcomeID);
+      outcome.setActiveSince(new Date());
+      outcome.setModifiedBy(this.getCurrentUser());
+      outcomeService.saveResearchOutcome(outcome, this.getActionName(), relationsName);
+
+      Collection<String> messages = this.getActionMessages();
+
+      if (!this.getInvalidFields().isEmpty()) {
+        this.setActionMessages(null);
+
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+
+      } else {
+        this.addActionMessage("message:" + this.getText("saving.saved"));
+      }
+
+      messages = this.getActionMessages();
+
+      return SUCCESS;
+    } else {
+      return NOT_AUTHORIZED;
+    }
+  }
+
+
+  public void saveMilestones(ResearchOutcome outcomeSave) {
+    if (outcomeSave.getResearchMilestones() != null && outcomeSave.getResearchMilestones().size() > 0) {
+      List<ResearchMilestone> milestonesPrew = new ArrayList<>(
+        outcomeSave.getResearchMilestones().stream().filter(rm -> rm.isActive()).collect(Collectors.toList()));
+
+      for (ResearchMilestone researchMilestone : milestonesPrew) {
+        if (!outcome.getMilestones().contains(researchMilestone)) {
+          milestoneService.deleteResearchMilestone(researchMilestone.getId());
+        }
+      }
+    }
+
+    if (outcome.getMilestones() != null) {
+      for (ResearchMilestone researchMilestone : outcome.getMilestones()) {
+        if (researchMilestone.getId() == null) {
+          ResearchMilestone milestone = new ResearchMilestone();
+          milestone.setResearchOutcome(outcomeSave);
+          milestone.setActive(true);
+          milestone.setActiveSince(new Date());
+          milestone.setCreatedBy(this.getCurrentUser());
+          milestone.setModifiedBy(this.getCurrentUser());
+
+          TargetUnit targetUnit = targetUnitService.getTargetUnitById(researchMilestone.getTargetUnit().getId());
+          milestone.setTargetUnit(targetUnit);
+          if (targetUnit.getId() != -1) {
+            milestone.setValue(researchMilestone.getValue());
+          } else {
+            milestone.setValue(null);
+          }
+          milestone.setTargetYear(researchMilestone.getTargetYear());
+          milestone.setTitle(researchMilestone.getTitle());
+
+          milestoneService.saveResearchMilestone(milestone);
+        } else {
+          boolean hasChanges = false;
+          ResearchMilestone milestonePrew = milestoneService.getResearchMilestoneById(researchMilestone.getId());
+
+          if (!milestonePrew.getTitle().equals(researchMilestone.getTitle())) {
+            hasChanges = true;
+            milestonePrew.setTitle(researchMilestone.getTitle());
+          }
+
+          TargetUnit targetUnit = targetUnitService.getTargetUnitById(researchMilestone.getTargetUnit().getId());
+          if (!milestonePrew.getTargetUnit().equals(targetUnit)) {
+            hasChanges = true;
+            milestonePrew.setTargetUnit(targetUnit);
+            if (targetUnit.getId() == -1) {
+              milestonePrew.setValue(null);
+            }
+          }
+
+          if (targetUnit.getId() != -1) {
+            if (milestonePrew.getValue() != null) {
+              if (!milestonePrew.getValue().equals(researchMilestone.getValue())) {
+                hasChanges = true;
+                milestonePrew.setValue(researchMilestone.getValue());
+              }
+            } else {
+              milestonePrew.setValue(researchMilestone.getValue());
+            }
+          }
+
+          if (!milestonePrew.getTargetYear().equals(researchMilestone.getTargetYear())) {
+            hasChanges = true;
+            milestonePrew.setTargetYear(researchMilestone.getTargetYear());
+          }
+
+
+          if (hasChanges) {
+            milestonePrew.setModifiedBy(this.getCurrentUser());
+            milestoneService.saveResearchMilestone(milestonePrew);
+          }
+        }
+      }
+    }
+
+  }
 
   public void setAreaID(long areaID) {
     this.areaID = areaID;
@@ -280,6 +479,10 @@ public class OutcomesAction extends BaseAction {
     this.topicID = topicID;
   }
 
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
+  }
+
   /**
    * method that sort a map list alphabetical
    * 
@@ -307,6 +510,13 @@ public class OutcomesAction extends BaseAction {
       sortedMap.put(entry.getKey(), entry.getValue());
     }
     return sortedMap;
+  }
+
+  @Override
+  public void validate() {
+    if (save) {
+      validator.validate(this, outcome, selectedProgram, true);
+    }
   }
 
 }

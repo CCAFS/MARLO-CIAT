@@ -19,6 +19,7 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -35,23 +36,33 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
  */
 public class EditOutcomeInterceptor extends AbstractInterceptor implements Serializable {
 
+
   private static final long serialVersionUID = 6885486232213967456L;
+
 
   private IResearchOutcomeService outcomeService;
 
+  private IProgramService programService;
+
   private BaseAction baseAction;
   private Map<String, Object> parameters;
+
   private Map<String, Object> session;
   private ResearchCenter researchCenter;
   private long outcomeID = -1;
   private long areaID = -1;
   private long programID = -1;
 
-
   @Inject
-  public EditOutcomeInterceptor(IResearchOutcomeService outcomeService) {
+  public EditOutcomeInterceptor(IResearchOutcomeService outcomeService, IProgramService programService) {
     this.outcomeService = outcomeService;
+    this.programService = programService;
   }
+
+  public long getProgramID() {
+    return programID;
+  }
+
 
   @Override
   public String intercept(ActionInvocation invocation) throws Exception {
@@ -84,10 +95,13 @@ public class EditOutcomeInterceptor extends AbstractInterceptor implements Seria
     ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     if (outcome != null) {
-      ResearchProgram program = outcome.getResearchImpact().getResearchProgram();
+
+
+      programID = outcome.getResearchTopic().getResearchProgram().getId();
+      ResearchProgram program = programService.getProgramById(programID);
 
       if (program != null) {
-        programID = program.getId();
+
         areaID = program.getResearchArea().getId();
 
         String params[] = {researchCenter.getAcronym(), areaID + "", programID + ""};
@@ -126,6 +140,10 @@ public class EditOutcomeInterceptor extends AbstractInterceptor implements Seria
       throw new Exception();
     }
 
+  }
+
+  public void setProgramID(long programID) {
+    this.programID = programID;
   }
 
 }

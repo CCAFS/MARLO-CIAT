@@ -30,7 +30,7 @@
     </many-to-one>
     <property name="modificationJustification" type="string">
       <column name="modification_justification" length="65535"
-        not-null="true" />
+        not-null="false" />
     </property>
 		<set lazy="true" name="centerUsers" table="center_users" inverse="true"
 			fetch="select">

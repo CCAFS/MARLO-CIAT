@@ -27,12 +27,14 @@ import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +60,7 @@ public class OutcomesListAction extends BaseAction {
   private List<ResearchProgram> researchPrograms;
   private List<ResearchTopic> researchTopics;
   private IResearchTopicService researchTopicService;
+  private IResearchOutcomeService outcomeService;
   private ResearchProgram selectedProgram;
   private ResearchArea selectedResearchArea;
   private ResearchTopic selectedResearchTopic;
@@ -70,13 +73,35 @@ public class OutcomesListAction extends BaseAction {
 
   @Inject
   public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IUserService userService, IResearchTopicService researchTopicService) {
+    IResearchAreaService researchAreaService, IUserService userService, IResearchTopicService researchTopicService,
+    IResearchOutcomeService outcomeService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.researchAreaService = researchAreaService;
     this.userService = userService;
     this.researchTopicService = researchTopicService;
+    this.outcomeService = outcomeService;
+  }
+
+  @Override
+  public String add() {
+
+    ResearchOutcome outcome = new ResearchOutcome();
+    outcome.setActive(true);
+    outcome.setActiveSince(new Date());
+    outcome.setCreatedBy(this.getCurrentUser());
+    outcome.setResearchTopic(selectedResearchTopic);
+    outcome.setTargetYear(-1);
+    outcomeID = outcomeService.saveResearchOutcome(outcome);
+
+    if (outcomeID > 0) {
+      return SUCCESS;
+    } else {
+      return INPUT;
+    }
+
+
   }
 
   public long getAreaID() {
@@ -94,6 +119,7 @@ public class OutcomesListAction extends BaseAction {
   public List<ResearchOutcome> getOutcomes() {
     return outcomes;
   }
+
 
   public long getProgramID() {
     return programID;
@@ -113,7 +139,6 @@ public class OutcomesListAction extends BaseAction {
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;
   }
-
 
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;

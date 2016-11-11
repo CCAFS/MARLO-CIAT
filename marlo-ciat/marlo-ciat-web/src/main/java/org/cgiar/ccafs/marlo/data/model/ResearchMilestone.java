@@ -22,6 +22,7 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
@@ -37,39 +38,22 @@ public class ResearchMilestone implements Serializable, IAuditLog {
 
   @Expose
   private Long id;
-
   @Expose
   private String title;
-
-
   @Expose
   private Integer targetYear;
-
-
   @Expose
   private BigDecimal value;
-
-
   @Expose
   private boolean active;
-
-
   @Expose
-  private boolean activeSince;
-
-
+  private Date activeSince;
   @Expose
   private User createdBy;
-
-
   @Expose
   private User modifiedBy;
-
-
   @Expose
   private String modificationJustification;
-
-
   @Expose
   private ResearchOutcome researchOutcome;
   @Expose
@@ -87,7 +71,7 @@ public class ResearchMilestone implements Serializable, IAuditLog {
    * @param activeSince
    * @param impactOutcome
    */
-  public ResearchMilestone(String title, Integer targetYear, BigDecimal value, boolean active, boolean activeSince,
+  public ResearchMilestone(String title, Integer targetYear, BigDecimal value, boolean active, Date activeSince,
     ResearchOutcome researchOutcome) {
     super();
     this.title = title;
@@ -96,6 +80,32 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     this.activeSince = activeSince;
     this.researchOutcome = researchOutcome;
     this.value = value;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchMilestone other = (ResearchMilestone) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
+  public Date getActiveSince() {
+    return activeSince;
   }
 
   public User getCreatedBy() {
@@ -133,7 +143,6 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return researchOutcome;
   }
 
-
   public TargetUnit getTargetUnit() {
     return targetUnit;
   }
@@ -145,6 +154,7 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return targetYear;
   }
 
+
   /**
    * @return the title
    */
@@ -152,9 +162,16 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return title;
   }
 
-
   public BigDecimal getValue() {
     return value;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
 
@@ -168,25 +185,13 @@ public class ResearchMilestone implements Serializable, IAuditLog {
 
 
   /**
-   * @return the activeSince
-   */
-  public boolean isActiveSince() {
-    return activeSince;
-  }
-
-
-  /**
    * @param active the active to set
    */
   public void setActive(boolean active) {
     this.active = active;
   }
 
-
-  /**
-   * @param activeSince the activeSince to set
-   */
-  public void setActiveSince(boolean activeSince) {
+  public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
 

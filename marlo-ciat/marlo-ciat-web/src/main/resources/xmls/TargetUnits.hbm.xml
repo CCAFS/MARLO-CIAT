@@ -24,7 +24,7 @@
             <column name="active_since" length="19" not-null="true" />
         </property>
         <property name="modificationJustification" type="string">
-            <column name="modification_justification" length="65535" not-null="true" />
+            <column name="modification_justification" length="65535" not-null="false" />
         </property>
         <set name="researchMilestones" table="research_milestones" inverse="true" lazy="true" fetch="select">
             <key>

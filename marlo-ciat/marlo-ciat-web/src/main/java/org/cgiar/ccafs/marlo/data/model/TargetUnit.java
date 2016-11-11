@@ -16,8 +16,10 @@ import com.google.gson.annotations.Expose;
 public class TargetUnit implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = 4442022448817199007L;
+
   @Expose
   private Long id;
+
   @Expose
   private User modifiedBy;
   @Expose
@@ -30,7 +32,6 @@ public class TargetUnit implements java.io.Serializable, IAuditLog {
   private Date activeSince;
   @Expose
   private String modificationJustification;
-
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
 
@@ -45,7 +46,6 @@ public class TargetUnit implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
-
   public TargetUnit(User modifiedBy, User createdBy, String name, boolean active, Date activeSince,
     String modificationJustification, Set<ResearchMilestone> researchMilestones,
     Set<ResearchOutcome> researchOutcomes) {
@@ -57,6 +57,28 @@ public class TargetUnit implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
     this.researchMilestones = researchMilestones;
     this.researchOutcomes = researchOutcomes;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    TargetUnit other = (TargetUnit) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -94,6 +116,7 @@ public class TargetUnit implements java.io.Serializable, IAuditLog {
     return modifiedBy;
   }
 
+
   public String getName() {
     return name;
   }
@@ -104,6 +127,14 @@ public class TargetUnit implements java.io.Serializable, IAuditLog {
 
   public Set<ResearchOutcome> getResearchOutcomes() {
     return researchOutcomes;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override

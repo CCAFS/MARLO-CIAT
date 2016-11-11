@@ -75,4 +75,14 @@ public interface IResearchOutcomeDAO {
    *         or -1 is some error occurred.
    */
   public long save(ResearchOutcome researchOutcome);
+
+  /**
+   * This method saves the information of the given researchOutcome
+   * 
+   * @param outcome - is the researchOutcome object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the researchOutcome was
+   *         updated
+   *         or -1 is some error occurred.
+   */
+  public long save(ResearchOutcome outcome, String actionName, List<String> relationsName);
 }

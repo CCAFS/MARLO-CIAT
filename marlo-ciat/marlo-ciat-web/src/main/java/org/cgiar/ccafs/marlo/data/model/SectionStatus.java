@@ -22,8 +22,8 @@ public class SectionStatus implements java.io.Serializable {
 
 
   private Long id;
-
   private ResearchProgram researchProgram;
+  private ResearchOutcome researchOutcome;
   private String sectionName;
   private String missingFields;
   private String cycle;
@@ -32,9 +32,10 @@ public class SectionStatus implements java.io.Serializable {
   public SectionStatus() {
   }
 
-  public SectionStatus(ResearchProgram researchProgram, String sectionName, String missingFields, String cycle,
-    Integer year) {
+  public SectionStatus(ResearchProgram researchProgram, ResearchOutcome researchOutcome, String sectionName,
+    String missingFields, String cycle, Integer year) {
     this.researchProgram = researchProgram;
+    this.researchOutcome = researchOutcome;
     this.sectionName = sectionName;
     this.missingFields = missingFields;
     this.cycle = cycle;
@@ -45,7 +46,6 @@ public class SectionStatus implements java.io.Serializable {
     this.sectionName = sectionName;
   }
 
-
   public String getCycle() {
     return this.cycle;
   }
@@ -54,8 +54,13 @@ public class SectionStatus implements java.io.Serializable {
     return this.id;
   }
 
+
   public String getMissingFields() {
     return this.missingFields;
+  }
+
+  public ResearchOutcome getResearchOutcome() {
+    return researchOutcome;
   }
 
   public ResearchProgram getResearchProgram() {
@@ -80,6 +85,10 @@ public class SectionStatus implements java.io.Serializable {
 
   public void setMissingFields(String missingFields) {
     this.missingFields = missingFields;
+  }
+
+  public void setResearchOutcome(ResearchOutcome researchOutcome) {
+    this.researchOutcome = researchOutcome;
   }
 
   public void setResearchProgram(ResearchProgram researchProgram) {

@@ -15,6 +15,19 @@ function init() {
   /* Percentage Inputs */
   $('.outcomes-list input.contribution').percentageInput();
 
+  $("#researchTopics").on(
+      "change",
+      function() {
+        var programID = $("#programSelected").html();
+        var option = $(this).find("option:selected");
+        if(option.val() != "-1") {
+          var url =
+              baseURL + "/impactPathway/" + centerSession + "/outcomesList.do?programID=" + programID + "&edit="
+                  + editable + "&topicID=" + option.val();
+          window.location = url;
+        }
+      });
+
 }
 
 function attachEvents() {

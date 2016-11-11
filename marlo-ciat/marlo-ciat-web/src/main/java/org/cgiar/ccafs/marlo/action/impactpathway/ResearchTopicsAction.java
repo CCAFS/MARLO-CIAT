@@ -26,6 +26,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
@@ -52,18 +53,23 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ResearchTopicsAction extends BaseAction {
 
+
   private static final long serialVersionUID = -3428452128710971531L;
+
 
   // Services (Managers)
   private ICenterService centerService;
+
   private IProgramService programService;
+
   private IResearchAreaService researchAreaService;
   private IResearchTopicService researchTopicService;
+  private IAuditLogService auditLogService;
   private IUserService userService;
-
   private ResearchTopicsValidator validator;
   // Local Variables
   private ResearchCenter loggedCenter;
+
   private List<ResearchArea> researchAreas;
   private List<ResearchTopic> researchTopics;
   private List<ResearchProgram> researchPrograms;
@@ -71,11 +77,13 @@ public class ResearchTopicsAction extends BaseAction {
   private ResearchProgram selectedProgram;
   private long programID;
   private long areaID;
+  private String transaction;
+
 
   @Inject
   public ResearchTopicsAction(APConfig config, ICenterService centerService, IProgramService programService,
     IResearchAreaService researchAreaService, IResearchTopicService researchTopicService, IUserService userService,
-    ResearchTopicsValidator validator) {
+    ResearchTopicsValidator validator, IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -83,6 +91,7 @@ public class ResearchTopicsAction extends BaseAction {
     this.researchTopicService = researchTopicService;
     this.userService = userService;
     this.validator = validator;
+    this.auditLogService = auditLogService;
   }
 
   public long getAreaID() {
@@ -97,11 +106,9 @@ public class ResearchTopicsAction extends BaseAction {
     return programID;
   }
 
-
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
-
 
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
@@ -121,6 +128,12 @@ public class ResearchTopicsAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
+
+
+  public String getTransaction() {
+    return transaction;
+  }
+
 
   @Override
   public void prepare() throws Exception {
@@ -183,17 +196,30 @@ public class ResearchTopicsAction extends BaseAction {
             }
           }
         }
+        if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
-        if (programID != -1) {
-          selectedProgram = programService.getProgramById(programID);
+          transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
 
-          if (selectedProgram != null) {
-            if (selectedProgram.getResearchTopics() != null) {
-              researchTopics = new ArrayList<>(
-                selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-            }
+          if (history != null) {
+            selectedProgram = history;
+          } else {
+            this.transaction = null;
+            this.setTransaction("-1");
           }
 
+        } else {
+          if (programID != -1) {
+            selectedProgram = programService.getProgramById(programID);
+
+            if (selectedProgram != null) {
+              if (selectedProgram.getResearchTopics() != null) {
+                researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
+                  .filter(rt -> rt.isActive()).collect(Collectors.toList()));
+              }
+            }
+
+          }
         }
       } else {
         if (programID != -1) {
@@ -257,6 +283,7 @@ public class ResearchTopicsAction extends BaseAction {
           newResearchTopic.setActive(true);
           newResearchTopic.setActiveSince(new Date());
           newResearchTopic.setCreatedBy(this.getCurrentUser());
+          newResearchTopic.setModifiedBy(this.getCurrentUser());
           newResearchTopic.setResearchTopic(researchTopic.getResearchTopic());
           newResearchTopic.setResearchProgram(selectedProgram);
 
@@ -274,6 +301,12 @@ public class ResearchTopicsAction extends BaseAction {
         }
 
       }
+
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.RESEARCH_PROGRAM_TOPIC_RELATION);
+      selectedProgram.setActiveSince(new Date());
+      selectedProgram.setModifiedBy(this.getCurrentUser());
+      programService.saveProgram(selectedProgram, this.getActionName(), relationsName);
 
       Collection<String> messages = this.getActionMessages();
 
@@ -329,6 +362,10 @@ public class ResearchTopicsAction extends BaseAction {
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
   }
 
   @Override

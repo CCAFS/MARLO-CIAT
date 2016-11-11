@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -79,6 +79,16 @@ public class ResearchOutcomeDAO implements IResearchOutcomeDAO {
       dao.update(researchOutcome);
     }
     return researchOutcome.getId();
+  }
+
+  @Override
+  public long save(ResearchOutcome outcome, String actionName, List<String> relationsName) {
+    if (outcome.getId() == null) {
+      dao.save(outcome, actionName, relationsName);
+    } else {
+      dao.update(outcome, actionName, relationsName);
+    }
+    return outcome.getId();
   }
 
 

@@ -21,17 +21,17 @@
           [#-- outcome statement --]
           <td class="left"> 
             [#if outcome.description?has_content]
-                <a href="[@s.url namespace=namespace action=defaultAction] [@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url]" title="${outcome.description}">
+                <a href="[@s.url namespace=namespace action=defaultAction][@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url]" title="${outcome.description}">
                 [#if outcome.description?length < 120] ${outcome.description}</a> [#else] [@utilities.wordCutter string=outcome.description maxPos=120 /]...</a> [/#if]
             [#else]
-                <a href="[@s.url namespace=namespace action=defaultAction includeParams='get'] [@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url] ">
-                  [@s.text name="projectsList.title.none" /]
+                <a href="[@s.url namespace=namespace action=defaultAction][@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url] ">
+                  [@s.text name="programImpact.outcomeList.title.none" /]
                 </a>
             [/#if]
           </td>
           [#-- outcome Year --]
           <td class="text-center">
-          [#if outcome.targetYear== -1]
+          [#if outcome.targetYear== -1 ]
           none
           [#else]
           ${(outcome.targetYear)!'none'}

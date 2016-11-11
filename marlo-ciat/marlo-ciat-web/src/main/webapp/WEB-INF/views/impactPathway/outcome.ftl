@@ -29,7 +29,7 @@
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
         [#-- Impact pathway sub menu --]
-        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-outcome.ftl" /]
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
@@ -81,7 +81,7 @@
               [#--  --if editable]<div class="addOtherTargetUnit text-center"><a href="#">([@s.text name = "outcomes.addNewTargetUnit" /])</a></div>[/#if --]
             </div>
             [#-- Target Value --]
-            [#assign showTargetValue =  (outcome??) && (outcome.srfTargetUnit??) && (outcome.srfTargetUnit.id??) && (outcome.srfTargetUnit.id != -1) /]
+            [#assign showTargetValue =  (outcome??) && (outcome.targetUnit??) && (outcome.targetUnit.id??) && (outcome.targetUnit.id != -1) /]
             <div class="col-md-4 targetValue-block" style="display:${showTargetValue?string('block', 'none')}">
               [@customForm.input name="${outcomeCustomName}.value" type="text" i18nkey="outcome.targetValue" placeholder="outcome.inputTargetValue.placeholder" className="targetValue" required=true editable=editable /]
             </div> 
@@ -109,7 +109,7 @@
         </div>
           
         [#-- Section Buttons--]
-        [#include "/WEB-INF/views/impactPathway/buttons-impactPathway.ftl" /]
+        [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
         
         [#-- Hidden inputs --]
         <input type="hidden" name="outcomeID" value="${outcomeID}" />
@@ -123,7 +123,7 @@
 </section>
 
 [#-- Milestone Template --]
-[@milestoneMacro milestone={} name="project.milestones" index=-1 isTemplate=true /]
+[@milestoneMacro milestone={} name="${outcomeCustomName}.milestones" index=-1 isTemplate=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
@@ -133,7 +133,7 @@
   <div id="milestone-${isTemplate?string('template', index)}" class="milestone simpleBox" style="display:${isTemplate?string('none','block')}">
     <div class="leftHead green sm">
       <span class="index">${index+1}</span>
-      <span class="elementId">[@s.text name="milestone.index.title"/]</span>
+      <span class="elementId">[@s.text name="outcome.milestone.index.title"/]</span>
     </div>
      <input type="hidden" class="mileStoneId" name="${milestoneCustomName}.id" value="${(milestone.id)!}"/>
     [#-- Remove Button --]
@@ -143,21 +143,21 @@
     
     [#-- Milestone Statement --]
     <div class="form-group">
-      [@customForm.textArea name="${milestoneCustomName}.title" i18nkey="milestone.statement" required=true className="milestone-statement limitWords-50" editable=editable /]
+      [@customForm.textArea name="${milestoneCustomName}.title" i18nkey="outcome.milestone.index.statement" required=true className="milestone-statement limitWords-50" editable=editable /]
     </div>
     <div class="row form-group target-block">
       [#-- Target Year --]
       ${(outcome.milestone.targetYears)!}
-      <div class="col-md-4">[@customForm.select name="${milestoneCustomName}.year" value="${(milestone.year)!-1}"  i18nkey="milestone.inputTargetYear" listName="milestoneYears"  required=true  className=" targetYear milestoneYear"  disabled=!editable/]</div>
+      <div class="col-md-4">[@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear"  disabled=!editable/]</div>
       [#-- Target Unit --]
       <div class="col-md-4">
-        [@customForm.select name="${milestoneCustomName}.srfTargetUnit.id"  i18nkey="milestone.selectTargetUnit" placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
+        [@customForm.select name="${milestoneCustomName}.targetUnit.id"  i18nkey="outcome.milestone.index.selectTargetUnit" placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
         [#--  --if editable]<div class="addOtherTargetUnit text-center"><a href="#">([@s.text name = "outcomes.addNewTargetUnit" /])</a></div>[/#if--]
       </div>
       [#-- Target Value --]
-      [#local showTargetValue = (milestone.srfTargetUnit??) && (milestone.srfTargetUnit.id??) && (milestone.srfTargetUnit.id != -1) /]
+      [#local showTargetValue = (milestone.targetUnit??) && (milestone.targetUnit.id??) && (milestone.targetUnit.id != -1) /]
       <div class="col-md-4 targetValue-block" style="display:${showTargetValue?string('block', 'none')}">
-        [@customForm.input name="${milestoneCustomName}.value" type="text"  i18nkey="milestone.inputTargetValue" placeholder="milestone.inputTargetValue.placeholder" className="targetValue" required=true editable=editable /]
+        [@customForm.input name="${milestoneCustomName}.value" type="text"  i18nkey="outcome.milestone.index.inputTargetValue" placeholder="outcome.milestone.index..placeholder" className="targetValue" required=true editable=editable /]
       </div>
     </div> 
     

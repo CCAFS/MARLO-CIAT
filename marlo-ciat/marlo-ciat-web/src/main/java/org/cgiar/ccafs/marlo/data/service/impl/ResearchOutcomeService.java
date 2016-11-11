@@ -77,5 +77,10 @@ public class ResearchOutcomeService implements IResearchOutcomeService {
     return researchOutcomeDAO.save(researchOutcome);
   }
 
+  @Override
+  public long saveResearchOutcome(ResearchOutcome outcome, String actionName, List<String> relationsName) {
+    return researchOutcomeDAO.save(outcome, actionName, relationsName);
+  }
+
 
 }

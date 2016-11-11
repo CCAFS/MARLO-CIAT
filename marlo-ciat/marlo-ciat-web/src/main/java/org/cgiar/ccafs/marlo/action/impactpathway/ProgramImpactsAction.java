@@ -364,6 +364,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setDescription(researchImpact.getDescription());
           researchImpactNew.setResearchProgram(programDb);
           researchImpactNew.setTargetYear(researchImpact.getTargetYear());
+          researchImpactNew.setModifiedBy(this.getCurrentUser());
 
           long impactId = impactService.saveResearchImpact(researchImpactNew);
 
@@ -379,6 +380,7 @@ public class ProgramImpactsAction extends BaseAction {
               impactObjectiveNew.setCreatedBy(this.getCurrentUser());
               impactObjectiveNew.setResearchObjective(researchObjective);
               impactObjectiveNew.setResearchImpact(researchImpactNew);
+              impactObjectiveNew.setModifiedBy(this.getCurrentUser());
 
               impactObjectiveService.saveResearchImpactObjective(impactObjectiveNew);
             }
@@ -405,6 +407,7 @@ public class ProgramImpactsAction extends BaseAction {
           }
 
           if (hasChanges) {
+            researchImpactRew.setModifiedBy(this.getCurrentUser());
             long impactId = impactService.saveResearchImpact(researchImpactRew);
             researchImpactRew = impactService.getResearchImpactById(impactId);
           }
@@ -432,6 +435,7 @@ public class ProgramImpactsAction extends BaseAction {
                 impactObjectiveNew.setActive(true);
                 impactObjectiveNew.setActiveSince(new Date());
                 impactObjectiveNew.setCreatedBy(this.getCurrentUser());
+                impactObjectiveNew.setModifiedBy(this.getCurrentUser());
                 impactObjectiveService.saveResearchImpactObjective(impactObjectiveNew);
               }
 

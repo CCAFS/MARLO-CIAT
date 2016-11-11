@@ -26,11 +26,11 @@
     </many-to-one>
     <property name="modificationJustification" type="string">
       <column name="modification_justification" length="65535"
-        not-null="true" />
+        not-null="false" />
     </property>
 		<many-to-one name="researchImpact"
 			class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" fetch="select">
-			<column name="research_impact_id" not-null="true" />
+			<column name="research_impact_id" not-null="false" />
 		</many-to-one>
 		<many-to-one name="researchTopic"
       class="org.cgiar.ccafs.marlo.data.model.ResearchTopic" fetch="select">
