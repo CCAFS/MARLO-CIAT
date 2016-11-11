@@ -91,7 +91,10 @@ public final class APConstants {
   public static final String RESEARCH_PROGRAM_IMPACT_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchProgram.researchImpacts)";
 
-  public static final String RESEARCH_IMPACT_OBJECTIVE_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchImpact.researchImpactObjectives)";
+  public static final String RESEARCH_PROGRAM_TOPIC_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchProgram.researchTopics)";
+
+  public static final String RESEARCH_OUTCOME_MILESTONE_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutcome.researchMilestones)";
 
 }

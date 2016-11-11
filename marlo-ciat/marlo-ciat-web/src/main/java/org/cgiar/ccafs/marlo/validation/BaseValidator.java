@@ -2,6 +2,7 @@ package org.cgiar.ccafs.marlo.validation;
 
 
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
@@ -91,6 +92,34 @@ public class BaseValidator {
       return !string.trim().isEmpty();
     }
     return false;
+  }
+
+  /**
+   * This method saves the missing fields into the database for a section at ImpactPathway - Outcome.
+   * 
+   * @param program is a ResearchProgram.
+   * @param outcome is a ResearchOutcome.
+   * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
+   */
+  protected void saveMissingFields(ResearchProgram program, ResearchOutcome outcome, String sectionName) {
+    // Reporting missing fields into the database.
+    int year = 0;
+
+    SectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName);
+    if (status == null) {
+
+      status = new SectionStatus();
+      status.setSectionName(sectionName);
+      status.setResearchProgram(program);
+      status.setResearchOutcome(outcome);
+    }
+    if (this.missingFields.length() > 0) {
+      status.setMissingFields(this.missingFields.toString());
+    } else {
+      status.setMissingFields("");
+    }
+
+    sectionStatusService.saveSectionStatus(status);
   }
 
   /**
