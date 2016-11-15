@@ -37,11 +37,9 @@
             <label for="">Research Topics:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
               <option value="-1" >Select an option</option>
-              
                 [#list researchTopics as researchTopic]
                   <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
                 [/#list]
-              
             </select>
          </div>
         
@@ -65,7 +63,7 @@
           
           [#-- Research impact --]
           <div class="form-group">
-            [@customForm.select name="${outcomeCustomName}.researchImpact.id"  i18nkey="outcome.researchImpact" listName="researchImpacts" keyFieldName="id"  displayFieldName="description" required=true  className=""  disabled=!editable/]
+            [@customForm.select name="${outcomeCustomName}.researchImpact.id"  i18nkey="outcome.researchImpact" listName="researchImpacts" keyFieldName="id"  displayFieldName="description" required=true  className=""  editable=editable/]
           </div>
           [#-- Outcome Statement --]
           <div class="form-group">
@@ -73,7 +71,16 @@
           </div>
           <div class="row form-group target-block">
             [#-- Target Year --]            
-            <div class="col-md-4">[@customForm.select name="${outcomeCustomName}.targetYear" label=""  i18nkey="outcome.year" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]</div>
+            <div class="col-md-4">
+              [#if editable]
+                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected" editable=editable/]
+              [#else]
+                <div class="select">
+                  <label for=""> [@s.text name="outcome.year" /]:  </label>
+                  <div class="selectList"><p> ${(outcome.targetYear)!'none'} </p></div> 
+                </div>
+              [/#if]
+            </div>
             [#-- Target Unit --]
             <div class="col-md-4">
               [@customForm.select name="${outcomeCustomName}.targetUnit.id" i18nkey="outcome.selectTargetUnit"  placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
@@ -147,8 +154,16 @@
     </div>
     <div class="row form-group target-block">
       [#-- Target Year --]
-      ${(outcome.milestone.targetYears)!}
-      <div class="col-md-4">[@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear"  disabled=!editable/]</div>
+      <div class="col-md-4">
+        [#if editable]
+          [@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear"  disabled=!editable/]
+        [#else]
+          <div class="select">
+            <label for=""> [@s.text name="outcome.milestone.index.inputTargetYear" /]:  </label>
+            <div class="selectList"><p> ${(milestone.targetYear)!'none'} </p></div> 
+          </div>
+        [/#if]
+      </div>
       [#-- Target Unit --]
       <div class="col-md-4">
         [@customForm.select name="${milestoneCustomName}.targetUnit.id"  i18nkey="outcome.milestone.index.selectTargetUnit" placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]

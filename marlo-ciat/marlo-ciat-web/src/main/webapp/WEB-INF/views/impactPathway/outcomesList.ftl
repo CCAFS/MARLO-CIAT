@@ -49,14 +49,18 @@
             </select>
           </div>
           
+          [#-- Program Title --]
           <div class="col-md-12">
             <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outcomes</h3>
             <hr />
           </div>
           
+          [#-- Outcomes Table --]
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=candit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
+          
+          [#-- Add Outcome button --]
           <div class="text-right">
-            [#if editable]
+            [#if canEdit]
             <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param][/@s.url]">
               <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
             </a></div>
