@@ -203,6 +203,8 @@ public class ResearchTopicsAction extends BaseAction {
 
           if (history != null) {
             selectedProgram = history;
+            areaID = selectedProgram.getResearchArea().getId();
+            selectedResearchArea = researchAreaService.find(areaID);
           } else {
             this.transaction = null;
             this.setTransaction("-1");
@@ -211,23 +213,44 @@ public class ResearchTopicsAction extends BaseAction {
         } else {
           if (programID != -1) {
             selectedProgram = programService.getProgramById(programID);
+          }
+        }
 
-            if (selectedProgram != null) {
-              if (selectedProgram.getResearchTopics() != null) {
-                researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
-                  .filter(rt -> rt.isActive()).collect(Collectors.toList()));
-              }
-            }
-
+        if (selectedProgram != null) {
+          if (selectedProgram.getResearchTopics() != null) {
+            researchTopics = new ArrayList<>(
+              selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
           }
         }
       } else {
-        if (programID != -1) {
 
-          selectedProgram = programService.getProgramById(programID);
-          areaID = selectedProgram.getResearchArea().getId();
-          selectedResearchArea = researchAreaService.find(areaID);
+        if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
+          transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+
+          if (history != null) {
+            selectedProgram = history;
+            areaID = selectedProgram.getResearchArea().getId();
+            selectedResearchArea = researchAreaService.find(areaID);
+          } else {
+            this.transaction = null;
+            this.setTransaction("-1");
+          }
+
+        } else {
+
+          if (programID != -1) {
+
+            selectedProgram = programService.getProgramById(programID);
+            areaID = selectedProgram.getResearchArea().getId();
+            selectedResearchArea = researchAreaService.find(areaID);
+
+
+          }
+        }
+
+        if (selectedProgram != null) {
           researchPrograms = new ArrayList<>(selectedResearchArea.getResearchPrograms().stream()
             .filter(rp -> rp.isActive()).collect(Collectors.toList()));
           if (selectedProgram != null) {
@@ -284,15 +307,15 @@ public class ResearchTopicsAction extends BaseAction {
           newResearchTopic.setActiveSince(new Date());
           newResearchTopic.setCreatedBy(this.getCurrentUser());
           newResearchTopic.setModifiedBy(this.getCurrentUser());
-          newResearchTopic.setResearchTopic(researchTopic.getResearchTopic());
+          newResearchTopic.setResearchTopic(researchTopic.getResearchTopic().trim());
           newResearchTopic.setResearchProgram(selectedProgram);
 
           researchTopicService.saveResearchTopic(newResearchTopic);
         } else {
           ResearchTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
-          if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic())) {
+          if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic().trim())) {
 
-            researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic());
+            researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic().trim());
             researchTopicPrew.setModifiedBy(this.getCurrentUser());
             researchTopicPrew.setModificationJustification("Modified on " + new Date().toString());
 

@@ -223,15 +223,15 @@ public class OutcomesAction extends BaseAction {
       areaID = selectedResearchArea.getId();
 
       if (selectedProgram.getResearchTopics() != null) {
-        researchTopics = new ArrayList<>(
-          selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+        researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
+          .filter(rt -> rt.isActive() && rt.getResearchTopic().trim().length() > 0).collect(Collectors.toList()));
       }
 
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-      researchImpacts = new ArrayList<>(
-        selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()));
+      researchImpacts = new ArrayList<>(selectedProgram.getResearchImpacts().stream()
+        .filter(ri -> ri.isActive() && ri.getDescription().trim().length() > 0).collect(Collectors.toList()));
 
       targetUnitList = new HashMap<>();
       if (targetUnitService.findAll() != null) {

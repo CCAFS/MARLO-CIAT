@@ -92,7 +92,7 @@
         [#else]
           <div class="select">
             <label for=""> [@s.text name="programImpact.targetYear" /]:  </label>
-            <div class="selectList"><p> ${(element.targetYear)!'none'} </p></div> 
+            <div class="selectList"><p> [#if element.targetYear == -1] Not Selected [#else]${(element.targetYear)!'none'}[/#if] </p></div> 
           </div>
         [/#if]
         </div>     

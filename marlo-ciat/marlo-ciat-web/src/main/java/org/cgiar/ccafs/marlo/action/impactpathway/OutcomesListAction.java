@@ -250,8 +250,8 @@ public class OutcomesListAction extends BaseAction {
       }
 
       if (selectedProgram.getResearchTopics() != null) {
-        researchTopics = new ArrayList<>(
-          selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+        researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
+          .filter(rt -> rt.isActive() && rt.getResearchTopic().trim().length() > 0).collect(Collectors.toList()));
         try {
           topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
           selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);

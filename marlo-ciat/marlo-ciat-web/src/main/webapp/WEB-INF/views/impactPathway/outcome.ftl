@@ -43,7 +43,7 @@
         
         [#-- Back --]
         <small class="pull-right">
-          <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=topicID /][/@s.url]">
+          <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=topicID /][@s.param name="edit" value=true /][/@s.url]">
             <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outcomes list
           </a>
         </small>
@@ -72,7 +72,7 @@
               [#else]
                 <div class="select">
                   <label for=""> [@s.text name="outcome.year" /]:  </label>
-                  <div class="selectList"><p> ${(outcome.targetYear)!'none'} </p></div> 
+                  <div class="selectList"><p> [#if outcome.targetYear == -1] Not Selected [#else]${(outcome.targetYear)!'none'}[/#if]  </p></div> 
                 </div>
               [/#if]
             </div>
@@ -155,7 +155,7 @@
         [#else]
           <div class="select">
             <label for=""> [@s.text name="outcome.milestone.index.inputTargetYear" /]:  </label>
-            <div class="selectList"><p> ${(milestone.targetYear)!'none'} </p></div> 
+            <div class="selectList"><p> [#if milestone.targetYear == -1] Not Selected [#else]${(milestone.targetYear)!'none'}[/#if]  </p></div> 
           </div>
         [/#if]
       </div>

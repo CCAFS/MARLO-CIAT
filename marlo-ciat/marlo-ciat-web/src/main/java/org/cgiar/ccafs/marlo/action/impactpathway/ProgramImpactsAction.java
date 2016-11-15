@@ -240,6 +240,8 @@ public class ProgramImpactsAction extends BaseAction {
 
           if (history != null) {
             selectedProgram = history;
+            areaID = selectedProgram.getResearchArea().getId();
+            selectedResearchArea = researchAreaService.find(areaID);
           } else {
             this.transaction = null;
             this.setTransaction("-1");
@@ -361,7 +363,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setActive(true);
           researchImpactNew.setActiveSince(new Date());
           researchImpactNew.setCreatedBy(this.getCurrentUser());
-          researchImpactNew.setDescription(researchImpact.getDescription());
+          researchImpactNew.setDescription(researchImpact.getDescription().trim());
           researchImpactNew.setResearchProgram(programDb);
           researchImpactNew.setTargetYear(researchImpact.getTargetYear());
           researchImpactNew.setModifiedBy(this.getCurrentUser());
@@ -389,9 +391,9 @@ public class ProgramImpactsAction extends BaseAction {
           boolean hasChanges = false;
           ResearchImpact researchImpactRew = impactService.getResearchImpactById(researchImpact.getId());
 
-          if (!researchImpactRew.getDescription().equals(researchImpact.getDescription())) {
+          if (!researchImpactRew.getDescription().equals(researchImpact.getDescription().trim())) {
             hasChanges = true;
-            researchImpactRew.setDescription(researchImpact.getDescription());
+            researchImpactRew.setDescription(researchImpact.getDescription().trim());
           }
 
           if (researchImpact.getTargetYear() != null) {
