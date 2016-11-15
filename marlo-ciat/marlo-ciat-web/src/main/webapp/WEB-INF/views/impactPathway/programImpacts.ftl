@@ -86,7 +86,16 @@
       
       <div class="row">
         <div class="col-md-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
-        <div class="col-md-4">[@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]</div>     
+        <div class="col-md-4">
+        [#if editable]
+          [@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]
+        [#else]
+          <div class="select">
+            <label for=""> [@s.text name="programImpact.targetYear" /]:  </label>
+            <div class="selectList"><p> ${(element.targetYear)!'none'} </p></div> 
+          </div>
+        [/#if]
+        </div>     
       </div>
     </div>
     
@@ -98,8 +107,8 @@
         [@s.checkboxlist name="${customName}.objectiveValue" list="researchObjectives" listKey="id" listValue="objective" cssClass="checkboxInput"  value="${customName}.objectivesIds" /]
       [#else]
         <input type="hidden" name="${customName}.objectiveValue" value="${(element.objectiveValue)!}"/>
-        [#if element.strategicObjectives?has_content]
-          [#list element.strategicObjectives as element]<p class="checked">${element.objective}</p>[/#list]
+        [#if element.objectives?has_content]
+          [#list element.objectives as element]<p class="checked">${element.objective}</p>[/#list]
         [/#if]
       [/#if]
     </div>

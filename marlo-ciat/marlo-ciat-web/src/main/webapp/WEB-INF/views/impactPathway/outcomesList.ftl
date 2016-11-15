@@ -48,20 +48,22 @@
               
             </select>
           </div>
-          
+          [#-- Program Title --]
           <div class="col-md-12">
             <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outcomes</h3>
             <hr />
           </div><div class="clearfix"></div>
+          [#-- Outcomes Table --]
           [#if outcomes?has_content]
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
           [#else]
             <div class="notOutcome">
-            There are NO OUTCOMES added to " <b>${selectedProgram.name}</b> " as of yet. [#if editable] If you want to add a new outcome, please click on the button below: [/#if]
+            There are NO OUTCOMES added to " <b>${selectedProgram.name}</b> " as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
             </div>
           [/#if]
           <br>
-          [#if editable]            
+          [#-- Add Outcome button --]
+          [#if canEdit]            
             [#if outcomes?has_content]
               <div class="text-right">
               <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="topicID"]${selectedResearchTopic.id}[/@s.param][/@s.url]">
