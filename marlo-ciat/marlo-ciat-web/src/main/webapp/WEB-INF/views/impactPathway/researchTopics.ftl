@@ -68,7 +68,13 @@
     [#local customName = "${name}[${index}]" /]
     [#-- Remove Button --]
     [#if editable]
-      <div class=" removeElement removeResearchTopic" title="Remove Research Topic"></div>
+    [#if element.id?has_content]
+      [#if template || action.canBeDeleted(element.id, element.class.name)!false]
+        <span class="glyphicon glyphicon-remove pull-right removeResearchTopic" style="color:#FF0000" aria-hidden="true"></span>
+      [#else]
+        <span class="glyphicon glyphicon-remove pull-right" style="color:#ccc" aria-hidden="true" title="Can not be deleted"></span>
+      [/#if]
+    [/#if] 
     [/#if]
     
     <div class="leftHead">

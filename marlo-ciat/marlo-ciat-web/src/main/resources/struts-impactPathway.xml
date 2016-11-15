@@ -59,6 +59,15 @@
 				<param name="edit">true</param>
 			</result>
 		</action>
+		
+		<action name="{center}/deleteOutcome" method="delete"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesListAction">
+      <interceptor-ref name="outcomeStack" />
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/outcomesList</param>
+        <param name="programID">${programID}</param>
+      </result>
+    </action>
 
 		<action name="{center}/outcomes"
 			class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">

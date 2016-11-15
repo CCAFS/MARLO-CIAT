@@ -8,6 +8,7 @@
         <th id="ids">[@s.text name="programImpact.outcomeList.idTable" /]</th>
         <th id="outcomeTitles" >[@s.text name="programImpact.outcomeList.statement" /]</th>
         <th id="outcomeTargetYear">[@s.text name="programImpact.outcomeList.targetYear" /]</th>
+        <th id="outcomeDelete">[@s.text name="programImpact.outcomeList.delete" /]</th>
       </tr>
     </thead>
     <tbody>
@@ -15,8 +16,8 @@
       [#list outcomes as outcome]
         <tr>
         [#-- ID --]
-        <td class="deliverableId">
-          <a href="[@s.url namespace=namespace action=defaultAction][@s.param name='deliverableID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url]">OC${outcome.id}</a>
+        <td class="outcomeId">
+          <a href="[@s.url namespace=namespace action=defaultAction][@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url]">OC${outcome.id}</a>
         </td>
           [#-- outcome statement --]
           <td class="left"> 
@@ -37,6 +38,17 @@
           ${(outcome.targetYear)!'none'}
           [/#if]
             
+          </td>
+          
+          [#-- Delete Outcome--]
+          <td class="text-center">           
+            [#if canEdit]
+              <a id="removeDeliverable-${outcome.id}" class="removeDeliverable" href="${baseUrl}/impactPathway/${centerSession}/deleteOutcome.do?outcomeID=${outcome.id}" title="">
+                <img src="${baseUrl}/images/global/trash.png" title="[@s.text name="programImpact.outcomeList.removeOutcome" /]" /> 
+              </a>
+            [#else]
+              <img src="${baseUrl}/images/global/trash_disable.png" title="[@s.text name="programImpact.outcomeList.cannotDelete" /]" />
+            [/#if]
           </td>
           
         </tr>  

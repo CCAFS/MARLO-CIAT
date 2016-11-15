@@ -52,17 +52,30 @@
           <div class="col-md-12">
             <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outcomes</h3>
             <hr />
-          </div>
-          
-          <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=candit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
-          <div class="text-right">
-            [#if editable]
-            <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param][/@s.url]">
-              <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
-            </a></div>
+          </div><div class="clearfix"></div>
+          [#if outcomes?has_content]
+          <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
+          [#else]
+            <div class="notOutcome">
+            There are NO OUTCOMES added to " <b>${selectedProgram.name}</b> " as of yet. [#if editable] If you want to add a new outcome, please click on the button below: [/#if]
+            </div>
+          [/#if]
+          <br>
+          [#if editable]            
+            [#if outcomes?has_content]
+              <div class="text-right">
+              <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="topicID"]${selectedResearchTopic.id}[/@s.param][/@s.url]">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
+              </a></div>
+              </div>
+            [#else]
+              <div class="text-center">
+              <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="topicID"]${selectedResearchTopic.id}[/@s.param][/@s.url]">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
+              </a></div>
+              </div>
             [/#if]
-          </div>
-          
+         [/#if]          
         [/@s.form]
         [#else]
          <p class="text-center borderBox inf">Before completing this section, please add at least one Research Topic by <a href="[@s.url action='${centerSession}/researchTopics'][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 

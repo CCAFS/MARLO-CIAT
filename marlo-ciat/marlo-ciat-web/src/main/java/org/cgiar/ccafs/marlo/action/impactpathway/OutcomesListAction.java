@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -104,6 +105,22 @@ public class OutcomesListAction extends BaseAction {
 
   }
 
+  @Override
+  public String delete() {
+    Map<String, Object> parameters = this.getParameters();
+    outcomeID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.OUTCOME_ID))[0]));
+
+    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+
+    if (outcome != null) {
+      programID = outcome.getResearchTopic().getResearchProgram().getId();
+      outcomeService.deleteResearchOutcome(outcome.getId());
+      this.addActionMessage("message:" + this.getText("deleting.success"));
+    }
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
   }
@@ -115,6 +132,7 @@ public class OutcomesListAction extends BaseAction {
   public long getOutcomeID() {
     return outcomeID;
   }
+
 
   public List<ResearchOutcome> getOutcomes() {
     return outcomes;
@@ -134,7 +152,6 @@ public class OutcomesListAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
-
 
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;

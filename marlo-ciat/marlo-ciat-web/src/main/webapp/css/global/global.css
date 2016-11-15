@@ -6097,6 +6097,7 @@ input.fieldChecked {
 }
 
 .missingSelect{
+  border: 1px solid #F44;
   border-bottom: 1px solid #F44;
 }
 
@@ -6156,4 +6157,13 @@ span.errorTag {
    border-left: 1px solid #ddd;
    border-right: 1px solid #ddd;
    border-bottom: 1px solid #ddd;
+}
+
+.notOutcome {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  border: 1px dashed;
+  background-color : #B4CADC;
+  text-align: center;
 }

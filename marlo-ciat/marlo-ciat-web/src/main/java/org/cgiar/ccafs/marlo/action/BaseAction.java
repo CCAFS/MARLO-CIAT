@@ -18,8 +18,13 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
+import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
+import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -35,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -74,12 +80,18 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public static final String NOT_LOGGED = "401";
   public static final String SAVED_STATUS = "savedStatus";
   private static final long serialVersionUID = -740360140511380630L;
-  protected boolean add;
+
   @Inject
   private IAuditLogService auditLogManager;
+  @Inject
+  private IResearchTopicService topicService;
+  @Inject
+  private IResearchImpactService impactService;
+
+  protected boolean add;
   private String basePermission;
   protected boolean cancel;
-  private boolean canEdit; // If user is able to edit the form.
+  private boolean canEdit;
   protected APConfig config;
   private Long centerID;
   private String centerSession;
@@ -150,6 +162,55 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return securityContext.hasPermission(permission);
   }
 
+  /**
+   * Verify if the class model name have not relations for enable the delete button.
+   * 
+   * @param id - the id of the model
+   * @param className - the model class name
+   * @return true for enabling the delete button or false to disable the delete button.
+   */
+  public boolean canBeDeleted(long id, String className) {
+    Class clazz;
+    try {
+
+      clazz = Class.forName(className);
+
+      // Verify ResearchTopic Model
+      if (clazz == ResearchTopic.class) {
+        ResearchTopic topic = topicService.getResearchTopicById(id);
+
+        List<ResearchOutcome> outcomes = new ArrayList<>(
+          topic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+        if (outcomes != null) {
+          if (!outcomes.isEmpty()) {
+            return false;
+          }
+        }
+      }
+
+      // Verify ResearchImpact Model
+      if (clazz == ResearchImpact.class) {
+        ResearchImpact impact = impactService.getResearchImpactById(id);
+
+        List<ResearchOutcome> outcomes = new ArrayList<>(
+          impact.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+        if (outcomes != null) {
+          if (!outcomes.isEmpty()) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+
+
+  }
+
   /* Override this method depending of the cancel action. */
   public String cancel() {
     return CANCEL;
@@ -163,6 +224,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     ((APCustomRealm) securityContext.getRealm())
       .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
   }
+
 
   /* Override this method depending of the delete action. */
   public String delete() {
@@ -187,7 +249,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
     return INPUT;
   }
-
 
   public String generatePermission(String permission, String... params) {
     // TODO: Update the permission
@@ -333,6 +394,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
   }
 
+
   /**
    * Define default locale while we decide to support other languages in the
    * future.
@@ -341,7 +403,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public Locale getLocale() {
     return Locale.ENGLISH;
   }
-
 
   public String getNamespace() {
     return ServletActionContext.getActionMapping().getNamespace();
@@ -460,10 +521,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return submit;
   }
 
+
   public String next() {
     return NEXT;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -475,10 +536,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return SUCCESS;
   }
 
+
   public void setAdd(boolean add) {
     this.add = true;
   }
-
 
   public void setBasePermission(String basePermission) {
     this.basePermission = basePermission;

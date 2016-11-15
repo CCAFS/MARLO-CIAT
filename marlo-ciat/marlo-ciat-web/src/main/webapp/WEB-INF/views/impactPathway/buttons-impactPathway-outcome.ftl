@@ -14,6 +14,5 @@
       [#-- Edit Button --]
       <a href="[@s.url][@s.param name="programID" value=programID /][@s.param name="outcomeID" value=outcomeID /][@s.param name="edit" value="true"/][/@s.url]" class="form-button button-edit"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> [@s.text name="form.buttons.edit" /]</a>
     [/#if]
-    <input type="hidden" name="outcomeID" value="${outcomeID}" />
   </div>
 </div>
