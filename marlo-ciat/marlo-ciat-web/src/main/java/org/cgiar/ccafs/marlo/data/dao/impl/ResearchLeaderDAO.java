@@ -42,7 +42,7 @@ public class ResearchLeaderDAO implements IResearchLeaderDAO {
   @Override
   public boolean deleteResearchLeader(long researchLeaderId) {
     ResearchLeader researchLeader = this.find(researchLeaderId);
-    // researchLeader.setActive(false);
+    researchLeader.setActive(false);
     return this.save(researchLeader) > 0;
   }
 

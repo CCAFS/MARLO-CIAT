@@ -35,7 +35,8 @@ public class ResearchOutcomeDAO implements IResearchOutcomeDAO {
   @Override
   public boolean deleteResearchOutcome(long researchOutcomeId) {
     ResearchOutcome researchOutcome = this.find(researchOutcomeId);
-    return dao.delete(researchOutcome);
+    researchOutcome.setActive(false);
+    return this.save(researchOutcome) > 0;
   }
 
   @Override

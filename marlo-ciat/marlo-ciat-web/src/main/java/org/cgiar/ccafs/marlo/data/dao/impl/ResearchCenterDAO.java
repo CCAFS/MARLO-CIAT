@@ -37,8 +37,9 @@ public class ResearchCenterDAO implements IResearchCenterDAO {
 
   @Override
   public boolean deleteCrp(long crpId) {
-    ResearchCenter crp = this.find(crpId);
-    return this.save(crp) > 0;
+    ResearchCenter center = this.find(crpId);
+    center.setActive(false);
+    return this.save(center) > 0;
   }
 
   @Override
