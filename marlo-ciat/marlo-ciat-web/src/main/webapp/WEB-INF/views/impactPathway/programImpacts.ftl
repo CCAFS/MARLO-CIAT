@@ -70,6 +70,8 @@
       [#else]
         <span class="glyphicon glyphicon-remove pull-right" style="color:#ccc" aria-hidden="true" title="Can not be deleted"></span>
       [/#if]
+    [#else]
+        <span class="glyphicon glyphicon-remove pull-right removeProgramImpact" style="color:#FF0000" aria-hidden="true"></span>
     [/#if]  
     [/#if]
     
@@ -92,7 +94,7 @@
         [#else]
           <div class="select">
             <label for=""> [@s.text name="programImpact.targetYear" /]:  </label>
-            <div class="selectList"><p> [#if element.targetYear == -1] Not Selected [#else]${(element.targetYear)!'none'}[/#if] </p></div> 
+            <div class="selectList"><p> [#if element.targetYear?has_content][#if element.targetYear == -1] Not Selected [#else]${(element.targetYear)!'none'}[/#if][#else]Not Selected[/#if] </p></div> 
           </div>
         [/#if]
         </div>     

@@ -16,12 +16,15 @@
 package org.cgiar.ccafs.marlo.interceptor;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
+import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -45,6 +48,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
   private ICenterService centerService;
   private IUserService userService;
   private IProgramService programService;
+  private IResearchAreaService areaServcie;
 
   private BaseAction baseAction;
   private Map<String, Object> parameters;
@@ -55,10 +59,11 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
 
   @Inject
   public EditImpactPathwayInterceptor(ICenterService centerService, IUserService userService,
-    IProgramService programService) {
+    IProgramService programService, IResearchAreaService areaServcie) {
     this.centerService = centerService;
     this.userService = userService;
     this.programService = programService;
+    this.areaServcie = areaServcie;
   }
 
   void getprogramId() {
@@ -70,18 +75,32 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
       User user = (User) session.get(APConstants.SESSION_USER);
       user = userService.getUser(user.getId());
 
-      // TODO - Create Enum to Research Leaders Type
-      List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
-        .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
-
-      if (!userLeads.isEmpty()) {
-        programID = userLeads.get(0).getResearchProgram().getId();
+      List<ResearchLeader> userAreaLeads =
+        new ArrayList<>(
+          user.getResearchLeaders().stream()
+            .filter(rl -> rl.isActive()
+              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+            .collect(Collectors.toList()));
+      if (!userAreaLeads.isEmpty()) {
+        areaID = userAreaLeads.get(0).getResearchArea().getId();
+        ResearchArea area = areaServcie.find(areaID);
+        List<ResearchProgram> programs =
+          area.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList());
+        programID = programs.get(0).getId();
       } else {
-        ResearchProgram rp =
-          loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
-            .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
-        programID = rp.getId();
-        areaID = rp.getResearchArea().getId();
+        List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+          .filter(rl -> rl.isActive()
+            && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+          .collect(Collectors.toList()));
+        if (!userProgramLeads.isEmpty()) {
+          programID = userProgramLeads.get(0).getResearchProgram().getId();
+        } else {
+          ResearchProgram rp =
+            loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
+              .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
+          programID = rp.getId();
+          areaID = rp.getResearchArea().getId();
+        }
       }
     }
   }
@@ -121,9 +140,9 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
 
     if (researchProgram != null) {
 
-      if (areaID != -1) {
-        areaID = researchProgram.getResearchArea().getId();
-      }
+
+      areaID = researchProgram.getResearchArea().getId();
+
       String params[] = {researchCenter.getAcronym(), areaID + "", programID + ""};
       if (baseAction.canAccessSuperAdmin()) {
         canEdit = true;

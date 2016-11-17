@@ -20,6 +20,7 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
@@ -50,15 +51,18 @@ public class OutcomesListAction extends BaseAction {
 
   private static final long serialVersionUID = 2639447995874299013L;
 
+
   private ICenterService centerService;
 
   private ResearchCenter loggedCenter;
+
   private List<ResearchOutcome> outcomes;
+
   private IProgramService programService;
   private List<ResearchArea> researchAreas;
-
   private IResearchAreaService researchAreaService;
   private List<ResearchProgram> researchPrograms;
+
   private List<ResearchTopic> researchTopics;
   private IResearchTopicService researchTopicService;
   private IResearchOutcomeService outcomeService;
@@ -71,6 +75,7 @@ public class OutcomesListAction extends BaseAction {
   private long programID;
   private long outcomeID;
   private long areaID;
+  private String justification;
 
   @Inject
   public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -114,6 +119,13 @@ public class OutcomesListAction extends BaseAction {
 
     if (outcome != null) {
       programID = outcome.getResearchTopic().getResearchProgram().getId();
+      topicID = outcome.getResearchTopic().getId();
+      outcome
+        .setModificationJustification(this.getJustification() == null ? "Outcome deleted" : this.getJustification());
+      outcome.setModifiedBy(this.getCurrentUser());
+
+      outcomeService.saveResearchOutcome(outcome);
+
       outcomeService.deleteResearchOutcome(outcome.getId());
       this.addActionMessage("message:" + this.getText("deleting.success"));
     }
@@ -125,6 +137,10 @@ public class OutcomesListAction extends BaseAction {
     return areaID;
   }
 
+  public String getJustification() {
+    return justification;
+  }
+
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
   }
@@ -132,7 +148,6 @@ public class OutcomesListAction extends BaseAction {
   public long getOutcomeID() {
     return outcomeID;
   }
-
 
   public List<ResearchOutcome> getOutcomes() {
     return outcomes;
@@ -152,6 +167,7 @@ public class OutcomesListAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
+
 
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;
@@ -197,17 +213,25 @@ public class OutcomesListAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          // TODO - Create Enum to Research Leaders Type
-          List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
-            .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
-
-          if (!userLeads.isEmpty()) {
-            programID = userLeads.get(0).getResearchProgram().getId();
+          List<ResearchLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            .filter(rl -> rl.isActive()
+              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+            .collect(Collectors.toList()));
+          if (!userAreaLeads.isEmpty()) {
+            areaID = userAreaLeads.get(0).getResearchArea().getId();
           } else {
-            if (!researchAreas.isEmpty()) {
-              ResearchProgram rp = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
-                .collect(Collectors.toList()).get(0);
+            List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+              .filter(rl -> rl.isActive()
+                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+              .collect(Collectors.toList()));
+            if (!userProgramLeads.isEmpty()) {
+              programID = userProgramLeads.get(0).getResearchProgram().getId();
+            } else {
+              ResearchProgram rp =
+                loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
+                  .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
               programID = rp.getId();
+              areaID = rp.getResearchArea().getId();
             }
           }
         }
@@ -274,6 +298,11 @@ public class OutcomesListAction extends BaseAction {
 
   public void setAreaID(long areaID) {
     this.areaID = areaID;
+  }
+
+  @Override
+  public void setJustification(String justification) {
+    this.justification = justification;
   }
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {

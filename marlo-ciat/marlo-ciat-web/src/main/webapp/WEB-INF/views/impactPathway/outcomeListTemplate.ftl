@@ -41,16 +41,15 @@
           </td>
           
           [#-- Delete Outcome--]
-          <td class="text-center">           
+          <td class="text-center">
             [#if canEdit]
-              <a id="removeDeliverable-${outcome.id}" class="removeDeliverable" href="${baseUrl}/impactPathway/${centerSession}/deleteOutcome.do?outcomeID=${outcome.id}" title="">
+              <a id="removeOutcome-${outcome.id}" class="removeOutcome" href="#" title="">
                 <img src="${baseUrl}/images/global/trash.png" title="[@s.text name="programImpact.outcomeList.removeOutcome" /]" /> 
               </a>
             [#else]
               <img src="${baseUrl}/images/global/trash_disable.png" title="[@s.text name="programImpact.outcomeList.cannotDelete" /]" />
             [/#if]
-          </td>
-          
+          </td>          
         </tr>  
       [/#list]
       [/#if]

@@ -15,6 +15,7 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
+[#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/views/impactPathway/outcomeListTemplate.ftl" as outcomesList /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
@@ -58,7 +59,7 @@
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
           [#else]
             <div class="notOutcome">
-            There are NO OUTCOMES added to " <b>${selectedProgram.name}</b> " as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
+            There are NO OUTCOMES added to "<b>${selectedProgram.name}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
             </div>
           [/#if]
           <br>
@@ -89,6 +90,8 @@
     [/#if]
   </div>
 </section>
+
+[@customForm.confirmJustification action="deleteOutcome.do" namespace="/${currentSection}" title="Remove Outcome" /]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 

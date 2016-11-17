@@ -25,6 +25,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
@@ -192,17 +193,25 @@ public class ProgramImpactsAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          // TODO - Create Enum to Research Leaders Type
-          List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
-            .filter(rl -> rl.isActive() && rl.getType().getId() == 6).collect(Collectors.toList()));
-
-          if (!userLeads.isEmpty()) {
-            programID = userLeads.get(0).getResearchProgram().getId();
+          List<ResearchLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            .filter(rl -> rl.isActive()
+              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+            .collect(Collectors.toList()));
+          if (!userAreaLeads.isEmpty()) {
+            areaID = userAreaLeads.get(0).getResearchArea().getId();
           } else {
-            if (!researchAreas.isEmpty()) {
-              ResearchProgram rp = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
-                .collect(Collectors.toList()).get(0);
+            List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+              .filter(rl -> rl.isActive()
+                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+              .collect(Collectors.toList()));
+            if (!userProgramLeads.isEmpty()) {
+              programID = userProgramLeads.get(0).getResearchProgram().getId();
+            } else {
+              ResearchProgram rp =
+                loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
+                  .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
               programID = rp.getId();
+              areaID = rp.getResearchArea().getId();
             }
           }
         }

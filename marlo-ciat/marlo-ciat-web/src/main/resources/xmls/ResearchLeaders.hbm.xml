@@ -31,6 +31,14 @@
 			class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" fetch="select">
 			<column name="research_program_id" not-null="true" />
 		</many-to-one>
+		<many-to-one name="researchArea"
+      class="org.cgiar.ccafs.marlo.data.model.ResearchArea" fetch="select">
+      <column name="research_area_id" not-null="true" />
+    </many-to-one>
+    <many-to-one name="researchCenter"
+      class="org.cgiar.ccafs.marlo.data.model.ResearchCenter" fetch="select">
+      <column name="research_center_id" not-null="true" />
+    </many-to-one>
 		<many-to-one name="user" class="org.cgiar.ccafs.marlo.data.model.User"
 			fetch="select">
 			<column name="user_id" not-null="true" />

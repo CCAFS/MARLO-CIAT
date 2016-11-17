@@ -74,6 +74,8 @@
       [#else]
         <span class="glyphicon glyphicon-remove pull-right" style="color:#ccc" aria-hidden="true" title="Can not be deleted"></span>
       [/#if]
+    [#else]  
+      <span class="glyphicon glyphicon-remove pull-right removeResearchTopic" style="color:#FF0000" aria-hidden="true"></span>
     [/#if] 
     [/#if]
     
