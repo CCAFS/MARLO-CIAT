@@ -173,9 +173,10 @@ public class ResearchTopicsAction extends BaseAction {
             if (!userProgramLeads.isEmpty()) {
               programID = userProgramLeads.get(0).getResearchProgram().getId();
             } else {
-              ResearchProgram rp =
-                loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
-                  .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
+              List<ResearchProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+                .collect(Collectors.toList());
+              Collections.sort(rps, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
+              ResearchProgram rp = rps.get(0);
               programID = rp.getId();
               areaID = rp.getResearchArea().getId();
             }
@@ -194,8 +195,10 @@ public class ResearchTopicsAction extends BaseAction {
           } catch (Exception e) {
             User user = userService.getUser(this.getCurrentUser().getId());
 
-            List<ResearchLeader> userLeads = new ArrayList<>(
-              user.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+              .filter(rl -> rl.isActive()
+                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+              .collect(Collectors.toList()));
 
             if (!userLeads.isEmpty()) {
               programID = userLeads.get(0).getResearchProgram().getId();

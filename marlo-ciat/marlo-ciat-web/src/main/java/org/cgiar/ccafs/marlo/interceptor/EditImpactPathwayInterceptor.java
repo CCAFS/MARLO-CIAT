@@ -31,6 +31,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -95,9 +96,13 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
         if (!userProgramLeads.isEmpty()) {
           programID = userProgramLeads.get(0).getResearchProgram().getId();
         } else {
-          ResearchProgram rp =
-            loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()).get(0)
-              .getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList()).get(0);
+          List<ResearchArea> ras =
+            loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList());
+          Collections.sort(ras, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
+          List<ResearchProgram> rps =
+            ras.get(0).getResearchPrograms().stream().filter(r -> r.isActive()).collect(Collectors.toList());
+          Collections.sort(rps, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
+          ResearchProgram rp = rps.get(0);
           programID = rp.getId();
           areaID = rp.getResearchArea().getId();
         }
@@ -114,12 +119,6 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     session = invocation.getInvocationContext().getSession();
     researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
     this.getprogramId();
-
-    // String params[] = {researchCenter.getAcronym(), areaID + "", programID + ""};
-    // if (!baseAction.hasPermission(baseAction.generatePermission(Permission.RESEARCH_PROGRAM_FULL_PRIVILEGES,
-    // params))) {
-    // return BaseAction.NOT_AUTHORIZED;
-    // }
 
     try {
       this.setPermissionParameters(invocation);

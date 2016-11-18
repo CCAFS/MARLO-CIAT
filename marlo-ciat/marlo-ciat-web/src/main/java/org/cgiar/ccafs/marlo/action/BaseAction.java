@@ -273,7 +273,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     List<Integer> allYears = new ArrayList<>();
 
     Calendar calendarStart = Calendar.getInstance();
-    calendarStart.set(Calendar.YEAR, 2016);
+    calendarStart.set(Calendar.YEAR, 2017);
     Calendar calendarEnd = Calendar.getInstance();
     calendarEnd.set(Calendar.YEAR, 2050);
 

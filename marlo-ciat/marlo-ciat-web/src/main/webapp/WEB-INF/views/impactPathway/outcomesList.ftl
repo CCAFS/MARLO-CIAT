@@ -59,7 +59,7 @@
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
           [#else]
             <div class="notOutcome">
-            There are NO OUTCOMES added to "<b>${selectedProgram.name}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
+            There are NO OUTCOMES added to "<b>${selectedResearchTopic.researchTopic}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
             </div>
           [/#if]
           <br>
