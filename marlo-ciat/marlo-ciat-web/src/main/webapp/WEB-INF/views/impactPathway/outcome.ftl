@@ -27,7 +27,7 @@
       </div>
       <div class="col-md-9">
         [#-- Section Messages --]
-        [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
+        [#include "/WEB-INF/views/impactPathway/messages-impactPathway-outcome.ftl" /]
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-outcome.ftl" /]
 
