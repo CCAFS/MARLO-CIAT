@@ -35,9 +35,7 @@
         
         <span id="programSelected" class="hidden">${selectedProgram.id}</span>
         
-        [@s.form action=actionName enctype="multipart/form-data" ]
-        
-          [#-- Research Topic List --]
+        [#-- Research Topic List --]
           <div class="simpleBox col-md-12">
             <label for="">Research Topics:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
@@ -50,7 +48,8 @@
             </select>
           </div>
           
-          [#-- Outcome List --]
+        [#if outcomes?has_content]
+        [#-- Outcome List --]
           <div class="simpleBox col-md-12">
             <label for="">Select Outcome:<span class="red">*</span></label>
             <select name="outcomes" id="outcomes">
@@ -61,39 +60,49 @@
                 [/#list]
               
             </select>
-          </div>
-          
+          </div>  
+         
+        
+        [@s.form action=actionName enctype="multipart/form-data" ]
+        
           [#-- Program Title --]
           <div class="col-md-12">
             <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - ALL Outputs</h3>
             <hr />
           </div><div class="clearfix"></div>
-          [#-- Outcomes Table --]
-          [#if outputs?has_content]
-          <div style="">[@outputsList.outputsList outputs=outputs canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outputs"/]</div>
-          [#else]
-            <div class="notOutcome">
-            There are NO OUTPUTS added to "<b>${selectedResearchOutcome.description}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
-            </div>
-          [/#if]
-          <br>
-          [#-- Add Outcome button --]
-          [#if canEdit]            
+          
+          
+   
+          
+            [#-- Outcomes Table --]
             [#if outputs?has_content]
-              <div class="text-right">
-              <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutput'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="outcomeID"]${selectedResearchOutcome.id}[/@s.param][/@s.url]">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutput" /]
-              </a></div>
-              </div>
+            <div style="">[@outputsList.outputsList outputs=outputs canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outputs"/]</div>
             [#else]
-              <div class="text-center">
-              <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutput'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="outcomeID"]${selectedResearchOutcome.id}[/@s.param][/@s.url]">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutput" /]
-              </a></div>
+              <div class="notOutcome">
+              There are NO OUTPUTS added to "<b>${selectedResearchOutcome.description}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
               </div>
             [/#if]
-         [/#if]          
-        [/@s.form]
+            <br>
+            [#-- Add Outcome button --]
+            [#if canEdit]            
+              [#if outputs?has_content]
+                <div class="text-right">
+                <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutput'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="outcomeID"]${selectedResearchOutcome.id}[/@s.param][/@s.url]">
+                  <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutput" /]
+                </a></div>
+                </div>
+              [#else]
+                <div class="text-center">
+                <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutput'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="outcomeID"]${selectedResearchOutcome.id}[/@s.param][/@s.url]">
+                  <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutput" /]
+                </a></div>
+                </div>
+              [/#if]
+           [/#if]          
+          [/@s.form]
+        [#else]
+         <p class="text-center borderBox inf">Before completing this section, please add at least one Outcome by <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=selectedResearchTopic.id /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
+        [/#if]
         [#else]
          <p class="text-center borderBox inf">Before completing this section, please add at least one Research Topic by <a href="[@s.url action='${centerSession}/researchTopics'][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
         [/#if]
