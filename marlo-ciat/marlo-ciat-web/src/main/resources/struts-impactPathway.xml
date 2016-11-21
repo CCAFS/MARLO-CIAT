@@ -82,6 +82,13 @@
 				<param name="edit">true</param>
 			</result>
 		</action>
+		
+		<action name="{center}/outputsList"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
+      <interceptor-ref name="impactPathwayStack" />
+      <result name="input">/WEB-INF/views/impactPathway/outputsList.ftl
+      </result>
+    </action>
 
 	</package>
 </struts>

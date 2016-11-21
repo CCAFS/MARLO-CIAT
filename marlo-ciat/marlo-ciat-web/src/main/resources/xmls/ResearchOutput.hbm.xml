@@ -35,7 +35,7 @@
     </property>
       <many-to-one name="researchOutcome" class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome"
       fetch="select">
-      <column name="impact_outcome_id" not-null="false" />
+      <column name="research_outcome_id" not-null="false" />
     </many-to-one>
 	</class>
 </hibernate-mapping>

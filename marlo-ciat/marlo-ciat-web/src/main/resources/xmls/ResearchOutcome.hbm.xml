@@ -13,29 +13,29 @@
 			<column name="active_since" length="19" not-null="true" />
 		</property>
 		<many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User"
-      fetch="select">
-      <column name="created_by" not-null="false" />
-    </many-to-one>
-    <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
-      fetch="select">
-      <column name="modified_by" not-null="false" />
-    </many-to-one>
-    <many-to-one name="targetUnit" class="org.cgiar.ccafs.marlo.data.model.TargetUnit"
-      fetch="select">
-      <column name="target_unit_id" not-null="false" />
-    </many-to-one>
-    <property name="modificationJustification" type="string">
-      <column name="modification_justification" length="65535"
-        not-null="false" />
-    </property>
+			fetch="select">
+			<column name="created_by" not-null="false" />
+		</many-to-one>
+		<many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
+			fetch="select">
+			<column name="modified_by" not-null="false" />
+		</many-to-one>
+		<many-to-one name="targetUnit"
+			class="org.cgiar.ccafs.marlo.data.model.TargetUnit" fetch="select">
+			<column name="target_unit_id" not-null="false" />
+		</many-to-one>
+		<property name="modificationJustification" type="string">
+			<column name="modification_justification" length="65535"
+				not-null="false" />
+		</property>
 		<many-to-one name="researchImpact"
 			class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" fetch="select">
 			<column name="research_impact_id" not-null="false" />
 		</many-to-one>
 		<many-to-one name="researchTopic"
-      class="org.cgiar.ccafs.marlo.data.model.ResearchTopic" fetch="select">
-      <column name="research_topic_id" not-null="true" />
-    </many-to-one>
+			class="org.cgiar.ccafs.marlo.data.model.ResearchTopic" fetch="select">
+			<column name="research_topic_id" not-null="true" />
+		</many-to-one>
 		<property name="description" type="string">
 			<column name="description" length="65535" not-null="false" />
 		</property>
@@ -48,11 +48,19 @@
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
 		</property>
-		<set name="researchMilestones" table="research_milestones" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="impact_outcome_id" not-null="true" />
-            </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchMilestone" />
-        </set>
+		<set name="researchMilestones" table="research_milestones"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="impact_outcome_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchMilestone" />
+		</set>
+		<set name="researchOutputs" table="research_outputs" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="research_outcome_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" />
+		</set>
 	</class>
 </hibernate-mapping>

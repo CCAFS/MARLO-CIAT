@@ -22,6 +22,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
@@ -29,15 +30,14 @@ import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -46,87 +46,48 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
  */
-public class OutcomesListAction extends BaseAction {
+public class OutputsListAction extends BaseAction {
 
-  private static final long serialVersionUID = 2639447995874299013L;
+  private static final long serialVersionUID = 6922866669964604405L;
 
   private ICenterService centerService;
-  private ResearchCenter loggedCenter;
-  private List<ResearchOutcome> outcomes;
-
   private IProgramService programService;
-  private List<ResearchArea> researchAreas;
   private IResearchAreaService researchAreaService;
-  private List<ResearchProgram> researchPrograms;
-
-  private List<ResearchTopic> researchTopics;
   private IResearchTopicService researchTopicService;
   private IResearchOutcomeService outcomeService;
+  private IUserService userService;
+  private IResearchOutputService outputService;
+
+  private List<ResearchArea> researchAreas;
+  private List<ResearchProgram> researchPrograms;
+  private List<ResearchOutcome> outcomes;
+  private List<ResearchTopic> researchTopics;
+  private List<ResearchOutput> outputs;
   private ResearchProgram selectedProgram;
   private ResearchArea selectedResearchArea;
   private ResearchTopic selectedResearchTopic;
-  private IUserService userService;
-
+  private ResearchOutcome selectedResearchOutcome;
+  private ResearchCenter loggedCenter;
   private long topicID;
   private long programID;
+
   private long outcomeID;
   private long areaID;
+  private long outputID;
   private String justification;
 
   @Inject
-  public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IUserService userService, IResearchTopicService researchTopicService,
-    IResearchOutcomeService outcomeService) {
+  public OutputsListAction(APConfig config, ICenterService centerService, IProgramService programService,
+    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService,
+    IResearchOutcomeService outcomeService, IUserService userService, IResearchOutputService outputService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.researchAreaService = researchAreaService;
-    this.userService = userService;
     this.researchTopicService = researchTopicService;
     this.outcomeService = outcomeService;
-  }
-
-  @Override
-  public String add() {
-
-    ResearchOutcome outcome = new ResearchOutcome();
-    outcome.setActive(true);
-    outcome.setActiveSince(new Date());
-    outcome.setCreatedBy(this.getCurrentUser());
-    outcome.setResearchTopic(selectedResearchTopic);
-    outcome.setTargetYear(-1);
-    outcomeID = outcomeService.saveResearchOutcome(outcome);
-
-    if (outcomeID > 0) {
-      return SUCCESS;
-    } else {
-      return INPUT;
-    }
-
-
-  }
-
-  @Override
-  public String delete() {
-    Map<String, Object> parameters = this.getParameters();
-    outcomeID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.OUTCOME_ID))[0]));
-
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
-
-    if (outcome != null) {
-      programID = outcome.getResearchTopic().getResearchProgram().getId();
-      topicID = outcome.getResearchTopic().getId();
-      outcome
-        .setModificationJustification(this.getJustification() == null ? "Outcome deleted" : this.getJustification());
-      outcome.setModifiedBy(this.getCurrentUser());
-
-      outcomeService.saveResearchOutcome(outcome);
-
-      outcomeService.deleteResearchOutcome(outcome.getId());
-      this.addActionMessage("message:" + this.getText("deleting.success"));
-    }
-
-    return SUCCESS;
+    this.userService = userService;
+    this.outputService = outputService;
   }
 
   public long getAreaID() {
@@ -149,6 +110,13 @@ public class OutcomesListAction extends BaseAction {
     return outcomes;
   }
 
+  public long getOutputID() {
+    return outputID;
+  }
+
+  public List<ResearchOutput> getOutputs() {
+    return outputs;
+  }
 
   public long getProgramID() {
     return programID;
@@ -169,12 +137,19 @@ public class OutcomesListAction extends BaseAction {
     return researchTopics;
   }
 
+
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
 
+
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
+  }
+
+
+  public ResearchOutcome getSelectedResearchOutcome() {
+    return selectedResearchOutcome;
   }
 
   public ResearchTopic getSelectedResearchTopic() {
@@ -190,6 +165,7 @@ public class OutcomesListAction extends BaseAction {
     areaID = -1;
     programID = -1;
     topicID = -1;
+    outcomeID = -1;
 
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
@@ -272,25 +248,63 @@ public class OutcomesListAction extends BaseAction {
       }
 
       if (selectedProgram.getResearchTopics() != null) {
+
         researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
           .filter(rt -> rt.isActive() && rt.getResearchTopic().trim().length() > 0).collect(Collectors.toList()));
         try {
           topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
           selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
+          if (selectedResearchTopic != null) {
+            if (selectedResearchTopic.getResearchOutcomes() != null) {
+              outcomes = selectedResearchTopic.getResearchOutcomes().stream()
+                .filter(ro -> ro.isActive() && ro.getDescription() != null && ro.getTargetYear() != -1)
+                .collect(Collectors.toList());
+
+              if (!outcomes.isEmpty()) {
+                selectedResearchOutcome = outcomes.get(0);
+              }
+            }
+          }
         } catch (Exception e) {
-          if (!researchTopics.isEmpty()) {
-            selectedResearchTopic = researchTopics.get(0);
-          }
-        }
-        if (selectedResearchTopic != null) {
-          if (selectedResearchTopic.getResearchOutcomes() != null) {
-            outcomes = selectedResearchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
+
+          try {
+            outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
+            selectedResearchOutcome = outcomeService.getResearchOutcomeById(outcomeID);
+            selectedResearchTopic = selectedResearchOutcome.getResearchTopic();
+            outcomes = selectedResearchTopic.getResearchOutcomes().stream()
+              .filter(ro -> ro.isActive() && ro.getDescription() != null && ro.getTargetYear() != -1)
               .collect(Collectors.toList());
+          } catch (Exception ex) {
+            if (!researchTopics.isEmpty()) {
+              selectedResearchTopic = researchTopics.get(0);
+            }
+
+            if (selectedResearchTopic != null) {
+              if (selectedResearchTopic.getResearchOutcomes() != null) {
+                outcomes = selectedResearchTopic.getResearchOutcomes().stream()
+                  .filter(ro -> ro.isActive() && ro.getDescription() != null && ro.getTargetYear() != -1)
+                  .collect(Collectors.toList());
+
+                if (!outcomes.isEmpty()) {
+                  selectedResearchOutcome = outcomes.get(0);
+                }
+
+              }
+            }
+
           }
+
+          if (selectedResearchOutcome != null) {
+            if (selectedResearchOutcome.getResearchOutputs() != null) {
+              outputs = selectedResearchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
+                .collect(Collectors.toList());
+            }
+          }
+
         }
+
 
       }
-
     }
   }
 
@@ -313,6 +327,14 @@ public class OutcomesListAction extends BaseAction {
 
   public void setOutcomes(List<ResearchOutcome> outcomes) {
     this.outcomes = outcomes;
+  }
+
+  public void setOutputID(long outputID) {
+    this.outputID = outputID;
+  }
+
+  public void setOutputs(List<ResearchOutput> outputs) {
+    this.outputs = outputs;
   }
 
   public void setProgramID(long programID) {
@@ -339,6 +361,10 @@ public class OutcomesListAction extends BaseAction {
     this.selectedResearchArea = selectedResearchArea;
   }
 
+  public void setSelectedResearchOutcome(ResearchOutcome selectedResearchOutcome) {
+    this.selectedResearchOutcome = selectedResearchOutcome;
+  }
+
   public void setSelectedResearchTopic(ResearchTopic selectedResearchTopic) {
     this.selectedResearchTopic = selectedResearchTopic;
   }
@@ -346,5 +372,6 @@ public class OutcomesListAction extends BaseAction {
   public void setTopicID(long topicID) {
     this.topicID = topicID;
   }
+
 
 }

@@ -236,6 +236,22 @@
   </div>
 [/#macro]
 
+[#macro confirmJustificationOut action="" namespace="/" nameId="" title="" outputID=""]
+  <div id="dialog-justification" title="${title}" style="display:none"> 
+    <div class="dialog-content"> 
+      [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
+        [@textArea name="justification" i18nkey="saving.justification" required=true className="justification"/]
+        [#if nameId != ""]
+          <input name="${nameId}" type="hidden" value="-1" />
+        [/#if]
+        <input name="outcomeID" type="hidden" value="${outputID}" />
+        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      [/@s.form]
+    </div>  
+  </div>
+[/#macro]
+
 [#macro rank name disabled=false editable=true]
   [#assign score][@s.property value="${name}"/][/#assign]
   <div class="rankingBlock" style="text-align:center;">

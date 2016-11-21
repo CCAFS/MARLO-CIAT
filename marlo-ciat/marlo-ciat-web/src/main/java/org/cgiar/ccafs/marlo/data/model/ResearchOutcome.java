@@ -48,8 +48,11 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   @Expose
   private Integer targetYear;
+
   @Expose
   private BigDecimal value;
+
+
   @Expose
   private ResearchImpact researchImpact;
   @Expose
@@ -68,6 +71,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private String modificationJustification;
 
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
+  private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
   private List<ResearchMilestone> milestones;
 
@@ -151,6 +155,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return researchMilestones;
   }
 
+  public Set<ResearchOutput> getResearchOutputs() {
+    return researchOutputs;
+  }
+
   /**
    * @return the researchTopic
    */
@@ -180,7 +188,6 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   public boolean isActive() {
     return active;
   }
-
 
   /**
    * @param active the active to set
@@ -225,10 +232,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
+
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
-
 
   /**
    * @param researchImpact the researchImpact to set
@@ -240,6 +247,11 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   public void setResearchMilestones(Set<ResearchMilestone> researchMilestones) {
     this.researchMilestones = researchMilestones;
+  }
+
+
+  public void setResearchOutputs(Set<ResearchOutput> researchOutputs) {
+    this.researchOutputs = researchOutputs;
   }
 
   /**
