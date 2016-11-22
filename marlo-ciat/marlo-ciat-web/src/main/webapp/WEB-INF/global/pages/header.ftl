@@ -61,7 +61,7 @@
           [#if namespace?contains('superadmin')]
             <img id="crp-image" src="${baseUrl}/images/global/cgiar.png" alt="" />
           [#else]
-            [#if crpSession??]<img id="crp-image" src="${baseUrl}/images/global/crps/logo_ciat.png" alt="CIAT" />[/#if]
+            [#if centerSession??]<img id="crp-image" src="${baseUrl}/images/global/centers/${centerSession}.png" alt="${centerSession}" />[/#if]
           [/#if]
           
         </div>

@@ -42,7 +42,7 @@
           
           [#-- Delete Outcome--]
           <td class="text-center">
-            [#if canEdit]
+            [#if canEdit && action.canBeDeleted(outcome.id, outcome.class.name)!false]
               <a id="removeOutcome-${outcome.id}" class="removeOutcome" href="#" title="">
                 <img src="${baseUrl}/images/global/trash.png" title="[@s.text name="programImpact.outcomeList.removeOutcome" /]" /> 
               </a>

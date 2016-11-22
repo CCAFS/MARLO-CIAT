@@ -37,7 +37,9 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -88,6 +90,50 @@ public class OutputsListAction extends BaseAction {
     this.outcomeService = outcomeService;
     this.userService = userService;
     this.outputService = outputService;
+  }
+
+  @Override
+  public String add() {
+    ResearchOutput output = new ResearchOutput();
+
+    output.setActive(true);
+    output.setActiveSince(new Date());
+    output.setDateAdded(new Date());
+    output.setCreatedBy(this.getCurrentUser());
+    output.setModifiedBy(this.getCurrentUser());
+    output.setResearchOutcome(selectedResearchOutcome);
+
+    outputID = outputService.saveResearchOutput(output);
+
+    if (outcomeID > 0) {
+      return SUCCESS;
+    } else {
+      return INPUT;
+    }
+  }
+
+  @Override
+  public String delete() {
+    Map<String, Object> parameters = this.getParameters();
+    outputID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.OUTPUT_ID))[0]));
+
+    ResearchOutput output = outputService.getResearchOutputById(outputID);
+
+    if (output != null) {
+      programID = output.getResearchOutcome().getResearchTopic().getResearchProgram().getId();
+      outcomeID = output.getResearchOutcome().getId();
+      output
+        .setModificationJustification(this.getJustification() == null ? "Outcome deleted" : this.getJustification());
+      output.setModifiedBy(this.getCurrentUser());
+
+      outputService.saveResearchOutput(output);
+
+      outputService.deleteResearchOutput(output.getId());
+
+      this.addActionMessage("message:" + this.getText("deleting.success"));
+    }
+
+    return SUCCESS;
   }
 
   public long getAreaID() {

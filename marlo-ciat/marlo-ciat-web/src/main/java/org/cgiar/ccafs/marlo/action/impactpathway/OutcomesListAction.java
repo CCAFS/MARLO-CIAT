@@ -93,6 +93,7 @@ public class OutcomesListAction extends BaseAction {
     outcome.setActive(true);
     outcome.setActiveSince(new Date());
     outcome.setCreatedBy(this.getCurrentUser());
+    outcome.setModifiedBy(this.getCurrentUser());
     outcome.setResearchTopic(selectedResearchTopic);
     outcome.setTargetYear(-1);
     outcomeID = outcomeService.saveResearchOutcome(outcome);

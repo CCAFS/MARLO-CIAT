@@ -12,7 +12,10 @@
             <column name="research_program_id" />
         </many-to-one>
         <many-to-one name="researchOutcome" class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome" fetch="select">
-            <column name="reserach_outcome_id" />
+            <column name="research_outcome_id" />
+        </many-to-one>
+        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" fetch="select">
+            <column name="research_output_id" />
         </many-to-one>
         <property name="sectionName" type="string">
             <column name="section_name" not-null="true">

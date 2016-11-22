@@ -80,5 +80,15 @@ public interface IResearchOutputService {
    */
   public long saveResearchOutput(ResearchOutput researchOutput);
 
+  /**
+   * This method saves the information of the given researchOutput
+   * 
+   * @param outcome - is the researchOutput object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the researchOutput was
+   *         updated
+   *         or -1 is some error occurred.
+   */
+  public long saveResearchOutput(ResearchOutput output, String actionName, List<String> relationsName);
+
 
 }

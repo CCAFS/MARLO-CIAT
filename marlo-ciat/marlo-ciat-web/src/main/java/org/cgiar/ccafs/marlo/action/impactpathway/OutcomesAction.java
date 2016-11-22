@@ -63,7 +63,6 @@ public class OutcomesAction extends BaseAction {
 
   // Services - Managers
   private ICenterService centerService;
-
   private IResearchOutcomeService outcomeService;
   private IAuditLogService auditLogService;
   private ITargetUnitService targetUnitService;
@@ -71,6 +70,7 @@ public class OutcomesAction extends BaseAction {
   private IProgramService programService;
   private IResearchImpactService impactService;
   private IResearchMilestoneService milestoneService;
+
   // Front Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
@@ -86,10 +86,10 @@ public class OutcomesAction extends BaseAction {
   // Parameter Variables
   private long programID;
   private long areaID;
-
   private long topicID;
   private long outcomeID;
   private String transaction;
+
   // Validator
   private OutcomesValidator validator;
 

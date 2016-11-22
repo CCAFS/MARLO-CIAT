@@ -89,6 +89,42 @@
       <result name="input">/WEB-INF/views/impactPathway/outputsList.ftl
       </result>
     </action>
+    
+    <action name="{center}/outputs"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
+      <interceptor-ref name="outputStack" />
+      <result name="input">/WEB-INF/views/impactPathway/output.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/outputs</param>
+        <param name="outputID">${outputID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    <action name="{center}/addNewOutput" method="add"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
+      <interceptor-ref name="impactPathwayStack" />
+      <result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/outputs</param>
+        <param name="outputID">${outputID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
+    <action name="{center}/deleteOutput" method="delete"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
+      <interceptor-ref name="outputStack" />
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/outputsList</param>
+        <param name="programID">${programID}</param>
+        <param name="outcomeID">${outcomeID}</param>
+      </result>
+    </action>
 
 	</package>
 </struts>

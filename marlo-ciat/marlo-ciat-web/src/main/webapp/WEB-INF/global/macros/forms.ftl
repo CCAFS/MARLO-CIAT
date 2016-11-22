@@ -244,7 +244,7 @@
         [#if nameId != ""]
           <input name="${nameId}" type="hidden" value="-1" />
         [/#if]
-        <input name="outcomeID" type="hidden" value="${outputID}" />
+        <input name="outputID" type="hidden" value="${outputID}" />
         <!-- Allow form submission with keyboard without duplicating the dialog button -->
         <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
       [/@s.form]

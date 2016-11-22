@@ -35,6 +35,9 @@
         <!-- validating if the user have edit privileges to impact pathway - outcomes -->
       <interceptor name="editOutcome"
         class="org.cgiar.ccafs.marlo.interceptor.EditOutcomeInterceptor" />
+        <!-- validating if the user have edit privileges to impact pathway - outputs -->
+      <interceptor name="editOutput"
+        class="org.cgiar.ccafs.marlo.interceptor.EditOutputInterceptor" />
         
         
 			<!-- stack from home packgae -->
@@ -56,6 +59,14 @@
         <interceptor-ref name="i18nFile" />
         <interceptor-ref name="requireUser" />
         <interceptor-ref name="editOutcome" />
+        <interceptor-ref name="keepRedirectMessages" />
+        <interceptor-ref name="defaultStack" />
+      </interceptor-stack>
+      
+      <interceptor-stack name="outputStack">
+        <interceptor-ref name="i18nFile" />
+        <interceptor-ref name="requireUser" />
+        <interceptor-ref name="editOutput" />
         <interceptor-ref name="keepRedirectMessages" />
         <interceptor-ref name="defaultStack" />
       </interceptor-stack>

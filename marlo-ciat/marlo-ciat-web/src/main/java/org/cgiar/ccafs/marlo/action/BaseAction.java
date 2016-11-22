@@ -20,10 +20,12 @@ import org.cgiar.ccafs.marlo.data.model.Auditlog;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
@@ -87,6 +89,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private IResearchTopicService topicService;
   @Inject
   private IResearchImpactService impactService;
+  @Inject
+  private IResearchOutcomeService outcomeService;
 
   protected boolean add;
   private String basePermission;
@@ -198,6 +202,20 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
         if (outcomes != null) {
           if (!outcomes.isEmpty()) {
+            return false;
+          }
+        }
+      }
+
+      // Verify ResearchOutcome Model
+      if (clazz == ResearchOutcome.class) {
+        ResearchOutcome outcome = outcomeService.getResearchOutcomeById(id);
+
+        List<ResearchOutput> outputs = new ArrayList<>(
+          outcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+        if (outputs != null) {
+          if (!outputs.isEmpty()) {
             return false;
           }
         }
