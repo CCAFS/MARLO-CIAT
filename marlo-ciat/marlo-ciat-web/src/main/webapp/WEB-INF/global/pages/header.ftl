@@ -57,12 +57,15 @@
             <div class="clearfix"></div>
             [#if !config.production] <h4 class="testEnvironment"><span class="label label-danger text-left">Testing Environment</span></h4> [/#if]
           </div>
-          
+          <!--
           [#if namespace?contains('superadmin')]
             <img id="crp-image" src="${baseUrl}/images/global/cgiar.png" alt="" />
           [#else]
             [#if centerSession??]<img id="crp-image" src="${baseUrl}/images/global/centers/${centerSession}.png" alt="${centerSession}" />[/#if]
           [/#if]
+          -->
+          
+          <img id="crp-image" src="${baseUrl}/images/global/centers/CIAT.png" alt="CIAT" />
           
         </div>
       </header>
