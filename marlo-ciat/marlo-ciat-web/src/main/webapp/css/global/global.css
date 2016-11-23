@@ -1806,7 +1806,9 @@ border-radius: 2px;
   color: #5a5a5a;
   padding: 5px 11px;
 }
-
+#secondaryMenu ul li ul li#menu-mainInfo a,#secondaryMenu ul li ul li#menu-nextUsers a,#secondaryMenu ul li ul li#menu-partners a{
+  padding-left: 30px;
+}
 #secondaryMenu a.goBack {
   background: url("../../images/global/sub-menu-goback.png") 0.2em no-repeat;
   background-size: 46%;
