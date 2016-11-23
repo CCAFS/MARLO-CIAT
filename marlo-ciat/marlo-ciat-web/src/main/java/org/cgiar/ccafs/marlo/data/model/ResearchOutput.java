@@ -67,7 +67,15 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
+/**
+   * The next user of the output such as (Policy Makers, etc)
+   */
+  private List<OutputNextUser> nextOutputUsers;
+  /**
+   * The next sub users such as Minister of Agriculture.
+   */
+  private List<OutputNextSubUser> nextOutputSubUsers;
+  
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
 
 

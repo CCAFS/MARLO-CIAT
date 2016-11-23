@@ -20,6 +20,8 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.OutputNextSubUser;
+import org.cgiar.ccafs.marlo.data.model.OutputNextUser;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
@@ -29,6 +31,8 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IOutputNextSubUserService;
+import org.cgiar.ccafs.marlo.data.service.IOutputNextUserService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -61,6 +65,8 @@ public class OutputsAction extends BaseAction {
   private IAuditLogService auditLogService;
   private IProgramService programService;
   private IResearchOutputService outputService;
+  private IOutputNextUserService outputNextUserService;
+  private IOutputNextSubUserService outputNextSubUserService;
 
   // Front Variables
   private ResearchCenter loggedCenter;
@@ -72,6 +78,8 @@ public class OutputsAction extends BaseAction {
   private ResearchOutput output;
   private ResearchTopic selectedResearchTopic;
   private List<ResearchLeader> contacPersons;
+  private List<OutputNextUser> outputNextUsers;
+  private List<OutputNextSubUser> outputNextSubUsers;
 
   // Parameter Variables
   private long programID;
@@ -79,23 +87,36 @@ public class OutputsAction extends BaseAction {
   private long outcomeID;
   private long outputID;
   private String transaction;
+  private long nextUserID;
+
 
   // Validator
   private OutputsValidator validator;
+
 
   /**
    * @param config
    */
   @Inject
   public OutputsAction(APConfig config, ICenterService centerService, IAuditLogService auditLogService,
-    IProgramService programService, IResearchOutputService outputService, OutputsValidator validator) {
+    IProgramService programService, IResearchOutputService outputService, OutputsValidator validator,
+    IOutputNextUserService outputNextUserService, IOutputNextSubUserService outputNextSubUserService) {
     super(config);
     this.centerService = centerService;
     this.auditLogService = auditLogService;
     this.programService = programService;
     this.outputService = outputService;
     this.validator = validator;
+    this.outputNextUserService = outputNextUserService;
+    this.outputNextSubUserService = outputNextSubUserService;
   }
+
+
+  public String addNextUsers() {
+
+    return SUCCESS;
+  }
+
 
   public long getAreaID() {
     return areaID;
@@ -121,6 +142,14 @@ public class OutputsAction extends BaseAction {
     return outputID;
   }
 
+  public List<OutputNextSubUser> getOutputNextSubUsers() {
+    return outputNextSubUsers;
+  }
+
+
+  public List<OutputNextUser> getOutputNextUsers() {
+    return outputNextUsers;
+  }
 
   public long getProgramID() {
     return programID;
@@ -134,6 +163,7 @@ public class OutputsAction extends BaseAction {
     return researchPrograms;
   }
 
+
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
@@ -143,7 +173,6 @@ public class OutputsAction extends BaseAction {
     return selectedResearchArea;
   }
 
-
   public ResearchOutcome getSelectedResearchOutcome() {
     return selectedResearchOutcome;
   }
@@ -152,9 +181,11 @@ public class OutputsAction extends BaseAction {
     return selectedResearchTopic;
   }
 
+
   public String getTransaction() {
     return transaction;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -185,8 +216,8 @@ public class OutputsAction extends BaseAction {
     } else {
       output = outputService.getResearchOutputById(outputID);
     }
-    researchAreas = new ArrayList<>(
-      loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
+    researchAreas =
+      new ArrayList<>(loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
     Collections.sort(researchAreas, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
 
     if (researchAreas != null && output != null) {
@@ -199,8 +230,9 @@ public class OutputsAction extends BaseAction {
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
 
-      contacPersons = new ArrayList<>(
-        selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+      contacPersons =
+        new ArrayList<>(selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive())
+          .collect(Collectors.toList()));
 
 
       String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
@@ -211,8 +243,12 @@ public class OutputsAction extends BaseAction {
           contacPersons.clear();
         }
       }
-
     }
+    // TODO Update the service method
+    // Get list of next user types from the database
+    outputNextUsers = outputNextUserService.findAll();
+    // TODO Update the method
+    outputNextSubUsers = outputNextSubUserService.findAll();
 
   }
 
@@ -256,6 +292,7 @@ public class OutputsAction extends BaseAction {
 
   }
 
+
   public void setAreaID(long areaID) {
     this.areaID = areaID;
   }
@@ -264,9 +301,11 @@ public class OutputsAction extends BaseAction {
     this.contacPersons = contacPersons;
   }
 
+
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
+
 
   public void setOutcomeID(long outcomeID) {
     this.outcomeID = outcomeID;
@@ -276,8 +315,17 @@ public class OutputsAction extends BaseAction {
     this.output = output;
   }
 
+
   public void setOutputID(long outputID) {
     this.outputID = outputID;
+  }
+
+  public void setOutputNextSubUsers(List<OutputNextSubUser> outputNextSubUsers) {
+    this.outputNextSubUsers = outputNextSubUsers;
+  }
+
+  public void setOutputNextUsers(List<OutputNextUser> outputNextUsers) {
+    this.outputNextUsers = outputNextUsers;
   }
 
   public void setProgramID(long programID) {
@@ -292,30 +340,46 @@ public class OutputsAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
+
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
+
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 
+
   public void setSelectedResearchOutcome(ResearchOutcome selectedResearchOutcome) {
     this.selectedResearchOutcome = selectedResearchOutcome;
   }
+
 
   public void setSelectedResearchTopic(ResearchTopic selectedResearchTopic) {
     this.selectedResearchTopic = selectedResearchTopic;
   }
 
+
   public void setTransaction(String transaction) {
     this.transaction = transaction;
   }
+
 
   @Override
   public void validate() {
     if (save) {
       validator.validate(this, output, selectedProgram, true);
     }
+  }
+
+
+  public long getNextUserID() {
+    return nextUserID;
+  }
+
+
+  public void setNextUserID(long nextUserID) {
+    this.nextUserID = nextUserID;
   }
 }

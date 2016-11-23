@@ -125,6 +125,12 @@
         <param name="outcomeID">${outcomeID}</param>
       </result>
     </action>
+        <action name="{center}/nextUsers"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
+      <interceptor-ref name="impactPathwayStack" />
+      <result name="success">/WEB-INF/views/impactPathway/output-nextUsers.ftl
+      </result>
+    </action>
 
 	</package>
 </struts>
