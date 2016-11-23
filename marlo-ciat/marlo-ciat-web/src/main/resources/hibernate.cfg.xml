@@ -50,10 +50,16 @@
 		<mapping resource="xmls/Roles.hbm.xml" />
 		<mapping resource="xmls/UserRoles.hbm.xml" />
 		<mapping resource="xmls/Users.hbm.xml" />
-		<mapping resource="xmls/ResearchPartners.hbm.xml" />
 		<mapping resource="xmls/ResearchImpactObjectives.hbm.xml" />
 		<mapping resource="xmls/SectionStatuses.hbm.xml" />		
 		<mapping resource="xmls/TargetUnits.hbm.xml" />
+		<mapping resource="xmls/Institutions.hbm.xml" />
+		<mapping resource="xmls/InstitutionTypes.hbm.xml" />
+		<mapping resource="xmls/LocElements.hbm.xml" />
+		<mapping resource="xmls/LocElementTypes.hbm.xml" />
+		<mapping resource="xmls/LocGeopositions.hbm.xml" />
+		<mapping resource="xmls/ResearchOutputPartnerPersons.hbm.xml" />
+		<mapping resource="xmls/ResearchOutputPartners.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

@@ -18,6 +18,8 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
@@ -41,7 +43,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   @Expose
   private Date dateAdded;
-
 
   @Expose
   private ResearchOutcome researchOutcome;
@@ -67,6 +68,9 @@ public class ResearchOutput implements Serializable, IAuditLog {
   private String modificationJustification;
 
 
+  private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
+
+
   /**
    * 
    */
@@ -87,6 +91,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.researchOutcome = researchOutcome;
     this.activeSince = activeSince;
   }
+
 
   public Date getActiveSince() {
     return activeSince;
@@ -134,6 +139,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return researchOutcome;
   }
 
+  public Set<ResearchOutputPartner> getResearchOutputPartners() {
+    return researchOutputPartners;
+  }
+
   public String getTitle() {
     return title;
   }
@@ -146,7 +155,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -183,11 +191,16 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   /**
    * @param researchOutcome the researchOutcome to set
    */
   public void setResearchOutcome(ResearchOutcome researchOutcome) {
     this.researchOutcome = researchOutcome;
+  }
+
+  public void setResearchOutputPartners(Set<ResearchOutputPartner> researchOutputPartners) {
+    this.researchOutputPartners = researchOutputPartners;
   }
 
   public void setTitle(String title) {
