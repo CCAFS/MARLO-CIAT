@@ -111,5 +111,6 @@
 
 	<include file="struts-home.xml" />
 	<include file="struts-impactPathway.xml"/>
+	<include file="struts-json.xml"/>
 
 </struts>

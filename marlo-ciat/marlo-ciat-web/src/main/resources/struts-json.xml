@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="json" namespace="/" extends="json-default">
+
+		<interceptors>
+			<!-- Json interceptors -->
+			<interceptor name="SecurityControl"
+				class="org.cgiar.ccafs.marlo.interceptor.json.SecurityJsonInterceptor" />
+
+			<interceptor-stack name="jsonStack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="SecurityControl" />
+				<interceptor-ref name="prepare" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="jsonStack"></default-interceptor-ref>
+
+		<action name="searchUsers"
+			class="org.cgiar.ccafs.marlo.action.json.global.ManageUsersAction"
+			method="search">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+		
+		<action name="createUser"
+      class="org.cgiar.ccafs.marlo.action.json.global.ManageUsersAction"
+      method="create">
+      <result type="json">
+        <param name="noCache">true</param>
+        <param name="excludeNullProperties">true</param>
+      </result>
+    </action>
+
+		<action name="sendNotification"
+			class="org.cgiar.ccafs.marlo.action.json.global.MessagesAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
+		<action name="pusherAutentication"
+			class="org.cgiar.ccafs.marlo.action.json.global.PusherAutentication">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="root">jsonString</param>
+			</result>
+		</action>
+				
+	</package>
+</struts>
