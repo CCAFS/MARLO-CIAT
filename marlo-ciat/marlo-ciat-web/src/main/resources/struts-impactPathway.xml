@@ -103,6 +103,19 @@
       </result>
     </action>
     
+    <action name="{center}/outputsPartners"
+      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputPartnerAction">
+      <interceptor-ref name="outputStack" />
+      <result name="input">/WEB-INF/views/impactPathway/outputPartner.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/outputsPartners</param>
+        <param name="outputID">${outputID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
     <action name="{center}/addNewOutput" method="add"
       class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
       <interceptor-ref name="impactPathwayStack" />
@@ -124,6 +137,7 @@
         <param name="programID">${programID}</param>
         <param name="outcomeID">${outcomeID}</param>
       </result>
+      
     </action>
         <action name="{center}/nextUsers"
       class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
