@@ -3,13 +3,16 @@
   { 'slug': 'programImpacts',           'name': 'impactPathway.menu.hrefProgramImpacts',  'action': 'programimpacts',           'active': true  },
   { 'slug': 'researchTopics',  'name': 'impactPathway.menu.hrefResearchTopics',       'action': 'researchTopics',  'active': true },
   { 'slug': 'outcomes',           'name': 'impactPathway.menu.hrefOutcomes',  'action': 'outcomesList',           'active': true  },
-  { 'slug': 'outputs',  'name': 'impactPathway.menu.hrefOutputs',       'action': 'outputsList',  'active': true }
+  { 'slug': 'outputs',  'name': 'impactPathway.menu.hrefOutputs',       'action': 'outputsList',  'active': true },
+  { 'slug': 'maininfo',  'name': 'impactPathway.menu.hrefMainInfo',       'action': 'mainInfo',  'active': true }
+  { 'slug': 'partners',  'name': 'impactPathway.menu.hrefPartners',       'action': 'partners',  'active': true }
+  { 'slug': 'nextusers',  'name': 'impactPathway.menu.hrefNextUsers',       'action': 'nextUsers',  'active': true }
 ]/]
 
 
 [#assign submission = (action.submission)! /]
 [#assign canSubmit = (action.hasPersmissionSubmit())!false /]
-[#-- ]#assign completed = action.isCompleteImpact(programID) --]
+[#-- #assign completed = action.isCompleteImpact(programID) --]
 
 
 <nav id="secondaryMenu" class="">
