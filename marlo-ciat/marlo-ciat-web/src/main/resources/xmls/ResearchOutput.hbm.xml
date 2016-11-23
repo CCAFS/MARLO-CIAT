@@ -37,5 +37,21 @@
       fetch="select">
       <column name="research_outcome_id" not-null="false" />
     </many-to-one>
+        <set name="nextOutputUsers" table="research_output_nextusers" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="research_output_id" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.cgiar.ccafs.marlo.data.model.OutputNextUser">
+                <column name="nextuser_id" not-null="true" />
+            </many-to-many>
+        </set>
+         <set name="nextOutputSubUsers" table="research_output_nextsubusers" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="research_output_id" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.cgiar.ccafs.marlo.data.model.OutputNextSubUser">
+                <column name="nextsubuser_id" not-null="true" />
+            </many-to-many>
+        </set>
 	</class>
 </hibernate-mapping>

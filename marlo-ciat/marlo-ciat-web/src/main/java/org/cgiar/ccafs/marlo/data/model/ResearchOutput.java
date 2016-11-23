@@ -18,6 +18,7 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
@@ -65,7 +66,14 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   @Expose
   private String modificationJustification;
-
+  /**
+   * The next user of the output such as (Policy Makers, etc)
+   */
+  private List<OutputNextUser> nextOutputUsers;
+  /**
+   * The next sub users such as Minister of Agriculture.
+   */
+  private List<OutputNextSubUser> nextOutputSubUsers;
 
   /**
    * 
@@ -127,12 +135,24 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
+
+  public List<OutputNextSubUser> getNextOutputSubUsers() {
+    return nextOutputSubUsers;
+  }
+
+
+  public List<OutputNextUser> getNextOutputUsers() {
+    return nextOutputUsers;
+  }
+
+
   /**
    * @return the researchOutcome
    */
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
   }
+
 
   public String getTitle() {
     return title;
@@ -142,6 +162,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public boolean isActive() {
     return active;
   }
+
 
   public void setActive(boolean active) {
     this.active = active;
@@ -178,10 +199,19 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
-
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
+
+  public void setNextOutputSubUsers(List<OutputNextSubUser> nextOutputSubUsers) {
+    this.nextOutputSubUsers = nextOutputSubUsers;
+  }
+
+
+  public void setNextOutputUsers(List<OutputNextUser> nextOutputUsers) {
+    this.nextOutputUsers = nextOutputUsers;
+  }
+
 
   /**
    * @param researchOutcome the researchOutcome to set

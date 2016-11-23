@@ -54,6 +54,9 @@
 		<mapping resource="xmls/ResearchImpactObjectives.hbm.xml" />
 		<mapping resource="xmls/SectionStatuses.hbm.xml" />		
 		<mapping resource="xmls/TargetUnits.hbm.xml" />
+		<mapping resource="xmls/OutputNextSubUser.hbm.xml" />
+		<mapping resource="xmls/OutputNextUser.hbm.xml" />
+		    
 	</session-factory>
 
 </hibernate-configuration>
