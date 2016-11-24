@@ -1,8 +1,8 @@
 [#ftl]
 [#assign title = "Outcome" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
-[#assign pageLibs = ["datatables.net", "datatables.net-bs","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign pageLibs = ["select2"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outputs" /]
@@ -28,23 +28,9 @@
       <div class="col-md-9">
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway-output.ftl" /]
-        [#-- Impact pathway sub menu --]
-        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
+        
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
-        [#-- Impact pathway sub menu --]
-        <div class="simpleBox col-md-12">
-            <label for="">Research Topic:  </label>
-            <p>${selectedResearchTopic.researchTopic}</p>
-        </div>
-        
-        <div class="simpleBox col-md-12">
-            <label for="">Outcome:  </label>
-            <p>${selectedResearchOutcome.description}</p>
-        </div>
-        
-        <br />
-        <br />
         
         [#-- Back --]
         <small class="pull-right">
@@ -54,6 +40,9 @@
         </small>
         
         <div class="clearfix"></div>
+        
+        [#-- Impact pathway sub menu --]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
         
         [@s.form action=actionName enctype="multipart/form-data" ]
         
@@ -67,6 +56,16 @@
             [@customForm.textArea name="${outputCustomName}.title"  i18nkey="output.name" required=true className="output-name limitWords-100" editable=editable /]
           </div> 
           
+          [#-- Research topic --]
+          <div class="form-group">
+              <label for="">Research Topic:</label><p>${selectedResearchTopic.researchTopic}</p>
+          </div>
+          
+          [#-- Outcome --]
+          <div class="form-group">
+              <label for="">Outcome:</label><p>${selectedResearchOutcome.description}</p>
+          </div>
+          
           [#-- Contact Person --]
           [#if contacPersons?has_content]
             <label for="">Contact Person(s):  </label>
@@ -77,26 +76,7 @@
           
         </div>
         
-        <h3 class="headTitle"> Partners </h3>
-        <div class="parntersBlock">
-          <div class="partnersList">
-            [#if output.partners?has_content]
-              [#list output.partners as partner]
-                [@partnerMacro element=partner name="output.partners" index=partner_index /]
-              [/#list]
-            [#else]
-              [@partnerMacro element={} name="output.partners" index=0 /]
-              [#-- <p class="emptyMessage text-center">No partners added yet.</p> --]
-            [/#if]
-          </div>
-          [#-- Select a organization/institution  --]
-          [#if editable]
-          <div class="partnerSelect"> 
-            <div class="pull-left"> <span class="glyphicon glyphicon-plus"></span>  &nbsp</div>
-            [@customForm.select name="" label="" disabled=!canEdit i18nkey="output.selectInstitution"  listName="" keyFieldName="id" displayFieldName="title" className="" value="" /]
-          </div>
-          [/#if] 
-        </div>
+        
           
         [#-- Section Buttons--]
         [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-output.ftl" /]
@@ -112,63 +92,5 @@
   </div>
 </section>
 
-[#-- Search users Interface --]
-[#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
-[@usersForm.searchUsers/]
-
-[#-- Partner Template --]
-[@partnerMacro element={} name="${outputCustomName}.partners" index="-1" isTemplate=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
-
-[#macro partnerMacro element name index isTemplate=false]
-  <div id="partner-${isTemplate?string('template', index)}" class="partner borderBox" style="display:${isTemplate?string('none','block')}">
-    [#local customName = "${name}[${index}]"]
-    
-    [#-- Remove Button --]
-    [#if editable]<div class="removeIcon removePartner" title="Remove"></div>[/#if]
-
-    [#-- Hidden Inputs --]
-    <input class="id" type="hidden" name="${customName}.id" value="${(element.id)!}" />
-    <input class="partnerInstitutionId" type="hidden" name="${customName}.institution.id" value="${(element.institution.id)!}" />
-    
-    [#-- Partner Title --]
-    <div class="form-group">
-       <h5 class="sectionSubTitle title">${(element.institution.composedName)!'Undefined'}</h5>
-    </div>
-    
-    [#-- Contact persons --]
-    <div class="users-block">
-      <div class="items-list simpleBox">
-        <ul>
-        [#if element.users?has_content]
-          [#list element.users as item]
-            [@userItem element=item name="${customName}.users" index=item_index /]
-          [/#list]
-        [/#if] 
-        </ul>
-        <p class="emptyMessage text-center" style="display:${(element.users?has_content)?string('none','block')}">No assigned a partner contact yet.</p>
-      </div>
-      <div class="text-center">
-        <div class="searchUser button-green">
-          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>[@s.text name="form.buttons.addPerson" /]
-        </div>
-      </div>
-    </div>
-  </div>
-[/#macro]
-
-
-[#macro userItem element name index template=false]
-  [#local customName = "${name}[${index}]" /]
-  <li id="user-${template?string('template',index)}" class="user userItem" style="display:${template?string('none','block')}">
-    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-    <span class="name"> ${(element.user.getComposedName()?html)!'Unknown user'}</span>
-    <input class="user" type="hidden" name="${customName}.user.id" value="${(element.user.id)!}"/>
-    <input class="id" type="hidden" name="${customName}.id" value="${(element.id)!}"/>
-    [#-- Remove Button --]
-    [#if editable]
-      <span class="glyphicon glyphicon-remove pull-right remove-userItem" aria-hidden="true"></span>
-    [/#if]
-  </li>
-[/#macro]
