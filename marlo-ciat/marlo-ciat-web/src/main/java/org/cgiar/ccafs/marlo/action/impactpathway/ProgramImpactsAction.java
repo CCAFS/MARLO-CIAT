@@ -20,6 +20,7 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.BeneficiaryType;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
@@ -31,6 +32,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchRegion;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.IBeneficiaryTypeService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
@@ -38,6 +40,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchImpactObjectiveService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
 import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
+import org.cgiar.ccafs.marlo.data.service.IResearchRegionService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -63,9 +66,13 @@ public class ProgramImpactsAction extends BaseAction {
 
   private static final long serialVersionUID = -2261790056574973080L;
 
+
   private ICenterService centerService;
 
   private IProgramService programService;
+  private IResearchRegionService regionService;
+  private IBeneficiaryTypeService beneficiaryTypeService;
+
 
   private IResearchAreaService researchAreaService;
   private IUserService userService;
@@ -76,7 +83,7 @@ public class ProgramImpactsAction extends BaseAction {
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private List<ResearchRegion> regions;
-
+  private List<BeneficiaryType> beneficiaryTypes;
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private List<ResearchObjective> researchObjectives;
@@ -92,7 +99,8 @@ public class ProgramImpactsAction extends BaseAction {
     IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService,
     IResearchObjectiveService objectiveService, IResearchImpactService impactService,
     IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator,
-    IAuditLogService auditLogService) {
+    IAuditLogService auditLogService, IResearchRegionService regionService,
+    IBeneficiaryTypeService beneficiaryTypeService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -103,6 +111,8 @@ public class ProgramImpactsAction extends BaseAction {
     this.impactObjectiveService = impactObjectiveService;
     this.validator = validator;
     this.auditLogService = auditLogService;
+    this.regionService = regionService;
+    this.beneficiaryTypeService = beneficiaryTypeService;
   }
 
   /**
@@ -110,6 +120,10 @@ public class ProgramImpactsAction extends BaseAction {
    */
   public Long getAreaID() {
     return areaID;
+  }
+
+  public List<BeneficiaryType> getBeneficiaryTypes() {
+    return beneficiaryTypes;
   }
 
   /**
@@ -126,6 +140,10 @@ public class ProgramImpactsAction extends BaseAction {
     return programID;
   }
 
+  public List<ResearchRegion> getRegions() {
+    return regions;
+  }
+
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
@@ -137,7 +155,6 @@ public class ProgramImpactsAction extends BaseAction {
   public List<ResearchObjective> getResearchObjectives() {
     return researchObjectives;
   }
-
 
   /**
    * @return the researchPrograms
@@ -160,7 +177,6 @@ public class ProgramImpactsAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
-
 
   public String getTransaction() {
     return transaction;
@@ -289,6 +305,15 @@ public class ProgramImpactsAction extends BaseAction {
       researchImpacts =
         selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList());
 
+      if (regionService.findAll() != null) {
+        regions = regionService.findAll().stream().filter(r -> r.isActive()).collect(Collectors.toList());
+      }
+
+      if (beneficiaryTypeService.findAll() != null) {
+        beneficiaryTypes =
+          beneficiaryTypeService.findAll().stream().filter(bt -> bt.isActive()).collect(Collectors.toList());
+      }
+
 
       if (objectiveService.findAll() != null) {
         researchObjectives =
@@ -305,10 +330,10 @@ public class ProgramImpactsAction extends BaseAction {
               researchImpact.getObjectives().add(impactObjective.getResearchObjective());
             }
           }
+          researchImpact.setBeneficiaries(new ArrayList<>(researchImpact.getResearchImpactBeneficiaries().stream()
+            .filter(rib -> rib.isActive()).collect(Collectors.toList())));
         }
       }
-
-
     }
 
 
@@ -334,6 +359,7 @@ public class ProgramImpactsAction extends BaseAction {
       System.out.println(ri.getId());
     }
   }
+
 
   @Override
   public String save() {
@@ -483,6 +509,7 @@ public class ProgramImpactsAction extends BaseAction {
 
   }
 
+
   /**
    * @param areaID the areaID to set
    */
@@ -490,12 +517,15 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
-
   /**
    * @param areaID the areaID to set
    */
   public void setAreaID(Long areaID) {
     this.areaID = areaID;
+  }
+
+  public void setBeneficiaryTypes(List<BeneficiaryType> beneficiaryTypes) {
+    this.beneficiaryTypes = beneficiaryTypes;
   }
 
 
@@ -506,6 +536,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.loggedCenter = loggedCenter;
   }
 
+
   /**
    * @param programID the programID to set
    */
@@ -513,12 +544,16 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
-
   /**
    * @param programID the programID to set
    */
   public void setProgramID(Long programID) {
     this.programID = programID;
+  }
+
+
+  public void setRegions(List<ResearchRegion> regions) {
+    this.regions = regions;
   }
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
