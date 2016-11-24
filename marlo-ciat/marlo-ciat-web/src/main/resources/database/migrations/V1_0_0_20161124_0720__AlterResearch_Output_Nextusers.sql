@@ -1,2 +1,0 @@
-ALTER TABLE `research_output_nextsubusers` DROP FOREIGN KEY `fk_output_nextsubuser`, DROP FOREIGN KEY `fk_output_researchoutput`;
-ALTER TABLE `research_output_nextsubusers` CHANGE COLUMN `id` `id` INT NOT NULL AUTO_INCREMENT, CHANGE COLUMN `research_output_id` `research_output_id` INT NOT NULL, CHANGE COLUMN `nextsubuser_id` `nextsubuser_id` INT NOT NULL;
