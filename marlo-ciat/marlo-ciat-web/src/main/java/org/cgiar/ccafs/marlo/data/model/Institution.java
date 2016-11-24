@@ -86,8 +86,65 @@ public class Institution implements java.io.Serializable {
   }
 
 
+  public String getBranchName() {
+    try {
+      String composedAcronym = this.acronym != null ? this.acronym : "";
+      if (this.institution == null) {
+        // Verify if there exist a city to show
+        if (this.city != null && this.city != "") {
+          return "HQ: " + composedAcronym + " - " + this.city + ", " + this.locElement.getName();
+        }
+        return "HQ: " + composedAcronym + " - " + this.locElement.getName();
+      } else {
+        // Verify if there exist a city to show
+        if (this.city != null && this.city != "") {
+          return composedAcronym + " - " + this.city + ", " + this.locElement.getName();
+        }
+        return composedAcronym + " - " + this.locElement.getName();
+      }
+    } catch (Exception e) {
+      return this.name;
+    }
+
+  }
+
+
   public String getCity() {
     return city;
+  }
+
+
+  public String getComposedName() {
+    try {
+      if (this.getLocElement() == null) {
+        return this.getAcronym() + " - " + this.getName();
+      }
+
+      if (this.getLocElement().getName() == null) {
+        this.getLocElement().setName("");
+      }
+      if (this.getAcronym() != null) {
+        if (this.getAcronym().length() != 0) {
+          try {
+            return this.getAcronym() + " - " + this.getName();// + " - " + this.getLocElement().getName();
+          } catch (Exception e) {
+            return this.getAcronym() + " - " + this.getName();
+          }
+
+        }
+      } else {
+        try {
+          return this.getName() + "-" + this.getLocElement().getName();
+        } catch (Exception e) {
+          return this.getName();
+        }
+      }
+      return this.getName();
+    } catch (Exception e) {
+      return this.getName();
+    }
+
+
   }
 
 
@@ -95,11 +152,9 @@ public class Institution implements java.io.Serializable {
     return id;
   }
 
-
   public Institution getInstitution() {
     return institution;
   }
-
 
   public InstitutionType getInstitutionType() {
     return institutionType;
@@ -141,6 +196,7 @@ public class Institution implements java.io.Serializable {
     this.institution = institution;
   }
 
+
   public void setInstitutionType(InstitutionType institutionType) {
     this.institutionType = institutionType;
   }
@@ -149,7 +205,6 @@ public class Institution implements java.io.Serializable {
     this.locElement = locElement;
   }
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -157,6 +212,5 @@ public class Institution implements java.io.Serializable {
   public void setWebsiteLink(String websiteLink) {
     this.websiteLink = websiteLink;
   }
-
 }
 
