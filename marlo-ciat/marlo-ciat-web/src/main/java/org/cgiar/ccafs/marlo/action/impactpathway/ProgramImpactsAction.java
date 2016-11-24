@@ -28,6 +28,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.ResearchRegion;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
@@ -74,6 +75,7 @@ public class ProgramImpactsAction extends BaseAction {
   private IAuditLogService auditLogService;
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
+  private List<ResearchRegion> regions;
 
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
