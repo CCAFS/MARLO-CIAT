@@ -6,6 +6,7 @@
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outputs" /]
+[#assign currentSubStage = "mainInformation" /]
 
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"impactPathway", "action":"programImpacts"},
@@ -17,6 +18,9 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#import "/WEB-INF/views/impactPathway/outputListTemplate.ftl" as outcomesList /]
+
+[#assign outputCustomName= "output" /]
+
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
@@ -45,11 +49,9 @@
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
         
         [@s.form action=actionName enctype="multipart/form-data" ]
-        
         <h3 class="headTitle"> Output description </h3>
         <div class="borderBox">
           <!--h5 class="sectionSubTitle"> Output description</h5-->
-          [#assign outputCustomName= "output" /]
           
           [#-- Output Name --]
           <div class="form-group">
@@ -73,11 +75,13 @@
             <p> <span class="glyphicon glyphicon-user"></span> ${contacPerson.user.composedCompleteName}</p>
             [/#list]
           [/#if] 
-          
         </div>
         
+        <h3 class="headTitle"> Next Users </h3>
+        <div class="borderBox">
+          Comming...
+        </div>
         
-          
         [#-- Section Buttons--]
         [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-output.ftl" /]
         

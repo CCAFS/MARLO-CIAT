@@ -35,6 +35,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,13 +50,15 @@ public class OutputPartnerAction extends BaseAction {
 
   private static final long serialVersionUID = 2383816234266649382L;
 
+  private static final String INTERNAL = "Internal";
+  private static final String EXTERNAL = "External";
+
   // Services - Managers
   private ICenterService centerService;
   private IAuditLogService auditLogService;
   private IProgramService programService;
   private IResearchOutputService outputService;
   private IInstitutionService institutionService;
-
   // Front Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
@@ -66,12 +69,13 @@ public class OutputPartnerAction extends BaseAction {
   private ResearchOutput output;
   private ResearchTopic selectedResearchTopic;
   private List<Institution> institutions;
+
   private List<ResearchOutputPartner> outputPartners;
+  private HashMap<Boolean, String> partnerModes;
 
   // Parameter Variables
   private long programID;
   private long areaID;
-
   private long outcomeID;
   private long outputID;
   private String transaction;
@@ -91,6 +95,10 @@ public class OutputPartnerAction extends BaseAction {
     return areaID;
   }
 
+  // return default gender value
+  public Boolean getDefaultPartnerModeValue() {
+    return false;
+  }
 
   public List<Institution> getInstitutions() {
     return institutions;
@@ -119,6 +127,11 @@ public class OutputPartnerAction extends BaseAction {
 
   public List<ResearchOutputPartner> getOutputPartners() {
     return outputPartners;
+  }
+
+
+  public HashMap<Boolean, String> getPartnerModes() {
+    return partnerModes;
   }
 
 
@@ -162,6 +175,10 @@ public class OutputPartnerAction extends BaseAction {
 
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
+
+    partnerModes = new HashMap<Boolean, String>();
+    partnerModes.put(true, INTERNAL);
+    partnerModes.put(false, EXTERNAL);
 
     try {
       outputID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTPUT_ID)));
@@ -242,6 +259,10 @@ public class OutputPartnerAction extends BaseAction {
 
   public void setOutputPartners(List<ResearchOutputPartner> outputPartners) {
     this.outputPartners = outputPartners;
+  }
+
+  public void setPartnerModes(HashMap<Boolean, String> partnerModes) {
+    this.partnerModes = partnerModes;
   }
 
   public void setProgramID(long programID) {

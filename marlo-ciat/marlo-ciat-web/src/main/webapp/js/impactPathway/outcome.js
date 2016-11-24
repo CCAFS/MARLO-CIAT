@@ -110,7 +110,7 @@ function updateAllIndexes() {
 
     $(milestone).find('span.index').text(i + 1);
 
-    $(milestone).setNameIndexes(1, i)
+    $(milestone).setNameIndexes(1, i);
 
   });
 

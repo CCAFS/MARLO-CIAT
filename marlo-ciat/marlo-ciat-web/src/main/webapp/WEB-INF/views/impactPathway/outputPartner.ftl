@@ -6,6 +6,7 @@
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outputs" /]
+[#assign currentSubStage = "partners" /]
 
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"impactPathway", "action":"programImpacts"},
@@ -17,6 +18,9 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#import "/WEB-INF/views/impactPathway/outputListTemplate.ftl" as outcomesList /]
+
+[#assign outputCustomName= "output" /]
+
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
@@ -54,8 +58,7 @@
               [#list output.partners as partner]
                 [@partnerMacro element=partner name="output.partners" index=partner_index /]
               [/#list]
-            [#else]
-              [@partnerMacro element={} name="output.partners" index=0 /]
+            [#else] 
               [#-- <p class="emptyMessage text-center">No partners added yet.</p> --]
             [/#if]
           </div>
@@ -63,7 +66,7 @@
           [#if editable]
           <div class="partnerSelect"> 
             <div class="pull-left"> <span class="glyphicon glyphicon-plus"></span>  &nbsp</div>
-            [@customForm.select name="" label="" disabled=!canEdit i18nkey="output.selectInstitution"  listName="" keyFieldName="id" displayFieldName="title" className="" value="" /]
+            [@customForm.select name="" label="" disabled=!canEdit i18nkey="output.selectInstitution"  listName="institutions" keyFieldName="id" displayFieldName="composedName" className="" value="" /]
           </div>
           [/#if] 
         </div>
@@ -89,6 +92,9 @@
 [#-- Partner Template --]
 [@partnerMacro element={} name="${outputCustomName}.partners" index="-1" isTemplate=true /]
 
+[#-- UserItem Template --]
+[@userItem element={} name="${outputCustomName}.partners[-1].users" index="-1" template=true /]
+
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
 [#macro partnerMacro element name index isTemplate=false]
@@ -104,7 +110,9 @@
     
     [#-- Partner Title --]
     <div class="form-group">
-       <h5 class="sectionSubTitle title">${(element.institution.composedName)!'Undefined'}</h5>
+      <div class="pull-right">[@s.radio label="outputPartner.mode" name="${customName}.internal" list="partnerModes" value="defaultPartnerModeValue" /]</div>
+      <h5 class="sectionSubTitle title">${(element.institution.composedName)!'Undefined'}</h5> 
+      <div class="clearfix"></div>
     </div>
     
     [#-- Contact persons --]
@@ -117,11 +125,11 @@
           [/#list]
         [/#if] 
         </ul>
-        <p class="emptyMessage text-center" style="display:${(element.users?has_content)?string('none','block')}">No assigned a partner contact yet.</p>
+        <p class="emptyMessage text-center usersMessage" style="display:${(element.users?has_content)?string('none','block')}">No assigned a partner contact yet.</p>
       </div>
       <div class="text-center">
         <div class="searchUser button-green">
-          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>[@s.text name="form.buttons.addPerson" /]
+          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addPerson" /]
         </div>
       </div>
     </div>
