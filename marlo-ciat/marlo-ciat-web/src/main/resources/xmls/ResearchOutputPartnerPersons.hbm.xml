@@ -15,7 +15,7 @@
             <column name="created_by" />
         </many-to-one>
         <many-to-one name="researchOutputPartner" class="org.cgiar.ccafs.marlo.data.model.ResearchOutputPartner" fetch="select">
-            <column name="outcome_partner_id" />
+            <column name="output_partner_id" />
         </many-to-one>
         <property name="active" type="java.lang.Byte">
             <column name="is_active" />

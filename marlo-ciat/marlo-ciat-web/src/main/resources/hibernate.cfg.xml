@@ -60,6 +60,10 @@
 		<mapping resource="xmls/LocGeopositions.hbm.xml" />
 		<mapping resource="xmls/ResearchOutputPartnerPersons.hbm.xml" />
 		<mapping resource="xmls/ResearchOutputPartners.hbm.xml" />
+		<mapping resource="xmls/Beneficiaries.hbm.xml" />
+		<mapping resource="xmls/BeneficiaryTypes.hbm.xml" />
+		<mapping resource="xmls/ResearchImpactBeneficiaries.hbm.xml" />
+		<mapping resource="xmls/ResearchRegions.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>
