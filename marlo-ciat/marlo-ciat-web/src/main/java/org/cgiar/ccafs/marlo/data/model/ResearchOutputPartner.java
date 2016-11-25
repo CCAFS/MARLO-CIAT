@@ -45,6 +45,9 @@ public class ResearchOutputPartner implements java.io.Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
+  @Expose
+  private User user;
+
 
   private Set<ResearchOutputPartnerPerson> researchOutputPartnerPersons = new HashSet<ResearchOutputPartnerPerson>(0);
 

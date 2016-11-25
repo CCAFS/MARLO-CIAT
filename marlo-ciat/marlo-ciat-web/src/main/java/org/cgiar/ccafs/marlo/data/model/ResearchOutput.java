@@ -52,7 +52,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private Date activeSince;
 
-
   @Expose
   private boolean active;
 
@@ -68,17 +67,20 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
+
   /**
    * The next user of the output such as (Policy Makers, etc)
    */
   private List<OutputNextUser> nextOutputUsers;
+
+
   /**
    * The next sub users such as Minister of Agriculture.
    */
   private List<OutputNextSubUser> nextOutputSubUsers;
 
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
-
+  private List<ResearchOutputPartner> partners;
 
   /**
    * 
@@ -101,7 +103,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
@@ -109,6 +110,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public User getCreatedBy() {
     return createdBy;
   }
+
 
   /**
    * @return the dateAdded
@@ -141,6 +143,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
+  public List<ResearchOutputPartner> getPartners() {
+    return partners;
+  }
+
   /**
    * @return the researchOutcome
    */
@@ -168,7 +174,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -198,6 +203,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
+  }
+
+
+  public void setPartners(List<ResearchOutputPartner> partners) {
+    this.partners = partners;
   }
 
 

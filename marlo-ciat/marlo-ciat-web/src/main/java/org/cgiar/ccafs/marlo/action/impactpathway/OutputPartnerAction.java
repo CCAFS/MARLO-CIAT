@@ -219,8 +219,8 @@ public class OutputPartnerAction extends BaseAction {
         institutions = new ArrayList<>(institutionService.findAll());
       }
 
-      outputPartners = new ArrayList<>(
-        output.getResearchOutputPartners().stream().filter(op -> op.isActive()).collect(Collectors.toList()));
+      output.setPartners(new ArrayList<>(
+        output.getResearchOutputPartners().stream().filter(op -> op.isActive()).collect(Collectors.toList())));
 
       String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
       this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
