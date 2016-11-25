@@ -20,10 +20,10 @@
         <many-to-one name="institution" class="org.cgiar.ccafs.marlo.data.model.Institution" fetch="select">
             <column name="institution_id" not-null="true" />
         </many-to-one>
-        <property name="internal" type="java.lang.Boolean">
+        <property name="internal" type="boolean">
             <column name="is_internal" />
         </property>
-        <property name="active" type="java.lang.Boolean">
+        <property name="active" type="boolean">
             <column name="is_active" />
         </property>
         <property name="activeSince" type="timestamp">
@@ -34,7 +34,7 @@
         </property>
         <set name="researchOutputPartnerPersons" table="research_output_partner_persons" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="outcome_partner_id" />
+                <column name="output_partner_id" />
             </key>
             <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchOutputPartnerPerson" />
         </set>

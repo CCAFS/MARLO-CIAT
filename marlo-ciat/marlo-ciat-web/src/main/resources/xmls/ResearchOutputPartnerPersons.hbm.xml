@@ -20,7 +20,7 @@
         <many-to-one name="user" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="user_id" />
         </many-to-one>
-        <property name="active" type="java.lang.Byte">
+        <property name="active" type="boolean">
             <column name="is_active" />
         </property>
         <property name="activeSince" type="timestamp">

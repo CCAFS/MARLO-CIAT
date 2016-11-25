@@ -108,9 +108,9 @@
     <input class="id" type="hidden" name="${customName}.id" value="${(element.id)!}" />
     <input class="partnerInstitutionId" type="hidden" name="${customName}.institution.id" value="${(element.institution.id)!}" />
     
-    [#-- Partner Title --]
+    [#-- Partner Title --]    
     <div class="form-group">
-      <div class="pull-right">[@s.radio label="outputPartner.mode" name="${customName}.internal" list="partnerModes" value="defaultPartnerModeValue" /]</div>
+      <div class="pull-right">[@s.radio label="outputPartner.mode" name="${customName}.internal" list="partnerModes" value="${(element.internal?c)!}" /]</div>
       <h5 class="sectionSubTitle title">${(element.institution.composedName)!'Undefined'}</h5> 
       <div class="clearfix"></div>
     </div>

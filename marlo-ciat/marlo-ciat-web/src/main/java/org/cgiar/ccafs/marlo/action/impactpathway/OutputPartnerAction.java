@@ -37,6 +37,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.validation.impactpathway.OutputPartnersValidator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -91,11 +92,14 @@ public class OutputPartnerAction extends BaseAction {
   private long outputID;
   private String transaction;
 
+  // Validator
+  private OutputPartnersValidator validator;
+
   @Inject
   public OutputPartnerAction(APConfig config, ICenterService centerService, IAuditLogService auditLogService,
     IProgramService programService, IResearchOutputService outputService, IInstitutionService institutionService,
     IResearchOutputPartnerService partnerService, IResearchOutputPartnerPersonService partnerPersonService,
-    IUserService userService) {
+    IUserService userService, OutputPartnersValidator validator) {
     super(config);
     this.centerService = centerService;
     this.auditLogService = auditLogService;
@@ -105,6 +109,7 @@ public class OutputPartnerAction extends BaseAction {
     this.partnerService = partnerService;
     this.partnerPersonService = partnerPersonService;
     this.userService = userService;
+    this.validator = validator;
   }
 
   public long getAreaID() {
@@ -262,9 +267,11 @@ public class OutputPartnerAction extends BaseAction {
 
       ResearchOutput outputDb = outputService.getResearchOutputById(outputID);
 
+
       this.savePartners(outputDb);
 
       List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.RESEARCH_OUTPUT_PARTNER_RELATION);
       output = outputService.getResearchOutputById(outputID);
       output.setActiveSince(new Date());
       output.setModifiedBy(this.getCurrentUser());
@@ -322,32 +329,14 @@ public class OutputPartnerAction extends BaseAction {
                     }
                   }
                 }
-
-                for (ResearchOutputPartnerPerson partnerPerson : researchOutputPartner.getUsers()) {
-                  if (partnerPerson.getId() == null) {
-
-                    ResearchOutputPartnerPerson partnerPersonNew = new ResearchOutputPartnerPerson();
-                    partnerPersonNew.setActive(true);
-                    partnerPersonNew.setActiveSince(new Date());
-                    partnerPersonNew.setCreatedBy(this.getCurrentUser());
-                    partnerPersonNew.setModifiedBy(this.getCurrentUser());
-                    // TODO partnerPersonNew.setModificationJustification("");
-
-                    partnerPersonNew.setResearchOutputPartner(outputPartner);
-
-                    User user = userService.getUser(partnerPerson.getUser().getId());
-                    partnerPersonNew.setUser(user);
-
-                    partnerPersonService.saveResearchOutputPartnerPerson(partnerPersonNew);
-
-                  }
-                }
               }
             }
           }
         }
       }
     }
+
+
     if (output.getPartners() != null) {
       for (ResearchOutputPartner researchOutputPartner : output.getPartners()) {
         if (researchOutputPartner.getId() == null) {
@@ -370,24 +359,55 @@ public class OutputPartnerAction extends BaseAction {
 
           partnerNew = partnerService.getResearchOutputPartnerById(partnerNewId);
 
-          for (ResearchOutputPartnerPerson partnerPerson : researchOutputPartner.getUsers()) {
+          if (researchOutputPartner.getUsers() != null) {
+            for (ResearchOutputPartnerPerson partnerPerson : researchOutputPartner.getUsers()) {
 
-            ResearchOutputPartnerPerson partnerPersonNew = new ResearchOutputPartnerPerson();
-            partnerPersonNew.setActive(true);
-            partnerPersonNew.setActiveSince(new Date());
-            partnerPersonNew.setCreatedBy(this.getCurrentUser());
-            partnerPersonNew.setModifiedBy(this.getCurrentUser());
-            // TODO partnerPersonNew.setModificationJustification("");
+              ResearchOutputPartnerPerson partnerPersonNew = new ResearchOutputPartnerPerson();
+              partnerPersonNew.setActive(true);
+              partnerPersonNew.setActiveSince(new Date());
+              partnerPersonNew.setCreatedBy(this.getCurrentUser());
+              partnerPersonNew.setModifiedBy(this.getCurrentUser());
+              // TODO partnerPersonNew.setModificationJustification("");
 
-            partnerPersonNew.setResearchOutputPartner(partnerNew);
+              partnerPersonNew.setResearchOutputPartner(partnerNew);
 
-            User user = userService.getUser(partnerPerson.getUser().getId());
-            partnerPersonNew.setUser(user);
+              User user = userService.getUser(partnerPerson.getUser().getId());
+              partnerPersonNew.setUser(user);
 
-            partnerPersonService.saveResearchOutputPartnerPerson(partnerPersonNew);
+              partnerPersonService.saveResearchOutputPartnerPerson(partnerPersonNew);
 
+            }
+          }
+        } else {
+
+          ResearchOutputPartner partnerNew = partnerService.getResearchOutputPartnerById(researchOutputPartner.getId());
+
+          if (partnerNew.isInternal() != researchOutputPartner.isInternal()) {
+            partnerNew.setInternal(researchOutputPartner.isInternal());
+            partnerService.saveResearchOutputPartner(partnerNew);
           }
 
+          if (researchOutputPartner.getUsers() != null) {
+            for (ResearchOutputPartnerPerson partnerPerson : researchOutputPartner.getUsers()) {
+              if (partnerPerson.getId() == null) {
+
+                ResearchOutputPartnerPerson partnerPersonNew = new ResearchOutputPartnerPerson();
+                partnerPersonNew.setActive(true);
+                partnerPersonNew.setActiveSince(new Date());
+                partnerPersonNew.setCreatedBy(this.getCurrentUser());
+                partnerPersonNew.setModifiedBy(this.getCurrentUser());
+                // TODO partnerPersonNew.setModificationJustification("");
+
+
+                partnerPersonNew.setResearchOutputPartner(partnerNew);
+
+                User user = userService.getUser(partnerPerson.getUser().getId());
+                partnerPersonNew.setUser(user);
+
+                partnerPersonService.saveResearchOutputPartnerPerson(partnerPersonNew);
+              }
+            }
+          }
 
         }
       }
@@ -458,6 +478,13 @@ public class OutputPartnerAction extends BaseAction {
 
   public void setTransaction(String transaction) {
     this.transaction = transaction;
+  }
+
+  @Override
+  public void validate() {
+    if (save) {
+      validator.validate(this, output, selectedProgram, true);
+    }
   }
 
 }
