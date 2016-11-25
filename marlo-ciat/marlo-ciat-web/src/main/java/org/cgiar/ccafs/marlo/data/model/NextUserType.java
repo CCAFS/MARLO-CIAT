@@ -26,7 +26,7 @@ import com.google.gson.annotations.Expose;
 /**
  * @author nmatovu
  */
-public class OutputNextUser implements IAuditLog {
+public class NextUserType implements IAuditLog {
 
   private static final long serialVersionUID = 8838679369696038853L;
   @Expose
@@ -38,7 +38,6 @@ public class OutputNextUser implements IAuditLog {
   private String name;
 
 
-  private Set<OutputNextSubUser> nextOutputSubUsers = new HashSet<OutputNextSubUser>(0);
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
   @Expose
@@ -99,8 +98,8 @@ public class OutputNextUser implements IAuditLog {
   }
 
 
-  public Set<OutputNextSubUser> getNextOutputSubUsers() {
-    return nextOutputSubUsers;
+  public Set<ResearchOutput> getResearchOutputs() {
+    return researchOutputs;
   }
 
 
@@ -114,7 +113,6 @@ public class OutputNextUser implements IAuditLog {
     this.active = active;
   }
 
-
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
@@ -122,6 +120,7 @@ public class OutputNextUser implements IAuditLog {
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
+
 
   public void setId(Long id) {
     this.id = id;
@@ -137,18 +136,10 @@ public class OutputNextUser implements IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
-
   public void setName(String name) {
     this.name = name;
   }
 
-  public void setNextOutputSubUsers(Set<OutputNextSubUser> nextOutputSubUsers) {
-    this.nextOutputSubUsers = nextOutputSubUsers;
-  }
-
-  public Set<ResearchOutput> getResearchOutputs() {
-    return researchOutputs;
-  }
 
   public void setResearchOutputs(Set<ResearchOutput> researchOutputs) {
     this.researchOutputs = researchOutputs;

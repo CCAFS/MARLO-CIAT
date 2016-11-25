@@ -2,8 +2,8 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.cgiar.ccafs.marlo.data.model.OutputNextUser"
-		table="output_nextusers" optimistic-lock="version">
+	<class name="org.cgiar.ccafs.marlo.data.model.NextUserType"
+		table="nextuser_types" optimistic-lock="version">
 		<id name="id" type="java.lang.Long">
 			<column name="id" />
 			<generator class="identity" />
@@ -29,20 +29,13 @@
 		  <property name="name" type="string">
       <column name="name" length="65535" not-null="true" />
     </property>
-    <set name="researchOutputs" table="research_output_nextusers" inverse="false" lazy="true" fetch="select" cascade="all">
+    <set name="researchOutputs" table="research_outputs_next_users" inverse="false" lazy="true" fetch="select" cascade="all">
             <key>
-                <column name="nextuser_id"/>
+                <column name="nextuser_type_id"/>
             </key>
             <many-to-many entity-name="org.cgiar.ccafs.marlo.data.model.ResearchOutput">
                 <column name="research_output_id" not-null="true" />
             </many-to-many>
         </set>
-	<set name="nextOutputSubUsers" table="output_nextsubuser"
-		inverse="true" lazy="true" fetch="select">
-		<key>
-			<column name="next_userid" />
-		</key>
-		<one-to-many class="org.cgiar.ccafs.marlo.data.model.OutputNextSubUser" />
-	</set>
 	</class>
 </hibernate-mapping>

@@ -17,7 +17,7 @@
 package org.cgiar.ccafs.marlo.data.dao;
 
 import org.cgiar.ccafs.marlo.data.dao.impl.NextUserTypeDAO;
-import org.cgiar.ccafs.marlo.data.model.OutputNextUser;
+import org.cgiar.ccafs.marlo.data.model.NextUserType;
 
 import java.util.List;
 
@@ -48,14 +48,14 @@ public interface INextUserTypeDAO {
    * @param nextUserTypeID is the nextUserType identifier.
    * @return a NextUserType object.
    */
-  public OutputNextUser find(long id);
+  public NextUserType find(long id);
 
   /**
    * This method gets a list of nextUserType that are active
    * 
    * @return a list from NextUserType null if no exist records
    */
-  public List<OutputNextUser> findAll();
+  public List<NextUserType> findAll();
 
 
   /**
@@ -64,7 +64,7 @@ public interface INextUserTypeDAO {
    * @param userId - the user id
    * @return List of NextUserTypes or null if the user is invalid or not have roles.
    */
-  public List<OutputNextUser> getNextUserTypesByUserId(long userId);
+  public List<NextUserType> getNextUserTypesByUserId(long userId);
 
   /**
    * This method saves the information of the given nextUserType
@@ -74,5 +74,5 @@ public interface INextUserTypeDAO {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long save(OutputNextUser nextUserType);
+  public long save(NextUserType nextUserType);
 }
