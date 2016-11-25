@@ -23,18 +23,25 @@ import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutputPartner;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutputPartnerPerson;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputPartnerPersonService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputPartnerService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
+import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +66,10 @@ public class OutputPartnerAction extends BaseAction {
   private IProgramService programService;
   private IResearchOutputService outputService;
   private IInstitutionService institutionService;
+  private IResearchOutputPartnerService partnerService;
+  private IResearchOutputPartnerPersonService partnerPersonService;
+  private IUserService userService;
+
   // Front Variables
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
@@ -82,13 +93,18 @@ public class OutputPartnerAction extends BaseAction {
 
   @Inject
   public OutputPartnerAction(APConfig config, ICenterService centerService, IAuditLogService auditLogService,
-    IProgramService programService, IResearchOutputService outputService, IInstitutionService institutionService) {
+    IProgramService programService, IResearchOutputService outputService, IInstitutionService institutionService,
+    IResearchOutputPartnerService partnerService, IResearchOutputPartnerPersonService partnerPersonService,
+    IUserService userService) {
     super(config);
     this.centerService = centerService;
     this.auditLogService = auditLogService;
     this.programService = programService;
     this.outputService = outputService;
     this.institutionService = institutionService;
+    this.partnerService = partnerService;
+    this.partnerPersonService = partnerPersonService;
+    this.userService = userService;
   }
 
   public long getAreaID() {
@@ -222,6 +238,13 @@ public class OutputPartnerAction extends BaseAction {
       output.setPartners(new ArrayList<>(
         output.getResearchOutputPartners().stream().filter(op -> op.isActive()).collect(Collectors.toList())));
 
+      if (output.getPartners() != null || !output.getPartners().isEmpty()) {
+        for (ResearchOutputPartner partner : output.getPartners()) {
+          partner.setUsers(new ArrayList<>(partner.getResearchOutputPartnerPersons().stream()
+            .filter(opp -> opp.isActive()).collect(Collectors.toList())));
+        }
+      }
+
       String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
       this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
 
@@ -231,6 +254,146 @@ public class OutputPartnerAction extends BaseAction {
         }
       }
     }
+  }
+
+  @Override
+  public String save() {
+    if (this.hasPermission("*")) {
+
+      ResearchOutput outputDb = outputService.getResearchOutputById(outputID);
+
+      this.savePartners(outputDb);
+
+      List<String> relationsName = new ArrayList<>();
+      output = outputService.getResearchOutputById(outputID);
+      output.setActiveSince(new Date());
+      output.setModifiedBy(this.getCurrentUser());
+      outputService.saveResearchOutput(output, this.getActionName(), relationsName);
+
+      Collection<String> messages = this.getActionMessages();
+
+      if (!this.getInvalidFields().isEmpty()) {
+        this.setActionMessages(null);
+
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+
+      } else {
+        this.addActionMessage("message:" + this.getText("saving.saved"));
+      }
+
+      messages = this.getActionMessages();
+
+
+      return SUCCESS;
+    } else {
+      return NOT_AUTHORIZED;
+    }
+  }
+
+  public void savePartners(ResearchOutput outputSave) {
+    if (outputSave.getResearchOutputPartners() != null && outputSave.getResearchOutputPartners().size() > 0) {
+
+      List<ResearchOutputPartner> partnersPrew =
+        outputSave.getResearchOutputPartners().stream().filter(rop -> rop.isActive()).collect(Collectors.toList());
+
+      for (ResearchOutputPartner outputPartner : partnersPrew) {
+        if (!output.getResearchOutputPartners().contains(outputPartner)) {
+          for (ResearchOutputPartnerPerson partnerPerson : outputPartner.getResearchOutputPartnerPersons().stream()
+            .filter(opp -> opp.isActive()).collect(Collectors.toList())) {
+            partnerPersonService.deleteResearchOutputPartnerPerson(partnerPerson.getId());
+          }
+          partnerService.deleteResearchOutputPartner(outputPartner.getId());
+        } else {
+          for (ResearchOutputPartner researchOutputPartner : output.getPartners()) {
+            if (researchOutputPartner.equals(outputPartner)) {
+              if (outputPartner.getResearchOutputPartnerPersons() != null
+                && outputPartner.getResearchOutputPartnerPersons().size() > 0) {
+
+                List<ResearchOutputPartnerPerson> personsPrew = outputPartner.getResearchOutputPartnerPersons().stream()
+                  .filter(pp -> pp.isActive()).collect(Collectors.toList());
+
+                for (ResearchOutputPartnerPerson researchOutputPartnerPerson : personsPrew) {
+                  if (researchOutputPartner.getUsers() != null) {
+                    if (!researchOutputPartner.getUsers().contains(researchOutputPartnerPerson)) {
+                      partnerPersonService.deleteResearchOutputPartnerPerson(researchOutputPartnerPerson.getId());
+                    }
+                  }
+                }
+
+                for (ResearchOutputPartnerPerson partnerPerson : researchOutputPartner.getUsers()) {
+                  if (partnerPerson.getId() == null) {
+
+                    ResearchOutputPartnerPerson partnerPersonNew = new ResearchOutputPartnerPerson();
+                    partnerPersonNew.setActive(true);
+                    partnerPersonNew.setActiveSince(new Date());
+                    partnerPersonNew.setCreatedBy(this.getCurrentUser());
+                    partnerPersonNew.setModifiedBy(this.getCurrentUser());
+                    // TODO partnerPersonNew.setModificationJustification("");
+
+                    partnerPersonNew.setResearchOutputPartner(outputPartner);
+
+                    User user = userService.getUser(partnerPerson.getUser().getId());
+                    partnerPersonNew.setUser(user);
+
+                    partnerPersonService.saveResearchOutputPartnerPerson(partnerPersonNew);
+
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    if (output.getPartners() != null) {
+      for (ResearchOutputPartner researchOutputPartner : output.getPartners()) {
+        if (researchOutputPartner.getId() == null) {
+
+          ResearchOutputPartner partnerNew = new ResearchOutputPartner();
+          partnerNew.setActive(true);
+          partnerNew.setActiveSince(new Date());
+          partnerNew.setCreatedBy(this.getCurrentUser());
+          partnerNew.setModifiedBy(this.getCurrentUser());
+          partnerNew.setModificationJustification("");
+
+          partnerNew.setInternal(researchOutputPartner.isInternal());
+          partnerNew.setResearchOutput(outputSave);
+
+          Institution institution =
+            institutionService.getInstitutionById(researchOutputPartner.getInstitution().getId());
+          partnerNew.setInstitution(institution);
+
+          long partnerNewId = partnerService.saveResearchOutputPartner(partnerNew);
+
+          partnerNew = partnerService.getResearchOutputPartnerById(partnerNewId);
+
+          for (ResearchOutputPartnerPerson partnerPerson : researchOutputPartner.getUsers()) {
+
+            ResearchOutputPartnerPerson partnerPersonNew = new ResearchOutputPartnerPerson();
+            partnerPersonNew.setActive(true);
+            partnerPersonNew.setActiveSince(new Date());
+            partnerPersonNew.setCreatedBy(this.getCurrentUser());
+            partnerPersonNew.setModifiedBy(this.getCurrentUser());
+            // TODO partnerPersonNew.setModificationJustification("");
+
+            partnerPersonNew.setResearchOutputPartner(partnerNew);
+
+            User user = userService.getUser(partnerPerson.getUser().getId());
+            partnerPersonNew.setUser(user);
+
+            partnerPersonService.saveResearchOutputPartnerPerson(partnerPersonNew);
+
+          }
+
+
+        }
+      }
+    }
+
+
   }
 
   public void setAreaID(long areaID) {

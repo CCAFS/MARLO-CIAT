@@ -15,10 +15,12 @@ import com.google.gson.annotations.Expose;
  */
 public class ResearchRegion implements java.io.Serializable, IAuditLog {
 
+
   private static final long serialVersionUID = 2934551082694871863L;
 
+
   @Expose
-  private Integer id;
+  private Long id;
 
   @Expose
   private User modifiedBy;
@@ -38,9 +40,7 @@ public class ResearchRegion implements java.io.Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
   private Set<ResearchImpactBeneficiary> researchImpactBeneficiaries = new HashSet<ResearchImpactBeneficiary>(0);
-
 
   public ResearchRegion() {
   }
@@ -74,7 +74,7 @@ public class ResearchRegion implements java.io.Serializable, IAuditLog {
 
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -86,10 +86,10 @@ public class ResearchRegion implements java.io.Serializable, IAuditLog {
     return sb.toString();
   }
 
-
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   @Override
   public User getModifiedBy() {
@@ -121,7 +121,7 @@ public class ResearchRegion implements java.io.Serializable, IAuditLog {
     this.createdBy = createdBy;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

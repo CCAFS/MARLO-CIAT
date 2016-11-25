@@ -4,7 +4,7 @@
 <!-- Generated Nov 24, 2016 11:37:14 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="org.cgiar.ccafs.marlo.data.model.BeneficiaryType" table="beneficiary_types" optimistic-lock="version">
-        <id name="id" type="java.lang.Integer">
+        <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
         </id>

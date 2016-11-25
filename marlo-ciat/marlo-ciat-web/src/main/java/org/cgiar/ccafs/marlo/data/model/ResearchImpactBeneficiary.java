@@ -13,10 +13,12 @@ import com.google.gson.annotations.Expose;
  */
 public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLog {
 
+
   private static final long serialVersionUID = -6926942149840809770L;
 
+
   @Expose
-  private Integer id;
+  private Long id;
 
   @Expose
   private User modifiedBy;
@@ -42,10 +44,8 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
   @Expose
   private String modificationJustification;
 
-
   public ResearchImpactBeneficiary() {
   }
-
 
   public ResearchImpactBeneficiary(Beneficiary beneficiary, ResearchRegion researchRegion, boolean active) {
     this.beneficiary = beneficiary;
@@ -84,7 +84,7 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
 
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -96,10 +96,10 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
     return sb.toString();
   }
 
-
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   @Override
   public User getModifiedBy() {
@@ -135,7 +135,7 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
     this.createdBy = createdBy;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

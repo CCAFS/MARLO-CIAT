@@ -13,10 +13,13 @@ import com.google.gson.annotations.Expose;
  */
 public class ResearchOutputPartnerPerson implements java.io.Serializable, IAuditLog {
 
+
   private static final long serialVersionUID = 7878374433525614391L;
 
+
   @Expose
-  private Integer id;
+  private Long id;
+
 
   @Expose
   private User modifiedBy;
@@ -24,19 +27,23 @@ public class ResearchOutputPartnerPerson implements java.io.Serializable, IAudit
   @Expose
   private User createdBy;
 
+
   @Expose
   private ResearchOutputPartner researchOutputPartner;
+
 
   @Expose
   private boolean active;
 
+
   @Expose
   private Date activeSince;
 
+  @Expose
+  private User user;
 
   public ResearchOutputPartnerPerson() {
   }
-
 
   public ResearchOutputPartnerPerson(User modifiedBy, User createdBy, ResearchOutputPartner researchOutputPartner,
     boolean active, Date activeSince) {
@@ -47,19 +54,38 @@ public class ResearchOutputPartnerPerson implements java.io.Serializable, IAudit
     this.activeSince = activeSince;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchOutputPartnerPerson other = (ResearchOutputPartnerPerson) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
 
   public Date getActiveSince() {
     return activeSince;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
 
-
   @Override
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -76,8 +102,23 @@ public class ResearchOutputPartnerPerson implements java.io.Serializable, IAudit
     return modifiedBy;
   }
 
+
   public ResearchOutputPartner getResearchOutputPartner() {
     return researchOutputPartner;
+  }
+
+
+  public User getUser() {
+    return user;
+  }
+
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override
@@ -97,7 +138,7 @@ public class ResearchOutputPartnerPerson implements java.io.Serializable, IAudit
     this.createdBy = createdBy;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -105,9 +146,13 @@ public class ResearchOutputPartnerPerson implements java.io.Serializable, IAudit
     this.modifiedBy = modifiedBy;
   }
 
-
   public void setResearchOutputPartner(ResearchOutputPartner researchOutputPartner) {
     this.researchOutputPartner = researchOutputPartner;
+  }
+
+
+  public void setUser(User user) {
+    this.user = user;
   }
 
 
