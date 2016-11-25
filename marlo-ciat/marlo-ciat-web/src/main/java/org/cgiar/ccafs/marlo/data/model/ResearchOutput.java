@@ -19,7 +19,6 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -71,11 +70,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
   /**
    * The next user of the output such as (Policy Makers, etc)
    */
-  private List<OutputNextUser> nextOutputUsers;
+  private Set<OutputNextUser> nextOutputUsers = new HashSet<OutputNextUser>(0);
   /**
    * The next sub users such as Minister of Agriculture.
    */
-  private List<OutputNextSubUser> nextOutputSubUsers;
+  private Set<OutputNextSubUser> nextOutputSubUsers = new HashSet<OutputNextSubUser>(0);
 
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
 
@@ -141,6 +140,14 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
+  public Set<OutputNextSubUser> getNextOutputSubUsers() {
+    return nextOutputSubUsers;
+  }
+
+  public Set<OutputNextUser> getNextOutputUsers() {
+    return nextOutputUsers;
+  }
+
   /**
    * @return the researchOutcome
    */
@@ -152,18 +159,22 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return researchOutputPartners;
   }
 
+
   public String getTitle() {
     return title;
   }
+
 
   @Override
   public boolean isActive() {
     return active;
   }
 
+
   public void setActive(boolean active) {
     this.active = active;
   }
+
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -181,7 +192,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public void setDateAdded(Date dateAdded) {
     this.dateAdded = dateAdded;
   }
-
 
   /**
    * @param id the id to set
@@ -201,6 +211,15 @@ public class ResearchOutput implements Serializable, IAuditLog {
   }
 
 
+  public void setNextOutputSubUsers(Set<OutputNextSubUser> nextOutputSubUsers) {
+    this.nextOutputSubUsers = nextOutputSubUsers;
+  }
+
+
+  public void setNextOutputUsers(Set<OutputNextUser> nextOutputUsers) {
+    this.nextOutputUsers = nextOutputUsers;
+  }
+
   /**
    * @param researchOutcome the researchOutcome to set
    */
@@ -208,9 +227,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.researchOutcome = researchOutcome;
   }
 
+
   public void setResearchOutputPartners(Set<ResearchOutputPartner> researchOutputPartners) {
     this.researchOutputPartners = researchOutputPartners;
   }
+
 
   public void setTitle(String title) {
     this.title = title;

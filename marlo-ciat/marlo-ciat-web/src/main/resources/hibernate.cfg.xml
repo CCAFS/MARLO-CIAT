@@ -64,6 +64,8 @@
 		<mapping resource="xmls/BeneficiaryTypes.hbm.xml" />
 		<mapping resource="xmls/ResearchImpactBeneficiaries.hbm.xml" />
 		<mapping resource="xmls/ResearchRegions.hbm.xml" />
+		<mapping resource="xmls/OutputNextUser.hbm.xml" />
+		<mapping resource="xmls/OutputNextSubUser.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>
