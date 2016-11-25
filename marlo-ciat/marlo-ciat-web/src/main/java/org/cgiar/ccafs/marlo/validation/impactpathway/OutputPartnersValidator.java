@@ -79,12 +79,19 @@ public class OutputPartnersValidator extends BaseValidator {
 
     if (partner.getUsers() != null) {
       if (partner.getUsers().size() == 0) {
-        this.addMessage(baseAction.getText("output.action.partner.user", params));
-        baseAction.getInvalidFields().put("list-output.partners[" + i + "]", InvalidFieldsMessages.EMPTYLIST);
+        this.addMissingField("users");
+        this.addMessage(baseAction.getText("output.action.partner.user"));
+        baseAction.getInvalidFields().put("list-output.partners[" + i + "].users",
+          baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"users"}));
+
       }
     } else {
-      this.addMessage(baseAction.getText("output.action.partner.user", params));
-      baseAction.getInvalidFields().put("list-output.partners[" + i + "]", InvalidFieldsMessages.EMPTYLIST);
+      this.addMissingField("users");
+      this.addMessage(baseAction.getText("output.action.partner.user"));
+      baseAction.getInvalidFields().put("list-output.partners[" + i + "].users",
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"users"}));
+
+
     }
   }
 

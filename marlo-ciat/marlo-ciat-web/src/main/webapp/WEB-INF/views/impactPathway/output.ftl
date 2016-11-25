@@ -36,6 +36,12 @@
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
+        [#-- Title --]
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outputs</h3>
+            <hr />
+          </div><div class="clearfix"></div>
+        
         [#-- Back --]
         <small class="pull-right">
           <a href="[@s.url action='${centerSession}/outputsList'][@s.param name="programID" value=programID /][@s.param name="outcomeID" value=outcomeID /][@s.param name="edit" value=true /][/@s.url]">

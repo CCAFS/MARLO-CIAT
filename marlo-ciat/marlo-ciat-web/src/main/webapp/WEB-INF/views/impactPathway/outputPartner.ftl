@@ -36,6 +36,12 @@
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
+        [#-- Title --]
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outputs</h3>
+            <hr />
+          </div><div class="clearfix"></div>
+        
         [#-- Back --]
         <small class="pull-right">
           <a href="[@s.url action='${centerSession}/outputsList'][@s.param name="programID" value=programID /][@s.param name="outcomeID" value=outcomeID /][@s.param name="edit" value=true /][/@s.url]">
@@ -117,7 +123,7 @@
     
     [#-- Contact persons --]
     <div class="users-block">
-      <div class="items-list simpleBox">
+      <div class="items-list simpleBox" listname="${customName}.users">
         <ul>
         [#if element.users?has_content]
           [#list element.users as item]
@@ -127,11 +133,13 @@
         </ul>
         <p class="emptyMessage text-center usersMessage" style="display:${(element.users?has_content)?string('none','block')}">No assigned a partner contact yet.</p>
       </div>
+      [#if !editable]
       <div class="text-center">
         <div class="searchUser button-green">
           <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addPerson" /]
         </div>
       </div>
+      [/#if]
     </div>
   </div>
 [/#macro]
