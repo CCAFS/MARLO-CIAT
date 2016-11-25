@@ -17,7 +17,7 @@
 package org.cgiar.ccafs.marlo.data.dao.impl;
 
 import org.cgiar.ccafs.marlo.data.dao.INextUserTypeDAO;
-import org.cgiar.ccafs.marlo.data.model.OutputNextUser;
+import org.cgiar.ccafs.marlo.data.model.NextUserType;
 
 import java.util.List;
 
@@ -34,13 +34,13 @@ public class NextUserTypeDAO implements INextUserTypeDAO {
 
   @Override
   public boolean deleteNextUserType(long nextUserTypeId) {
-    OutputNextUser nextUserType = this.find(nextUserTypeId);
+    NextUserType nextUserType = this.find(nextUserTypeId);
     return dao.delete(nextUserType);
   }
 
   @Override
   public boolean existNextUserType(long nextUserTypeID) {
-    OutputNextUser nextUserType = this.find(nextUserTypeID);
+    NextUserType nextUserType = this.find(nextUserTypeID);
     if (nextUserType == null) {
       return false;
     }
@@ -49,15 +49,15 @@ public class NextUserTypeDAO implements INextUserTypeDAO {
   }
 
   @Override
-  public OutputNextUser find(long id) {
-    return dao.find(OutputNextUser.class, id);
+  public NextUserType find(long id) {
+    return dao.find(NextUserType.class, id);
 
   }
 
   @Override
-  public List<OutputNextUser> findAll() {
-    String query = "from " + OutputNextUser.class.getName();
-    List<OutputNextUser> list = dao.findAll(query);
+  public List<NextUserType> findAll() {
+    String query = "from " + NextUserType.class.getName();
+    List<NextUserType> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;
     }
@@ -66,13 +66,13 @@ public class NextUserTypeDAO implements INextUserTypeDAO {
   }
 
   @Override
-  public List<OutputNextUser> getNextUserTypesByUserId(long userId) {
-    String query = "from " + OutputNextUser.class.getName() + " where user_id=" + userId;
+  public List<NextUserType> getNextUserTypesByUserId(long userId) {
+    String query = "from " + NextUserType.class.getName() + " where user_id=" + userId;
     return dao.findAll(query);
   }
 
   @Override
-  public long save(OutputNextUser nextUserType) {
+  public long save(NextUserType nextUserType) {
     if (nextUserType.getId() == null) {
       dao.save(nextUserType);
     } else {

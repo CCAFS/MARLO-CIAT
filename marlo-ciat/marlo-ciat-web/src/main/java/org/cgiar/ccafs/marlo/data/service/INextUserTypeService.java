@@ -14,7 +14,7 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.data.service;
 
-import org.cgiar.ccafs.marlo.data.model.OutputNextUser;
+import org.cgiar.ccafs.marlo.data.model.NextUserType;
 import org.cgiar.ccafs.marlo.data.service.impl.NextUserTypeService;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public interface INextUserTypeService {
    * 
    * @return a list from NextUserType null if no exist records
    */
-  public List<OutputNextUser> findAll();
+  public List<NextUserType> findAll();
 
 
   /**
@@ -60,7 +60,7 @@ public interface INextUserTypeService {
    * @param nextUserTypeID is the nextUserType identifier.
    * @return a NextUserType object.
    */
-  public OutputNextUser getNextUserTypeById(long nextUserTypeID);
+  public NextUserType getNextUserTypeById(long nextUserTypeID);
 
   /**
    * This method gets a list of nextUserTypes belongs of the user
@@ -68,7 +68,7 @@ public interface INextUserTypeService {
    * @param userId - the user id
    * @return List of NextUserTypes or null if the user is invalid or not have roles.
    */
-  public List<OutputNextUser> getNextUserTypesByUserId(Long userId);
+  public List<NextUserType> getNextUserTypesByUserId(Long userId);
 
   /**
    * This method saves the information of the given nextUserType
@@ -78,7 +78,7 @@ public interface INextUserTypeService {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long saveNextUserType(OutputNextUser nextUserType);
+  public long saveNextUserType(NextUserType nextUserType);
 
 
 }

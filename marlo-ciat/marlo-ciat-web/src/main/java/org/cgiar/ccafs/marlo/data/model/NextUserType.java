@@ -12,45 +12,37 @@
  * You should have received a copy of the GNU General Public License
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
+
 package org.cgiar.ccafs.marlo.data.model;
 
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
-
 /**
  * @author nmatovu
- * @author hjimenez
  */
-public class ResearchOutput implements Serializable, IAuditLog {
+public class NextUserType implements IAuditLog {
 
-
-  private static final long serialVersionUID = -185814169741386135L;
-
-
+  private static final long serialVersionUID = 8838679369696038853L;
   @Expose
   private Long id;
-
+  /**
+   * The name of the next user type e.g (Policy Makers, etc)
+   */
   @Expose
-  private String title;
+  private String name;
 
 
-  @Expose
-  private Date dateAdded;
-
-  @Expose
-  private ResearchOutcome researchOutcome;
-
+  private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
   @Expose
   private Date activeSince;
+
 
   @Expose
   private boolean active;
@@ -67,62 +59,20 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
-  /**
-   * The next user of the output such as (Policy Makers, etc)
-   */
-  private Set<NextUserType> nextUserTypes = new HashSet<NextUserType>(0);
-
-
-  private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
-
-  private List<ResearchOutputPartner> partners;
-
-
-  /**
-   * 
-   */
-  public ResearchOutput() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
-  /**
-   * @param output
-   * @param dateAdded
-   * @param researchOutcome
-   */
-  public ResearchOutput(String title, Date dateAdded, ResearchOutcome researchOutcome, Date activeSince) {
-    super();
-    this.title = title;
-    this.dateAdded = dateAdded;
-    this.researchOutcome = researchOutcome;
-    this.activeSince = activeSince;
-  }
-
   public Date getActiveSince() {
     return activeSince;
   }
-
 
   public User getCreatedBy() {
     return createdBy;
   }
 
-  /**
-   * @return the dateAdded
-   */
-  public Date getDateAdded() {
-    return dateAdded;
-  }
 
-  /**
-   * @return the id
-   */
   @Override
   public Long getId() {
     return id;
   }
+
 
   @Override
   public String getLogDeatil() {
@@ -130,6 +80,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
     sb.append("Id : ").append(this.getId());
     return sb.toString();
   }
+
 
   public String getModificationJustification() {
     return modificationJustification;
@@ -141,30 +92,14 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
-  public Set<NextUserType> getNextUserTypes() {
-    return nextUserTypes;
-  }
 
-  public List<ResearchOutputPartner> getPartners() {
-    return partners;
+  public String getName() {
+    return name;
   }
 
 
-  /**
-   * @return the researchOutcome
-   */
-  public ResearchOutcome getResearchOutcome() {
-    return researchOutcome;
-  }
-
-
-  public Set<ResearchOutputPartner> getResearchOutputPartners() {
-    return researchOutputPartners;
-  }
-
-
-  public String getTitle() {
-    return title;
+  public Set<ResearchOutput> getResearchOutputs() {
+    return researchOutputs;
   }
 
 
@@ -187,17 +122,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   }
 
 
-  /**
-   * @param dateAdded the dateAdded to set
-   */
-  public void setDateAdded(Date dateAdded) {
-    this.dateAdded = dateAdded;
-  }
-
-
-  /**
-   * @param id the id to set
-   */
   public void setId(Long id) {
     this.id = id;
   }
@@ -212,28 +136,14 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
-  public void setNextUserTypes(Set<NextUserType> nextUserTypes) {
-    this.nextUserTypes = nextUserTypes;
+  public void setName(String name) {
+    this.name = name;
   }
 
 
-  public void setPartners(List<ResearchOutputPartner> partners) {
-    this.partners = partners;
+  public void setResearchOutputs(Set<ResearchOutput> researchOutputs) {
+    this.researchOutputs = researchOutputs;
   }
 
-  /**
-   * @param researchOutcome the researchOutcome to set
-   */
-  public void setResearchOutcome(ResearchOutcome researchOutcome) {
-    this.researchOutcome = researchOutcome;
-  }
-
-  public void setResearchOutputPartners(Set<ResearchOutputPartner> researchOutputPartners) {
-    this.researchOutputPartners = researchOutputPartners;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
 
 }

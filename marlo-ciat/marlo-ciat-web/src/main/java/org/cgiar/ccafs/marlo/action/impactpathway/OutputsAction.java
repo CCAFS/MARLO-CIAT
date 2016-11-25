@@ -20,8 +20,7 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.OutputNextSubUser;
-import org.cgiar.ccafs.marlo.data.model.OutputNextUser;
+import org.cgiar.ccafs.marlo.data.model.NextUserType;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
@@ -31,8 +30,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IOutputNextSubUserService;
-import org.cgiar.ccafs.marlo.data.service.IOutputNextUserService;
+import org.cgiar.ccafs.marlo.data.service.INextUserTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -65,8 +63,7 @@ public class OutputsAction extends BaseAction {
   private IAuditLogService auditLogService;
   private IProgramService programService;
   private IResearchOutputService outputService;
-  private IOutputNextUserService outputNextUserService;
-  private IOutputNextSubUserService outputNextSubUserService;
+  private INextUserTypeService nextUserTypeService;
 
   // Front Variables
   private ResearchCenter loggedCenter;
@@ -78,8 +75,7 @@ public class OutputsAction extends BaseAction {
   private ResearchOutput output;
   private ResearchTopic selectedResearchTopic;
   private List<ResearchLeader> contacPersons;
-  private List<OutputNextUser> outputNextUsers;
-  private List<OutputNextSubUser> outputNextSubUsers;
+  private List<NextUserType> nextUserTypes;
 
   // Parameter Variables
   private long programID;
@@ -87,7 +83,7 @@ public class OutputsAction extends BaseAction {
   private long outcomeID;
   private long outputID;
   private String transaction;
-  private long nextUserID;
+  private long nextUserTypeID;
 
 
   // Validator
@@ -100,15 +96,14 @@ public class OutputsAction extends BaseAction {
   @Inject
   public OutputsAction(APConfig config, ICenterService centerService, IAuditLogService auditLogService,
     IProgramService programService, IResearchOutputService outputService, OutputsValidator validator,
-    IOutputNextUserService outputNextUserService, IOutputNextSubUserService outputNextSubUserService) {
+    INextUserTypeService nextUserTypeService) {
     super(config);
     this.centerService = centerService;
     this.auditLogService = auditLogService;
     this.programService = programService;
     this.outputService = outputService;
     this.validator = validator;
-    this.outputNextUserService = outputNextUserService;
-    this.outputNextSubUserService = outputNextSubUserService;
+    this.nextUserTypeService = nextUserTypeService;
   }
 
 
@@ -130,6 +125,10 @@ public class OutputsAction extends BaseAction {
     return loggedCenter;
   }
 
+  public long getNextUserID() {
+    return nextUserTypeID;
+  }
+
   public long getOutcomeID() {
     return outcomeID;
   }
@@ -142,13 +141,9 @@ public class OutputsAction extends BaseAction {
     return outputID;
   }
 
-  public List<OutputNextSubUser> getOutputNextSubUsers() {
-    return outputNextSubUsers;
-  }
 
-
-  public List<OutputNextUser> getOutputNextUsers() {
-    return outputNextUsers;
+  public List<NextUserType> getOutputNextUsers() {
+    return nextUserTypes;
   }
 
   public long getProgramID() {
@@ -159,6 +154,7 @@ public class OutputsAction extends BaseAction {
     return researchAreas;
   }
 
+
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
@@ -168,7 +164,6 @@ public class OutputsAction extends BaseAction {
     return selectedProgram;
   }
 
-
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
@@ -176,6 +171,7 @@ public class OutputsAction extends BaseAction {
   public ResearchOutcome getSelectedResearchOutcome() {
     return selectedResearchOutcome;
   }
+
 
   public ResearchTopic getSelectedResearchTopic() {
     return selectedResearchTopic;
@@ -185,7 +181,6 @@ public class OutputsAction extends BaseAction {
   public String getTransaction() {
     return transaction;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -246,11 +241,10 @@ public class OutputsAction extends BaseAction {
     }
     // TODO Update the service method
     // Get list of next user types from the database
-    outputNextUsers = outputNextUserService.findAll();
-    // TODO Update the method
-    outputNextSubUsers = outputNextSubUserService.findAll();
+    nextUserTypes = nextUserTypeService.findAll();
 
   }
+
 
   @Override
   public String save() {
@@ -292,10 +286,10 @@ public class OutputsAction extends BaseAction {
 
   }
 
-
   public void setAreaID(long areaID) {
     this.areaID = areaID;
   }
+
 
   public void setContacPersons(List<ResearchLeader> contacPersons) {
     this.contacPersons = contacPersons;
@@ -304,6 +298,10 @@ public class OutputsAction extends BaseAction {
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
+  }
+
+  public void setNextUserID(long nextUserID) {
+    this.nextUserTypeID = nextUserID;
   }
 
 
@@ -315,26 +313,24 @@ public class OutputsAction extends BaseAction {
     this.output = output;
   }
 
-
   public void setOutputID(long outputID) {
     this.outputID = outputID;
   }
 
-  public void setOutputNextSubUsers(List<OutputNextSubUser> outputNextSubUsers) {
-    this.outputNextSubUsers = outputNextSubUsers;
-  }
 
-  public void setOutputNextUsers(List<OutputNextUser> outputNextUsers) {
-    this.outputNextUsers = outputNextUsers;
+  public void setOutputNextUsers(List<NextUserType> outputNextUsers) {
+    this.nextUserTypes = outputNextUsers;
   }
 
   public void setProgramID(long programID) {
     this.programID = programID;
   }
 
+
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
+
 
   public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
@@ -371,15 +367,5 @@ public class OutputsAction extends BaseAction {
     if (save) {
       validator.validate(this, output, selectedProgram, true);
     }
-  }
-
-
-  public long getNextUserID() {
-    return nextUserID;
-  }
-
-
-  public void setNextUserID(long nextUserID) {
-    this.nextUserID = nextUserID;
   }
 }

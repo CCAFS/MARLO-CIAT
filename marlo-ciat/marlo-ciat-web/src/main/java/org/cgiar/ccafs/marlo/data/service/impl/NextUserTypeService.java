@@ -16,7 +16,7 @@ package org.cgiar.ccafs.marlo.data.service.impl;
 
 
 import org.cgiar.ccafs.marlo.data.dao.INextUserTypeDAO;
-import org.cgiar.ccafs.marlo.data.model.OutputNextUser;
+import org.cgiar.ccafs.marlo.data.model.NextUserType;
 import org.cgiar.ccafs.marlo.data.service.INextUserTypeService;
 
 import java.util.List;
@@ -54,25 +54,25 @@ public class NextUserTypeService implements INextUserTypeService {
   }
 
   @Override
-  public List<OutputNextUser> findAll() {
+  public List<NextUserType> findAll() {
 
     return nextUserTypeDAO.findAll();
 
   }
 
   @Override
-  public OutputNextUser getNextUserTypeById(long nextUserTypeID) {
+  public NextUserType getNextUserTypeById(long nextUserTypeID) {
 
     return nextUserTypeDAO.find(nextUserTypeID);
   }
 
   @Override
-  public List<OutputNextUser> getNextUserTypesByUserId(Long userId) {
+  public List<NextUserType> getNextUserTypesByUserId(Long userId) {
     return nextUserTypeDAO.getNextUserTypesByUserId(userId);
   }
 
   @Override
-  public long saveNextUserType(OutputNextUser nextUserType) {
+  public long saveNextUserType(NextUserType nextUserType) {
 
     return nextUserTypeDAO.save(nextUserType);
   }
