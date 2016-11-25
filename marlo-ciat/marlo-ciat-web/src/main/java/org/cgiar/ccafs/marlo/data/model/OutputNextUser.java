@@ -15,44 +15,142 @@
 
 package org.cgiar.ccafs.marlo.data.model;
 
-import java.io.Serializable;
-import java.util.List;
+import org.cgiar.ccafs.marlo.data.IAuditLog;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-public class OutputNextUser implements Serializable {
+import com.google.gson.annotations.Expose;
+
+/**
+ * @author nmatovu
+ */
+public class OutputNextUser implements IAuditLog {
 
   private static final long serialVersionUID = 8838679369696038853L;
+  @Expose
   private Long id;
   /**
    * The name of the next user type e.g (Policy Makers, etc)
    */
+  @Expose
   private String name;
 
 
-  private List<ResearchOutput> researchOutputs;
+  private Set<OutputNextSubUser> nextOutputSubUsers = new HashSet<OutputNextSubUser>(0);
+  private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
+  @Expose
+  private Date activeSince;
+
+
+  @Expose
+  private boolean active;
+
+
+  @Expose
+  private User createdBy;
+
+
+  @Expose
+  private User modifiedBy;
+
+
+  @Expose
+  private String modificationJustification;
+
+  public Date getActiveSince() {
+    return activeSince;
+  }
+
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
+
+  @Override
   public Long getId() {
     return id;
   }
+
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
+  }
+
+
+  public String getModificationJustification() {
+    return modificationJustification;
+  }
+
+
+  @Override
+  public User getModifiedBy() {
+    return modifiedBy;
+  }
+
 
   public String getName() {
     return name;
   }
 
 
+  public Set<OutputNextSubUser> getNextOutputSubUsers() {
+    return nextOutputSubUsers;
+  }
+
+
+  @Override
+  public boolean isActive() {
+    return active;
+  }
+
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
+  }
+
+  public void setCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
+
+
+  public void setModificationJustification(String modificationJustification) {
+    this.modificationJustification = modificationJustification;
+  }
+
+
+  public void setModifiedBy(User modifiedBy) {
+    this.modifiedBy = modifiedBy;
+  }
+
 
   public void setName(String name) {
     this.name = name;
   }
 
-  public List<ResearchOutput> getResearchOutputs() {
+  public void setNextOutputSubUsers(Set<OutputNextSubUser> nextOutputSubUsers) {
+    this.nextOutputSubUsers = nextOutputSubUsers;
+  }
+
+  public Set<ResearchOutput> getResearchOutputs() {
     return researchOutputs;
   }
 
-  public void setResearchOutputs(List<ResearchOutput> researchOutputs) {
+  public void setResearchOutputs(Set<ResearchOutput> researchOutputs) {
     this.researchOutputs = researchOutputs;
   }
 
