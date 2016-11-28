@@ -2019,8 +2019,8 @@ h3.contentSubTitle {
 
 .sectionSubTitle {
   font-family: 'Open Sans', sans-serif;
-  border-bottom: 1px solid #95a5ce;
-  color: #95a5ce;
+  border-bottom: 1px solid #207f4f;
+  color: #137845;
   padding-bottom: 3px;
 }
 
@@ -6096,6 +6096,7 @@ input.fieldChecked {
 
 .relVal{
   position: relative;
+  margin-bottom:25px;
 }
 
 .missingSelect{

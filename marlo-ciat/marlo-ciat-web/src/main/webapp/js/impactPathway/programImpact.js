@@ -14,6 +14,27 @@ function attachEvents() {
   $('.addImpact').on('click', addImpact);
   // Remove a program impact
   $('.removeProgramImpact').on('click', removeProgramImpact);
+
+// Add a beneficiary
+  $('.addBeneficiary').on('click', addBeneficiary);
+// Remove a beneficiary
+  $('.removeBeneficiary').on('click', removeBeneficiary);
+
+  // When change of beneficiary type
+  $(".typeSelect").on("change", function() {
+    var url = baseURL + "/beneficiaryByType.do";
+    var data = {
+      "beneficiaryTypeID": "1"
+    }
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: "json",
+        data: data
+    }).done(function(m) {
+      console.log(m);
+    });
+  });
 }
 
 /**
@@ -47,9 +68,47 @@ function updateAllIndexes() {
   $('.elements-list').find('.programImpact').each(function(i,outcome) {
     $(outcome).find('span.index').html(i + 1);
     $(outcome).setNameIndexes(1, i);
+
+    // Update beneficiaries
+    $(outcome).find(".beneficiary").each(function(index,beneficiary) {
+      $(beneficiary).setNameIndexes(2, index);
+    });
   });
 
   // Update component event
   $(document).trigger('updateComponent');
 
+}
+
+/**
+ * beneficiary function
+ */
+function addBeneficiary() {
+
+  var $list = $(this).parents(".programImpact").find('.beneficiaries-list');
+  console.log($list);
+  var $item = $('#beneficiary-template').clone(true).removeAttr("id");
+  $list.append($item);
+  $item.show('slow');
+  checkItems($list);
+  updateAllIndexes();
+}
+
+function removeBeneficiary() {
+  var $list = $(this).parents('.beneficiaries-list');
+  var $item = $(this).parents('.beneficiary');
+  $item.hide(function() {
+    $item.remove();
+    checkItems($list);
+    updateAllIndexes();
+  });
+}
+
+function checkItems(block) {
+  var items = $(block).find('.beneficiary ').length;
+  if(items == 0) {
+    $(block).parent().find('p.message').fadeIn();
+  } else {
+    $(block).parent().find('p.message').fadeOut();
+  }
 }

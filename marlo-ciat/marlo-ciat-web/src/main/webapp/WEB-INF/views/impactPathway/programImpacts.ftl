@@ -57,6 +57,8 @@
 [#-- Templates --]
 [@programImpactMacro element={} name="researchImpacts" index=-1 template=true /]
 
+[@beneficiaryMacro beneficiary={} name="researchImpacts[-1].beneficiaries" index=-1 template=true/]
+
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
 [#macro programImpactMacro element name index template=false]
@@ -116,10 +118,49 @@
     </div>
     
     [#-- Beneficiaries--]
-    <div class="form-group">
-      
+    <h5 class="sectionSubTitle">[@s.text name="Intended beneficiaries: "/]</h5>
+    <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> please list (as much as you know now) who will benefit from your Program by Target year.</div>
+    <div class="form-group simpleBox beneficiaries-list">
+      [#if beneficiaries?has_content]
+        [#list beneficiaries as beneficiary]
+          [@beneficiaryMacro beneficiary=beneficiary name="${customName}.beneficiaries" index=beneficiary_index /]
+        [/#list]
+      [#else]
+        <p class="message text-center">[@s.text name="There are not beneficiaries added yet.."/]</p>
+      [/#if]
+    </div>
+    <div class="text-right">
+      <div class="addBeneficiary button-blue text-right"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="Add beneficiary"/]</div>
     </div>
     
     
+  </div>
+[/#macro]
+
+[#macro beneficiaryMacro beneficiary name index template=false]
+  [#assign beneficiaryCustomName = "${name}[${index}]" /]
+  <div id="beneficiary-${template?string('template', index)}" class="beneficiary borderBox form-group" style="position:relative; display:${template?string('none','block')}">
+    [#-- Remove Button --]
+    [#if editable]
+    <div class="removeBeneficiary removeIcon" title="Remove assumption"></div>
+    [/#if]
+    <input type="hidden" class="beneficiaryId" name="${beneficiaryCustomName}.id" value="${(beneficiary.id)!}"/>
+  
+  [#-- Type select --]
+  <div class="col-md-4">
+  [@customForm.select name="${beneficiaryCustomName}.type" label=""  i18nkey="Type" listName="beneficiaryTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
+  </div>   
+
+  [#-- Focus select --]
+  <div class="col-md-4">
+  [@customForm.select name="${beneficiaryCustomName}.focus" label=""  i18nkey="Focus" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="focusSelect form-control input-sm " editable=editable/]
+  </div>
+  
+  [#-- Region select --]
+  <div class="col-md-4">
+  [@customForm.select name="${beneficiaryCustomName}.region" label=""  i18nkey="Region" listName="regions" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="regionSelect form-control input-sm" editable=editable/]
+  </div>
+  
+  <div class="clearfix"></div>
   </div>
 [/#macro]
