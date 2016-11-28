@@ -20,10 +20,12 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Beneficiary;
 import org.cgiar.ccafs.marlo.data.model.BeneficiaryType;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
+import org.cgiar.ccafs.marlo.data.model.ResearchImpactBeneficiary;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
@@ -32,10 +34,12 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchRegion;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.IBeneficiaryService;
 import org.cgiar.ccafs.marlo.data.service.IBeneficiaryTypeService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.IResearchImpactBeneficiaryService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactObjectiveService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
@@ -72,14 +76,15 @@ public class ProgramImpactsAction extends BaseAction {
   private IProgramService programService;
   private IResearchRegionService regionService;
   private IBeneficiaryTypeService beneficiaryTypeService;
-
-
+  private IResearchImpactBeneficiaryService impactBeneficiaryService;
   private IResearchAreaService researchAreaService;
   private IUserService userService;
   private IResearchObjectiveService objectiveService;
   private IResearchImpactService impactService;
   private IResearchImpactObjectiveService impactObjectiveService;
   private IAuditLogService auditLogService;
+  private IBeneficiaryService beneficiaryService;
+
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private List<ResearchRegion> regions;
@@ -100,7 +105,8 @@ public class ProgramImpactsAction extends BaseAction {
     IResearchObjectiveService objectiveService, IResearchImpactService impactService,
     IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator,
     IAuditLogService auditLogService, IResearchRegionService regionService,
-    IBeneficiaryTypeService beneficiaryTypeService) {
+    IBeneficiaryTypeService beneficiaryTypeService, IResearchImpactBeneficiaryService impactBeneficiaryService,
+    IBeneficiaryService beneficiaryService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -113,6 +119,8 @@ public class ProgramImpactsAction extends BaseAction {
     this.auditLogService = auditLogService;
     this.regionService = regionService;
     this.beneficiaryTypeService = beneficiaryTypeService;
+    this.impactBeneficiaryService = impactBeneficiaryService;
+    this.beneficiaryService = beneficiaryService;
   }
 
   /**
@@ -413,6 +421,9 @@ public class ProgramImpactsAction extends BaseAction {
               impactObjectiveService.saveResearchImpactObjective(impactObjectiveNew);
             }
           }
+
+          this.saveBeneficiary(researchImpact, researchImpactNew);
+
         } else {
           boolean hasChanges = false;
           ResearchImpact researchImpactRew = impactService.getResearchImpactById(researchImpact.getId());
@@ -478,7 +489,11 @@ public class ProgramImpactsAction extends BaseAction {
             }
           }
 
+          this.saveBeneficiary(researchImpact, researchImpactRew);
+
         }
+
+
       }
 
       List<String> relationsName = new ArrayList<>();
@@ -505,6 +520,77 @@ public class ProgramImpactsAction extends BaseAction {
     } else {
       this.setActionMessages(null);
       return NOT_AUTHORIZED;
+    }
+
+  }
+
+
+  public void saveBeneficiary(ResearchImpact researchImpact, ResearchImpact researchImpactSave) {
+
+    if (researchImpactSave.getResearchImpactBeneficiaries() != null
+      && researchImpactSave.getResearchImpactBeneficiaries().size() > 0) {
+
+      List<ResearchImpactBeneficiary> beneficiariesPrew = researchImpactSave.getResearchImpactBeneficiaries().stream()
+        .filter(rb -> rb.isActive()).collect(Collectors.toList());
+
+      for (ResearchImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
+        if (!researchImpact.getBeneficiaries().contains(impactBeneficiary)) {
+          impactBeneficiaryService.deleteResearchImpactBeneficiary(impactBeneficiary.getId());
+        }
+      }
+    }
+
+    if (researchImpact.getBeneficiaries() != null) {
+      for (ResearchImpactBeneficiary impactBeneficiary : researchImpact.getBeneficiaries()) {
+        if (impactBeneficiary.getId() == null) {
+          ResearchImpactBeneficiary impactBeneficiaryNew = new ResearchImpactBeneficiary();
+          impactBeneficiaryNew.setActive(true);
+          impactBeneficiaryNew.setActiveSince(new Date());
+          impactBeneficiaryNew.setCreatedBy(this.getCurrentUser());
+          impactBeneficiaryNew.setModifiedBy(this.getCurrentUser());
+          impactBeneficiaryNew.setModificationJustification("");
+
+          impactBeneficiaryNew.setResearchImpact(researchImpactSave);
+
+          ResearchRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
+
+          impactBeneficiaryNew.setResearchRegion(region);
+
+          Beneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
+
+          impactBeneficiary.setBeneficiary(beneficiary);
+
+          impactBeneficiaryService.saveResearchImpactBeneficiary(impactBeneficiaryNew);
+
+        } else {
+
+          boolean hasChanges = false;
+
+          ResearchImpactBeneficiary impactBeneficiaryPrew =
+            impactBeneficiaryService.getResearchImpactBeneficiaryById(impactBeneficiary.getId());
+
+          ResearchRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
+          Beneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
+
+          if (!impactBeneficiaryPrew.getResearchRegion().equals(region)) {
+            impactBeneficiaryPrew.setResearchRegion(region);
+            hasChanges = true;
+          }
+
+          if (!impactBeneficiaryPrew.getBeneficiary().equals(beneficiary)) {
+            impactBeneficiaryPrew.setBeneficiary(beneficiary);
+            hasChanges = true;
+          }
+
+          if (hasChanges) {
+            impactBeneficiaryPrew.setModifiedBy(this.getCurrentUser());
+            impactBeneficiaryPrew.setActiveSince(new Date());
+            impactBeneficiaryService.saveResearchImpactBeneficiary(impactBeneficiaryPrew);
+          }
+
+
+        }
+      }
     }
 
   }

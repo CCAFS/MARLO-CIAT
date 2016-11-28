@@ -16,12 +16,12 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
 
   private static final long serialVersionUID = -6926942149840809770L;
 
-
   @Expose
   private Long id;
 
   @Expose
   private User modifiedBy;
+
 
   @Expose
   private User createdBy;
@@ -53,7 +53,6 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
     this.active = active;
   }
 
-
   public ResearchImpactBeneficiary(User modifiedBy, User createdBy, ResearchImpact researchImpact,
     Beneficiary beneficiary, ResearchRegion researchRegion, boolean active, Date activeSince,
     String modificationJustification) {
@@ -65,6 +64,28 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
     this.active = active;
     this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchImpactBeneficiary other = (ResearchImpactBeneficiary) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -96,15 +117,16 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
-
 
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
+
 
   public ResearchImpact getResearchImpact() {
     return researchImpact;
@@ -112,6 +134,14 @@ public class ResearchImpactBeneficiary implements java.io.Serializable, IAuditLo
 
   public ResearchRegion getResearchRegion() {
     return researchRegion;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override
