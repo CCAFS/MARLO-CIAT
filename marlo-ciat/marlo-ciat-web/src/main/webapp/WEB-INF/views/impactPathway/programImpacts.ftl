@@ -121,8 +121,8 @@
     <h5 class="sectionSubTitle">[@s.text name="Intended beneficiaries: "/]</h5>
     <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> please list (as much as you know now) who will benefit from your Program by Target year.</div>
     <div class="form-group simpleBox beneficiaries-list">
-      [#if beneficiaries?has_content]
-        [#list beneficiaries as beneficiary]
+      [#if element.beneficiaries?has_content]
+        [#list element.beneficiaries as beneficiary]
           [@beneficiaryMacro beneficiary=beneficiary name="${customName}.beneficiaries" index=beneficiary_index /]
         [/#list]
       [#else]
@@ -148,17 +148,17 @@
   
   [#-- Type select --]
   <div class="col-md-4">
-  [@customForm.select name="${beneficiaryCustomName}.type" label=""  i18nkey="Type" listName="beneficiaryTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${beneficiaryCustomName}.beneficiary.beneficiaryType.id" label=""  i18nkey="Type" listName="beneficiaryTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
   </div>   
 
   [#-- Focus select --]
   <div class="col-md-4">
-  [@customForm.select name="${beneficiaryCustomName}.focus" label=""  i18nkey="Focus" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="focusSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${beneficiaryCustomName}.beneficiary.id" label=""  i18nkey="Focus" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="focusSelect form-control input-sm " editable=editable/]
   </div>
   
   [#-- Region select --]
   <div class="col-md-4">
-  [@customForm.select name="${beneficiaryCustomName}.region" label=""  i18nkey="Region" listName="regions" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="regionSelect form-control input-sm" editable=editable/]
+  [@customForm.select name="${beneficiaryCustomName}.researchRegion.id" label=""  i18nkey="Region" listName="regions" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="regionSelect form-control input-sm" editable=editable/]
   </div>
   
   <div class="clearfix"></div>

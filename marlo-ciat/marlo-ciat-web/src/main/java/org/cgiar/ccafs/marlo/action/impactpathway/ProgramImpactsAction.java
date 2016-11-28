@@ -558,7 +558,7 @@ public class ProgramImpactsAction extends BaseAction {
 
           Beneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
 
-          impactBeneficiary.setBeneficiary(beneficiary);
+          impactBeneficiaryNew.setBeneficiary(beneficiary);
 
           impactBeneficiaryService.saveResearchImpactBeneficiary(impactBeneficiaryNew);
 
