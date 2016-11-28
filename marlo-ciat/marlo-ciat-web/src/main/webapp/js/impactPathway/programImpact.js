@@ -22,17 +22,29 @@ function attachEvents() {
 
   // When change of beneficiary type
   $(".typeSelect").on("change", function() {
+    var option = $(this).find("option:selected");
+    var $select = $(this).parents(".beneficiary").find(".focusSelect ");
     var url = baseURL + "/beneficiaryByType.do";
     var data = {
-      "beneficiaryTypeID": "1"
+      "beneficiaryTypeID": option.val()
     }
+    // remove options
+    $select.find("option").each(function(i,e) {
+      $(e).remove();
+    });
     $.ajax({
         url: url,
         type: 'GET',
         dataType: "json",
         data: data
     }).done(function(m) {
-      console.log(m);
+      $select.addOption("-1", "Select an option");
+      for(var i = 0; i < m.beneficiaries.length; i++) {
+        // Add beneficiary option
+        $select.addOption(m.beneficiaries[i].id, m.beneficiaries[i].name);
+        $select.trigger("change.select2");
+      }
+
     });
   });
 }
