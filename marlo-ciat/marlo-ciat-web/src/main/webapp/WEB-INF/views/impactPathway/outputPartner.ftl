@@ -133,7 +133,7 @@
         </ul>
         <p class="emptyMessage text-center usersMessage" style="display:${(element.users?has_content)?string('none','block')}">No assigned a partner contact yet.</p>
       </div>
-      [#if !editable]
+      [#if editable]
       <div class="text-center">
         <div class="searchUser button-green">
           <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addPerson" /]
