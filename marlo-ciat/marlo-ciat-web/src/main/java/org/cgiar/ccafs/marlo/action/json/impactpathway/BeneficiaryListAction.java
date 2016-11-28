@@ -50,6 +50,7 @@ public class BeneficiaryListAction extends BaseAction {
   @Inject
   public BeneficiaryListAction(APConfig config, IBeneficiaryTypeService beneficiaryTypeService) {
     super(config);
+    this.beneficiaryTypeService = beneficiaryTypeService;
   }
 
   @Override
