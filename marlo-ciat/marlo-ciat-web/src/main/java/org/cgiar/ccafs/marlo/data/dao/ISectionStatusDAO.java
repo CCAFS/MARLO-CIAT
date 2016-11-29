@@ -64,7 +64,7 @@ public interface ISectionStatusDAO {
    * @param sectionName
    * @return a SectionStatus Object
    */
-  public SectionStatus getSectionStatusByProgram(long programId, String sectionName);
+  public List<SectionStatus> getSectionStatusByProgram(long programId, String sectionName);
 
   /**
    * This method gets a list of sectionStatuss belongs of the user

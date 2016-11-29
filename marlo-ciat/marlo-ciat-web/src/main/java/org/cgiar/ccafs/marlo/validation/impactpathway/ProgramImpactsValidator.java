@@ -53,6 +53,7 @@ public class ProgramImpactsValidator extends BaseValidator {
 
     if (researchImpacts.size() == 0) {
       this.addMissingField("researchImpacts");
+      this.addMessage(baseAction.getText("programImpact.action.required"));
       baseAction.getInvalidFields().put("list-researchImpacts",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"researchImpacts"}));
 

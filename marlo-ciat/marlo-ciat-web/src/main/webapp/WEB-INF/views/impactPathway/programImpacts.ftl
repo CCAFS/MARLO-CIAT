@@ -30,7 +30,7 @@
         
         [@s.form action=actionName enctype="multipart/form-data" ]
           
-          <div class="elements-list">
+          <div class="elements-list" listname="researchImpacts">
           [#if researchImpacts?has_content]
             [#list researchImpacts as impact]
               [@programImpactMacro element=impact name="researchImpacts" index=impact_index /]
