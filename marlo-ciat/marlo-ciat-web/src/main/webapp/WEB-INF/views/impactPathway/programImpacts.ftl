@@ -153,7 +153,7 @@
 
   [#-- Focus select --]
   <div class="col-md-4">
-  [@customForm.select name="${beneficiaryCustomName}.beneficiary.id" label=""  i18nkey="Focus" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="focusSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${beneficiaryCustomName}.beneficiary.id" label=""  i18nkey="Focus" listName="${beneficiaryCustomName}.beneficiary.beneficiaryType.beneficiaries" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="focusSelect form-control input-sm " editable=editable/]
   </div>
   
   [#-- Region select --]

@@ -18,7 +18,6 @@ public class BeneficiaryType implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -1358087568675397584L;
 
-
   @Expose
   private Long id;
 

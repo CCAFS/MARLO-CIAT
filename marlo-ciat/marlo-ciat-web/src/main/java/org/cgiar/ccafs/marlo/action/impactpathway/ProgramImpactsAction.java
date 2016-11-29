@@ -74,7 +74,10 @@ public class ProgramImpactsAction extends BaseAction {
   private ICenterService centerService;
 
   private IProgramService programService;
+
+
   private IResearchRegionService regionService;
+
   private IBeneficiaryTypeService beneficiaryTypeService;
   private IResearchImpactBeneficiaryService impactBeneficiaryService;
   private IResearchAreaService researchAreaService;
@@ -84,9 +87,9 @@ public class ProgramImpactsAction extends BaseAction {
   private IResearchImpactObjectiveService impactObjectiveService;
   private IAuditLogService auditLogService;
   private IBeneficiaryService beneficiaryService;
-
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
+
   private List<ResearchRegion> regions;
   private List<BeneficiaryType> beneficiaryTypes;
   private ResearchArea selectedResearchArea;
@@ -178,7 +181,6 @@ public class ProgramImpactsAction extends BaseAction {
     return selectedProgram;
   }
 
-
   /**
    * @return the selectedResearchArea
    */
@@ -186,10 +188,10 @@ public class ProgramImpactsAction extends BaseAction {
     return selectedResearchArea;
   }
 
+
   public String getTransaction() {
     return transaction;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -603,12 +605,14 @@ public class ProgramImpactsAction extends BaseAction {
     this.areaID = areaID;
   }
 
+
   /**
    * @param areaID the areaID to set
    */
   public void setAreaID(Long areaID) {
     this.areaID = areaID;
   }
+
 
   public void setBeneficiaryTypes(List<BeneficiaryType> beneficiaryTypes) {
     this.beneficiaryTypes = beneficiaryTypes;
