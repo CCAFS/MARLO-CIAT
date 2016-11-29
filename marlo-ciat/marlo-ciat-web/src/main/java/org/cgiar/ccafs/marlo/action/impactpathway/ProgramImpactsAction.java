@@ -574,12 +574,23 @@ public class ProgramImpactsAction extends BaseAction {
           ResearchRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
           Beneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
 
-          if (!impactBeneficiaryPrew.getResearchRegion().equals(region)) {
+          if (impactBeneficiaryPrew.getResearchRegion() != null) {
+            if (!impactBeneficiaryPrew.getResearchRegion().equals(region)) {
+              impactBeneficiaryPrew.setResearchRegion(region);
+              hasChanges = true;
+            }
+          } else {
             impactBeneficiaryPrew.setResearchRegion(region);
             hasChanges = true;
           }
 
-          if (!impactBeneficiaryPrew.getBeneficiary().equals(beneficiary)) {
+          if (impactBeneficiaryPrew.getBeneficiary() != null) {
+
+            if (!impactBeneficiaryPrew.getBeneficiary().equals(beneficiary)) {
+              impactBeneficiaryPrew.setBeneficiary(beneficiary);
+              hasChanges = true;
+            }
+          } else {
             impactBeneficiaryPrew.setBeneficiary(beneficiary);
             hasChanges = true;
           }

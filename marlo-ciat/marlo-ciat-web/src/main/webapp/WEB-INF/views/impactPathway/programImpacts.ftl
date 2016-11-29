@@ -119,8 +119,8 @@
     
     [#-- Beneficiaries--]
     <h5 class="sectionSubTitle">[@s.text name="Intended beneficiaries: "/]</h5>
-    <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> please list (as much as you know now) who will benefit from your Program by Target year.</div>
-    <div class="form-group simpleBox beneficiaries-list">
+    <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Please list (as much as you know now) who will benefit from your Program by Estimated Target year.</div>
+    <div class="form-group simpleBox beneficiaries-list" listname="${customName}.beneficiaries">
       [#if element.beneficiaries?has_content]
         [#list element.beneficiaries as beneficiary]
           [@beneficiaryMacro beneficiary=beneficiary name="${customName}.beneficiaries" index=beneficiary_index /]
@@ -128,11 +128,12 @@
       [#else]
         <p class="message text-center">[@s.text name="There are not beneficiaries added yet.."/]</p>
       [/#if]
+    [#if editable]  
     </div>
     <div class="text-right">
       <div class="addBeneficiary button-blue text-right"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="Add beneficiary"/]</div>
     </div>
-    
+    [/#if]
     
   </div>
 [/#macro]

@@ -17,6 +17,7 @@ package org.cgiar.ccafs.marlo.validation.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
+import org.cgiar.ccafs.marlo.data.model.ResearchImpactBeneficiary;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -65,6 +66,32 @@ public class ProgramImpactsValidator extends BaseValidator {
     this.saveMissingFields(selectedProgram, "researchImpact");
   }
 
+  public void validateBeneficiaries(BaseAction baseAction, ResearchImpactBeneficiary impactBeneficiary, int i, int j) {
+
+    List<String> params = new ArrayList<String>();
+    params.add(String.valueOf(i + 1));
+    params.add(String.valueOf(j + 1));
+
+    if (impactBeneficiary.getResearchRegion().getId() == -1) {
+      this.addMessage(baseAction.getText("programImpact.action.beneficiary.region", params));
+      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
+        InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (impactBeneficiary.getBeneficiary().getId() == -1) {
+      this.addMessage(baseAction.getText("programImpact.action.beneficiary.focus", params));
+      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
+        InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (impactBeneficiary.getBeneficiary().getBeneficiaryType().getId() == -1) {
+      this.addMessage(baseAction.getText("programImpact.action.beneficiary.type", params));
+      baseAction.getInvalidFields().put(
+        "input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.beneficiaryType.id",
+        InvalidFieldsMessages.EMPTYFIELD);
+    }
+  }
+
   public void validateProgramImpact(BaseAction baseAction, ResearchImpact researchImpact, int i) {
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
@@ -86,6 +113,25 @@ public class ProgramImpactsValidator extends BaseValidator {
       this.addMessage(baseAction.getText("programImpact.action.objectiveValue.empty", params));
       baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].objectiveValue",
         InvalidFieldsMessages.CHECKBOX);
+    }
+
+    if (researchImpact.getBeneficiaries() != null) {
+      if (researchImpact.getBeneficiaries().size() == 0) {
+        this.addMissingField("beneficiaries");
+        this.addMessage(baseAction.getText("programImpact.action.beneficiary"));
+        baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
+          baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
+      } else {
+        for (int j = 0; j < researchImpact.getBeneficiaries().size(); j++) {
+          ResearchImpactBeneficiary beneficiary = researchImpact.getBeneficiaries().get(j);
+          this.validateBeneficiaries(baseAction, beneficiary, i, j);
+        }
+      }
+    } else {
+      this.addMissingField("beneficiaries");
+      this.addMessage(baseAction.getText("programImpact.action.beneficiary"));
+      baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
     }
   }
 

@@ -18,10 +18,10 @@
             <column name="impact_id" />
         </many-to-one>
         <many-to-one name="beneficiary" class="org.cgiar.ccafs.marlo.data.model.Beneficiary" fetch="select">
-            <column name="beneficiary_id" not-null="true" />
+            <column name="beneficiary_id" not-null="false" />
         </many-to-one>
         <many-to-one name="researchRegion" class="org.cgiar.ccafs.marlo.data.model.ResearchRegion" fetch="select">
-            <column name="research_region_id" not-null="true" />
+            <column name="research_region_id" not-null="false" />
         </many-to-one>
         <property name="active" type="boolean">
             <column name="is_active" not-null="true" />

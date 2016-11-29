@@ -59,7 +59,7 @@
         
         <h3 class="headTitle"> Partners </h3>
         <div class="parntersBlock">
-          <div class="partnersList">
+          <div class="partnersList" listname="${customName}.partners">
             [#if output.partners?has_content]
               [#list output.partners as partner]
                 [@partnerMacro element=partner name="output.partners" index=partner_index /]

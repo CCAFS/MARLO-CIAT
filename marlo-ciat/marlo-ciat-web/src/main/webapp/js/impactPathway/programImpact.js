@@ -42,9 +42,8 @@ function attachEvents() {
       for(var i = 0; i < m.beneficiaries.length; i++) {
         // Add beneficiary option
         $select.addOption(m.beneficiaries[i].id, m.beneficiaries[i].name);
-        $select.trigger("change.select2");
       }
-
+      $select.trigger("change.select2");
     });
   });
 }
