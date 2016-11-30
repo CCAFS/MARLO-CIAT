@@ -84,10 +84,19 @@
         </div>
         
         <h3 class="headTitle"> Next Users </h3>
-        <div class="borderBox">
-          Comming...
+        <div class="borderBox nextUsers-list">
+          [#if nextUsers?has_content]
+            <label for="">Contact Person(s):  </label>
+            [#list nextUsers as nextUser]
+            [@nextUserMacro nextUser=beneficiary name="outcome.nextUsers" index=nextUser_index /]
+            [/#list]
+            [#else]
+            <p class="message text-center">[@s.text name="There are not beneficiaries added yet.."/]</p>
+          [/#if] 
         </div>
-        
+        <div class="text-right">
+          <div class="addNextUser button-blue text-right"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="Add a new Next User"/]</div>
+        </div>
         [#-- Section Buttons--]
         [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-output.ftl" /]
         
@@ -102,5 +111,30 @@
   </div>
 </section>
 
+[#-- Macros --]
+[@nextUserMacro nextUser={} name="output.nextUsers" index=-1 template=true/]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
+
+[#macro nextUserMacro nextUser name index template=false]
+  [#assign nextUserCustomName = "${name}[${index}]" /]
+  <div id="nextUser-${template?string('template', index)}" class="nextUser borderBox form-group" style="position:relative; display:${template?string('none','block')}">
+    [#-- Remove Button --]
+    [#if editable]
+    <div class="removeNextUser removeIcon" title="Remove assumption"></div>
+    [/#if]
+    <input type="hidden" class="nextUserId" name="${nextUserCustomName}.id" value="${(nextUser.id)!}"/>
+  
+  [#-- Type select --]
+  <div class="col-md-6">
+  [@customForm.select name="${nextUserCustomName}.nextUser.nextUserType.id" label=""  i18nkey="Type" listName="nextUserTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
+  </div>   
+
+  [#-- SubType select --]
+  <div class="col-md-6">
+  [@customForm.select name="${nextUserCustomName}.nextUser.id" label=""  i18nkey="Subtype" listName="${nextUserCustomName}.nextUser.nextUserType.nextUsers" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="subTypeSelect form-control input-sm " editable=editable/]
+  </div>
+  
+  <div class="clearfix"></div>
+  </div>
+[/#macro]

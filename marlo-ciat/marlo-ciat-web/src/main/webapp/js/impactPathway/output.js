@@ -3,7 +3,9 @@ $(document).ready(init);
 function init() {
 
   // Add Select2
-  $('select').select2();
+  $('form select').select2({
+    width: '100%'
+  });
 
   attachEvents();
 }
@@ -21,6 +23,39 @@ function attachEvents() {
 
   // Remove a partner
   $('.removePartner').on('click', removePartner);
+  
+//Add a next User
+  $('.addNextUser').on('click', addNextUser);
+  
+// Remove a next User
+  $('.removeNextUser').on('click', removeNextUser);
+  
+//When change of beneficiary type
+  $(".typeSelect").on("change", function() {
+    var option = $(this).find("option:selected");
+    var $select = $(this).parents(".nextUser").find(".subTypeSelect");
+    var url = baseURL + "/nextUserByType.do";
+    var data = {
+      "nextUserID": option.val()
+    }
+    // remove options
+    $select.find("option").each(function(i,e) {
+      $(e).remove();
+    });
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: "json",
+        data: data
+    }).done(function(m) {
+      $select.addOption("-1", "Select an option");
+      for(var i = 0; i < m.nextUsers.length; i++) {
+        // Add beneficiary option
+        $select.addOption(m.nextUsers[i].id, m.nextUsers[i].name);
+      }
+      $select.trigger("change.select2");
+    });
+  });
 
 }
 
@@ -120,4 +155,43 @@ function updateIndexes() {
       $(e).setNameIndexes(2, i);
     });
   });
+  
+//Update beneficiaries
+  $(".nextUsers-list").find(".nextUser").each(function(i,e) {
+    console.log($(e));
+    $(e).setNameIndexes(1, i);
+  });
+}
+
+/**
+ * next users function
+ */
+function addNextUser() {
+  console.log("holi");
+  var $list = $(this).parents("form").find('.nextUsers-list');
+  console.log($list);
+  var $item = $('#nextUser-template').clone(true).removeAttr("id");
+  $list.append($item);
+  $item.show('slow');
+  checkNextUsersItems($list);
+  updateIndexes();
+}
+
+function removeNextUser() {
+  var $list = $(this).parents('.nextUsers-list');
+  var $item = $(this).parents('.nextUser');
+  $item.hide(function() {
+    $item.remove();
+    checkNextUsersItems($list);
+    updateIndexes();
+  });
+}
+
+function checkNextUsersItems(block) {
+  var items = $(block).find('.nextUser ').length;
+  if(items == 0) {
+    $(block).parent().find('p.message').fadeIn();
+  } else {
+    $(block).parent().find('p.message').fadeOut();
+  }
 }
