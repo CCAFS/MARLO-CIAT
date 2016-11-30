@@ -66,10 +66,30 @@ public interface ISectionStatusService {
    * gets a SectionStatus of the one section by a specific research program
    * 
    * @param programId
+   * @param outcomeId
    * @param sectionName
    * @return a SectionStatus Object
    */
-  public List<SectionStatus> getSectionStatusByProgram(long programId, String sectionName);
+  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName);
+
+  /**
+   * gets a SectionStatus of the one section by a specific research program
+   * 
+   * @param programId
+   * @param outputId
+   * @param sectionName
+   * @return a SectionStatus Object
+   */
+  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName);
+
+  /**
+   * gets a SectionStatus of the one section by a specific research program
+   * 
+   * @param programId
+   * @param sectionName
+   * @return a SectionStatus Object
+   */
+  public SectionStatus getSectionStatusByProgram(long programId, String sectionName);
 
   /**
    * This method gets a list of sectionStatuss belongs of the user

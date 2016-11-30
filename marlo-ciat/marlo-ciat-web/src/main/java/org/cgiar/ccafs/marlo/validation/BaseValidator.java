@@ -106,7 +106,8 @@ public class BaseValidator {
     // Reporting missing fields into the database.
     int year = 0;
 
-    SectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName);
+    SectionStatus status =
+      sectionStatusService.getSectionStatusByOutcome(program.getId(), outcome.getId(), sectionName);
     if (status == null) {
 
       status = new SectionStatus();
@@ -134,7 +135,7 @@ public class BaseValidator {
     // Reporting missing fields into the database.
     int year = 0;
 
-    SectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName);
+    SectionStatus status = sectionStatusService.getSectionStatusByOutput(program.getId(), output.getId(), sectionName);
     if (status == null) {
 
       status = new SectionStatus();

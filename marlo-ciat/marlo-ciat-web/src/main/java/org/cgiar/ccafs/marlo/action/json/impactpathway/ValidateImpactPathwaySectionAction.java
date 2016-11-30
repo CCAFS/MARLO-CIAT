@@ -69,7 +69,7 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   private long programID;
   private Map<String, Object> section;
   // Model
-  private List<SectionStatus> sectionStatuses;
+  private SectionStatus sectionStatus;
 
   // Validator
   private OutcomesValidator outcomeValidator;
@@ -120,14 +120,13 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
       }
 
     }
-    sectionStatuses = sectionStatusService.getSectionStatusByProgram(programID, sectionName);
 
-    for (SectionStatus sectionStatus : sectionStatuses) {
-      section = new HashMap<String, Object>();
-      section.put("sectionName", sectionStatus.getSectionName());
-      section.put("missingFields", sectionStatus.getMissingFields());
-      Thread.sleep(500);
-    }
+    sectionStatus = sectionStatusService.getSectionStatusByProgram(programID, sectionName);
+    section = new HashMap<String, Object>();
+    section.put("sectionName", sectionStatus.getSectionName());
+    section.put("missingFields", sectionStatus.getMissingFields());
+    Thread.sleep(500);
+
 
     return SUCCESS;
   }

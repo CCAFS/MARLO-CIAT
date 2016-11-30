@@ -66,12 +66,34 @@ public class SectionStatusDAO implements ISectionStatusDAO {
   }
 
   @Override
-  public List<SectionStatus> getSectionStatusByProgram(long programId, String sectionName) {
+  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName) {
+    String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
+      + "' and research_program_id=" + programId + " and research_outcome_id=" + outcomeId;
+    List<SectionStatus> list = dao.findAll(query);
+    if (list.size() > 0) {
+      return list.get(0);
+    }
+    return null;
+  }
+
+  @Override
+  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName) {
+    String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
+      + "' and research_program_id=" + programId + " and research_output_id=" + outputId;
+    List<SectionStatus> list = dao.findAll(query);
+    if (list.size() > 0) {
+      return list.get(0);
+    }
+    return null;
+  }
+
+  @Override
+  public SectionStatus getSectionStatusByProgram(long programId, String sectionName) {
     String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
       + "' and research_program_id=" + programId;
     List<SectionStatus> list = dao.findAll(query);
     if (list.size() > 0) {
-      return list;
+      return list.get(0);
     }
     return null;
   }
