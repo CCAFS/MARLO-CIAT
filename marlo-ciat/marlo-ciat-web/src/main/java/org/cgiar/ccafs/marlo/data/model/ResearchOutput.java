@@ -59,7 +59,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private User createdBy;
 
-
   @Expose
   private User modifiedBy;
 
@@ -69,15 +68,18 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
 
+
+  private Set<ResearchOutputsNextUser> researchOutputsNextUsers = new HashSet<ResearchOutputsNextUser>(0);
+
+
   private List<ResearchOutputPartner> partners;
 
 
-  /**
-   * 
-   */
+  private List<ResearchOutputsNextUser> nextUsers;
+
+
   public ResearchOutput() {
     super();
-    // TODO Auto-generated constructor stub
   }
 
   /**
@@ -97,10 +99,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return activeSince;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
+
 
   /**
    * @return the dateAdded
@@ -124,20 +126,23 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
-
 
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
 
+  public List<ResearchOutputsNextUser> getNextUsers() {
+    return nextUsers;
+  }
+
   public List<ResearchOutputPartner> getPartners() {
     return partners;
   }
-
 
   /**
    * @return the researchOutcome
@@ -149,6 +154,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   public Set<ResearchOutputPartner> getResearchOutputPartners() {
     return researchOutputPartners;
+  }
+
+  public Set<ResearchOutputsNextUser> getResearchOutputsNextUsers() {
+    return researchOutputsNextUsers;
   }
 
 
@@ -167,14 +176,15 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
-
 
   /**
    * @param dateAdded the dateAdded to set
@@ -183,13 +193,13 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.dateAdded = dateAdded;
   }
 
-
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
@@ -199,6 +209,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
+
+  public void setNextUsers(List<ResearchOutputsNextUser> nextUsers) {
+    this.nextUsers = nextUsers;
+  }
+
 
   public void setPartners(List<ResearchOutputPartner> partners) {
     this.partners = partners;
@@ -213,6 +228,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   public void setResearchOutputPartners(Set<ResearchOutputPartner> researchOutputPartners) {
     this.researchOutputPartners = researchOutputPartners;
+  }
+
+  public void setResearchOutputsNextUsers(Set<ResearchOutputsNextUser> researchOutputsNextUsers) {
+    this.researchOutputsNextUsers = researchOutputsNextUsers;
   }
 
   public void setTitle(String title) {
