@@ -235,8 +235,8 @@ public class OutputsAction extends BaseAction {
         selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
       if (nextUserService.findAll() != null) {
-        nextuserTypes =
-          new ArrayList<>(nextUserService.findAll().stream().filter(nu -> nu.isActive()).collect(Collectors.toList()));
+        nextuserTypes = new ArrayList<>(nextUserService.findAll().stream()
+          .filter(nu -> nu.isActive() && nu.getNextuserType() != null).collect(Collectors.toList()));
       }
 
       output.setNextUsers(new ArrayList<>(
