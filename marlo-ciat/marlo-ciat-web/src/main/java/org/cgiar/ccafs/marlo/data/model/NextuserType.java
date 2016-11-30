@@ -18,10 +18,14 @@ public class NextuserType implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -4356098204290324921L;
 
+
   @Expose
   private Long id;
+
+
   @Expose
   private User modifiedBy;
+
   @Expose
   private User createdBy;
   @Expose
@@ -34,15 +38,11 @@ public class NextuserType implements java.io.Serializable, IAuditLog {
   private boolean active;
   @Expose
   private String modificationJustification;
-
   private Set<NextuserType> nextuserTypes = new HashSet<NextuserType>(0);
-
   private Set<ResearchOutputsNextUser> researchOutputsNextUsers = new HashSet<ResearchOutputsNextUser>(0);
-
 
   public NextuserType() {
   }
-
 
   public NextuserType(String name) {
     this.name = name;
@@ -61,6 +61,29 @@ public class NextuserType implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
     this.nextuserTypes = nextuserTypes;
     this.researchOutputsNextUsers = researchOutputsNextUsers;
+  }
+
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    NextuserType other = (NextuserType) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -103,6 +126,7 @@ public class NextuserType implements java.io.Serializable, IAuditLog {
     return name;
   }
 
+
   public NextuserType getNextuserType() {
     return nextuserType;
   }
@@ -113,6 +137,14 @@ public class NextuserType implements java.io.Serializable, IAuditLog {
 
   public Set<ResearchOutputsNextUser> getResearchOutputsNextUsers() {
     return researchOutputsNextUsers;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override
