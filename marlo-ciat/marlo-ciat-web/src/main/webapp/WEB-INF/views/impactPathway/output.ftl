@@ -127,7 +127,7 @@
   
   [#-- Type select --]
   <div class="col-md-6">
-  [@customForm.select name="${nextUserCustomName}.nextUser.nextUserType.id" label=""  i18nkey="Type" listName="nextUserTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${nextUserCustomName}.nextUser.nextUserType.id" label=""  i18nkey="Type" listName="nextuserTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
   </div>   
 
   [#-- SubType select --]
