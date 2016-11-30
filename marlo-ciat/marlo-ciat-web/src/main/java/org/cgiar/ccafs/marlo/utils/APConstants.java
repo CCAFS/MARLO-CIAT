@@ -100,6 +100,9 @@ public final class APConstants {
   public static final String RESEARCH_OUTCOME_MILESTONE_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutcome.researchMilestones)";
 
+  public static final String RESEARCH_OUTPUT_NEXTUSER_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutput.researchOutputsNextUsers)";
+
   public static final String RESEARCH_OUTPUT_PARTNER_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutput.researchOutputPartners)";
 

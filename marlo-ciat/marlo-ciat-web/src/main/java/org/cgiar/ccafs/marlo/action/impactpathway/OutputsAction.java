@@ -236,7 +236,7 @@ public class OutputsAction extends BaseAction {
 
       if (nextUserService.findAll() != null) {
         nextuserTypes = new ArrayList<>(nextUserService.findAll().stream()
-          .filter(nu -> nu.isActive() && nu.getNextuserType() != null).collect(Collectors.toList()));
+          .filter(nu -> nu.isActive() && nu.getNextuserType() == null).collect(Collectors.toList()));
       }
 
       output.setNextUsers(new ArrayList<>(
@@ -270,8 +270,10 @@ public class OutputsAction extends BaseAction {
 
       ResearchOutput outputSave = outputService.getResearchOutputById(outputSaveId);
 
+      this.saveNextUser(outputSave);
 
       List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.RESEARCH_OUTPUT_NEXTUSER_RELATION);
       output = outputService.getResearchOutputById(outputID);
       output.setActiveSince(new Date());
       output.setModifiedBy(this.getCurrentUser());

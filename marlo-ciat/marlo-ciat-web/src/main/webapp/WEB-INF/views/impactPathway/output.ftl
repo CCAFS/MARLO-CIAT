@@ -1,5 +1,5 @@
 [#ftl]
-[#assign title = "Outcome" /]
+[#assign title = "Output" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["select2"] /]
 [#assign customJS = ["${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
@@ -84,14 +84,13 @@
         </div>
         
         <h3 class="headTitle"> Next Users </h3>
-        <div class="borderBox nextUsers-list">
-          [#if nextUsers?has_content]
-            <label for="">Contact Person(s):  </label>
-            [#list nextUsers as nextUser]
-            [@nextUserMacro nextUser=beneficiary name="outcome.nextUsers" index=nextUser_index /]
+        <div class="borderBox nextUsers-list" listname="${outputCustomName}.nextUsers">
+          [#if output.nextUsers?has_content]
+            [#list output.nextUsers as nextUser]
+            [@nextUserMacro nextUser=nextUser name="${outputCustomName}.nextUsers" index=nextUser_index /]
             [/#list]
             [#else]
-            <p class="message text-center">[@s.text name="There are not beneficiaries added yet.."/]</p>
+            <p class="message text-center">[@s.text name="There are not Next Users added yet.."/]</p>
           [/#if] 
         </div>
         <div class="text-right">
@@ -127,12 +126,12 @@
   
   [#-- Type select --]
   <div class="col-md-6">
-  [@customForm.select name="${nextUserCustomName}.nextUser.nextUserType.id" label=""  i18nkey="Type" listName="nextuserTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${nextUserCustomName}.nextuserType.nextuserType.id" label=""  i18nkey="Type" listName="nextuserTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
   </div>   
 
   [#-- SubType select --]
   <div class="col-md-6">
-  [@customForm.select name="${nextUserCustomName}.nextUser.id" label=""  i18nkey="Subtype" listName="${nextUserCustomName}.nextUser.nextUserType.nextUsers" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="subTypeSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${nextUserCustomName}.nextuserType.id" label=""  i18nkey="Subtype" listName="${nextUserCustomName}.nextuserType.nextuserType.nextuserTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="subTypeSelect form-control input-sm " editable=editable/]
   </div>
   
   <div class="clearfix"></div>

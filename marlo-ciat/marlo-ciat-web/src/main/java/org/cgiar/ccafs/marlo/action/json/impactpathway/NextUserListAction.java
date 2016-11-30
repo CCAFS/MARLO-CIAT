@@ -62,17 +62,19 @@ public class NextUserListAction extends BaseAction {
 
     NextuserType nextUserType = nextUserService.getNextuserTypeById(nextUserID);
 
-    List<NextuserType> nextUserChilds = new ArrayList<>(
-      nextUserType.getNextuserTypes().stream().filter(nu -> nu.isActive()).collect(Collectors.toList()));
+    if (nextUserType != null) {
+      List<NextuserType> nextUserChilds = new ArrayList<>(
+        nextUserType.getNextuserTypes().stream().filter(nu -> nu.isActive()).collect(Collectors.toList()));
 
-    for (NextuserType nu : nextUserChilds) {
+      for (NextuserType nu : nextUserChilds) {
 
-      nextUser = new HashMap<>();
-      nextUser.put("id", nu.getId());
-      nextUser.put("name", nu.getName());
+        nextUser = new HashMap<>();
+        nextUser.put("id", nu.getId());
+        nextUser.put("name", nu.getName());
 
-      nextUsers.add(nextUser);
+        nextUsers.add(nextUser);
 
+      }
     }
 
 
