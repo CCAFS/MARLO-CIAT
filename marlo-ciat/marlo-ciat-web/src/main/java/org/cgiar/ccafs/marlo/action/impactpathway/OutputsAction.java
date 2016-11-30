@@ -20,7 +20,6 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.NextUserType;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
@@ -30,7 +29,6 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.INextUserTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -63,7 +61,6 @@ public class OutputsAction extends BaseAction {
   private IAuditLogService auditLogService;
   private IProgramService programService;
   private IResearchOutputService outputService;
-  private INextUserTypeService nextUserTypeService;
 
   // Front Variables
   private ResearchCenter loggedCenter;
@@ -75,8 +72,6 @@ public class OutputsAction extends BaseAction {
   private ResearchOutput output;
   private ResearchTopic selectedResearchTopic;
   private List<ResearchLeader> contacPersons;
-  private List<NextUserType> nextUserTypes;
-
   // Parameter Variables
   private long programID;
   private long areaID;
@@ -95,15 +90,13 @@ public class OutputsAction extends BaseAction {
    */
   @Inject
   public OutputsAction(APConfig config, ICenterService centerService, IAuditLogService auditLogService,
-    IProgramService programService, IResearchOutputService outputService, OutputsValidator validator,
-    INextUserTypeService nextUserTypeService) {
+    IProgramService programService, IResearchOutputService outputService, OutputsValidator validator) {
     super(config);
     this.centerService = centerService;
     this.auditLogService = auditLogService;
     this.programService = programService;
     this.outputService = outputService;
     this.validator = validator;
-    this.nextUserTypeService = nextUserTypeService;
   }
 
 
@@ -141,10 +134,6 @@ public class OutputsAction extends BaseAction {
     return outputID;
   }
 
-
-  public List<NextUserType> getOutputNextUsers() {
-    return nextUserTypes;
-  }
 
   public long getProgramID() {
     return programID;
@@ -211,8 +200,8 @@ public class OutputsAction extends BaseAction {
     } else {
       output = outputService.getResearchOutputById(outputID);
     }
-    researchAreas =
-      new ArrayList<>(loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
+    researchAreas = new ArrayList<>(
+      loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
     Collections.sort(researchAreas, (ra1, ra2) -> ra1.getId().compareTo(ra2.getId()));
 
     if (researchAreas != null && output != null) {
@@ -225,9 +214,8 @@ public class OutputsAction extends BaseAction {
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
 
-      contacPersons =
-        new ArrayList<>(selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive())
-          .collect(Collectors.toList()));
+      contacPersons = new ArrayList<>(
+        selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
 
       String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
@@ -239,9 +227,6 @@ public class OutputsAction extends BaseAction {
         }
       }
     }
-    // TODO Update the service method
-    // Get list of next user types from the database
-    nextUserTypes = nextUserTypeService.findAll();
 
   }
 
@@ -315,11 +300,6 @@ public class OutputsAction extends BaseAction {
 
   public void setOutputID(long outputID) {
     this.outputID = outputID;
-  }
-
-
-  public void setOutputNextUsers(List<NextUserType> outputNextUsers) {
-    this.nextUserTypes = outputNextUsers;
   }
 
   public void setProgramID(long programID) {

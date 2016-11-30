@@ -67,13 +67,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
-  /**
-   * The next user of the output such as (Policy Makers, etc)
-   */
-  private Set<NextUserType> nextUserTypes = new HashSet<NextUserType>(0);
-
-
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
 
   private List<ResearchOutputPartner> partners;
@@ -141,10 +134,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
-  public Set<NextUserType> getNextUserTypes() {
-    return nextUserTypes;
-  }
-
   public List<ResearchOutputPartner> getPartners() {
     return partners;
   }
@@ -202,7 +191,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.id = id;
   }
 
-
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
@@ -211,11 +199,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
-
-  public void setNextUserTypes(Set<NextUserType> nextUserTypes) {
-    this.nextUserTypes = nextUserTypes;
-  }
-
 
   public void setPartners(List<ResearchOutputPartner> partners) {
     this.partners = partners;
