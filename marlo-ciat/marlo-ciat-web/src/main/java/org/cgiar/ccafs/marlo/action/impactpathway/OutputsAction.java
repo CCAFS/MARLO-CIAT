@@ -253,6 +253,10 @@ public class OutputsAction extends BaseAction {
         if (nextuserTypes != null) {
           nextuserTypes.clear();
         }
+
+        if (output.getNextUsers() != null) {
+          output.getNextUsers().clear();
+        }
       }
     }
 

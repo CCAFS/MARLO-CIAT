@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -35,7 +35,8 @@ public class BeneficiaryTypeDAO implements IBeneficiaryTypeDAO {
   @Override
   public boolean deleteBeneficiaryType(long beneficiaryTypeId) {
     BeneficiaryType beneficiaryType = this.find(beneficiaryTypeId);
-    return dao.delete(beneficiaryType);
+    beneficiaryType.setActive(false);
+    return this.save(beneficiaryType) > 0;
   }
 
   @Override

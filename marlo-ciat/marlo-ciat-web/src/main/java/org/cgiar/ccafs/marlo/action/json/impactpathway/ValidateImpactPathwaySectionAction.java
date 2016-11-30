@@ -112,7 +112,7 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
           this.validateOutcome();
           break;
         case OUTPUT:
-          this.validateOutcome();
+          this.validateOutput();
           break;
         case OUTPUT_PARTNER:
           this.validateOutputPartner();
@@ -190,36 +190,6 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
     }
   }
 
-  public void validateOuput() {
-
-    ResearchProgram program = programServcie.getProgramById(programID);
-
-    if (program != null) {
-      List<ResearchTopic> topics =
-        new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-      if (topics != null) {
-        for (ResearchTopic researchTopic : topics) {
-          List<ResearchOutcome> outcomes = new ArrayList<>(
-            researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-          for (ResearchOutcome researchOutcome : outcomes) {
-            researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
-              .filter(rm -> rm.isActive()).collect(Collectors.toList())));
-
-            List<ResearchOutput> outputs = new ArrayList<>(
-              researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-            for (ResearchOutput researchOutput : outputs) {
-              outputValidator.validate(this, researchOutput, program, false);
-            }
-
-          }
-        }
-      }
-    }
-
-  }
-
   public void validateOutcome() {
     ResearchProgram program = programServcie.getProgramById(programID);
 
@@ -240,6 +210,40 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
         }
       }
     }
+  }
+
+  public void validateOutput() {
+
+    ResearchProgram program = programServcie.getProgramById(programID);
+
+    if (program != null) {
+      List<ResearchTopic> topics =
+        new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+      if (topics != null) {
+        for (ResearchTopic researchTopic : topics) {
+          List<ResearchOutcome> outcomes = new ArrayList<>(
+            researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+          for (ResearchOutcome researchOutcome : outcomes) {
+            researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
+              .filter(rm -> rm.isActive()).collect(Collectors.toList())));
+
+            List<ResearchOutput> outputs = new ArrayList<>(
+              researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+            for (ResearchOutput researchOutput : outputs) {
+
+              researchOutput.setNextUsers(new ArrayList<>(researchOutput.getResearchOutputsNextUsers().stream()
+                .filter(nu -> nu.isActive()).collect(Collectors.toList())));
+
+              outputValidator.validate(this, researchOutput, program, false);
+            }
+
+          }
+        }
+      }
+    }
+
   }
 
   public void validateOutputPartner() {

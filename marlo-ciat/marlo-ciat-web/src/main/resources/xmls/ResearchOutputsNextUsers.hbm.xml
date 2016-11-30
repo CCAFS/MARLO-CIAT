@@ -9,10 +9,10 @@
             <generator class="identity" />
         </id>
         <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" fetch="select">
-            <column name="research_output_id" not-null="true" />
+            <column name="research_output_id" not-null="false" />
         </many-to-one>
         <many-to-one name="nextuserType" class="org.cgiar.ccafs.marlo.data.model.NextuserType" fetch="select">
-            <column name="nextuser_type_id" not-null="true" />
+            <column name="nextuser_type_id" not-null="false" />
         </many-to-one>
         <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="modified_by" />

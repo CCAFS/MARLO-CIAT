@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -35,7 +35,8 @@ public class LocGeopositionDAO implements ILocGeopositionDAO {
   @Override
   public boolean deleteLocGeoposition(long locGeopositionId) {
     LocGeoposition locGeoposition = this.find(locGeopositionId);
-    return dao.delete(locGeoposition);
+    locGeoposition.setActive(false);
+    return this.save(locGeoposition) > 0;
   }
 
   @Override

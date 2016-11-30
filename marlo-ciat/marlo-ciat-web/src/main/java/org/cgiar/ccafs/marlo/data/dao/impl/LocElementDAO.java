@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -35,7 +35,8 @@ public class LocElementDAO implements ILocElementDAO {
   @Override
   public boolean deleteLocElement(long locElementId) {
     LocElement locElement = this.find(locElementId);
-    return dao.delete(locElement);
+    locElement.setActive(false);
+    return this.save(locElement) > 0;
   }
 
   @Override
