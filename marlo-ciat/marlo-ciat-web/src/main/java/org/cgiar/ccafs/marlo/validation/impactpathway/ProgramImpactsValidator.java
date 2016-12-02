@@ -59,6 +59,7 @@ public class ProgramImpactsValidator extends BaseValidator {
     }
 
     for (int i = 0; i < researchImpacts.size(); i++) {
+
       ResearchImpact researchImpact = researchImpacts.get(i);
       this.validateProgramImpact(baseAction, researchImpact, i);
     }
@@ -93,6 +94,7 @@ public class ProgramImpactsValidator extends BaseValidator {
   }
 
   public void validateProgramImpact(BaseAction baseAction, ResearchImpact researchImpact, int i) {
+
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
 
@@ -124,7 +126,7 @@ public class ProgramImpactsValidator extends BaseValidator {
 
     if (researchImpact.getBeneficiaries() != null) {
       if (researchImpact.getBeneficiaries().size() == 0) {
-        this.addMessage(baseAction.getText("programImpact.action.beneficiary"));
+        this.addMessage(baseAction.getText("programImpact.action.beneficiary", params));
         baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
       } else {
@@ -134,7 +136,7 @@ public class ProgramImpactsValidator extends BaseValidator {
         }
       }
     } else {
-      this.addMessage(baseAction.getText("programImpact.action.beneficiary"));
+      this.addMessage(baseAction.getText("programImpact.action.beneficiary", params));
       baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
     }

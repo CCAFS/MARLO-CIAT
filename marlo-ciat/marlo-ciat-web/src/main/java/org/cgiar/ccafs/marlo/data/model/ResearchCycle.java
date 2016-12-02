@@ -17,7 +17,6 @@ public class ResearchCycle implements java.io.Serializable {
 
   private Long id;
 
-
   private User modifiedBy;
 
 
@@ -64,6 +63,29 @@ public class ResearchCycle implements java.io.Serializable {
   }
 
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchCycle other = (ResearchCycle) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
+
   public String getAcronym() {
     return acronym;
   }
@@ -93,12 +115,21 @@ public class ResearchCycle implements java.io.Serializable {
     return modifiedBy;
   }
 
+
   public String getName() {
     return name;
   }
 
   public Set<Submission> getSubmissions() {
     return submissions;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   public boolean isActive() {

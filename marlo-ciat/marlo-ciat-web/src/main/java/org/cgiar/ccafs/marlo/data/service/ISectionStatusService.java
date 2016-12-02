@@ -55,6 +55,15 @@ public interface ISectionStatusService {
 
 
   /**
+   * gets a SectionStatus of the one section by a specific research program
+   * 
+   * @param programId
+   * @param sectionName
+   * @return a SectionStatus List Object
+   */
+  public List<SectionStatus> getSectionStatus(long programId, String sectionName);
+
+  /**
    * This method gets a sectionStatus object by a given sectionStatus identifier.
    * 
    * @param sectionStatusID is the sectionStatus identifier.

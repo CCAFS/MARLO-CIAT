@@ -22,6 +22,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
@@ -76,24 +77,27 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public static final String NEXT = "next";
 
+
   public static final String NOT_AUTHORIZED = "403";
 
   public static final String NOT_FOUND = "404";
+
   public static final String NOT_LOGGED = "401";
+
   public static final String SAVED_STATUS = "savedStatus";
   private static final long serialVersionUID = -740360140511380630L;
-
   @Inject
   private IAuditLogService auditLogManager;
   @Inject
   private IResearchTopicService topicService;
+
   @Inject
   private IResearchImpactService impactService;
   @Inject
   private IResearchOutcomeService outcomeService;
-
   protected boolean add;
   private String basePermission;
+
   protected boolean cancel;
   private boolean canEdit;
   protected APConfig config;
@@ -125,10 +129,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   // Config Variables
   @Inject
   protected BaseSecurityContext securityContext;
-
   private Map<String, Object> session;
-
   protected boolean submit;
+
+  private Submission submission;
 
   @Inject
   public BaseAction(APConfig config) {
@@ -243,12 +247,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       .clearCachedAuthorizationInfo(securityContext.getSubject().getPrincipals());
   }
 
-
   /* Override this method depending of the delete action. */
   public String delete() {
     return SUCCESS;
   }
-
 
   @Override
   public String execute() throws Exception {
@@ -268,6 +270,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return INPUT;
   }
 
+
   public String generatePermission(String permission, String... params) {
     // TODO: Update the permission
     if (params != null) {
@@ -277,6 +280,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
 
   }
+
 
   public String getActionName() {
     return ServletActionContext.getActionMapping().getName();
@@ -412,7 +416,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
   }
 
-
   /**
    * Define default locale while we decide to support other languages in the
    * future.
@@ -437,6 +440,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
     return 0;
   }
+
 
   public Map<String, Object> getParameters() {
     parameters = ActionContext.getContext().getParameters();
@@ -463,6 +467,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return session;
   }
 
+  public Submission getSubmission() {
+    return submission;
+  }
+
   public List<UserToken> getUsersOnline() {
     return SessionCounter.users;
   }
@@ -484,6 +492,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       }
     }
     return version;
+  }
+
+  public long getYear() {
+    return Calendar.YEAR;
   }
 
   public boolean hasPermission(String fieldName) {
@@ -539,10 +551,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return submit;
   }
 
-
   public String next() {
     return NEXT;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -554,10 +566,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return SUCCESS;
   }
 
-
   public void setAdd(boolean add) {
     this.add = true;
   }
+
 
   public void setBasePermission(String basePermission) {
     this.basePermission = basePermission;
@@ -651,6 +663,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   @Override
   public void setSession(Map<String, Object> session) {
     this.session = session;
+  }
+
+  public void setSubmission(Submission submission) {
+    this.submission = submission;
   }
 
   public void setSubmit(boolean submit) {

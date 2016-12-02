@@ -112,6 +112,18 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
     }
 
+    switch (ImpactPathwaySectionsEnum.getValue(sectionName)) {
+      case OUTCOME:
+        this.validateOutcome();
+        break;
+      case OUTPUT:
+        this.validateOutput();
+        break;
+      case OUTPUT_PARTNER:
+        this.validateOutputPartner();
+        break;
+    }
+
     sectionStatus = sectionStatusService.getSectionStatusByProgram(programID, sectionName);
     section = new HashMap<String, Object>();
     section.put("sectionName", sectionStatus.getSectionName());
@@ -171,8 +183,15 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
           for (ResearchImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
             .filter(ro -> ro.isActive()).collect(Collectors.toList())) {
             researchImpact.getObjectives().add(impactObjective.getResearchObjective());
+            if (researchImpact.getObjectiveValue() == null) {
+              researchImpact.setObjectiveValue(impactObjective.getResearchObjective().getId().toString());
+            } else {
+              researchImpact.setObjectiveValue(
+                researchImpact.getObjectiveValue() + "," + impactObjective.getResearchObjective().getId().toString());
+            }
           }
         }
+
         researchImpact.setBeneficiaries(new ArrayList<>(researchImpact.getResearchImpactBeneficiaries().stream()
           .filter(rib -> rib.isActive()).collect(Collectors.toList())));
       }

@@ -61,6 +61,15 @@ public interface ISectionStatusDAO {
    * gets a SectionStatus of the one section by a specific research program
    * 
    * @param programId
+   * @param sectionName
+   * @return a SectionStatus List Object
+   */
+  public List<SectionStatus> getSectionStatus(long programId, String sectionName);
+
+  /**
+   * gets a SectionStatus of the one section by a specific research program
+   * 
+   * @param programId
    * @param outcomeId
    * @param sectionName
    * @return a SectionStatus Object
@@ -85,6 +94,7 @@ public interface ISectionStatusDAO {
    * @return a SectionStatus Object
    */
   public SectionStatus getSectionStatusByProgram(long programId, String sectionName);
+
 
   /**
    * This method gets a list of sectionStatuss belongs of the user

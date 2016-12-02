@@ -82,7 +82,12 @@ public class OutcomesValidator extends BaseValidator {
 
   public void validateOutcome(BaseAction baseAction, ResearchOutcome outcome) {
 
-    if (outcome.getResearchImpact().getId() == -1) {
+    if (outcome.getResearchImpact() != null) {
+      if (outcome.getResearchImpact().getId() == -1) {
+        this.addMessage(baseAction.getText("outcome.action.impactPathway.required"));
+        baseAction.getInvalidFields().put("input-outcome.researchImpact", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("outcome.action.impactPathway.required"));
       baseAction.getInvalidFields().put("input-outcome.researchImpact", InvalidFieldsMessages.EMPTYFIELD);
     }

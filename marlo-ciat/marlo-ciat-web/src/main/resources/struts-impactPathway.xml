@@ -59,16 +59,16 @@
 				<param name="edit">true</param>
 			</result>
 		</action>
-		
+
 		<action name="{center}/deleteOutcome" method="delete"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesListAction">
-      <interceptor-ref name="outcomeStack" />
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/outcomesList</param>
-        <param name="programID">${programID}</param>
-        <param name="topicID">${"topicID"}</param>
-      </result>
-    </action>
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesListAction">
+			<interceptor-ref name="outcomeStack" />
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/outcomesList</param>
+				<param name="programID">${programID}</param>
+				<param name="topicID">${"topicID"}</param>
+			</result>
+		</action>
 
 		<action name="{center}/outcomes"
 			class="org.cgiar.ccafs.marlo.action.impactpathway.OutcomesAction">
@@ -82,69 +82,79 @@
 				<param name="edit">true</param>
 			</result>
 		</action>
-		
+
 		<action name="{center}/outputsList"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
-      <interceptor-ref name="impactPathwayStack" />
-      <result name="input">/WEB-INF/views/impactPathway/outputsList.ftl
-      </result>
-    </action>
-    
-    <action name="{center}/outputs"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
-      <interceptor-ref name="outputStack" />
-      <result name="input">/WEB-INF/views/impactPathway/output.ftl
-      </result>
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/outputs</param>
-        <param name="outputID">${outputID}</param>
-        <param name="programID">${programID}</param>
-        <param name="edit">true</param>
-      </result>
-    </action>
-    
-    <action name="{center}/outputsPartners"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputPartnerAction">
-      <interceptor-ref name="outputStack" />
-      <result name="input">/WEB-INF/views/impactPathway/outputPartner.ftl
-      </result>
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/outputsPartners</param>
-        <param name="outputID">${outputID}</param>
-        <param name="programID">${programID}</param>
-        <param name="edit">true</param>
-      </result>
-    </action>
-    
-    <action name="{center}/addNewOutput" method="add"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
-      <interceptor-ref name="impactPathwayStack" />
-      <result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
-      </result>
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/outputs</param>
-        <param name="outputID">${outputID}</param>
-        <param name="programID">${programID}</param>
-        <param name="edit">true</param>
-      </result>
-    </action>
-    
-    <action name="{center}/deleteOutput" method="delete"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
-      <interceptor-ref name="outputStack" />
-      <result name="success" type="redirectAction">
-        <param name="actionName">${centerSession}/outputsList</param>
-        <param name="programID">${programID}</param>
-        <param name="outcomeID">${outcomeID}</param>
-      </result>
-      
-    </action>
-        <action name="{center}/nextUsers"
-      class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
-      <interceptor-ref name="impactPathwayStack" />
-      <result name="success">/WEB-INF/views/impactPathway/output-nextUsers.ftl
-      </result>
-    </action>
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
+			<interceptor-ref name="impactPathwayStack" />
+			<result name="input">/WEB-INF/views/impactPathway/outputsList.ftl
+			</result>
+		</action>
+
+		<action name="{center}/outputs"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
+			<interceptor-ref name="outputStack" />
+			<result name="input">/WEB-INF/views/impactPathway/output.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/outputs</param>
+				<param name="outputID">${outputID}</param>
+				<param name="programID">${programID}</param>
+				<param name="edit">true</param>
+			</result>
+		</action>
+
+		<action name="{center}/outputsPartners"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutputPartnerAction">
+			<interceptor-ref name="outputStack" />
+			<result name="input">/WEB-INF/views/impactPathway/outputPartner.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/outputsPartners</param>
+				<param name="outputID">${outputID}</param>
+				<param name="programID">${programID}</param>
+				<param name="edit">true</param>
+			</result>
+		</action>
+
+		<action name="{center}/addNewOutput" method="add"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
+			<interceptor-ref name="impactPathwayStack" />
+			<result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/outputs</param>
+				<param name="outputID">${outputID}</param>
+				<param name="programID">${programID}</param>
+				<param name="edit">true</param>
+			</result>
+		</action>
+
+		<action name="{center}/deleteOutput" method="delete"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsListAction">
+			<interceptor-ref name="outputStack" />
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/outputsList</param>
+				<param name="programID">${programID}</param>
+				<param name="outcomeID">${outcomeID}</param>
+			</result>
+
+		</action>
+		<action name="{center}/nextUsers"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.OutputsAction">
+			<interceptor-ref name="impactPathwayStack" />
+			<result name="success">/WEB-INF/views/impactPathway/output-nextUsers.ftl
+			</result>
+		</action>
+
+		<action name="{center}/submit"
+			class="org.cgiar.ccafs.marlo.action.impactpathway.IPSubmissionAction">
+			<result name="input">/WEB-INF/views/impactPathway/programImpacts.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/programimpacts</param>
+				<param name="programID">${programID}</param>
+			</result>
+		</action>
 
 	</package>
 </struts>

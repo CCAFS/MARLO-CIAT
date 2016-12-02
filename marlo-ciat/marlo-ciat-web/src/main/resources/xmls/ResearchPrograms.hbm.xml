@@ -50,6 +50,13 @@
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
 		</set>
+		<set name="sectionStatuses" table="section_statuses" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="research_program_id" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.SectionStatus" />
+		</set>
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
 		</property>
