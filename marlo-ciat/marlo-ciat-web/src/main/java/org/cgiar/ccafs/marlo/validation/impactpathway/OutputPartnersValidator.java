@@ -50,13 +50,11 @@ public class OutputPartnersValidator extends BaseValidator {
 
     if (output.getPartners() != null) {
       if (output.getPartners().size() == 0) {
-        this.addMissingField("partners");
         this.addMessage(baseAction.getText("output.action.partner.required"));
         baseAction.getInvalidFields().put("list-output.partners",
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"partners"}));
       }
     } else {
-      this.addMissingField("partners");
       this.addMessage(baseAction.getText("output.action.partner.required"));
       baseAction.getInvalidFields().put("list-output.partners",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"partners"}));
@@ -79,14 +77,12 @@ public class OutputPartnersValidator extends BaseValidator {
 
     if (partner.getUsers() != null) {
       if (partner.getUsers().size() == 0) {
-        this.addMissingField("users");
         this.addMessage(baseAction.getText("output.action.partner.user"));
         baseAction.getInvalidFields().put("list-output.partners[" + i + "].users",
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"users"}));
 
       }
     } else {
-      this.addMissingField("users");
       this.addMessage(baseAction.getText("output.action.partner.user"));
       baseAction.getInvalidFields().put("list-output.partners[" + i + "].users",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"users"}));

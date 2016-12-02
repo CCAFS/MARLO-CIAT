@@ -52,7 +52,6 @@ public class ProgramImpactsValidator extends BaseValidator {
     }
 
     if (researchImpacts.size() == 0) {
-      this.addMissingField("researchImpacts");
       this.addMessage(baseAction.getText("programImpact.action.required"));
       baseAction.getInvalidFields().put("list-researchImpacts",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"researchImpacts"}));
@@ -110,15 +109,21 @@ public class ProgramImpactsValidator extends BaseValidator {
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (researchImpact.getObjectiveValue().length() < 1) {
+    if (researchImpact.getObjectiveValue() != null) {
+      if (researchImpact.getObjectiveValue().length() < 1) {
+        this.addMessage(baseAction.getText("programImpact.action.objectiveValue.empty", params));
+        baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].objectiveValue",
+          InvalidFieldsMessages.CHECKBOX);
+      }
+    } else {
       this.addMessage(baseAction.getText("programImpact.action.objectiveValue.empty", params));
       baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].objectiveValue",
         InvalidFieldsMessages.CHECKBOX);
     }
 
+
     if (researchImpact.getBeneficiaries() != null) {
       if (researchImpact.getBeneficiaries().size() == 0) {
-        this.addMissingField("beneficiaries");
         this.addMessage(baseAction.getText("programImpact.action.beneficiary"));
         baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
@@ -129,7 +134,6 @@ public class ProgramImpactsValidator extends BaseValidator {
         }
       }
     } else {
-      this.addMissingField("beneficiaries");
       this.addMessage(baseAction.getText("programImpact.action.beneficiary"));
       baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));

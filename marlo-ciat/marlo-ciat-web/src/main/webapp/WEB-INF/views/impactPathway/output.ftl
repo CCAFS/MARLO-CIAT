@@ -90,12 +90,14 @@
             [@nextUserMacro nextUser=nextUser name="${outputCustomName}.nextUsers" index=nextUser_index /]
             [/#list]
             [#else]
-            <p class="message text-center">[@s.text name="There are not Next Users added yet.."/]</p>
+            <p class="message text-center">[@s.text name="No Next Users have been added."/]</p>
           [/#if] 
         </div>
+        [#if editable] 
         <div class="text-right">
           <div class="addNextUser button-blue text-right"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="Add a new Next User"/]</div>
         </div>
+        [/#if]
         [#-- Section Buttons--]
         [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-output.ftl" /]
         

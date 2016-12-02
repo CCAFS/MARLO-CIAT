@@ -37,12 +37,19 @@
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchTopic" />
 		</set>
 		<set lazy="true" name="researchImpacts" table="research_impacts"
-      inverse="true" fetch="select" order-by="id">
-      <key>
-        <column name="research_program_id" not-null="true" />
-      </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" />
-    </set>
+			inverse="true" fetch="select" order-by="id">
+			<key>
+				<column name="research_program_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" />
+		</set>
+		<set name="submissions" table="submissions" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="program_id" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
+		</set>
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
 		</property>

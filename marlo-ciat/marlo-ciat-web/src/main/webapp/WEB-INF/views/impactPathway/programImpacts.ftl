@@ -126,10 +126,11 @@
           [@beneficiaryMacro beneficiary=beneficiary name="${customName}.beneficiaries" index=beneficiary_index /]
         [/#list]
       [#else]
-        <p class="message text-center">[@s.text name="There are not beneficiaries added yet.."/]</p>
+        <p class="message text-center">[@s.text name="No beneficiaries have been added."/]</p>
       [/#if]
-    [#if editable]  
+     
     </div>
+    [#if editable] 
     <div class="text-right">
       <div class="addBeneficiary button-blue text-right"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="Add beneficiary"/]</div>
     </div>
@@ -146,7 +147,7 @@
     <div class="removeBeneficiary removeIcon" title="Remove assumption"></div>
     [/#if]
     <input type="hidden" class="beneficiaryId" name="${beneficiaryCustomName}.id" value="${(beneficiary.id)!}"/>
-  
+
   [#-- Type select --]
   <div class="col-md-4">
   [@customForm.select name="${beneficiaryCustomName}.beneficiary.beneficiaryType.id" label=""  i18nkey="Type" listName="beneficiaryTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]

@@ -49,7 +49,7 @@ public class ResearchTopicsValidator extends BaseValidator {
     }
 
     if (researchTopics.size() == 0) {
-      this.addMissingField("researchTopics");
+      this.addMessage(baseAction.getText("researchTopic.action.required"));
       baseAction.getInvalidFields().put("list-researchTopics",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"researchTopics"}));
     }

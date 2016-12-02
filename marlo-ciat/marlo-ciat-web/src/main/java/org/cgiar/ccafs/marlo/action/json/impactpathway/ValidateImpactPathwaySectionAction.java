@@ -27,8 +27,6 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutcomesValidator;
@@ -59,8 +57,6 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   private static final Logger LOG = LoggerFactory.getLogger(ValidateImpactPathwaySectionAction.class);
   // Managers
   private IProgramService programServcie;
-  private IResearchOutcomeService outcomeService;
-  private IResearchOutputService outputService;
   private ISectionStatusService sectionStatusService;
   // Parameters
   private boolean existProgram;
@@ -80,22 +76,17 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
   @Inject
   public ValidateImpactPathwaySectionAction(APConfig config, IProgramService programServcie,
-    IResearchOutcomeService outcomeService, IResearchOutputService outputService,
     ISectionStatusService sectionStatusService, OutcomesValidator outcomeValidator, OutputsValidator outputValidator,
     OutputPartnersValidator outputPartnerValidator, ProgramImpactsValidator impactValidator,
     ResearchTopicsValidator topicValidator) {
     super(config);
     this.programServcie = programServcie;
-    this.outcomeService = outcomeService;
-    this.outputService = outputService;
     this.sectionStatusService = sectionStatusService;
-
     this.outcomeValidator = outcomeValidator;
     this.outputValidator = outputValidator;
     this.outputPartnerValidator = outputPartnerValidator;
     this.impactValidator = impactValidator;
     this.topicValidator = topicValidator;
-
   }
 
   @Override

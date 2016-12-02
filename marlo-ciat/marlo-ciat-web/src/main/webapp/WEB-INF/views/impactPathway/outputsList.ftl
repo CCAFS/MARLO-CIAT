@@ -37,7 +37,7 @@
         
         [#-- Research Topic List --]
           <div class="simpleBox col-md-12">
-            <label for="">Research Topics:<span class="red">*</span></label>
+            <label for="">Research Topic:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
               <option value="-1" >Select an option</option>
               

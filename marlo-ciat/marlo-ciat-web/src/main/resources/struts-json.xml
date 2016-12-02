@@ -67,6 +67,14 @@
         <param name="excludeNullProperties">true</param>
       </result>
     </action>
+    
+    <action name="validateImpactPathway"
+      class="org.cgiar.ccafs.marlo.action.json.impactpathway.ValidateImpactPathwaySectionAction">
+      <result type="json">
+        <param name="noCache">true</param>
+        <param name="excludeNullProperties">true</param>
+      </result>
+    </action>
 				
 	</package>
 </struts>

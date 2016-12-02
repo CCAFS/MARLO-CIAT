@@ -52,9 +52,12 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
 
   private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
 
+
   private Set<ResearchTopic> researchTopics = new HashSet<ResearchTopic>(0);
 
   private Set<ResearchImpact> researchImpacts = new HashSet<ResearchImpact>(0);
+
+  private Set<Submission> submissions = new HashSet<Submission>(0);
 
   @Expose
   private String color;
@@ -129,7 +132,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return true;
   }
 
-
   public String getAcronym() {
     return this.acronym;
   }
@@ -137,6 +139,7 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
   public Date getActiveSince() {
     return activeSince;
   }
+
 
   public String getColor() {
     return color;
@@ -193,7 +196,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return researchImpacts;
   }
 
-
   /**
    * @return the researchLeaders
    */
@@ -205,11 +207,15 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return researchTopics;
   }
 
+
+  public Set<Submission> getSubmissions() {
+    return submissions;
+  }
+
   @Override
   public boolean isActive() {
     return active;
   }
-
 
   public void setAcronym(String acronym) {
     this.acronym = acronym;
@@ -220,19 +226,19 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setColor(String color) {
     this.color = color;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
-
 
   public void setId(Long id) {
     this.id = id;
@@ -248,10 +254,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   public void setName(String name) {
     this.name = name;
   }
-
 
   /**
    * @param programType the programType to set
@@ -268,10 +274,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.researchArea = researchArea;
   }
 
+
   public void setResearchImpacts(Set<ResearchImpact> researchImpacts) {
     this.researchImpacts = researchImpacts;
   }
-
 
   /**
    * @param researchLeaders the researchLeaders to set
@@ -280,8 +286,13 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.researchLeaders = researchLeaders;
   }
 
+
   public void setResearchTopics(Set<ResearchTopic> researchTopics) {
     this.researchTopics = researchTopics;
+  }
+
+  public void setSubmissions(Set<Submission> submissions) {
+    this.submissions = submissions;
   }
 
   @Override
