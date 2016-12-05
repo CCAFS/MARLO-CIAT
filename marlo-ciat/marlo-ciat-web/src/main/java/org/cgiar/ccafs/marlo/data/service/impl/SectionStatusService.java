@@ -72,18 +72,18 @@ public class SectionStatusService implements ISectionStatusService {
   }
 
   @Override
-  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName) {
-    return sectionStatusDAO.getSectionStatusByOutcome(programId, outcomeId, sectionName);
+  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName, int year) {
+    return sectionStatusDAO.getSectionStatusByOutcome(programId, outcomeId, sectionName, year);
   }
 
   @Override
-  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName) {
-    return sectionStatusDAO.getSectionStatusByOutput(programId, outputId, sectionName);
+  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName, int year) {
+    return sectionStatusDAO.getSectionStatusByOutput(programId, outputId, sectionName, year);
   }
 
   @Override
-  public SectionStatus getSectionStatusByProgram(long programId, String sectionName) {
-    return sectionStatusDAO.getSectionStatusByProgram(programId, sectionName);
+  public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year) {
+    return sectionStatusDAO.getSectionStatusByProgram(programId, sectionName, year);
   }
 
   @Override

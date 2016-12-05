@@ -126,7 +126,8 @@ public class IPSubmissionAction extends BaseAction {
 
     ResearchProgram researchProgram = programService.getProgramById(programId);
 
-    List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses());
+    List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
+      .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
 
     if (sectionStatuses != null && sectionStatuses.size() > 0) {
       for (SectionStatus sectionStatus : sectionStatuses) {

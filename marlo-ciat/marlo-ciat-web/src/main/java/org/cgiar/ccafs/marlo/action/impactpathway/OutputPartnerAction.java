@@ -483,7 +483,7 @@ public class OutputPartnerAction extends BaseAction {
   @Override
   public void validate() {
     if (save) {
-      validator.validate(this, output, selectedProgram, true);
+      // validator.validate(this, output, selectedProgram, true);
     }
   }
 

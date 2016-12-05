@@ -110,7 +110,7 @@ public class OutcomesValidator extends BaseValidator {
     }
 
     if (outcome.getResearchMilestones() == null || outcome.getMilestones().isEmpty()) {
-      this.addMessage("outcome.action.milestones.required");
+      this.addMessage(baseAction.getText("outcome.action.milestones"));
       baseAction.getInvalidFields().put("list-outcome.milestones",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Milestones"}));
     } else {

@@ -105,29 +105,90 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
         case OUTPUT:
           this.validateOutput();
           break;
-        case OUTPUT_PARTNER:
-          this.validateOutputPartner();
-          break;
       }
 
     }
 
+    ResearchProgram program = programServcie.getProgramById(programID);
+
     switch (ImpactPathwaySectionsEnum.getValue(sectionName)) {
       case OUTCOME:
-        this.validateOutcome();
+        section = new HashMap<String, Object>();
+        section.put("sectionName", sectionName);
+        section.put("missingFields", "");
+
+        if (program != null) {
+          List<ResearchTopic> topics = new ArrayList<>(
+            program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+          if (topics != null) {
+            for (ResearchTopic researchTopic : topics) {
+              List<ResearchOutcome> outcomes = new ArrayList<>(
+                researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+              for (ResearchOutcome researchOutcome : outcomes) {
+                sectionStatus = sectionStatusService.getSectionStatusByOutcome(program.getId(), researchOutcome.getId(),
+                  sectionName, this.getYear());
+
+                if (sectionStatus == null) {
+                  sectionStatus = new SectionStatus();
+                  sectionStatus.setMissingFields("No section");
+                }
+                if (sectionStatus.getMissingFields().length() > 0) {
+                  section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
+                }
+              }
+            }
+          }
+        }
+
+
         break;
       case OUTPUT:
-        this.validateOutput();
+        section = new HashMap<String, Object>();
+        section.put("sectionName", sectionName);
+        section.put("missingFields", "");
+        if (program != null) {
+          List<ResearchTopic> topics = new ArrayList<>(
+            program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+          if (topics != null) {
+            for (ResearchTopic researchTopic : topics) {
+              List<ResearchOutcome> outcomes = new ArrayList<>(
+                researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+              for (ResearchOutcome researchOutcome : outcomes) {
+                researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
+                  .filter(rm -> rm.isActive()).collect(Collectors.toList())));
+
+                List<ResearchOutput> outputs = new ArrayList<>(researchOutcome.getResearchOutputs().stream()
+                  .filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+                for (ResearchOutput researchOutput : outputs) {
+                  sectionStatus = sectionStatusService.getSectionStatusByOutput(program.getId(), researchOutput.getId(),
+                    sectionName, this.getYear());
+
+                  if (sectionStatus == null) {
+                    sectionStatus = new SectionStatus();
+                    sectionStatus.setMissingFields("No section");
+                  }
+                  if (sectionStatus.getMissingFields().length() > 0) {
+                    section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
+                  }
+                }
+              }
+            }
+          }
+        }
         break;
-      case OUTPUT_PARTNER:
-        this.validateOutputPartner();
+      default:
+        sectionStatus = sectionStatusService.getSectionStatusByProgram(programID, sectionName, this.getYear());
+        section = new HashMap<String, Object>();
+        section.put("sectionName", sectionStatus.getSectionName());
+        section.put("missingFields", sectionStatus.getMissingFields());
         break;
+
     }
 
-    sectionStatus = sectionStatusService.getSectionStatusByProgram(programID, sectionName);
-    section = new HashMap<String, Object>();
-    section.put("sectionName", sectionStatus.getSectionName());
-    section.put("missingFields", sectionStatus.getMissingFields());
+
     Thread.sleep(500);
 
 
@@ -160,7 +221,6 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
     sections.add("researchTopic");
     sections.add("outcomes");
     sections.add("outputs");
-    sections.add("outputsPartners");
 
     validSection = sections.contains(sectionName);
   }
@@ -256,6 +316,7 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
   }
 
+  // TODO Possible Delete
   public void validateOutputPartner() {
     ResearchProgram program = programServcie.getProgramById(programID);
 

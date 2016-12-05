@@ -8,6 +8,8 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 
+import java.util.Calendar;
+
 import javax.mail.internet.InternetAddress;
 
 import com.google.inject.Inject;
@@ -103,17 +105,17 @@ public class BaseValidator {
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
   protected void saveMissingFields(ResearchProgram program, ResearchOutcome outcome, String sectionName) {
-    // Reporting missing fields into the database.
-    int year = 0;
+    int year = Calendar.getInstance().get(Calendar.YEAR);
 
     SectionStatus status =
-      sectionStatusService.getSectionStatusByOutcome(program.getId(), outcome.getId(), sectionName);
+      sectionStatusService.getSectionStatusByOutcome(program.getId(), outcome.getId(), sectionName, year);
     if (status == null) {
 
       status = new SectionStatus();
       status.setSectionName(sectionName);
       status.setResearchProgram(program);
       status.setResearchOutcome(outcome);
+      status.setYear(year);
     }
     if (this.missingFields.length() > 0) {
       status.setMissingFields(this.missingFields.toString());
@@ -132,16 +134,17 @@ public class BaseValidator {
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
   protected void saveMissingFields(ResearchProgram program, ResearchOutput output, String sectionName) {
-    // Reporting missing fields into the database.
-    int year = 0;
+    int year = Calendar.getInstance().get(Calendar.YEAR);
 
-    SectionStatus status = sectionStatusService.getSectionStatusByOutput(program.getId(), output.getId(), sectionName);
+    SectionStatus status =
+      sectionStatusService.getSectionStatusByOutput(program.getId(), output.getId(), sectionName, year);
     if (status == null) {
 
       status = new SectionStatus();
       status.setSectionName(sectionName);
       status.setResearchProgram(program);
       status.setResearchOutput(output);
+      status.setYear(year);
     }
     if (this.missingFields.length() > 0) {
       status.setMissingFields(this.missingFields.toString());
@@ -159,15 +162,16 @@ public class BaseValidator {
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
   protected void saveMissingFields(ResearchProgram program, String sectionName) {
-    // Reporting missing fields into the database.
-    int year = 0;
 
-    SectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName);
+    int year = Calendar.getInstance().get(Calendar.YEAR);
+
+    SectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName, year);
     if (status == null) {
 
       status = new SectionStatus();
       status.setSectionName(sectionName);
       status.setResearchProgram(program);
+      status.setYear(year);
     }
     if (this.missingFields.length() > 0) {
       status.setMissingFields(this.missingFields.toString());

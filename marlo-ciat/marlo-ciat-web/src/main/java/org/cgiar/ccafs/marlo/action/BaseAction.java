@@ -494,8 +494,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return version;
   }
 
-  public long getYear() {
-    return Calendar.YEAR;
+  public int getYear() {
+    return Calendar.getInstance().get(Calendar.YEAR);
   }
 
   public boolean hasPermission(String fieldName) {

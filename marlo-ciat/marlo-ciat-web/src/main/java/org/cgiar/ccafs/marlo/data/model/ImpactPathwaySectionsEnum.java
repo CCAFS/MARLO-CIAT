@@ -21,8 +21,7 @@ package org.cgiar.ccafs.marlo.data.model;
  */
 public enum ImpactPathwaySectionsEnum {
 
-  PROGRAM_IMPACT("researchImpact"), TOPIC("researchTopic"), OUTCOME("outcomes"), OUTPUT("outputs"),
-  OUTPUT_PARTNER("outputsPartners");
+  PROGRAM_IMPACT("researchImpact"), TOPIC("researchTopic"), OUTCOME("outcomes"), OUTPUT("outputs");
 
   public static ImpactPathwaySectionsEnum getValue(String section) {
     ImpactPathwaySectionsEnum[] lst = ImpactPathwaySectionsEnum.values();

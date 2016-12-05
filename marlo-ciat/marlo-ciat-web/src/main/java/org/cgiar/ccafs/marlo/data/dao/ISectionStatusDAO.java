@@ -74,7 +74,7 @@ public interface ISectionStatusDAO {
    * @param sectionName
    * @return a SectionStatus Object
    */
-  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName);
+  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName, int year);
 
   /**
    * gets a SectionStatus of the one section by a specific research program
@@ -84,7 +84,7 @@ public interface ISectionStatusDAO {
    * @param sectionName
    * @return a SectionStatus Object
    */
-  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName);
+  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName, int year);
 
   /**
    * gets a SectionStatus of the one section by a specific research program
@@ -93,7 +93,7 @@ public interface ISectionStatusDAO {
    * @param sectionName
    * @return a SectionStatus Object
    */
-  public SectionStatus getSectionStatusByProgram(long programId, String sectionName);
+  public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year);
 
 
   /**

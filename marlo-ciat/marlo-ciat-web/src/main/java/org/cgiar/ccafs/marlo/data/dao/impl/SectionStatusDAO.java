@@ -77,9 +77,9 @@ public class SectionStatusDAO implements ISectionStatusDAO {
   }
 
   @Override
-  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName) {
+  public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName, int year) {
     String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
-      + "' and research_program_id=" + programId + " and research_outcome_id=" + outcomeId;
+      + "' and research_program_id=" + programId + " and research_outcome_id=" + outcomeId + " and year=" + year;
     List<SectionStatus> list = dao.findAll(query);
     if (list.size() > 0) {
       return list.get(0);
@@ -88,9 +88,9 @@ public class SectionStatusDAO implements ISectionStatusDAO {
   }
 
   @Override
-  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName) {
+  public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName, int year) {
     String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
-      + "' and research_program_id=" + programId + " and research_output_id=" + outputId;
+      + "' and research_program_id=" + programId + " and research_output_id=" + outputId + " and year=" + year;
     List<SectionStatus> list = dao.findAll(query);
     if (list.size() > 0) {
       return list.get(0);
@@ -99,9 +99,9 @@ public class SectionStatusDAO implements ISectionStatusDAO {
   }
 
   @Override
-  public SectionStatus getSectionStatusByProgram(long programId, String sectionName) {
+  public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year) {
     String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
-      + "' and research_program_id=" + programId;
+      + "' and research_program_id=" + programId + " and year=" + year;
     List<SectionStatus> list = dao.findAll(query);
     if (list.size() > 0) {
       return list.get(0);
