@@ -27,6 +27,9 @@
       <column name="modification_justification" length="65535"
         not-null="false" />
     </property>
+    <property name="color" type="string">
+      <column name="color" length="8" />
+    </property>
 		  <property name="description" type="string">
       <column name="description" length="65535" not-null="true" />
     </property>

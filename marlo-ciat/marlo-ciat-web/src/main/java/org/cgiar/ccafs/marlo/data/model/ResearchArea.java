@@ -41,7 +41,6 @@ public class ResearchArea implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
-
   @Expose
   private String name;
 
@@ -74,6 +73,10 @@ public class ResearchArea implements Serializable, IAuditLog {
   private String modificationJustification;
 
 
+  @Expose
+  private String color;
+
+
   private Set<ResearchProgram> researchPrograms = new HashSet<ResearchProgram>(0);
 
   /**
@@ -83,6 +86,7 @@ public class ResearchArea implements Serializable, IAuditLog {
     super();
     // TODO Auto-generated constructor stub
   }
+
 
   /**
    * @param name
@@ -114,6 +118,10 @@ public class ResearchArea implements Serializable, IAuditLog {
 
   public Date getActiveSince() {
     return activeSince;
+  }
+
+  public String getColor() {
+    return color;
   }
 
   public User getCreatedBy() {
@@ -148,7 +156,6 @@ public class ResearchArea implements Serializable, IAuditLog {
     return name;
   }
 
-
   /**
    * @return the researchCenter
    */
@@ -171,11 +178,6 @@ public class ResearchArea implements Serializable, IAuditLog {
   }
 
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
-   */
-
   /**
    * @param acronym the acronym to set
    */
@@ -184,6 +186,11 @@ public class ResearchArea implements Serializable, IAuditLog {
   }
 
 
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
+   */
+
   public void setActive(boolean active) {
     this.active = active;
   }
@@ -191,6 +198,11 @@ public class ResearchArea implements Serializable, IAuditLog {
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
+  }
+
+
+  public void setColor(String color) {
+    this.color = color;
   }
 
 

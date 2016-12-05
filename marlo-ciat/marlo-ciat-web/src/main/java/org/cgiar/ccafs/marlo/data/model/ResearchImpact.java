@@ -41,7 +41,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
-
   /**
    * The impact description text.
    */
@@ -54,6 +53,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
    */
   @Expose
   private Integer targetYear;
+
 
   /**
    * The research Program to which this research impact relates to.
@@ -79,13 +79,17 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private ResearchProgram researchProgram;
 
+  @Expose
+  private String color;
+
 
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
 
-
   private Set<ResearchImpactObjective> researchImpactObjectives = new HashSet<>(0);
 
+
   private Set<ResearchImpactBeneficiary> researchImpactBeneficiaries = new HashSet<ResearchImpactBeneficiary>(0);
+
 
   private List<ResearchObjective> objectives;
 
@@ -100,7 +104,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     super();
     // TODO Auto-generated constructor stub
   }
-
 
   /**
    * @param impact
@@ -136,23 +139,28 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return true;
   }
 
+
   public Date getActiveSince() {
     return activeSince;
   }
-
 
   public List<ResearchImpactBeneficiary> getBeneficiaries() {
     return beneficiaries;
   }
 
+  public String getColor() {
+    return color;
+  }
+
+
   public User getCreatedBy() {
     return createdBy;
   }
 
-
   public String getDescription() {
     return description;
   }
+
 
   /**
    * @return the id
@@ -162,7 +170,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return id;
   }
 
-
   @Override
   public String getLogDeatil() {
     StringBuilder sb = new StringBuilder();
@@ -170,15 +177,16 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
-
 
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
+
 
   public List<ResearchObjective> getObjectives() {
     return objectives;
@@ -200,10 +208,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return null;
   }
 
-
   public String getObjectiveValue() {
     return objectiveValue;
   }
+
 
   public Set<ResearchImpactBeneficiary> getResearchImpactBeneficiaries() {
     return researchImpactBeneficiaries;
@@ -234,7 +242,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return targetYear;
   }
 
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -249,6 +256,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return active;
   }
 
+
   public void setActive(boolean active) {
     this.active = active;
   }
@@ -259,6 +267,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   public void setBeneficiaries(List<ResearchImpactBeneficiary> beneficiaries) {
     this.beneficiaries = beneficiaries;
+  }
+
+  public void setColor(String color) {
+    this.color = color;
   }
 
   public void setCreatedBy(User createdBy) {

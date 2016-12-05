@@ -36,16 +36,15 @@ public class ResearchTopic implements Serializable, IAuditLog {
 
   private static final long serialVersionUID = 365817271325565483L;
 
+
   @Expose
   private Long id;
-
 
   /**
    * The research topic description text.
    */
   @Expose
   private String researchTopic;
-
 
   /**
    * The research program related to this research topic or flagship project.
@@ -74,8 +73,11 @@ public class ResearchTopic implements Serializable, IAuditLog {
   private String modificationJustification;
 
 
-  private Set<ResearchOutcome> researchOutcomes = new HashSet<>(0);
+  @Expose
+  private String color;
 
+
+  private Set<ResearchOutcome> researchOutcomes = new HashSet<>(0);
 
   /**
    * 
@@ -84,6 +86,7 @@ public class ResearchTopic implements Serializable, IAuditLog {
     super();
     // TODO Auto-generated constructor stub
   }
+
 
   /**
    * @param researchTopic
@@ -118,9 +121,13 @@ public class ResearchTopic implements Serializable, IAuditLog {
     return true;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
+  }
+
+
+  public String getColor() {
+    return color;
   }
 
 
@@ -136,6 +143,7 @@ public class ResearchTopic implements Serializable, IAuditLog {
   public Long getId() {
     return id;
   }
+
 
   @Override
   public String getLogDeatil() {
@@ -156,7 +164,6 @@ public class ResearchTopic implements Serializable, IAuditLog {
   public Set<ResearchOutcome> getResearchOutcomes() {
     return researchOutcomes;
   }
-
 
   /**
    * @return the researchProgram
@@ -188,12 +195,17 @@ public class ResearchTopic implements Serializable, IAuditLog {
     return active;
   }
 
+
   public void setActive(boolean active) {
     this.active = active;
   }
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
+  }
+
+  public void setColor(String color) {
+    this.color = color;
   }
 
 

@@ -46,5 +46,12 @@
       </key>
       <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchArea" />
     </set>
+    <set lazy="true" name="researchObjectives" table="research_objectives" inverse="true"
+      fetch="select">
+      <key>
+        <column name="research_center_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchObjective" />
+    </set>
 	</class>
 </hibernate-mapping>

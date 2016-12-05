@@ -30,6 +30,9 @@
       <column name="modification_justification" length="65535"
         not-null="false" />
     </property>
+    <property name="color" type="string">
+      <column name="color" length="8" />
+    </property>
     <many-to-one name="researchProgram" class="org.cgiar.ccafs.marlo.data.model.ResearchProgram"
       fetch="select">
       <column name="research_program_id" not-null="true" />

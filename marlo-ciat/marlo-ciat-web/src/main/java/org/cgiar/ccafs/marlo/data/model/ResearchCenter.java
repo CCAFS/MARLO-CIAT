@@ -46,7 +46,6 @@ public class ResearchCenter implements Serializable, IAuditLog {
   @Expose
   private String acronym;
 
-
   @Expose
   private boolean active;
 
@@ -73,12 +72,16 @@ public class ResearchCenter implements Serializable, IAuditLog {
   private Set<ResearchArea> researchAreas = new HashSet<ResearchArea>(0);
 
 
+  private Set<ResearchObjective> researchObjectives = new HashSet<ResearchObjective>(0);
+
+
   public ResearchCenter() {
   }
 
   public ResearchCenter(String name) {
     this.name = name;
   }
+
 
   /**
    * @param name
@@ -133,14 +136,12 @@ public class ResearchCenter implements Serializable, IAuditLog {
     return activeSince;
   }
 
-
   /**
    * @return the centerUsers
    */
   public Set<CenterUser> getCenterUsers() {
     return centerUsers;
   }
-
 
   public User getCreatedBy() {
     return createdBy;
@@ -160,9 +161,11 @@ public class ResearchCenter implements Serializable, IAuditLog {
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   @Override
   public User getModifiedBy() {
@@ -173,10 +176,14 @@ public class ResearchCenter implements Serializable, IAuditLog {
     return this.name;
   }
 
-
   public Set<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
+
+  public Set<ResearchObjective> getResearchObjectives() {
+    return researchObjectives;
+  }
+
 
   @Override
   public int hashCode() {
@@ -194,7 +201,6 @@ public class ResearchCenter implements Serializable, IAuditLog {
   public void setAcronym(String acronym) {
     this.acronym = acronym;
   }
-
 
   public void setActive(boolean active) {
     this.active = active;
@@ -233,12 +239,17 @@ public class ResearchCenter implements Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   public void setName(String name) {
     this.name = name;
   }
 
   public void setResearchAreas(Set<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
+  }
+
+  public void setResearchObjectives(Set<ResearchObjective> researchObjectives) {
+    this.researchObjectives = researchObjectives;
   }
 
   @Override

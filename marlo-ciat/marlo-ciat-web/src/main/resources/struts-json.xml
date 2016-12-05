@@ -25,15 +25,15 @@
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
-		
+
 		<action name="createUser"
-      class="org.cgiar.ccafs.marlo.action.json.global.ManageUsersAction"
-      method="create">
-      <result type="json">
-        <param name="noCache">true</param>
-        <param name="excludeNullProperties">true</param>
-      </result>
-    </action>
+			class="org.cgiar.ccafs.marlo.action.json.global.ManageUsersAction"
+			method="create">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
 
 		<action name="sendNotification"
 			class="org.cgiar.ccafs.marlo.action.json.global.MessagesAction">
@@ -51,30 +51,38 @@
 				<param name="root">jsonString</param>
 			</result>
 		</action>
-		
+
 		<action name="beneficiaryByType"
-      class="org.cgiar.ccafs.marlo.action.json.impactpathway.BeneficiaryListAction">
-      <result type="json">
-        <param name="noCache">true</param>
-        <param name="excludeNullProperties">true</param>
-      </result>
-    </action>
-    
-    <action name="nextUserByType"
-      class="org.cgiar.ccafs.marlo.action.json.impactpathway.NextUserListAction">
-      <result type="json">
-        <param name="noCache">true</param>
-        <param name="excludeNullProperties">true</param>
-      </result>
-    </action>
-    
-    <action name="validateImpactPathway"
-      class="org.cgiar.ccafs.marlo.action.json.impactpathway.ValidateImpactPathwaySectionAction">
-      <result type="json">
-        <param name="noCache">true</param>
-        <param name="excludeNullProperties">true</param>
-      </result>
-    </action>
-				
+			class="org.cgiar.ccafs.marlo.action.json.impactpathway.BeneficiaryListAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
+		<action name="nextUserByType"
+			class="org.cgiar.ccafs.marlo.action.json.impactpathway.NextUserListAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
+		<action name="validateImpactPathway"
+			class="org.cgiar.ccafs.marlo.action.json.impactpathway.ValidateImpactPathwaySectionAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
+		<action name="impactPathwayGraph"
+			class="org.cgiar.ccafs.marlo.action.json.impactpathway.graph.GraphByProgramAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
 	</package>
 </struts>
