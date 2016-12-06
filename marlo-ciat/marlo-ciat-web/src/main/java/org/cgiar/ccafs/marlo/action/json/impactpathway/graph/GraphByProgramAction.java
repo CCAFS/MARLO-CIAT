@@ -75,6 +75,7 @@ public class GraphByProgramAction extends BaseAction {
     ResearchProgram program = programService.getProgramById(programID);
     ResearchArea area = program.getResearchArea();
 
+    // Research Area Data
     HashMap<String, Object> dataArea = new HashMap<>();
     HashMap<String, Object> dataAreaDetail = new HashMap<>();
     dataAreaDetail.put("id", "A" + area.getId());
@@ -85,7 +86,7 @@ public class GraphByProgramAction extends BaseAction {
     dataArea.put("data", dataAreaDetail);
 
     dataNodes.add(dataArea);
-
+    // Research Program Data
     HashMap<String, Object> dataProgram = new HashMap<>();
     HashMap<String, Object> dataProgramDetail = new HashMap<>();
     dataProgramDetail.put("id", "P" + program.getId());
@@ -110,7 +111,7 @@ public class GraphByProgramAction extends BaseAction {
     int i = 1;
 
     for (ResearchTopic topic : topics) {
-
+      // Research Topic Data
       HashMap<String, Object> dataTopic = new HashMap<>();
       HashMap<String, Object> dataTopicDetail = new HashMap<>();
       dataTopicDetail.put("id", "T" + topic.getId());
@@ -128,7 +129,7 @@ public class GraphByProgramAction extends BaseAction {
     i = 1;
 
     for (ResearchImpact impact : impacts) {
-
+      // Research Impact Data
       HashMap<String, Object> dataImpact = new HashMap<>();
       HashMap<String, Object> dataImpactDetail = new HashMap<>();
       dataImpactDetail.put("id", "I" + impact.getId());
@@ -154,7 +155,7 @@ public class GraphByProgramAction extends BaseAction {
         new ArrayList<>(impact.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
       for (ResearchOutcome outcome : outcomes) {
-
+        // Research Outcome Data
         HashMap<String, Object> dataOutcome = new HashMap<>();
         HashMap<String, Object> dataOutcomeDetail = new HashMap<>();
         dataOutcomeDetail.put("id", "OC" + outcome.getId());
@@ -165,7 +166,7 @@ public class GraphByProgramAction extends BaseAction {
         dataOutcomeDetail.put("type", "OC");
         dataOutcome.put("data", dataOutcomeDetail);
         dataNodes.add(dataOutcome);
-
+        // Relation Program Impact - Outcome
         HashMap<String, Object> dataEdgeOutcome = new HashMap<>();
         HashMap<String, Object> dataEdgeOutcomeDetail = new HashMap<>();
         dataEdgeOutcomeDetail.put("source", "I" + outcome.getResearchImpact().getId());
@@ -178,7 +179,7 @@ public class GraphByProgramAction extends BaseAction {
 
         int k = 1;
         for (ResearchOutput output : outputs) {
-
+          // Research Output Data
           HashMap<String, Object> dataOutput = new HashMap<>();
           HashMap<String, Object> dataOutputDetail = new HashMap<>();
           dataOutputDetail.put("id", "OP" + output.getId());
@@ -189,7 +190,7 @@ public class GraphByProgramAction extends BaseAction {
           dataOutputDetail.put("type", "OP");
           dataOutput.put("data", dataOutputDetail);
           dataNodes.add(dataOutput);
-
+          // Relation Outcome - Output
           HashMap<String, Object> dataEdgeOutput = new HashMap<>();
           HashMap<String, Object> dataEdgeOutputDetail = new HashMap<>();
           dataEdgeOutputDetail.put("source", "OC" + output.getResearchOutcome().getId());
@@ -210,7 +211,7 @@ public class GraphByProgramAction extends BaseAction {
     i = 1;
 
     for (ResearchObjective researchObjective : objectives) {
-
+      // Strategic Objective Data
       HashMap<String, Object> dataObjective = new HashMap<>();
       HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
       dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
@@ -225,7 +226,7 @@ public class GraphByProgramAction extends BaseAction {
         .stream().filter(io -> io.isActive()).collect(Collectors.toList()));
 
       for (ResearchImpactObjective impactObjective : impactObjectives) {
-
+        // Relation S Objective - Program Impact
         HashMap<String, Object> dataEdgeImpact = new HashMap<>();
         HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
         dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchImpact().getId());
