@@ -148,14 +148,14 @@ public class GraphByProgramAction extends BaseAction {
         if (!objectives.contains(researchImpactObjective.getResearchObjective())) {
           objectives.add(researchImpactObjective.getResearchObjective());
         }
-      }      
+      }
 
       for (ResearchImpactObjective impactObjective : impactObjectives) {
         // Relation S Objective - Program Impact
         HashMap<String, Object> dataEdgeImpact = new HashMap<>();
         HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
-        dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchImpact().getId());
-        dataEdgeImpactDetail.put("target", "I" + impactObjective.getResearchObjective().getId());
+        dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchObjective().getId());
+        dataEdgeImpactDetail.put("target", "I" + impactObjective.getResearchImpact().getId());
         dataEdgeImpact.put("data", dataEdgeImpactDetail);
         dataEdges.add(dataEdgeImpact);
       }
@@ -231,8 +231,6 @@ public class GraphByProgramAction extends BaseAction {
       dataObjectiveDetail.put("type", "SO");
       dataObjective.put("data", dataObjectiveDetail);
       dataNodes.add(dataObjective);
-
-
 
 
       i++;
