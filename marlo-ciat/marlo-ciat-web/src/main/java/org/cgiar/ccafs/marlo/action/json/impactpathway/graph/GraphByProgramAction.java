@@ -218,6 +218,7 @@ public class GraphByProgramAction extends BaseAction {
       i++;
     }
 
+
     i = 1;
 
     for (ResearchObjective researchObjective : objectives) {
@@ -225,7 +226,7 @@ public class GraphByProgramAction extends BaseAction {
       HashMap<String, Object> dataObjective = new HashMap<>();
       HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
       dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
-      dataObjectiveDetail.put("label", "Strategic Objective " + i);
+      dataObjectiveDetail.put("label", "Objective " + i);
       dataObjectiveDetail.put("description", researchObjective.getObjective());
       dataObjectiveDetail.put("color", "#FFFFFF");
       dataObjectiveDetail.put("type", "SO");
