@@ -22,12 +22,15 @@ import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
+import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -95,6 +98,13 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private IResearchImpactService impactService;
   @Inject
   private IResearchOutcomeService outcomeService;
+
+  @Inject
+  private IResearchOutputService outputService;
+
+  @Inject
+  private ISectionStatusService secctionStatusService;
+
   protected boolean add;
   private String basePermission;
 
@@ -442,6 +452,28 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
 
+  /**
+   * This method gets the specific section status from the sectionStatuses array for a Deliverable.
+   * 
+   * @param deliverableID is the deliverable ID to be identified.
+   * @param section is the name of some section.
+   * @return a SectionStatus object with the information requested.
+   */
+  public SectionStatus getOutcomeStatus(long outcomeID) {
+
+    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+
+    // Deliverable deliverable = deliverableManager.getDeliverableById(deliverableID);
+
+    List<SectionStatus> sectionStatuses =
+      outcome.getSectionStatuses().stream().filter(c -> c.getYear() == this.getYear()).collect(Collectors.toList());
+
+    if (!sectionStatuses.isEmpty()) {
+      return sectionStatuses.get(0);
+    }
+    return null;
+  }
+
   public Map<String, Object> getParameters() {
     parameters = ActionContext.getContext().getParameters();
     return parameters;
@@ -551,10 +583,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return submit;
   }
 
+
   public String next() {
     return NEXT;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -566,10 +598,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return SUCCESS;
   }
 
+
   public void setAdd(boolean add) {
     this.add = true;
   }
-
 
   public void setBasePermission(String basePermission) {
     this.basePermission = basePermission;

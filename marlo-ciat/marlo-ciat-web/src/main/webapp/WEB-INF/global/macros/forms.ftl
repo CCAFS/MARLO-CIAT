@@ -224,7 +224,7 @@
   <div id="dialog-justification" title="${title}" style="display:none"> 
     <div class="dialog-content"> 
       [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
-        [@textArea name="justification" i18nkey="saving.justification" required=true className="justification"/]
+        [@textArea name="justification" i18nkey="saving.justification.outcome" required=true className="justification"/]
         [#if nameId != ""]
           <input name="${nameId}" type="hidden" value="-1" />
         [/#if]
@@ -240,7 +240,7 @@
   <div id="dialog-justification" title="${title}" style="display:none"> 
     <div class="dialog-content"> 
       [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
-        [@textArea name="justification" i18nkey="saving.justification" required=true className="justification"/]
+        [@textArea name="justification" i18nkey="saving.justification.output" required=true className="justification"/]
         [#if nameId != ""]
           <input name="${nameId}" type="hidden" value="-1" />
         [/#if]

@@ -55,12 +55,18 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   @Expose
   private ResearchImpact researchImpact;
+
   @Expose
   private boolean active;
+
+
   @Expose
   private Date activeSince;
+
   @Expose
   private ResearchTopic researchTopic;
+
+
   @Expose
   private User createdBy;
   @Expose
@@ -69,10 +75,9 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private TargetUnit targetUnit;
   @Expose
   private String modificationJustification;
-
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
-
+  private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
   private List<ResearchMilestone> milestones;
 
   public ResearchOutcome() {
@@ -166,6 +171,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return researchTopic;
   }
 
+  public Set<SectionStatus> getSectionStatuses() {
+    return sectionStatuses;
+  }
+
   public TargetUnit getTargetUnit() {
     return targetUnit;
   }
@@ -196,11 +205,9 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.active = active;
   }
 
-
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -237,6 +244,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   /**
    * @param researchImpact the researchImpact to set
    */
@@ -249,10 +257,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.researchMilestones = researchMilestones;
   }
 
-
   public void setResearchOutputs(Set<ResearchOutput> researchOutputs) {
     this.researchOutputs = researchOutputs;
   }
+
 
   /**
    * @param researchTopic the researchTopic to set
@@ -261,6 +269,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.researchTopic = researchTopic;
   }
 
+
+  public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
+    this.sectionStatuses = sectionStatuses;
+  }
 
   public void setTargetUnit(TargetUnit targetUnit) {
     this.targetUnit = targetUnit;

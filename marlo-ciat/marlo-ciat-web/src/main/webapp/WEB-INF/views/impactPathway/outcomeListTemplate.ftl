@@ -8,6 +8,7 @@
         <th id="ids">[@s.text name="programImpact.outcomeList.idTable" /]</th>
         <th id="outcomeTitles" >[@s.text name="programImpact.outcomeList.statement" /]</th>
         <th id="outcomeTargetYear">[@s.text name="programImpact.outcomeList.targetYear" /]</th>
+        <th id="outcomeRF">[@s.text name="programImpact.outcomeList.requiredFields" /]</th>
         <th id="outcomeDelete">[@s.text name="programImpact.outcomeList.delete" /]</th>
       </tr>
     </thead>
@@ -39,7 +40,18 @@
           [/#if]
             
           </td>
-          
+          [#-- Outcome required fields --]
+          <td class="text-center">
+            [#if action.getOutcomeStatus(outcome.id)??]
+              [#if !((action.getOutcomeStatus(outcome.id)).missingFields)?has_content]
+                <span class="icon-20 icon-check" title="Complete"></span>
+              [#else]
+                <span class="icon-20 icon-uncheck" title=""></span> 
+              [/#if]
+            [#else]
+                <span class="icon-20 icon-uncheck" title=""></span>
+            [/#if]
+          </td>
           [#-- Delete Outcome--]
           <td class="text-center">
             [#if canEdit && action.canBeDeleted(outcome.id, outcome.class.name)!false]

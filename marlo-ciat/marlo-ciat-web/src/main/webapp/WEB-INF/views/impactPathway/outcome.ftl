@@ -64,18 +64,7 @@
           <div class="form-group">
             [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=true className="outcome-statement limitWords-100" editable=editable /]
           </div>
-          <div class="row form-group target-block">
-            [#-- Target Year --]            
-            <div class="col-md-4">
-              [#if editable]
-                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected" editable=editable/]
-              [#else]
-                <div class="select">
-                  <label for=""> [@s.text name="outcome.year" /]:  </label>
-                  <div class="selectList"><p> [#if outcome.targetYear?has_content][#if outcome.targetYear == -1] Not Selected [#else]${(outcome.targetYear)!'none'}[/#if][#else]Not Selected[/#if] </p></div> 
-                </div>
-              [/#if]
-            </div>
+          <div class="row form-group target-block">            
             [#-- Target Unit --]
             <div class="col-md-4">
               [@customForm.select name="${outcomeCustomName}.targetUnit.id" i18nkey="outcome.selectTargetUnit"  placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
@@ -87,6 +76,17 @@
             <div class="col-md-4 targetValue-block" style="display:${showTargetValue?string('block', 'none')}">
               [@customForm.input name="${outcomeCustomName}.value" type="text" i18nkey="outcome.targetValue" placeholder="outcome.inputTargetValue.placeholder" className="targetValue" required=true editable=editable /]
             </div> 
+            [#-- Target Year --]            
+            <div class="col-md-4">
+              [#if editable]
+                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected" editable=editable/]
+              [#else]
+                <div class="select">
+                  <label for=""> [@s.text name="outcome.year" /]:  </label>
+                  <div class="selectList"><p> [#if outcome.targetYear?has_content][#if outcome.targetYear == -1] Not Selected [#else]${(outcome.targetYear)!'none'}[/#if][#else]Not Selected[/#if] </p></div> 
+                </div>
+              [/#if]
+            </div>
           </div>   
           <br />
           <br />
@@ -147,7 +147,17 @@
     <div class="form-group">
       [@customForm.textArea name="${milestoneCustomName}.title" i18nkey="outcome.milestone.index.statement" required=true className="milestone-statement limitWords-50" editable=editable /]
     </div>
-    <div class="row form-group target-block">
+    <div class="row form-group target-block">      
+      [#-- Target Unit --]
+      <div class="col-md-4">
+        [@customForm.select name="${milestoneCustomName}.targetUnit.id"  i18nkey="outcome.milestone.index.selectTargetUnit" placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
+        [#--  --if editable]<div class="addOtherTargetUnit text-center"><a href="#">([@s.text name = "outcomes.addNewTargetUnit" /])</a></div>[/#if--]
+      </div>
+      [#-- Target Value --]
+      [#local showTargetValue = (milestone??) && (milestone.targetUnit??) && (milestone.targetUnit.id??) && (milestone.targetUnit.id != -1) /]
+      <div class="col-md-4 targetValue-block" style="display:${showTargetValue?string('block', 'none')}">
+        [@customForm.input name="${milestoneCustomName}.value" type="text"  i18nkey="outcome.milestone.index.inputTargetValue" placeholder="outcome.milestone.index..placeholder" className="targetValue" required=true editable=editable /]
+      </div>
       [#-- Target Year --]
       <div class="col-md-4">
         [#if editable]
@@ -158,16 +168,6 @@
             <div class="selectList"><p> [#if milestone.targetYear?has_content][#if milestone.targetYear == -1] Not Selected [#else]${(milestone.targetYear)!'none'}[/#if][#else]Not Selected[/#if]  </p></div> 
           </div>
         [/#if]
-      </div>
-      [#-- Target Unit --]
-      <div class="col-md-4">
-        [@customForm.select name="${milestoneCustomName}.targetUnit.id"  i18nkey="outcome.milestone.index.selectTargetUnit" placeholder="outcome.selectTargetUnit.placeholder" className="targetUnit" listName="targetUnitList" editable=editable  /]
-        [#--  --if editable]<div class="addOtherTargetUnit text-center"><a href="#">([@s.text name = "outcomes.addNewTargetUnit" /])</a></div>[/#if--]
-      </div>
-      [#-- Target Value --]
-      [#local showTargetValue = (milestone??) && (milestone.targetUnit??) && (milestone.targetUnit.id??) && (milestone.targetUnit.id != -1) /]
-      <div class="col-md-4 targetValue-block" style="display:${showTargetValue?string('block', 'none')}">
-        [@customForm.input name="${milestoneCustomName}.value" type="text"  i18nkey="outcome.milestone.index.inputTargetValue" placeholder="outcome.milestone.index..placeholder" className="targetValue" required=true editable=editable /]
       </div>
     </div> 
     

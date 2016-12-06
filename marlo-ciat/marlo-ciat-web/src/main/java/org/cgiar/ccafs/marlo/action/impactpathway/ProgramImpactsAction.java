@@ -401,7 +401,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setCreatedBy(this.getCurrentUser());
           researchImpactNew.setDescription(researchImpact.getDescription().trim());
           researchImpactNew.setResearchProgram(programDb);
-          researchImpactNew.setTargetYear(researchImpact.getTargetYear());
+          // researchImpactNew.setTargetYear(researchImpact.getTargetYear());
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
           long impactId = impactService.saveResearchImpact(researchImpactNew);
@@ -435,17 +435,17 @@ public class ProgramImpactsAction extends BaseAction {
             researchImpactRew.setDescription(researchImpact.getDescription().trim());
           }
 
-          if (researchImpact.getTargetYear() != null) {
-            if (researchImpactRew.getTargetYear() != null) {
-              if (!researchImpactRew.getTargetYear().equals(researchImpact.getTargetYear())) {
-                hasChanges = true;
-                researchImpactRew.setTargetYear(researchImpact.getTargetYear());
-              }
-            } else {
-              hasChanges = true;
-              researchImpactRew.setTargetYear(researchImpact.getTargetYear());
-            }
-          }
+          // if (researchImpact.getTargetYear() != null) {
+          // if (researchImpactRew.getTargetYear() != null) {
+          // if (!researchImpactRew.getTargetYear().equals(researchImpact.getTargetYear())) {
+          // hasChanges = true;
+          // researchImpactRew.setTargetYear(researchImpact.getTargetYear());
+          // }
+          // } else {
+          // hasChanges = true;
+          // researchImpactRew.setTargetYear(researchImpact.getTargetYear());
+          // }
+          // }
 
           if (hasChanges) {
             researchImpactRew.setModifiedBy(this.getCurrentUser());

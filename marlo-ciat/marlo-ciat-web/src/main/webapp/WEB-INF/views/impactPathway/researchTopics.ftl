@@ -28,6 +28,12 @@
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
         
+        [#-- Title --]
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">Research Topics</h3>
+            <hr />
+          </div><div class="clearfix"></div>
+        
         [@s.form action=actionName enctype="multipart/form-data" ]     
           <div class="outcomes-list" listname="outcomes">
           [#if researchTopics?has_content]
@@ -81,7 +87,6 @@
     
     <div class="leftHead">
       <span class="index">${index+1}</span>
-      <span class="elementId">Research Topic</span>
     </div>
     <br />
             
