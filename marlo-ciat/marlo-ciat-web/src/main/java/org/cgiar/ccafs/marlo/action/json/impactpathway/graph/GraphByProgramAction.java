@@ -45,18 +45,18 @@ import org.slf4j.LoggerFactory;
 public class GraphByProgramAction extends BaseAction {
 
 
-  private static final long serialVersionUID = -5892467002878824894L;
   // logger
   private static final Logger LOG = LoggerFactory.getLogger(GraphByProgramAction.class);
+  private static final long serialVersionUID = -5892467002878824894L;
 
-  // Managers -Services
-  private IProgramService programService;
+  // Return values
+  private HashMap<String, Object> elements;
 
   // Parameters
   private long programID;
 
-  // Return values
-  private HashMap<String, Object> elements;
+  // Managers -Services
+  private IProgramService programService;
 
   @Inject
   public GraphByProgramAction(APConfig config, IProgramService programService) {
@@ -148,6 +148,16 @@ public class GraphByProgramAction extends BaseAction {
         if (!objectives.contains(researchImpactObjective.getResearchObjective())) {
           objectives.add(researchImpactObjective.getResearchObjective());
         }
+      }      
+
+      for (ResearchImpactObjective impactObjective : impactObjectives) {
+        // Relation S Objective - Program Impact
+        HashMap<String, Object> dataEdgeImpact = new HashMap<>();
+        HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
+        dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchImpact().getId());
+        dataEdgeImpactDetail.put("target", "I" + impactObjective.getResearchObjective().getId());
+        dataEdgeImpact.put("data", dataEdgeImpactDetail);
+        dataEdges.add(dataEdgeImpact);
       }
 
       int j = 1;
@@ -222,18 +232,7 @@ public class GraphByProgramAction extends BaseAction {
       dataObjective.put("data", dataObjectiveDetail);
       dataNodes.add(dataObjective);
 
-      List<ResearchImpactObjective> impactObjectives = new ArrayList<>(researchObjective.getResearchImpactObjectives()
-        .stream().filter(io -> io.isActive()).collect(Collectors.toList()));
 
-      for (ResearchImpactObjective impactObjective : impactObjectives) {
-        // Relation S Objective - Program Impact
-        HashMap<String, Object> dataEdgeImpact = new HashMap<>();
-        HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
-        dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchImpact().getId());
-        dataEdgeImpactDetail.put("target", "I" + impactObjective.getResearchObjective().getId());
-        dataEdgeImpact.put("data", dataEdgeImpactDetail);
-        dataEdges.add(dataEdgeImpact);
-      }
 
 
       i++;

@@ -6099,6 +6099,10 @@ input.fieldChecked {
   margin-bottom:25px;
 }
 
+.relVal label{
+	margin-bottom:15px;
+}
+
 .missingSelect{
   border: 1px solid #F44;
   border-bottom: 1px solid #F44;
