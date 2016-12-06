@@ -462,11 +462,38 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public SectionStatus getOutcomeStatus(long outcomeID) {
 
     ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    List<SectionStatus> sectionStatuses;
+    if (outcome.getSectionStatuses() != null) {
+      sectionStatuses = new ArrayList<>(
+        outcome.getSectionStatuses().stream().filter(c -> c.getYear() == this.getYear()).collect(Collectors.toList()));
+    } else {
+      return null;
+    }
 
-    // Deliverable deliverable = deliverableManager.getDeliverableById(deliverableID);
+    if (!sectionStatuses.isEmpty()) {
+      return sectionStatuses.get(0);
+    }
+    return null;
+  }
 
-    List<SectionStatus> sectionStatuses =
-      outcome.getSectionStatuses().stream().filter(c -> c.getYear() == this.getYear()).collect(Collectors.toList());
+  /**
+   * This method gets the specific section status from the sectionStatuses array for a Deliverable.
+   * 
+   * @param deliverableID is the deliverable ID to be identified.
+   * @param section is the name of some section.
+   * @return a SectionStatus object with the information requested.
+   */
+  public SectionStatus getOutputStatus(long outputID) {
+
+    ResearchOutput output = outputService.getResearchOutputById(outputID);
+    List<SectionStatus> sectionStatuses;
+
+    if (output.getSectionStatuses() != null) {
+      sectionStatuses = new ArrayList<>(
+        output.getSectionStatuses().stream().filter(c -> c.getYear() == this.getYear()).collect(Collectors.toList()));
+    } else {
+      return null;
+    }
 
     if (!sectionStatuses.isEmpty()) {
       return sectionStatuses.get(0);

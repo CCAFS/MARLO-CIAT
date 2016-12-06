@@ -105,11 +105,11 @@ public class ProgramImpactsValidator extends BaseValidator {
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (researchImpact.getTargetYear() == -1) {
-      this.addMessage(baseAction.getText("programImpact.action.year.required", params));
-      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].targetYear",
-        InvalidFieldsMessages.EMPTYFIELD);
-    }
+    // if (researchImpact.getTargetYear() == -1) {
+    // this.addMessage(baseAction.getText("programImpact.action.year.required", params));
+    // baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].targetYear",
+    // InvalidFieldsMessages.EMPTYFIELD);
+    // }
 
     if (researchImpact.getObjectiveValue() != null) {
       if (researchImpact.getObjectiveValue().length() < 1) {

@@ -8,6 +8,7 @@
         <th id="ids">[@s.text name="programImpact.outputList.idTable" /]</th>
         <th id="outputTitles" >[@s.text name="programImpact.outputList.title" /]</th>
         <th id="outputDateAdded">[@s.text name="programImpact.outputList.date" /]</th>
+        <th id="outputRF">[@s.text name="programImpact.outputList.requiredFields" /]</th>
         <th id="outputDelete">[@s.text name="programImpact.outputList.delete" /]</th>
       </tr>
     </thead>
@@ -33,6 +34,19 @@
           [#-- output Year --]
           <td class="text-center">
           ${(output.dateAdded)!'none'}
+          </td>
+          
+          [#-- Output required fields --]
+          <td class="text-center">
+            [#if action.getOutputStatus(output.id)??]
+              [#if !((action.getOutputStatus(output.id)).missingFields)?has_content]
+                <span class="icon-20 icon-check" title="Complete"></span>
+              [#else]
+                <span class="icon-20 icon-uncheck" title=""></span> 
+              [/#if]
+            [#else]
+                <span class="icon-20 icon-uncheck" title=""></span>
+            [/#if]
           </td>
           
           [#-- Delete output--]

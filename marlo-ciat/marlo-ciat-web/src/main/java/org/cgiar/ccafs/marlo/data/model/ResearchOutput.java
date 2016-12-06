@@ -34,12 +34,12 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   private static final long serialVersionUID = -185814169741386135L;
 
+
   @Expose
   private Long id;
 
   @Expose
   private String title;
-
 
   @Expose
   private Date dateAdded;
@@ -68,13 +68,14 @@ public class ResearchOutput implements Serializable, IAuditLog {
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
 
 
+  private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
+
   private Set<ResearchOutputsNextUser> researchOutputsNextUsers = new HashSet<ResearchOutputsNextUser>(0);
 
   private List<ResearchOutputPartner> partners;
 
 
   private List<ResearchOutputsNextUser> nextUsers;
-
 
   public ResearchOutput() {
     super();
@@ -117,9 +118,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return true;
   }
 
+
   public Date getActiveSince() {
     return activeSince;
   }
+
 
   public User getCreatedBy() {
     return createdBy;
@@ -131,7 +134,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public Date getDateAdded() {
     return dateAdded;
   }
-
 
   /**
    * @return the id
@@ -148,10 +150,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
-
 
   @Override
   public User getModifiedBy() {
@@ -161,6 +163,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public List<ResearchOutputsNextUser> getNextUsers() {
     return nextUsers;
   }
+
 
   public List<ResearchOutputPartner> getPartners() {
     return partners;
@@ -177,15 +180,18 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return researchOutputPartners;
   }
 
-
   public Set<ResearchOutputsNextUser> getResearchOutputsNextUsers() {
     return researchOutputsNextUsers;
   }
 
+  public Set<SectionStatus> getSectionStatuses() {
+    return sectionStatuses;
+  }
+
+
   public String getTitle() {
     return title;
   }
-
 
   @Override
   public int hashCode() {
@@ -216,6 +222,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.createdBy = createdBy;
   }
 
+
   /**
    * @param dateAdded the dateAdded to set
    */
@@ -230,7 +237,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.id = id;
   }
 
-
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
@@ -240,14 +246,15 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   public void setNextUsers(List<ResearchOutputsNextUser> nextUsers) {
     this.nextUsers = nextUsers;
   }
 
-
   public void setPartners(List<ResearchOutputPartner> partners) {
     this.partners = partners;
   }
+
 
   /**
    * @param researchOutcome the researchOutcome to set
@@ -262,6 +269,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
   public void setResearchOutputsNextUsers(Set<ResearchOutputsNextUser> researchOutputsNextUsers) {
     this.researchOutputsNextUsers = researchOutputsNextUsers;
+  }
+
+  public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
+    this.sectionStatuses = sectionStatuses;
   }
 
   public void setTitle(String title) {
