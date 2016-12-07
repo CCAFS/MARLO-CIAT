@@ -1,7 +1,7 @@
 [#ftl]
 [#assign title = "Impact Pathway - Program Impacts" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
-[#assign pageLibs = ["select2"] /]
+[#assign pageLibs = ["select2", "vanilla-color-picker"] /]
 [#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "programImpacts" /]
@@ -89,8 +89,10 @@
     <div class="form-group"> 
       
       <div class="row">
-        <div class="col-md-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
-        <div class="col-md-4">
+        <div class="col-sm-11">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
+        <div class="col-sm-1">
+          <label class="color" for="">Color</label>
+          <div class="color-picker" style="background:${(element.color)!};"><input type="hidden" name="${customName}.color" value="${(element.color)!}"></div>
         [#--] 
         [#if editable]
           [@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]
@@ -101,7 +103,10 @@
           </div>
         [/#if].
         --]
-        </div>     
+        </div> 
+
+          
+  
       </div>
     </div>
     

@@ -7,6 +7,9 @@ function init() {
   });
   /* Declaring Events */
   attachEvents();
+
+  /* Color picker widget */
+  $('form .color-picker').colorPicker();
 }
 
 function attachEvents() {

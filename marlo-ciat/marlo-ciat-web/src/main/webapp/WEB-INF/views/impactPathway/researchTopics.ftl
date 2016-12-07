@@ -1,7 +1,7 @@
 [#ftl]
 [#assign title = "Impact Pathway - Research Topics" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
-[#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2"] /]
+[#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2", "vanilla-color-picker"] /]
 [#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
 [#assign currentSection = "impactPathway" /]
@@ -95,8 +95,12 @@
     [#-- Research Topic Name --]
     <div class="form-group"> 
       <div class="row">
-        <div class="col-sm-12">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
-      </div>
+        <div class="col-sm-11">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
+        <div class="col-sm-1">
+          <label class="color" for="">Color</label>
+          <div class="color-picker" style="background:${(element.color)!};"><input type="hidden" name="${customName}.color" value="${(element.color)!}"></div>
+        </div>
+      </div>      
     </div>
   </div>  
 [/#macro]

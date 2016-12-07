@@ -321,17 +321,28 @@ public class ResearchTopicsAction extends BaseAction {
           newResearchTopic.setCreatedBy(this.getCurrentUser());
           newResearchTopic.setModifiedBy(this.getCurrentUser());
           newResearchTopic.setResearchTopic(researchTopic.getResearchTopic().trim());
+          newResearchTopic.setColor(researchTopic.getColor());
           newResearchTopic.setResearchProgram(selectedProgram);
 
           researchTopicService.saveResearchTopic(newResearchTopic);
         } else {
-          ResearchTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
-          if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic().trim())) {
+          boolean hasChanges = false;
 
+          ResearchTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
+
+          if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic().trim())) {
+            hasChanges = true;
             researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic().trim());
+          }
+
+          if (!researchTopicPrew.getColor().equals(researchTopic.getColor().trim())) {
+            hasChanges = true;
+            researchTopicPrew.setColor(researchTopic.getColor().trim());
+          }
+
+          if (hasChanges) {
             researchTopicPrew.setModifiedBy(this.getCurrentUser());
             researchTopicPrew.setModificationJustification("Modified on " + new Date().toString());
-
             researchTopicService.saveResearchTopic(researchTopicPrew);
           }
         }

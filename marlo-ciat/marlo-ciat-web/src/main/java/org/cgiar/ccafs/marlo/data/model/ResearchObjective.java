@@ -224,5 +224,9 @@ public class ResearchObjective implements Serializable, IAuditLog {
     this.researchImpactObjectives = researchImpactObjectives;
   }
 
+  @Override
+  public String toString() {
+    return id.toString();
+  }
 
 }

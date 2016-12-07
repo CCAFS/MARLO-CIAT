@@ -26,6 +26,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -57,11 +58,14 @@ public class GraphByProgramAction extends BaseAction {
 
   // Managers -Services
   private IProgramService programService;
+  private IResearchObjectiveService objectiveService;
 
   @Inject
-  public GraphByProgramAction(APConfig config, IProgramService programService) {
+  public GraphByProgramAction(APConfig config, IProgramService programService,
+    IResearchObjectiveService objectiveService) {
     super(config);
     this.programService = programService;
+    this.objectiveService = objectiveService;
   }
 
   @Override
@@ -101,6 +105,9 @@ public class GraphByProgramAction extends BaseAction {
 
 
     List<ResearchObjective> objectives = new ArrayList<>();
+    if (objectiveService.findAll() != null) {
+      objectives = objectiveService.findAll().stream().filter(o -> o.isActive()).collect(Collectors.toList());
+    }
 
     List<ResearchImpact> impacts =
       new ArrayList<>(program.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()));
@@ -143,12 +150,13 @@ public class GraphByProgramAction extends BaseAction {
 
       List<ResearchImpactObjective> impactObjectives = new ArrayList<>(
         impact.getResearchImpactObjectives().stream().filter(io -> io.isActive()).collect(Collectors.toList()));
-
-      for (ResearchImpactObjective researchImpactObjective : impactObjectives) {
-        if (!objectives.contains(researchImpactObjective.getResearchObjective())) {
-          objectives.add(researchImpactObjective.getResearchObjective());
-        }
-      }
+      //
+      // for (ResearchImpactObjective researchImpactObjective : impactObjectives) {
+      // ResearchObjective objective = researchImpactObjective.getResearchObjective();
+      // if (!objectives.contains(objective)) {
+      // objectives.add(researchImpactObjective.getResearchObjective());
+      // }
+      // }
 
       for (ResearchImpactObjective impactObjective : impactObjectives) {
         // Relation S Objective - Program Impact

@@ -401,6 +401,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setCreatedBy(this.getCurrentUser());
           researchImpactNew.setDescription(researchImpact.getDescription().trim());
           researchImpactNew.setResearchProgram(programDb);
+          researchImpactNew.setColor(researchImpact.getColor());
           // researchImpactNew.setTargetYear(researchImpact.getTargetYear());
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
@@ -433,6 +434,11 @@ public class ProgramImpactsAction extends BaseAction {
           if (!researchImpactRew.getDescription().equals(researchImpact.getDescription().trim())) {
             hasChanges = true;
             researchImpactRew.setDescription(researchImpact.getDescription().trim());
+          }
+
+          if (!researchImpactRew.getColor().equals(researchImpact.getColor().trim())) {
+            hasChanges = true;
+            researchImpactRew.setColor(researchImpact.getColor().trim());
           }
 
           // if (researchImpact.getTargetYear() != null) {
