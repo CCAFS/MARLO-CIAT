@@ -117,24 +117,6 @@ public class GraphByProgramAction extends BaseAction {
 
     int i = 1;
 
-    for (ResearchTopic topic : topics) {
-      // Research Topic Data
-      HashMap<String, Object> dataTopic = new HashMap<>();
-      HashMap<String, Object> dataTopicDetail = new HashMap<>();
-      dataTopicDetail.put("id", "T" + topic.getId());
-      dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
-      dataTopicDetail.put("label", "Research Topic " + i);
-      dataTopicDetail.put("description", topic.getResearchTopic());
-      dataTopicDetail.put("color", topic.getColor());
-      dataTopicDetail.put("type", "T");
-      dataTopic.put("data", dataTopicDetail);
-      dataNodes.add(dataTopic);
-
-      i++;
-    }
-
-    i = 1;
-
     for (ResearchImpact impact : impacts) {
       // Research Impact Data
       HashMap<String, Object> dataImpact = new HashMap<>();
@@ -150,13 +132,6 @@ public class GraphByProgramAction extends BaseAction {
 
       List<ResearchImpactObjective> impactObjectives = new ArrayList<>(
         impact.getResearchImpactObjectives().stream().filter(io -> io.isActive()).collect(Collectors.toList()));
-      //
-      // for (ResearchImpactObjective researchImpactObjective : impactObjectives) {
-      // ResearchObjective objective = researchImpactObjective.getResearchObjective();
-      // if (!objectives.contains(objective)) {
-      // objectives.add(researchImpactObjective.getResearchObjective());
-      // }
-      // }
 
       for (ResearchImpactObjective impactObjective : impactObjectives) {
         // Relation S Objective - Program Impact
@@ -168,9 +143,28 @@ public class GraphByProgramAction extends BaseAction {
         dataEdges.add(dataEdgeImpact);
       }
 
+
+      i++;
+    }
+
+    i = 1;
+
+    for (ResearchTopic topic : topics) {
+      // Research Topic Data
+      HashMap<String, Object> dataTopic = new HashMap<>();
+      HashMap<String, Object> dataTopicDetail = new HashMap<>();
+      dataTopicDetail.put("id", "T" + topic.getId());
+      dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
+      dataTopicDetail.put("label", "Research Topic " + i);
+      dataTopicDetail.put("description", topic.getResearchTopic());
+      dataTopicDetail.put("color", topic.getColor());
+      dataTopicDetail.put("type", "T");
+      dataTopic.put("data", dataTopicDetail);
+      dataNodes.add(dataTopic);
+
       int j = 1;
       List<ResearchOutcome> outcomes =
-        new ArrayList<>(impact.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+        new ArrayList<>(topic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
       for (ResearchOutcome outcome : outcomes) {
         // Research Outcome Data
@@ -225,7 +219,6 @@ public class GraphByProgramAction extends BaseAction {
 
       i++;
     }
-
 
     i = 1;
 
