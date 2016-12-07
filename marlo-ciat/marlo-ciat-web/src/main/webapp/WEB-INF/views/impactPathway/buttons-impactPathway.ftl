@@ -14,6 +14,11 @@
       [#-- Edit Button --]
       <a href="[@s.url][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]" class="form-button button-edit"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> [@s.text name="form.buttons.edit" /]</a>
     [/#if]
+    [#-- Hidden Parameters --]
     <input type="hidden" name="programID" value="${programID}" />
+    <input type="hidden"  name="className" value="${(selectedProgram.class.name)!}"/>
+    <input type="hidden"  name="id" value="${(selectedProgram.id)!}"/>
+    <input type="hidden"  name="modifiedBy.id" value="${(currentUser.id)!}"/>
+    <input type="hidden"  name="actionName" value="${(actionName)!}"/>    
   </div>
 </div>

@@ -18,6 +18,7 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -57,9 +58,12 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
 
   private Set<ResearchImpact> researchImpacts = new HashSet<ResearchImpact>(0);
 
+
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
   private Set<Submission> submissions = new HashSet<Submission>(0);
+
+  private List<ResearchImpact> impacts;
 
   @Expose
   private String color;
@@ -150,7 +154,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return this.acronym + ": " + this.name;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
@@ -158,6 +161,11 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
   @Override
   public Long getId() {
     return this.id;
+  }
+
+
+  public List<ResearchImpact> getImpacts() {
+    return impacts;
   }
 
   @Override
@@ -217,11 +225,11 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return submissions;
   }
 
-
   @Override
   public boolean isActive() {
     return active;
   }
+
 
   public void setAcronym(String acronym) {
     this.acronym = acronym;
@@ -230,7 +238,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -241,13 +248,18 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.color = color;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
 
-
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setImpacts(List<ResearchImpact> impacts) {
+    this.impacts = impacts;
   }
 
   public void setModificationJustification(String modificationJustification) {

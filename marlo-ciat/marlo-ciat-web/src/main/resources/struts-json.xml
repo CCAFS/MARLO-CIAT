@@ -83,14 +83,25 @@
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
-		
+
 		<action name="impactPathwayGraphByArea"
-      class="org.cgiar.ccafs.marlo.action.json.impactpathway.graph.GraphByAreaAction">
-      <result type="json">
-        <param name="noCache">true</param>
-        <param name="excludeNullProperties">true</param>
-      </result>
-    </action>
+			class="org.cgiar.ccafs.marlo.action.json.impactpathway.graph.GraphByAreaAction">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
+		<action name="autosaveWriter"
+			class="org.cgiar.ccafs.marlo.action.json.autosave.AutoSaveWriterAction">
+			<result type="json">
+				<param name="encoding">UTF-8</param>
+				<param name="status">status</param>
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="defaultEncoding">utf-8</param>
+			</result>
+		</action>
 
 	</package>
 </struts>

@@ -1,5 +1,6 @@
 var timeoutAutoSave;
 var $draftTag, $editedBy, $cancelButton;
+var notification;
 
 $(document).ready(function() {
 
@@ -11,6 +12,11 @@ $(document).ready(function() {
   $(document).on('updateComponent', changeDetected);
   $(':input').on('keyup change', changeDetected);
 
+  if($('#generalMessages ul.messages li').exists()) {
+    // Validate section
+    validateThisSection();
+  }
+
 });
 
 function autoSave() {
@@ -21,16 +27,24 @@ function autoSave() {
       data: {
         autoSave: JSON.stringify($('form').serializeObject())
       },
-      beforeSend: function() {
-        $draftTag.text('... Saving');
+      beforeSend: function(xhr,opts) {
+        if(autoSaveActive) {
+          $draftTag.text('... Saving');
+        } else {
+          // Auto save Cancelled
+          xhr.abort();
+        }
       },
       success: function(data) {
         if(data.status.status) {
-          successNotification('Successfully saved a draft version');
-          $draftTag.text('(Draft Version)').addClass('animated flipInX');
+
+          successNotification('Draft saved...');
+          // $draftTag.text('(Draft Version)').addClass('animated flipInX');
+          // $cancelButton.css('display', 'inline-block');
           $editedBy.find('.datetime').text(data.status.activeSince);
           $editedBy.find('.modifiedBy').text(data.status.modifiedBy);
-          $cancelButton.css('display', 'inline-block');
+
+          draft = true;
 
           // Validate section
           validateThisSection();
@@ -53,13 +67,13 @@ function autoSave() {
 function successNotification(msj) {
   var notyOptions = jQuery.extend({}, notyDefaultOptions);
   notyOptions.text = msj;
-  notyOptions.type = 'success';
+  notyOptions.type = 'info';
   notyOptions.layout = 'topCenter';
   notyOptions.animation = {
       open: 'animated fadeInDown',
       close: 'animated fadeOutUp'
   };
-  noty(notyOptions);
+  notification = noty(notyOptions);
 }
 
 function errorNotification(msj) {
@@ -71,11 +85,14 @@ function errorNotification(msj) {
       open: 'animated fadeInDown',
       close: 'animated fadeOutUp'
   };
-  noty(notyOptions);
+  notification = noty(notyOptions);
 }
 
 function changeDetected(e) {
   if(isChanged()) {
+    // Hide concurrence message
+    $('#concurrenceMessage').fadeOut();
+
     if(autoSaveActive) {
       if(timeoutAutoSave) {
         clearTimeout(timeoutAutoSave);
@@ -83,15 +100,18 @@ function changeDetected(e) {
       // Start a timer that will search when finished
       timeoutAutoSave = setTimeout(function() {
         autoSave();
-      }, 15 * 1000);
+      }, 7 * 1000);
     }
   }
 }
 
 function validateThisSection() {
   var $sectionMenu = $('#secondaryMenu .currentSection');
+  if(!$sectionMenu.exists()) {
+    return;
+  }
+
   var sectionName = ($sectionMenu.attr('id')).split("-")[1];
-  console.log(sectionName);
 
   var validateService = "";
   var sectionData = {};

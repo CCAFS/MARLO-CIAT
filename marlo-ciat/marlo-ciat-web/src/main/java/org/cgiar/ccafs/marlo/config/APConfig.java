@@ -15,12 +15,12 @@
 package org.cgiar.ccafs.marlo.config;
 
 
+import org.cgiar.ccafs.marlo.utils.PropertiesManager;
+
 import java.io.File;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import org.cgiar.ccafs.marlo.utils.PropertiesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class APConfig {
   private static final String ADMIN_ACTIVE = "marlo.admin.active";
   private static final String IMPACT_PATHWAY_ACTIVE = "marlo.impactPathway.active";
 
-  private static final String AUTOSAVE_FILE = "autosave.file";
+  private static final String AUTOSAVE_FOLDER = "autosave.folder";
 
   private static final String BASE_URL = "marlo.baseUrl";
   // Logging.
@@ -91,7 +91,7 @@ public class APConfig {
    */
   public String getAutoSaveFolder() {
     try {
-      return properties.getPropertiesAsString(AUTOSAVE_FILE);
+      return properties.getPropertiesAsString(AUTOSAVE_FOLDER);
     } catch (Exception e) {
       LOG.error("there is not a base folder to save the uploaded files configured.");
     }
