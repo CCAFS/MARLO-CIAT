@@ -87,11 +87,10 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
       colorFlagship = ele.data('color');
     }
 
-    if(ele.data('type') === 'CoA') {
+    //NODES WITH CHILDRENS
+    if(ele.data('type') === 'A') {
       ele.css({
           'shape': 'rectangle',
-          'background-color': '#F5F5F5',
-          'border-color': colorFlagship,
           'color': '#884809',
           'text-outline-width': 0
       });
@@ -102,6 +101,35 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
         ele.addClass('bottom-center');
       }
     }
+    
+    if(ele.data('type') === 'P') {
+      ele.css({
+          'shape': 'rectangle',
+          'color': '#884809',
+          'text-outline-width': 0
+      });
+      if(ele.children().length > 0) {
+        ele.css({
+
+        });
+        ele.addClass('bottom-center');
+      }
+    }
+    if(ele.data('type') === 'T') {
+      ele.css({
+          'shape': 'rectangle',
+          'color': '#884809',
+          'text-outline-width': 0
+      });
+      if(ele.children().length > 0) {
+        ele.css({
+
+        });
+        ele.addClass('bottom-center');
+      }
+    }
+    
+    
   });
 
   if(inPopUp === true) {
@@ -445,59 +473,139 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     console.log("done");
     var nodes = m.elements.nodes;
     var count = {
-        F: 0,
-        O: 0,
-        CoA: 0,
-        KO: 0,
+        SO: 0,
+        A: 0,
+        P: 0,
+        T: 0,
+        I: 0,
+        OC: 0,
+        OP: 0
     };
     var totalWidth = {
-        F: 0,
-        O: 0,
-        CoA: 0,
-        KO: 0,
+        SO: 0,
+        A: 0,
+        P: 0,
+        T: 0,
+        I: 0,
+        OC: 0,
+        OP: 0
     };
     var nodeWidth = 110;
     var nodeMargin = 20;
 
     // For to count and set position
     for(var i = 0; i < nodes.length; i++) {
-      if(nodes[i].data.type == "F") {
-        count.F++;
-      } else if(nodes[i].data.type == "O") {
-        count.O++;
-      } else if(nodes[i].data.type == "CoA") {
-        count.CoA++;
-      } else if(nodes[i].data.type == "KO") {
-        count.KO++;
+      if(nodes[i].data.type == "SO") {
+        count.SO++;
+      } else if(nodes[i].data.type == "A") {
+        count.A++;
+      } else if(nodes[i].data.type == "P") {
+        count.P++;
+      } else if(nodes[i].data.type == "T") {
+        count.T++;
+      }else if(nodes[i].data.type == "I") {
+        count.I++;
+      }else if(nodes[i].data.type == "OC") {
+        count.OC++;
+      }else if(nodes[i].data.type == "OP") {
+        count.OP++;
       }
     }
 
-    totalWidth.F = count.F * (nodeWidth + nodeMargin);
-    totalWidth.O = count.O * (nodeWidth + nodeMargin);
-    totalWidth.CoA = count.CoA * (nodeWidth + nodeMargin);
-    totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
+    totalWidth.SO = count.SO * (nodeWidth + nodeMargin);
+    totalWidth.A = count.A * (nodeWidth + nodeMargin);
+    totalWidth.P = count.P * (nodeWidth + nodeMargin);
+    totalWidth.T = count.T * (nodeWidth + nodeMargin);
+    totalWidth.I = count.I * (nodeWidth + nodeMargin);
+    totalWidth.OC = count.OC * (nodeWidth + nodeMargin);
+    totalWidth.OP = count.OP * (nodeWidth + nodeMargin);
+    //totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
 
+    
+    
+    console.log(totalWidth.A);
+    console.log(totalWidth.T);
+    console.log(totalWidth.OC);
+    console.log(totalWidth.OP);
+    
+    var widthTest=0;
+    if(totalWidth.T>totalWidth.OC){
+      widthTest=totalWidth.T;
+    }else{
+      widthTest=totalWidth.OC;
+    }
+    
+    if(widthTest>totalWidth.OP){
+      widthTest;
+    }else{
+      widthTest=totalWidth.OP;
+    }
+    
+    console.log(widthTest);
+    
     var move = {
-        F: -(totalWidth.F / 2),
-        O: -(totalWidth.O / 2),
-        CoA: -(totalWidth.CoA / 2),
-        KO: -(totalWidth.KO / 2),
+        SO: -(totalWidth.SO / 2),
+        A: -(totalWidth.A / 2),
+        P: -(totalWidth.P / 2),
+        T: -(totalWidth.T / 2),
+        I: -(totalWidth.I / 2),
+        OC: -(totalWidth.OC / 2),
+        OP: -(totalWidth.OP / 2)
     };
 
     for(var i = 0; i < nodes.length; i++) {
-      if(nodes[i].data.type == "F") {
-        move.F = (move.F + (nodeWidth + nodeMargin));
+      if(nodes[i].data.type == "SO") {
+        move.SO = (move.SO + (nodeWidth + nodeMargin));
         nodes[i].position = {
-            x: move.F,
+            x: move.SO,
             y: 0
         };
-      } else if(nodes[i].data.type == "O") {
-        move.O = (move.O + (nodeWidth + nodeMargin));
+      } else if(nodes[i].data.type == "A") {
+        move.A = (move.A + (nodeWidth + nodeMargin));
         nodes[i].position = {
-            x: move.O,
+            x: move.A,
             y: 200
         };
-      } else if(nodes[i].data.type == "CoA") {
+      } else if(nodes[i].data.type == "P") {
+        move.P = (move.P + (nodeWidth + nodeMargin));
+        nodes[i].position = {
+            x: move.P,
+            y: 200
+        };
+      }else if(nodes[i].data.type == "I") {
+        move.I = (move.I + (nodeWidth + nodeMargin + 20));
+        // console.log(move.KO);
+        nodes[i].position = {
+            x: move.I,
+            y: 200
+        };
+      }else if(nodes[i].data.type == "T") {
+        if(nodes[i + 1] && nodes[i + 1].data.type == "OC") {
+          move.OC;
+        } else {
+          move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
+        }
+        move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
+        // console.log(move.KO);
+        nodes[i].position = {
+            x: move.OC,
+            y: 400
+        };
+      }else if(nodes[i].data.type == "OC") {
+        move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
+        // console.log(move.KO);
+        nodes[i].position = {
+            x: move.OC,
+            y: 400
+        };
+      }else if(nodes[i].data.type == "OP") {
+        move.OP = (move.OP + (nodeWidth + nodeMargin + 20));
+        // console.log(move.KO);
+        nodes[i].position = {
+            x: move.OP,
+            y: 600
+        };
+      }/*else if(nodes[i].data.type == "CoA") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "KO") {
           move.KO;
         } else {
@@ -509,14 +617,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             x: move.KO,
             y: 400
         };
-      } else if(nodes[i].data.type == "KO") {
-        move.KO = (move.KO + (nodeWidth + nodeMargin + 20));
-        // console.log(move.KO);
-        nodes[i].position = {
-            x: move.KO,
-            y: 400
-        };
-      }
+      } */
     }
 
     createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip);
