@@ -163,8 +163,8 @@ public class GraphByProgramAction extends BaseAction {
       dataNodes.add(dataTopic);
 
       int j = 1;
-      List<ResearchOutcome> outcomes =
-        new ArrayList<>(topic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+      List<ResearchOutcome> outcomes = new ArrayList<>(topic.getResearchOutcomes().stream()
+        .filter(ro -> ro.isActive() && ro.getResearchImpact() != null).collect(Collectors.toList()));
 
       for (ResearchOutcome outcome : outcomes) {
         // Research Outcome Data
