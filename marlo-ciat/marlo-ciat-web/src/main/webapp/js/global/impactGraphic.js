@@ -7,7 +7,7 @@ $(function() { // on dom ready
 
   if(crpProgram != "" && crpProgram != null) {
     data = {
-        programID: crpProgram
+      programID: crpProgram
     };
 
     ajaxService(url, data, graphicContent, panningEnable, false, 'breadthfirst', false);
@@ -87,7 +87,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
       colorFlagship = ele.data('color');
     }
 
-    //NODES WITH CHILDRENS
+    // NODES WITH CHILDRENS
     if(ele.data('type') === 'A') {
       ele.css({
           'shape': 'rectangle',
@@ -101,7 +101,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
         ele.addClass('bottom-center');
       }
     }
-    
+
     if(ele.data('type') === 'P') {
       ele.css({
           'shape': 'rectangle',
@@ -128,8 +128,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
         ele.addClass('bottom-center');
       }
     }
-    
-    
+
   });
 
   if(inPopUp === true) {
@@ -470,6 +469,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
       dataType: "json",
       data: data
   }).done(function(m) {
+    // Updated
+    showHelpText();
+    setViewMore();
+    // /////////
     console.log("done");
     var nodes = m.elements.nodes;
     var count = {
@@ -503,11 +506,11 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         count.P++;
       } else if(nodes[i].data.type == "T") {
         count.T++;
-      }else if(nodes[i].data.type == "I") {
+      } else if(nodes[i].data.type == "I") {
         count.I++;
-      }else if(nodes[i].data.type == "OC") {
+      } else if(nodes[i].data.type == "OC") {
         count.OC++;
-      }else if(nodes[i].data.type == "OP") {
+      } else if(nodes[i].data.type == "OP") {
         count.OP++;
       }
     }
@@ -519,30 +522,28 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     totalWidth.I = count.I * (nodeWidth + nodeMargin);
     totalWidth.OC = count.OC * (nodeWidth + nodeMargin);
     totalWidth.OP = count.OP * (nodeWidth + nodeMargin);
-    //totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
+    // totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
 
-    
-    
     console.log(totalWidth.A);
     console.log(totalWidth.T);
     console.log(totalWidth.OC);
     console.log(totalWidth.OP);
-    
-    var widthTest=0;
-    if(totalWidth.T>totalWidth.OC){
-      widthTest=totalWidth.T;
-    }else{
-      widthTest=totalWidth.OC;
+
+    var widthTest = 0;
+    if(totalWidth.T > totalWidth.OC) {
+      widthTest = totalWidth.T;
+    } else {
+      widthTest = totalWidth.OC;
     }
-    
-    if(widthTest>totalWidth.OP){
+
+    if(widthTest > totalWidth.OP) {
       widthTest;
-    }else{
-      widthTest=totalWidth.OP;
+    } else {
+      widthTest = totalWidth.OP;
     }
-    
+
     console.log(widthTest);
-    
+
     var move = {
         SO: -(totalWidth.SO / 2),
         A: -(totalWidth.A / 2),
@@ -572,14 +573,14 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             x: move.P,
             y: 200
         };
-      }else if(nodes[i].data.type == "I") {
+      } else if(nodes[i].data.type == "I") {
         move.I = (move.I + (nodeWidth + nodeMargin + 20));
         // console.log(move.KO);
         nodes[i].position = {
             x: move.I,
             y: 200
         };
-      }else if(nodes[i].data.type == "T") {
+      } else if(nodes[i].data.type == "T") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC") {
           move.OC;
         } else {
@@ -591,33 +592,25 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             x: move.OC,
             y: 400
         };
-      }else if(nodes[i].data.type == "OC") {
+      } else if(nodes[i].data.type == "OC") {
         move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OC,
             y: 400
         };
-      }else if(nodes[i].data.type == "OP") {
+      } else if(nodes[i].data.type == "OP") {
         move.OP = (move.OP + (nodeWidth + nodeMargin + 20));
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OP,
             y: 600
         };
-      }/*else if(nodes[i].data.type == "CoA") {
-        if(nodes[i + 1] && nodes[i + 1].data.type == "KO") {
-          move.KO;
-        } else {
-          move.KO = (move.KO + (nodeWidth + nodeMargin + 20));
-        }
-
-        // console.log(move.KO);
-        nodes[i].position = {
-            x: move.KO,
-            y: 400
-        };
-      } */
+      }/*
+         * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; } else {
+         * move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = { x:
+         * move.KO, y: 400 }; }
+         */
     }
 
     createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip);
