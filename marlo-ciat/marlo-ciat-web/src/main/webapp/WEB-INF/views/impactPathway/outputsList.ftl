@@ -2,7 +2,7 @@
 [#assign title = "Outputs List" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["datatables.net", "datatables.net-bs","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/outputList.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/outputList.js", "${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/impactGraphic.js"] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outputs" /]
@@ -17,6 +17,14 @@
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/views/impactPathway/outputListTemplate.ftl" as outputsList /]
+[#--  Research Outputs Help Text--] 
+<div class="container helpText viewMore-block">
+  <div style="display:none;" class="helpMessage infoText">
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="researchOutputs.help" /] </p>
+  </div> 
+  <div style="display:none" class="viewMore closed"></div>
+</div>
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 

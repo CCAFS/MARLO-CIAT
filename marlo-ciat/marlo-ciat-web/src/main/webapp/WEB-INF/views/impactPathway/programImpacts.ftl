@@ -2,10 +2,9 @@
 [#assign title = "Impact Pathway - Program Impacts" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["select2", "vanilla-color-picker"] /]
-[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/impactGraphic.js","${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "programImpacts" /]
-
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"", "action":"programimpacts"},
   {"label":"programImpacts", "nameSpace":"", "action":"programimpacts"}
@@ -14,6 +13,14 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
+[#--  Program Impacts Help Text--]
+<div class="container helpText viewMore-block">
+  <div style="display:none;" class="helpMessage infoText">
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="programImpact.help" /] </p>
+  </div> 
+  <div style="display:none" class="viewMore closed"></div>
+</div>
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 

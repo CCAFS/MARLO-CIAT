@@ -2,7 +2,7 @@
 [#assign title = "Impact Pathway - Research Topics" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2", "vanilla-color-picker"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/impactGraphic.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "researchTopics" /]
@@ -14,6 +14,14 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
+[#--  Research Topics Help Text--] 
+<div class="container helpText viewMore-block">
+  <div style="display:none;" class="helpMessage infoText">
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="researchTopics.help" /] </p>
+  </div> 
+  <div style="display:none" class="viewMore closed"></div>
+</div>
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
