@@ -1213,8 +1213,8 @@ header {
   position: absolute;
   right: 1em;
   top: 0;
-  background: #959595;
-  border-bottom: 6px solid #888888;
+  background: #3cb371;
+  border-bottom: 6px solid #2e8b57;
   height: 100%;
   font-size: 0.9em;
   padding: 6px 20px 17px 20px;
@@ -6185,5 +6185,6 @@ span.errorTag {
 .infoText {
   *
   zoom: 1;
-  background: #98FB98;
+/*   background: #98FB98; */
+  background: rgba(76, 175, 80, 0.5) /* Green background with 50% opacity */
 }
