@@ -68,11 +68,11 @@
     <span id="resize" class="glyphicon glyphicon-resize-full  tool"></span>
   </div>
   
-  [#-- Change to full or current graph --]
+  [#-- Change to full or current graph 
   <div id="changeGraph">
   <span class="btn btn-primary btn-md currentGraph">Show full graph</span>
   </div>
-  
+  --]
   [#-- Download button--]
   <a class="download" href=""><span title="download" id="buttonDownload"><span class="glyphicon glyphicon-download-alt"></span></span></a>
   

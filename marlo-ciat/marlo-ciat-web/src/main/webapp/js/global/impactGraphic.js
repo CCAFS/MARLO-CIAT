@@ -149,11 +149,11 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     cy.$('edge').css('target-arrow-color', '#eee');
     cy.$('edge').css('z-index', '1');
     $(".panel-body ul").empty();
-    crps = [];
-    flagships = [];
+    areas = [];
+    pImpacts = [];
+    rTopics = [];
     outcomes = [];
-    clusters = [];
-    keyOutputs = [];
+    outputs = [];
 
     if(event.cyTarget == cy) {
 
@@ -183,6 +183,9 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
           ele.predecessors().forEach(function(ele1) {
             nodeSelected(ele1);
           });
+          ele.successors().forEach(function(ele1) {
+            nodeSelected(ele1);
+          });
         });
       }
       // IF NODE HAS PARENT
@@ -204,19 +207,19 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
       if(inPopUp === true) {
         // add info in Relations panel
-        crps.forEach(function(ele) {
-          $(".panel-body ul").append("<label>CRP:</label><li>" + ele + "</li>")
+        areas.forEach(function(ele) {
+          $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
         });
-        flagships.forEach(function(ele) {
+        pImpacts.forEach(function(ele) {
+          $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
+        });
+        rTopics.forEach(function(ele) {
           $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
         });
         outcomes.forEach(function(ele) {
           $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
         });
-        clusters.forEach(function(ele) {
-          $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
-        });
-        keyOutputs.forEach(function(ele) {
+        outputs.forEach(function(ele) {
           $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
         });
       }
@@ -241,9 +244,25 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     // Validate if the node exists in any array
 
     // In flagships array
-    flagships.forEach(function(array) {
+    areas.forEach(function(array) {
       if(ele.data('description') === array[0]) {
-        console.log("asd");
+        //console.log("asd AREA");
+        stop = 1;
+      }
+    });
+
+    // In Outcomes array
+    pImpacts.forEach(function(array) {
+      if(ele.data('description') === array[0]) {
+        //console.log("asd");
+        stop = 1;
+      }
+    });
+
+    // In Outcomes array
+    rTopics.forEach(function(array) {
+      if(ele.data('description') === array[0]) {
+        //console.log("asd");
         stop = 1;
       }
     });
@@ -251,23 +270,15 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     // In Outcomes array
     outcomes.forEach(function(array) {
       if(ele.data('description') === array[0]) {
-        console.log("asd");
+        //console.log("asd");
         stop = 1;
       }
     });
-
-    // In Outcomes array
-    clusters.forEach(function(array) {
+    
+ // In Outcomes array
+    outputs.forEach(function(array) {
       if(ele.data('description') === array[0]) {
-        console.log("asd");
-        stop = 1;
-      }
-    });
-
-    // In Outcomes array
-    keyOutputs.forEach(function(array) {
-      if(ele.data('description') === array[0]) {
-        console.log("asd");
+        //console.log("asd");
         stop = 1;
       }
     });
@@ -280,24 +291,26 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     // arrays information
     if(ele.data('description') != 'undefined' && ele.data('description') != null) {
       var data = [];
-      if(ele.data('type') === 'C') {
-        crps.push(ele.data('description'));
-      } else if(ele.data('type') === 'F') {
+      if(ele.data('type') === 'A') {
         data.push(ele.data('description'));
         data.push(ele.data('label'));
-        flagships.push(data);
-      } else if(ele.data('type') === 'O') {
+        areas.push(data);
+      } else if(ele.data('type') === 'I') {
+        data.push(ele.data('description'));
+        data.push(ele.data('label'));
+        pImpacts.push(data);
+      } else if(ele.data('type') === 'T') {
+        data.push(ele.data('description'));
+        data.push(ele.data('label'));
+        rTopics.push(data);
+      } else if(ele.data('type') === 'OC') {
         data.push(ele.data('description'));
         data.push(ele.data('label'));
         outcomes.push(data);
-      } else if(ele.data('type') === 'CoA') {
+      } else if(ele.data('type') === 'OP') {
         data.push(ele.data('description'));
         data.push(ele.data('label'));
-        clusters.push(data);
-      } else if(ele.data('type') === 'KO') {
-        data.push(ele.data('description'));
-        data.push(ele.data('label'));
-        keyOutputs.push(data);
+        outputs.push(data);
       }
     }
 
@@ -438,7 +451,7 @@ $("#overlay .btn").on("click", function() {
 });
 
 $("#changeGraph .btn").on("click", function() {
-  console.log("holi");
+  //console.log("holi");
   if($(this).hasClass("currentGraph")) {
     var url = baseURL + "/impactPathway/impactPathwayFullGraph.do";
     var dataFull = {
@@ -524,13 +537,13 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     totalWidth.OP = count.OP * (nodeWidth + nodeMargin);
     // totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
 
-    console.log(count.T);
-    console.log(count.OC);
-    console.log(count.OP);
+    //console.log(count.T);
+    //console.log(count.OC);
+    //console.log(count.OP);
     
-    console.log(totalWidth.T);
-    console.log(totalWidth.OC);
-    console.log(totalWidth.OP);
+    //console.log(totalWidth.T);
+    //console.log(totalWidth.OC);
+   // console.log(totalWidth.OP);
 
     var widthTest = 0;
     if(totalWidth.T > totalWidth.OC) {
@@ -545,7 +558,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
       widthTest = totalWidth.OP;
     }
 
-    console.log(widthTest);
+    //console.log(widthTest);
 
     var move = {
         SO: -(totalWidth.SO / 2),
@@ -553,8 +566,8 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         P: -(totalWidth.P / 2),
         T: -(widthTest/ 2),
         I: -(totalWidth.I / 2),
-        OC: -(widthTest / 2),
-        OP: -(widthTest / 2)
+        OC: -(totalWidth.OC / 2),
+        OP: 350
     };
 
     for(var i = 0; i < nodes.length; i++) {
@@ -594,10 +607,6 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             y: 300
         };
       } else if(nodes[i].data.type == "OC") {
-        if(nodes[i + 1] && nodes[i + 1].data.type == "OP") {
-        } else {
-          move.OP = (move.OP + (nodeWidth + nodeMargin + 20));
-        }
         move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
         // console.log(move.KO);
         nodes[i].position = {
@@ -605,17 +614,14 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             y: 300
         };
       } else if(nodes[i].data.type == "OP") {
-        move.OP = (move.OP + (nodeWidth + nodeMargin + 20));
-        if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T") {
-          move.OC = (move.OP );
-        } else {
-          
+        if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T"){
+          move.OP=300;
         }
-        
+        move.OP = (move.OP + 50);
         // console.log(move.KO);
         nodes[i].position = {
-            x: move.OP,
-            y: 400
+            x: move.OC,
+            y: move.OP
         };
       }/*
          * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; } else {
