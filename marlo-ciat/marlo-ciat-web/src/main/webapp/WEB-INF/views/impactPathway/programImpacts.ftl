@@ -14,13 +14,7 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#--  Program Impacts Help Text--]
-<div class="container helpText viewMore-block">
-  <div style="display:none;" class="helpMessage infoText">
-    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
-    <p class="col-md-10"> [@s.text name="programImpact.help" /] </p>
-  </div> 
-  <div style="display:none" class="viewMore closed"></div>
-</div>
+[@utils.helpInfos hlpInfo="programImpact.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
