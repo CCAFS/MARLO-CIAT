@@ -524,7 +524,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     totalWidth.OP = count.OP * (nodeWidth + nodeMargin);
     // totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
 
-    console.log(totalWidth.A);
+    console.log(count.T);
+    console.log(count.OC);
+    console.log(count.OP);
+    
     console.log(totalWidth.T);
     console.log(totalWidth.OC);
     console.log(totalWidth.OP);
@@ -548,10 +551,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         SO: -(totalWidth.SO / 2),
         A: -(totalWidth.A / 2),
         P: -(totalWidth.P / 2),
-        T: -(totalWidth.T / 2),
+        T: -(widthTest/ 2),
         I: -(totalWidth.I / 2),
-        OC: -(totalWidth.OC / 2),
-        OP: -(totalWidth.OP / 2)
+        OC: -(widthTest / 2),
+        OP: -(widthTest / 2)
     };
 
     for(var i = 0; i < nodes.length; i++) {
@@ -582,29 +585,37 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         };
       } else if(nodes[i].data.type == "T") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC") {
-          move.OC;
         } else {
           move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
+        }
+        // console.log(move.KO);
+        nodes[i].position = {
+            x: move.OC,
+            y: 300
+        };
+      } else if(nodes[i].data.type == "OC") {
+        if(nodes[i + 1] && nodes[i + 1].data.type == "OP") {
+        } else {
+          move.OP = (move.OP + (nodeWidth + nodeMargin + 20));
         }
         move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OC,
-            y: 400
-        };
-      } else if(nodes[i].data.type == "OC") {
-        move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
-        // console.log(move.KO);
-        nodes[i].position = {
-            x: move.OC,
-            y: 400
+            y: 300
         };
       } else if(nodes[i].data.type == "OP") {
         move.OP = (move.OP + (nodeWidth + nodeMargin + 20));
+        if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T") {
+          move.OC = (move.OP );
+        } else {
+          
+        }
+        
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OP,
-            y: 600
+            y: 400
         };
       }/*
          * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; } else {
