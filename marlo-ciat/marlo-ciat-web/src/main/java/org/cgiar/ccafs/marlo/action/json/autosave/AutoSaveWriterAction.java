@@ -123,7 +123,8 @@ public class AutoSaveWriterAction extends BaseAction {
       String jSon = gson.toJson(result);
 
       if (nameClass.equals(ResearchProgram.class.getName())) {
-        jSon = jSon.replaceAll("objectiveValue", "objectiveValueText");
+
+        // jSon = jSon.replaceAll("objectiveValue", "objectiveValueText");
       }
 
       try {

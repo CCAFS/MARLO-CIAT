@@ -394,11 +394,16 @@ public class ProgramImpactsAction extends BaseAction {
 
               impact.setBeneficiaries(new ArrayList<>(autoSaveIBeneficiaies));
 
+              String[] objectiveValues = impact.getObjectiveValue().split(",");
+              impact.setObjectives(new ArrayList<>());
+
+              for (int i = 0; i < objectiveValues.length; i++) {
+                ResearchObjective objective =
+                  objectiveService.getResearchObjectiveById(Long.parseLong(objectiveValues[i]));
+                impact.getObjectives().add(objective);
+              }
             }
-
           }
-
-
           reader.close();
           this.setDraft(true);
         } else {
@@ -801,5 +806,6 @@ public class ProgramImpactsAction extends BaseAction {
       validator.validate(this, impacts, selectedProgram, true);
     }
   }
+
 
 }

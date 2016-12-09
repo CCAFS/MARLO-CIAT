@@ -64,13 +64,13 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private Date activeSince;
 
-
   @Expose
   private User createdBy;
 
 
   @Expose
   private User modifiedBy;
+
 
   @Expose
   private String modificationJustification;
@@ -95,10 +95,11 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   private List<ResearchImpactBeneficiary> beneficiaries;
 
-
   private String objectiveValue;
 
-  private String objectiveValueText;
+
+  private List<String> objectiveValueText;
+
 
   /**
    * 
@@ -150,7 +151,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return beneficiaries;
   }
 
-
   public String getColor() {
     return color;
   }
@@ -159,10 +159,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return createdBy;
   }
 
+
   public String getDescription() {
     return description;
   }
-
 
   /**
    * @return the id
@@ -215,18 +215,15 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return objectiveValue;
   }
 
-  public String getObjectiveValueText() {
-    return objectiveValueText;
-  }
 
   public Set<ResearchImpactBeneficiary> getResearchImpactBeneficiaries() {
     return researchImpactBeneficiaries;
   }
 
-
   public Set<ResearchImpactObjective> getResearchImpactObjectives() {
     return researchImpactObjectives;
   }
+
 
   /**
    * @return the researchOutcomes
@@ -262,7 +259,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return active;
   }
 
-
   public void setActive(boolean active) {
     this.active = active;
   }
@@ -271,6 +267,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
+
 
   public void setBeneficiaries(List<ResearchImpactBeneficiary> beneficiaries) {
     this.beneficiaries = beneficiaries;
@@ -309,10 +306,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   public void setObjectiveValue(String objectiveValue) {
     this.objectiveValue = objectiveValue;
-  }
-
-  public void setObjectiveValueText(String objectiveValueText) {
-    this.objectiveValueText = objectiveValueText;
   }
 
   public void setResearchImpactBeneficiaries(Set<ResearchImpactBeneficiary> researchImpactBeneficiaries) {

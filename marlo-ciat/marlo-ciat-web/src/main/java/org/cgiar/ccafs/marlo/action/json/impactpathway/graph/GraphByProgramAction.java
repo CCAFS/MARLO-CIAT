@@ -176,8 +176,7 @@ public class GraphByProgramAction extends BaseAction {
         dataOutcomeDetail.put("description", outcome.getDescription());
         dataOutcomeDetail.put("color", outcome.getResearchImpact().getColor());
         dataOutcomeDetail.put("type", "OC");
-        dataOutcome.put("data", dataOutcomeDetail);
-        dataNodes.add(dataOutcome);
+
         // Relation Program Impact - Outcome
         HashMap<String, Object> dataEdgeOutcome = new HashMap<>();
         HashMap<String, Object> dataEdgeOutcomeDetail = new HashMap<>();
@@ -188,6 +187,10 @@ public class GraphByProgramAction extends BaseAction {
 
         List<ResearchOutput> outputs = new ArrayList<>(
           outcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+        dataOutcomeDetail.put("Nouptus", outputs.size());
+        dataOutcome.put("data", dataOutcomeDetail);
+        dataNodes.add(dataOutcome);
 
         int k = 1;
         for (ResearchOutput output : outputs) {
