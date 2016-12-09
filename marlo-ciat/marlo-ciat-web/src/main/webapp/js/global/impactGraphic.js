@@ -16,7 +16,7 @@ $(function() { // on dom ready
 
 });
 
-function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tooltip) {
+function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tooltip,nodeWidth) {
   var crps;
   var flagships;
   var outcomes;
@@ -36,7 +36,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
       style: cytoscape.stylesheet().selector('node').css({
           'shape': 'roundrectangle',
           'height': 30,
-          'width': 110,
+          'width': nodeWidth,
           'background-fit': 'cover',
           'border-width': 0.7,
           'border-opacity': 0.7,
@@ -493,7 +493,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         OC: 0,
         OP: 0
     };
-    var nodeWidth = 110;
+    var nodeWidth = 150;
     var nodeMargin = 20;
 
     // For to count and set position
@@ -624,7 +624,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
          */
     }
 
-    createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip);
+    createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip,nodeWidth);
   });
 }
 
