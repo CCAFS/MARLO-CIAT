@@ -17,6 +17,8 @@
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/views/impactPathway/outcomeListTemplate.ftl" as outcomesList /]
+[#--  Research Otcomes Help Text--] 
+[@utils.helpInfos hlpInfo="researchOutcomes.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 

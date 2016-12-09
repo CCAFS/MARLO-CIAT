@@ -7,6 +7,15 @@ function init() {
     }, 600);
     return false;
   });
+  setViewMore();
+  $('.viewMore').on("click", expandViewMoreBlock);
+
+  $(".removeHelp").on("click", function() {
+    $(this).parent().parent().fadeOut(function() {
+      console.log(this);
+      $(this).remove();
+    });
+  });
 }
 var yesnoEvent;
 var notyDefaultOptions = {
@@ -350,3 +359,37 @@ function setWordCounterToInputs(cssName) {
 $('.selectedProgram, selectedProject').on('click', function() {
   $(this).parent().next().slideToggle('slow');
 });
+/* Updated Set View More */
+function setViewMore() {
+  var element = $('.helpText');
+  if($(element).height() < 100) {
+// $(element).find('.viewMore').hide();
+  } else {
+    $(element).css({
+      "height": 65
+    })
+    $(element).find('.viewMore').html('View More');
+    $(element).find('.viewMore').show();
+  }
+}
+
+function expandViewMoreBlock() {
+  if($(this).hasClass("closed")) {
+    $(this).parent().css({
+      height: $(this).parent().find('.helpMessage').height() + $(this).height() + 5
+    });
+    $(this).css("border-bottom", "none");
+    $(this).html('View less');
+    $(this).addClass("opened");
+    $(this).removeClass("closed");
+  } else if($(this).hasClass("opened")) {
+    $(this).parent().css({
+      height: 70
+    });
+    $(this).css("border-bottom", "1px solid #f2f2f2");
+    $(this).html('View More');
+    $(this).addClass("closed");
+    $(this).removeClass("opened");
+  }
+
+}

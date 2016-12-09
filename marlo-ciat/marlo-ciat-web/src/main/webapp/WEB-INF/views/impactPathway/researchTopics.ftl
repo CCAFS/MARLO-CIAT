@@ -2,7 +2,7 @@
 [#assign title = "Impact Pathway - Research Topics" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2", "vanilla-color-picker"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/impactGraphic.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "researchTopics" /]
@@ -14,6 +14,8 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
+[#--  Research Topics Help Text--] 
+[@utils.helpInfos hlpInfo="researchTopics.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 

@@ -2,10 +2,9 @@
 [#assign title = "Impact Pathway - Program Impacts" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["select2", "vanilla-color-picker"] /]
-[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/impactGraphic.js","${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "programImpacts" /]
-
 [#assign breadCrumb = [
   {"label":"impactPathway", "nameSpace":"", "action":"programimpacts"},
   {"label":"programImpacts", "nameSpace":"", "action":"programimpacts"}
@@ -14,6 +13,8 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
+[#--  Program Impacts Help Text--]
+[@utils.helpInfos hlpInfo="programImpact.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 

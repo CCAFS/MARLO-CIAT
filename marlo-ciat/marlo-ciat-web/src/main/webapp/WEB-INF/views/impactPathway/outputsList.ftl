@@ -2,7 +2,7 @@
 [#assign title = "Outputs List" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["datatables.net", "datatables.net-bs","select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/outputList.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/impactPathway/outputList.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outputs" /]
@@ -17,6 +17,8 @@
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/views/impactPathway/outputListTemplate.ftl" as outputsList /]
+[#--  Research Outputs Help Text--] 
+[@utils.helpInfos hlpInfo="researchOutputs.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
   <div class="container"> 
