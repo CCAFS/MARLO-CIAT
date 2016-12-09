@@ -33,6 +33,12 @@
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
         
+         [#-- Program Title --]
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outputs</h3>
+            <hr />
+          </div><div class="clearfix"></div>
+        
         [#if researchTopics?has_content]
         
         <span id="programSelected" class="hidden">${selectedProgram.id}</span>
@@ -65,17 +71,7 @@
           </div>  
          
         
-        [@s.form action=actionName enctype="multipart/form-data" ]
-        
-          [#-- Program Title --]
-          <div class="col-md-12">
-            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - ALL Outputs</h3>
-            <hr />
-          </div><div class="clearfix"></div>
-          
-          
-   
-          
+        [@s.form action=actionName enctype="multipart/form-data" ]        
             [#-- Outcomes Table --]
             [#if outputs?has_content]
             <div style="">[@outputsList.outputsList outputs=outputs canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outputs"/]</div>

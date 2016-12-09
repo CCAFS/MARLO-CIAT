@@ -127,7 +127,7 @@
     
     [#-- Beneficiaries--]
     <h5 class="sectionSubTitle">[@s.text name="Intended beneficiaries: "/]</h5>
-    <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Please list (as much as you know now) who will benefit from your Program by Estimated Target year.</div>
+    <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-info-sign"></span> Please list intended beneficiaries. </div>
     <div class="form-group simpleBox beneficiaries-list" listname="${customName}.beneficiaries">
       [#if element.beneficiaries?has_content]
         [#list element.beneficiaries as beneficiary]

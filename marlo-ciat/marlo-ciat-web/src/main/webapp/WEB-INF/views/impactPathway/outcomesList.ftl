@@ -33,14 +33,20 @@
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
         
+        [#-- Program Title --]
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outcomes</h3>
+            <hr />
+          </div><div class="clearfix"></div>
+        
+          
+        
         [#if researchTopics?has_content]
         
         <span id="programSelected" class="hidden">${selectedProgram.id}</span>
         
-        [@s.form action=actionName enctype="multipart/form-data" ]
         
-        
-          <div class="simpleBox col-md-12">
+        <div class="simpleBox col-md-12">
             <label for="">Research Topic:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
               <option value="-1" >Select an option</option>
@@ -48,14 +54,13 @@
                 [#list researchTopics as researchTopic]
                   <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
                 [/#list]
-              
-            </select>
+               
+            </select>            
           </div>
-          [#-- Program Title --]
-          <div class="col-md-12">
-            <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outcomes</h3>
-            <hr />
-          </div><div class="clearfix"></div>
+          
+        [@s.form action=actionName enctype="multipart/form-data" ]
+        
+          
           [#-- Outcomes Table --]
           [#if outcomes?has_content]
           <div style="">[@outcomesList.outcomesList outcomes=outcomes canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outcomes"/]</div>
