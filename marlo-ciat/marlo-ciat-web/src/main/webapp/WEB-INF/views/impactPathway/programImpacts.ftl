@@ -31,12 +31,12 @@
         [@s.form action=actionName enctype="multipart/form-data" ]
           
           <div class="elements-list" listname="researchImpacts">
-          [#if researchImpacts?has_content]
-            [#list researchImpacts as impact]
-              [@programImpactMacro element=impact name="researchImpacts" index=impact_index /]
+          [#if impacts?has_content]
+            [#list impacts as impact]
+              [@programImpactMacro element=impact name="impacts" index=impact_index /]
             [/#list]
           [#else]
-            [@programImpactMacro element={} name="researchImpacts" index=0 /]
+            [@programImpactMacro element={} name="impacts" index=0 /]
           [/#if]
           </div>
           
@@ -55,9 +55,9 @@
 </section>
 
 [#-- Templates --]
-[@programImpactMacro element={} name="researchImpacts" index=-1 template=true /]
+[@programImpactMacro element={} name="impacts" index=-1 template=true /]
 
-[@beneficiaryMacro beneficiary={} name="researchImpacts[-1].beneficiaries" index=-1 template=true/]
+[@beneficiaryMacro beneficiary={} name="impacts[-1].beneficiaries" index=-1 template=true/]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 

@@ -54,7 +54,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private Integer targetYear;
 
-
   /**
    * The research Program to which this research impact relates to.
    */
@@ -64,6 +63,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   @Expose
   private Date activeSince;
+
 
   @Expose
   private User createdBy;
@@ -90,12 +90,15 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   private Set<ResearchImpactBeneficiary> researchImpactBeneficiaries = new HashSet<ResearchImpactBeneficiary>(0);
 
-
   private List<ResearchObjective> objectives;
+
 
   private List<ResearchImpactBeneficiary> beneficiaries;
 
+
   private String objectiveValue;
+
+  private String objectiveValueText;
 
   /**
    * 
@@ -139,7 +142,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return true;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
@@ -148,10 +150,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return beneficiaries;
   }
 
+
   public String getColor() {
     return color;
   }
-
 
   public User getCreatedBy() {
     return createdBy;
@@ -208,14 +210,19 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return null;
   }
 
+
   public String getObjectiveValue() {
     return objectiveValue;
   }
 
+  public String getObjectiveValueText() {
+    return objectiveValueText;
+  }
 
   public Set<ResearchImpactBeneficiary> getResearchImpactBeneficiaries() {
     return researchImpactBeneficiaries;
   }
+
 
   public Set<ResearchImpactObjective> getResearchImpactObjectives() {
     return researchImpactObjectives;
@@ -250,7 +257,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return result;
   }
 
-
   @Override
   public boolean isActive() {
     return active;
@@ -260,6 +266,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public void setActive(boolean active) {
     this.active = active;
   }
+
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -302,6 +309,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   public void setObjectiveValue(String objectiveValue) {
     this.objectiveValue = objectiveValue;
+  }
+
+  public void setObjectiveValueText(String objectiveValueText) {
+    this.objectiveValueText = objectiveValueText;
   }
 
   public void setResearchImpactBeneficiaries(Set<ResearchImpactBeneficiary> researchImpactBeneficiaries) {

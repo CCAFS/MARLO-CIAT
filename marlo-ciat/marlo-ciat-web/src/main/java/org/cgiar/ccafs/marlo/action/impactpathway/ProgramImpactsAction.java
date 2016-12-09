@@ -48,8 +48,13 @@ import org.cgiar.ccafs.marlo.data.service.IResearchRegionService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
 import org.cgiar.ccafs.marlo.validation.impactpathway.ProgramImpactsValidator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,6 +62,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -96,7 +104,7 @@ public class ProgramImpactsAction extends BaseAction {
   private List<ResearchProgram> researchPrograms;
   private List<ResearchObjective> researchObjectives;
   private ResearchProgram selectedProgram;
-  private List<ResearchImpact> researchImpacts;
+  private List<ResearchImpact> impacts;
   private long programID;
   private long areaID;
   private String transaction;
@@ -126,6 +134,30 @@ public class ProgramImpactsAction extends BaseAction {
     this.beneficiaryService = beneficiaryService;
   }
 
+  @Override
+  public String cancel() {
+
+    Path path = this.getAutoSaveFilePath();
+
+    if (path.toFile().exists()) {
+
+      boolean fileDeleted = path.toFile().delete();
+    }
+
+    this.setDraft(false);
+    Collection<String> messages = this.getActionMessages();
+    if (!messages.isEmpty()) {
+      String validationMessage = messages.iterator().next();
+      this.setActionMessages(null);
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    } else {
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    }
+    messages = this.getActionMessages();
+
+    return SUCCESS;
+  }
+
   /**
    * @return the areaID
    */
@@ -133,8 +165,20 @@ public class ProgramImpactsAction extends BaseAction {
     return areaID;
   }
 
+  private Path getAutoSaveFilePath() {
+    String composedClassName = selectedProgram.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = selectedProgram.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
+  }
+
   public List<BeneficiaryType> getBeneficiaryTypes() {
     return beneficiaryTypes;
+  }
+
+  public List<ResearchImpact> getImpacts() {
+    return impacts;
   }
 
   /**
@@ -159,10 +203,6 @@ public class ProgramImpactsAction extends BaseAction {
     return researchAreas;
   }
 
-  public List<ResearchImpact> getResearchImpacts() {
-    return researchImpacts;
-  }
-
   public List<ResearchObjective> getResearchObjectives() {
     return researchObjectives;
   }
@@ -173,6 +213,7 @@ public class ProgramImpactsAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
+
 
   /**
    * @return the selectedProgram
@@ -192,6 +233,7 @@ public class ProgramImpactsAction extends BaseAction {
   public String getTransaction() {
     return transaction;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -311,41 +353,90 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
+      if (selectedProgram != null) {
+        Path path = this.getAutoSaveFilePath();
 
-      researchImpacts =
-        selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList());
+        if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+          BufferedReader reader = null;
+          reader = new BufferedReader(new FileReader(path.toFile()));
+          Gson gson = new GsonBuilder().create();
+          JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+          AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-      if (regionService.findAll() != null) {
-        regions = regionService.findAll().stream().filter(r -> r.isActive()).collect(Collectors.toList());
-      }
+          selectedProgram = (ResearchProgram) autoSaveReader.readFromJson(jReader);
 
-      if (beneficiaryTypeService.findAll() != null) {
-        beneficiaryTypes =
-          beneficiaryTypeService.findAll().stream().filter(bt -> bt.isActive()).collect(Collectors.toList());
-      }
+          impacts = new ArrayList<>(selectedProgram.getImpacts());
+
+          if (impacts != null || !impacts.isEmpty()) {
+
+            for (ResearchImpact impact : impacts) {
+              List<ResearchImpactBeneficiary> impactBeneficiaries = new ArrayList<>(impact.getBeneficiaries());
+              List<ResearchImpactBeneficiary> autoSaveIBeneficiaies = new ArrayList<>();
+              for (ResearchImpactBeneficiary impactBeneficiary : impactBeneficiaries) {
+
+                ResearchRegion region =
+                  regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
+
+                Beneficiary beneficiary =
+                  beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
+
+                ResearchImpactBeneficiary autoSaveIBeneficiay = new ResearchImpactBeneficiary();
+
+                autoSaveIBeneficiay.setResearchRegion(region);
+                autoSaveIBeneficiay.setBeneficiary(beneficiary);
+
+                if (impactBeneficiary.getId() != null) {
+                  autoSaveIBeneficiay.setId(impactBeneficiary.getId());
+                }
+
+                autoSaveIBeneficiaies.add(autoSaveIBeneficiay);
+              }
+
+              impact.setBeneficiaries(new ArrayList<>(autoSaveIBeneficiaies));
+
+            }
+
+          }
 
 
-      if (objectiveService.findAll() != null) {
-        researchObjectives =
-          new ArrayList<>(objectiveService.findAll().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      }
+          reader.close();
+          this.setDraft(true);
+        } else {
+          this.setDraft(false);
+          impacts =
+            selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList());
 
-
-      if (researchImpacts != null) {
-        for (ResearchImpact researchImpact : researchImpacts) {
-          researchImpact.setObjectives(new ArrayList<>());
-          if (researchImpact.getResearchImpactObjectives() != null) {
-            for (ResearchImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
-              .filter(ro -> ro.isActive()).collect(Collectors.toList())) {
-              researchImpact.getObjectives().add(impactObjective.getResearchObjective());
+          if (impacts != null) {
+            for (ResearchImpact researchImpact : impacts) {
+              researchImpact.setObjectives(new ArrayList<>());
+              if (researchImpact.getResearchImpactObjectives() != null) {
+                for (ResearchImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
+                  .filter(ro -> ro.isActive()).collect(Collectors.toList())) {
+                  researchImpact.getObjectives().add(impactObjective.getResearchObjective());
+                }
+              }
+              researchImpact.setBeneficiaries(new ArrayList<>(researchImpact.getResearchImpactBeneficiaries().stream()
+                .filter(rib -> rib.isActive()).collect(Collectors.toList())));
             }
           }
-          researchImpact.setBeneficiaries(new ArrayList<>(researchImpact.getResearchImpactBeneficiaries().stream()
-            .filter(rib -> rib.isActive()).collect(Collectors.toList())));
         }
+
+        if (regionService.findAll() != null) {
+          regions = regionService.findAll().stream().filter(r -> r.isActive()).collect(Collectors.toList());
+        }
+
+        if (beneficiaryTypeService.findAll() != null) {
+          beneficiaryTypes =
+            beneficiaryTypeService.findAll().stream().filter(bt -> bt.isActive()).collect(Collectors.toList());
+        }
+
+        if (objectiveService.findAll() != null) {
+          researchObjectives = new ArrayList<>(
+            objectiveService.findAll().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+        }
+
       }
     }
-
 
     String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
     this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
@@ -360,14 +451,11 @@ public class ProgramImpactsAction extends BaseAction {
       if (researchObjectives != null) {
         researchObjectives.clear();
       }
-      if (researchImpacts != null) {
-        researchImpacts.clear();
+      if (impacts != null) {
+        impacts.clear();
       }
     }
 
-    for (ResearchImpact ri : researchImpacts) {
-      System.out.println(ri.getId());
-    }
   }
 
 
@@ -379,7 +467,7 @@ public class ProgramImpactsAction extends BaseAction {
 
       for (ResearchImpact researchImpact : programDb.getResearchImpacts().stream().filter(ri -> ri.isActive())
         .collect(Collectors.toList())) {
-        if (!researchImpacts.contains(researchImpact)) {
+        if (!impacts.contains(researchImpact)) {
 
           if (impactObjectiveService.findAll() != null) {
             for (ResearchImpactObjective impactObjective : impactObjectiveService.findAll().stream()
@@ -393,7 +481,7 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
-      for (ResearchImpact researchImpact : researchImpacts) {
+      for (ResearchImpact researchImpact : impacts) {
         if (researchImpact.getId() == null || researchImpact.getId() == -1) {
           ResearchImpact researchImpactNew = new ResearchImpact();
           researchImpactNew.setActive(true);
@@ -510,6 +598,12 @@ public class ProgramImpactsAction extends BaseAction {
       selectedProgram.setModifiedBy(this.getCurrentUser());
       programService.saveProgram(selectedProgram, this.getActionName(), relationsName);
       Collection<String> messages = this.getActionMessages();
+
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists()) {
+        path.toFile().delete();
+      }
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
@@ -635,6 +729,10 @@ public class ProgramImpactsAction extends BaseAction {
     this.beneficiaryTypes = beneficiaryTypes;
   }
 
+  public void setImpacts(List<ResearchImpact> impacts) {
+    this.impacts = impacts;
+  }
+
 
   /**
    * @param loggedCenter the loggedCenter to set
@@ -643,7 +741,6 @@ public class ProgramImpactsAction extends BaseAction {
     this.loggedCenter = loggedCenter;
   }
 
-
   /**
    * @param programID the programID to set
    */
@@ -651,13 +748,13 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
+
   /**
    * @param programID the programID to set
    */
   public void setProgramID(Long programID) {
     this.programID = programID;
   }
-
 
   public void setRegions(List<ResearchRegion> regions) {
     this.regions = regions;
@@ -668,13 +765,10 @@ public class ProgramImpactsAction extends BaseAction {
   }
 
 
-  public void setResearchImpacts(List<ResearchImpact> researchImpacts) {
-    this.researchImpacts = researchImpacts;
-  }
-
   public void setResearchObjectives(List<ResearchObjective> researchObjectives) {
     this.researchObjectives = researchObjectives;
   }
+
 
   /**
    * @param researchPrograms the researchPrograms to set
@@ -683,14 +777,12 @@ public class ProgramImpactsAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
-
   /**
    * @param selectedProgram the selectedProgram to set
    */
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
-
 
   /**
    * @param selectedResearchArea the selectedResearchArea to set
@@ -706,7 +798,7 @@ public class ProgramImpactsAction extends BaseAction {
   @Override
   public void validate() {
     if (save) {
-      validator.validate(this, researchImpacts, selectedProgram, true);
+      validator.validate(this, impacts, selectedProgram, true);
     }
   }
 
