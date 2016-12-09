@@ -2,7 +2,7 @@
 [#assign title = "Impact Pathway - Program Impacts" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["select2", "vanilla-color-picker"] /]
-[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/impactGraphic.js","${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/programSubmit.js", "${baseUrl}/js/impactPathway/programImpact.js", "${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "programImpacts" /]
 [#assign breadCrumb = [
