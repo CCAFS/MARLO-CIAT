@@ -73,23 +73,37 @@ public class ProgramImpactsValidator extends BaseValidator {
     params.add(String.valueOf(i + 1));
     params.add(String.valueOf(j + 1));
 
-    if (impactBeneficiary.getResearchRegion().getId() == -1) {
+    if (impactBeneficiary.getResearchRegion() != null) {
+      if (impactBeneficiary.getResearchRegion().getId() == -1) {
+        this.addMessage(baseAction.getText("programImpact.action.beneficiary.region", params));
+        baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
+          InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("programImpact.action.beneficiary.region", params));
       baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (impactBeneficiary.getBeneficiary().getId() == -1) {
+    if (impactBeneficiary.getBeneficiary() != null) {
+      if (impactBeneficiary.getBeneficiary().getId() == -1) {
+        this.addMessage(baseAction.getText("programImpact.action.beneficiary.focus", params));
+        baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
+          InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("programImpact.action.beneficiary.focus", params));
       baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (impactBeneficiary.getBeneficiary().getBeneficiaryType().getId() == -1) {
-      this.addMessage(baseAction.getText("programImpact.action.beneficiary.type", params));
-      baseAction.getInvalidFields().put(
-        "input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.beneficiaryType.id",
-        InvalidFieldsMessages.EMPTYFIELD);
+    if (impactBeneficiary.getBeneficiary() != null) {
+      if (impactBeneficiary.getBeneficiary().getBeneficiaryType().getId() == -1) {
+        this.addMessage(baseAction.getText("programImpact.action.beneficiary.type", params));
+        baseAction.getInvalidFields().put(
+          "input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.beneficiaryType.id",
+          InvalidFieldsMessages.EMPTYFIELD);
+      }
     }
   }
 

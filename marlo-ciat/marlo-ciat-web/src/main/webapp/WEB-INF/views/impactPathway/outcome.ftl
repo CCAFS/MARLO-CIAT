@@ -113,8 +113,7 @@
         [#-- Section Buttons--]
         [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
         
-        [#-- Hidden inputs --]
-        <input type="hidden" name="outcomeID" value="${outcomeID}" />
+
           
         [/@s.form]
         

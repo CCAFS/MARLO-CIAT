@@ -38,6 +38,9 @@
             <h3 class="subTitle headTitle outcomeListTitle">${selectedProgram.name} - Outputs</h3>
             <hr />
           </div><div class="clearfix"></div>
+          
+          [#-- Hidden Parameters --]
+          <input type="hidden" name="programID" value="${programID}" />
         
         [#if researchTopics?has_content]
         

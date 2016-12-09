@@ -93,11 +93,7 @@
         </div>
         [/#if]
         [#-- Section Buttons--]
-        [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-output.ftl" /]
-        
-        [#-- Hidden inputs --]
-        <input type="hidden" name="outputID" value="${outputID}" />
-          
+        [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-output.ftl" /]   
         [/@s.form]
         
       </div>

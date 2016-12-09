@@ -370,37 +370,42 @@ public class ProgramImpactsAction extends BaseAction {
           if (impacts != null || !impacts.isEmpty()) {
 
             for (ResearchImpact impact : impacts) {
-              List<ResearchImpactBeneficiary> impactBeneficiaries = new ArrayList<>(impact.getBeneficiaries());
-              List<ResearchImpactBeneficiary> autoSaveIBeneficiaies = new ArrayList<>();
-              for (ResearchImpactBeneficiary impactBeneficiary : impactBeneficiaries) {
+              if (impact.getBeneficiaries() != null) {
 
-                ResearchRegion region =
-                  regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
+                List<ResearchImpactBeneficiary> impactBeneficiaries = new ArrayList<>(impact.getBeneficiaries());
+                List<ResearchImpactBeneficiary> autoSaveIBeneficiaies = new ArrayList<>();
+                for (ResearchImpactBeneficiary impactBeneficiary : impactBeneficiaries) {
 
-                Beneficiary beneficiary =
-                  beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
+                  ResearchRegion region =
+                    regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
 
-                ResearchImpactBeneficiary autoSaveIBeneficiay = new ResearchImpactBeneficiary();
+                  Beneficiary beneficiary =
+                    beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
 
-                autoSaveIBeneficiay.setResearchRegion(region);
-                autoSaveIBeneficiay.setBeneficiary(beneficiary);
+                  ResearchImpactBeneficiary autoSaveIBeneficiay = new ResearchImpactBeneficiary();
 
-                if (impactBeneficiary.getId() != null) {
-                  autoSaveIBeneficiay.setId(impactBeneficiary.getId());
+                  autoSaveIBeneficiay.setResearchRegion(region);
+                  autoSaveIBeneficiay.setBeneficiary(beneficiary);
+
+                  if (impactBeneficiary.getId() != null) {
+                    autoSaveIBeneficiay.setId(impactBeneficiary.getId());
+                  }
+
+                  autoSaveIBeneficiaies.add(autoSaveIBeneficiay);
                 }
 
-                autoSaveIBeneficiaies.add(autoSaveIBeneficiay);
+                impact.setBeneficiaries(new ArrayList<>(autoSaveIBeneficiaies));
               }
 
-              impact.setBeneficiaries(new ArrayList<>(autoSaveIBeneficiaies));
+              if (impact.getObjectiveValue() != null) {
+                String[] objectiveValues = impact.getObjectiveValue().split(",");
+                impact.setObjectives(new ArrayList<>());
 
-              String[] objectiveValues = impact.getObjectiveValue().split(",");
-              impact.setObjectives(new ArrayList<>());
-
-              for (int i = 0; i < objectiveValues.length; i++) {
-                ResearchObjective objective =
-                  objectiveService.getResearchObjectiveById(Long.parseLong(objectiveValues[i]));
-                impact.getObjectives().add(objective);
+                for (int i = 0; i < objectiveValues.length; i++) {
+                  ResearchObjective objective =
+                    objectiveService.getResearchObjectiveById(Long.parseLong(objectiveValues[i]));
+                  impact.getObjectives().add(objective);
+                }
               }
             }
           }
