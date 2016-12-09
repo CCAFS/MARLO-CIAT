@@ -117,16 +117,10 @@ function validateThisSection() {
   var sectionData = {};
   sectionData.sectionName = sectionName;
 
-  // Validate projects
-  if(isProjectSection()) {
-    sectionData.projectID = $('input[name="projectID"]').val();
-    validateService = "/validateProjectSection.do";
-  }
-
   // Validate impact pathway
   if(isImpactPathwaySection()) {
-    sectionData.crpProgramID = $('input[name="crpProgramID"]').val();
-    validateService = "/impactPathway/validateImpactPathway.do";
+    sectionData.programID = $('input[name="programID"]').val();
+    validateService = "/validateImpactPathway.do";
   }
 
   $.ajax({

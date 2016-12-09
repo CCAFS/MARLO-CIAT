@@ -59,7 +59,7 @@ public class ResearchTopicsValidator extends BaseValidator {
       this.validateResearchTopic(baseAction, researchTopic, i);
     }
 
-    this.saveMissingFields(selectedProgram, "researchTopic");
+    this.saveMissingFields(selectedProgram, "researchTopics");
 
   }
 

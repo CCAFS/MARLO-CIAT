@@ -217,8 +217,8 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
     // Validate if the section exists.
     List<String> sections = new ArrayList<>();
-    sections.add("researchImpact");
-    sections.add("researchTopic");
+    sections.add("programimpacts");
+    sections.add("researchTopics");
     sections.add("outcomes");
     sections.add("outputs");
 

@@ -64,7 +64,7 @@ public class ProgramImpactsValidator extends BaseValidator {
       this.validateProgramImpact(baseAction, researchImpact, i);
     }
 
-    this.saveMissingFields(selectedProgram, "researchImpact");
+    this.saveMissingFields(selectedProgram, "programimpacts");
   }
 
   public void validateBeneficiaries(BaseAction baseAction, ResearchImpactBeneficiary impactBeneficiary, int i, int j) {
