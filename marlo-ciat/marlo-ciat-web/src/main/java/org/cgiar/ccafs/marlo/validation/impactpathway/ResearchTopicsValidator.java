@@ -16,11 +16,16 @@
 package org.cgiar.ccafs.marlo.validation.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
+import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +37,21 @@ import com.google.inject.Inject;
  */
 public class ResearchTopicsValidator extends BaseValidator {
 
+  ICenterService centerService;
+
   @Inject
-  public ResearchTopicsValidator() {
-    // TODO Auto-generated constructor stub
+  public ResearchTopicsValidator(ICenterService centerService) {
+    this.centerService = centerService;
+  }
+
+  private Path getAutoSaveFilePath(ResearchProgram program, long centerID) {
+    ResearchCenter center = centerService.getCrpById(centerID);
+    String composedClassName = program.getClass().getSimpleName();
+    String actionFile = ImpactPathwaySectionsEnum.TOPIC.getStatus().replace("/", "_");
+    String autoSaveFile =
+      program.getId() + "_" + composedClassName + "_" + center.getAcronym() + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
   public void validate(BaseAction baseAction, List<ResearchTopic> researchTopics, ResearchProgram selectedProgram,
@@ -42,7 +59,13 @@ public class ResearchTopicsValidator extends BaseValidator {
 
     baseAction.setInvalidFields(new HashMap<>());
 
-    // TODO validator autosave file
+    if (!saving) {
+      Path path = this.getAutoSaveFilePath(selectedProgram, baseAction.getCrpID());
+
+      if (path.toFile().exists()) {
+        this.addMissingField("researchTopic.action.draft");
+      }
+    }
 
     if (!baseAction.getFieldErrors().isEmpty()) {
       baseAction.addActionError(baseAction.getText("saving.fields.required"));

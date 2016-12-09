@@ -35,8 +35,13 @@ import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
 import org.cgiar.ccafs.marlo.validation.impactpathway.ResearchTopicsValidator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,6 +49,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -72,7 +80,7 @@ public class ResearchTopicsAction extends BaseAction {
   private ResearchCenter loggedCenter;
 
   private List<ResearchArea> researchAreas;
-  private List<ResearchTopic> researchTopics;
+  private List<ResearchTopic> topics;
   private List<ResearchProgram> researchPrograms;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
@@ -95,8 +103,40 @@ public class ResearchTopicsAction extends BaseAction {
     this.auditLogService = auditLogService;
   }
 
+  @Override
+  public String cancel() {
+
+    Path path = this.getAutoSaveFilePath();
+
+    if (path.toFile().exists()) {
+
+      boolean fileDeleted = path.toFile().delete();
+    }
+
+    this.setDraft(false);
+    Collection<String> messages = this.getActionMessages();
+    if (!messages.isEmpty()) {
+      String validationMessage = messages.iterator().next();
+      this.setActionMessages(null);
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    } else {
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    }
+    messages = this.getActionMessages();
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
+  }
+
+  private Path getAutoSaveFilePath() {
+    String composedClassName = selectedProgram.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = selectedProgram.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
   public ResearchCenter getLoggedCenter() {
@@ -107,17 +147,14 @@ public class ResearchTopicsAction extends BaseAction {
     return programID;
   }
 
+
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
 
+
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
-  }
-
-
-  public List<ResearchTopic> getResearchTopics() {
-    return researchTopics;
   }
 
 
@@ -131,10 +168,13 @@ public class ResearchTopicsAction extends BaseAction {
   }
 
 
+  public List<ResearchTopic> getTopics() {
+    return topics;
+  }
+
   public String getTransaction() {
     return transaction;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -229,12 +269,6 @@ public class ResearchTopicsAction extends BaseAction {
           }
         }
 
-        if (selectedProgram != null) {
-          if (selectedProgram.getResearchTopics() != null) {
-            researchTopics = new ArrayList<>(
-              selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-          }
-        }
       } else {
 
         if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
@@ -263,12 +297,32 @@ public class ResearchTopicsAction extends BaseAction {
           }
         }
 
-        if (selectedProgram != null) {
+
+      }
+
+      if (selectedProgram != null) {
+        Path path = this.getAutoSaveFilePath();
+
+        if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+          BufferedReader reader = null;
+          reader = new BufferedReader(new FileReader(path.toFile()));
+          Gson gson = new GsonBuilder().create();
+          JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+          AutoSaveReader autoSaveReader = new AutoSaveReader();
+
+          selectedProgram = (ResearchProgram) autoSaveReader.readFromJson(jReader);
+
+          topics = new ArrayList<>(selectedProgram.getTopics());
+
+          reader.close();
+          this.setDraft(true);
+        } else {
+          this.setDraft(false);
           researchPrograms = new ArrayList<>(selectedResearchArea.getResearchPrograms().stream()
             .filter(rp -> rp.isActive()).collect(Collectors.toList()));
           if (selectedProgram != null) {
             if (selectedProgram.getResearchTopics() != null) {
-              researchTopics = new ArrayList<>(
+              topics = new ArrayList<>(
                 selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
             }
           }
@@ -287,8 +341,8 @@ public class ResearchTopicsAction extends BaseAction {
       if (researchPrograms != null) {
         researchPrograms.clear();
       }
-      if (researchTopics != null) {
-        researchTopics.clear();
+      if (topics != null) {
+        topics.clear();
       }
     }
   }
@@ -306,14 +360,14 @@ public class ResearchTopicsAction extends BaseAction {
           selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList());
 
         for (ResearchTopic researchTopic : researchTopicsPrew) {
-          if (!researchTopics.contains(researchTopic)) {
+          if (!topics.contains(researchTopic)) {
             researchTopicService.deleteResearchTopic(researchTopic.getId());
           }
         }
       }
 
 
-      for (ResearchTopic researchTopic : researchTopics) {
+      for (ResearchTopic researchTopic : topics) {
         if (researchTopic.getId() == null || researchTopic.getId() == -1) {
           ResearchTopic newResearchTopic = new ResearchTopic();
           newResearchTopic.setActive(true);
@@ -354,6 +408,12 @@ public class ResearchTopicsAction extends BaseAction {
       selectedProgram.setActiveSince(new Date());
       selectedProgram.setModifiedBy(this.getCurrentUser());
       programService.saveProgram(selectedProgram, this.getActionName(), relationsName);
+
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists()) {
+        path.toFile().delete();
+      }
 
       Collection<String> messages = this.getActionMessages();
 
@@ -399,16 +459,16 @@ public class ResearchTopicsAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setResearchTopics(List<ResearchTopic> researchTopics) {
-    this.researchTopics = researchTopics;
-  }
-
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTopics(List<ResearchTopic> topics) {
+    this.topics = topics;
   }
 
   public void setTransaction(String transaction) {
@@ -418,7 +478,7 @@ public class ResearchTopicsAction extends BaseAction {
   @Override
   public void validate() {
     if (save) {
-      validator.validate(this, researchTopics, selectedProgram, true);
+      validator.validate(this, topics, selectedProgram, true);
     }
   }
 }

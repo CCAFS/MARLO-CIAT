@@ -2,7 +2,7 @@
 [#assign title = "Impact Pathway - Research Topics" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["cytoscape","cytoscape-panzoom","select2", "vanilla-color-picker"] /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/researchTopics.js", "${baseUrl}/js/global/fieldsValidation.js", "${baseUrl}/js/global/autoSave.js"] /]
 [#assign customCSS = [ "${baseUrl}/css/impactPathway/clusterActivities.css" ] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "researchTopics" /]
@@ -38,12 +38,12 @@
         
         [@s.form action=actionName enctype="multipart/form-data" ]     
           <div class="outcomes-list" listname="outcomes">
-          [#if researchTopics?has_content]
-            [#list researchTopics as outcome]
-              [@topicMacro element=outcome name="researchTopics" index=outcome_index /]
+          [#if topics?has_content]
+            [#list topics as topic]
+              [@topicMacro element=topic name="topics" index=topic_index /]
             [/#list]
           [#else]
-            [@topicMacro element={} name="researchTopics" index=0 /]
+            [@topicMacro element={} name="topics" index=0 /]
           [/#if]          
           </div>
           <div class="clearfix"></div>
@@ -66,7 +66,7 @@
   </div>
 </section>
 [#-- Outcome Template --]
-[@topicMacro element={} name="researchTopics" index=-1 template=true /]
+[@topicMacro element={} name="topics" index=-1 template=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
