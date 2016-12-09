@@ -2,7 +2,7 @@ $(document).ready(
     function() {
 
       var $deliverableList = $('table.outputList');
-
+      showHelpText();
       var table = $deliverableList.DataTable({
           "bPaginate": true, // This option enable the table pagination
           "bLengthChange": true, // This option disables the select table size option
@@ -104,4 +104,8 @@ function removeOutput(e) {
   // Getting deliverable ID and setting input hidden to remove that deliverable
   $dialogContent.find('input[name$=outputID]').val($(e.target).parent().attr('id').split('-')[1]);
   dialog.dialog("open");
+}
+function showHelpText() {
+  $('.helpMessage').show();
+  $('.helpMessage').addClass('animated flipInX');
 }
