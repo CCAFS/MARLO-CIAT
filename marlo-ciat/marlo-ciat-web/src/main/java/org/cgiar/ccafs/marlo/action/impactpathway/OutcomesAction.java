@@ -35,8 +35,13 @@ import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.ITargetUnitService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutcomesValidator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,6 +54,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -110,8 +118,40 @@ public class OutcomesAction extends BaseAction {
     this.auditLogService = auditLogService;
   }
 
+  @Override
+  public String cancel() {
+
+    Path path = this.getAutoSaveFilePath();
+
+    if (path.toFile().exists()) {
+
+      boolean fileDeleted = path.toFile().delete();
+    }
+
+    this.setDraft(false);
+    Collection<String> messages = this.getActionMessages();
+    if (!messages.isEmpty()) {
+      String validationMessage = messages.iterator().next();
+      this.setActionMessages(null);
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    } else {
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    }
+    messages = this.getActionMessages();
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
+  }
+
+  private Path getAutoSaveFilePath() {
+    String composedClassName = outcome.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = outcome.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
   public ResearchCenter getLoggedCenter() {
@@ -122,6 +162,7 @@ public class OutcomesAction extends BaseAction {
     return outcome;
   }
 
+
   public long getOutcomeID() {
     return outcomeID;
   }
@@ -129,7 +170,6 @@ public class OutcomesAction extends BaseAction {
   public long getProgramID() {
     return programID;
   }
-
 
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
@@ -147,9 +187,11 @@ public class OutcomesAction extends BaseAction {
     return researchTopics;
   }
 
+
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
+
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
@@ -222,6 +264,30 @@ public class OutcomesAction extends BaseAction {
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
 
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+        BufferedReader reader = null;
+        reader = new BufferedReader(new FileReader(path.toFile()));
+        Gson gson = new GsonBuilder().create();
+        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        AutoSaveReader autoSaveReader = new AutoSaveReader();
+
+        outcome = (ResearchOutcome) autoSaveReader.readFromJson(jReader);
+
+        System.out.println("");
+
+        reader.close();
+        this.setDraft(true);
+      } else {
+        this.setDraft(false);
+
+
+        outcome.setMilestones(new ArrayList<>(
+          outcome.getResearchMilestones().stream().filter(rm -> rm.isActive()).collect(Collectors.toList())));
+      }
+
+
       if (selectedProgram.getResearchTopics() != null) {
         researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
           .filter(rt -> rt.isActive() && rt.getResearchTopic().trim().length() > 0).collect(Collectors.toList()));
@@ -249,8 +315,6 @@ public class OutcomesAction extends BaseAction {
         targetUnitList = this.sortByComparator(targetUnitList);
       }
 
-      outcome.setMilestones(new ArrayList<>(
-        outcome.getResearchMilestones().stream().filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
     }
 
@@ -276,7 +340,6 @@ public class OutcomesAction extends BaseAction {
     }
 
   }
-
 
   @Override
   public String save() {
@@ -314,6 +377,12 @@ public class OutcomesAction extends BaseAction {
       outcome.setModifiedBy(this.getCurrentUser());
       outcomeService.saveResearchOutcome(outcome, this.getActionName(), relationsName);
 
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists()) {
+        path.toFile().delete();
+      }
+
       Collection<String> messages = this.getActionMessages();
 
       if (!this.getInvalidFields().isEmpty()) {
@@ -335,7 +404,6 @@ public class OutcomesAction extends BaseAction {
       return NOT_AUTHORIZED;
     }
   }
-
 
   public void saveMilestones(ResearchOutcome outcomeSave) {
     if (outcomeSave.getResearchMilestones() != null && outcomeSave.getResearchMilestones().size() > 0) {

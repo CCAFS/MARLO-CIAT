@@ -219,8 +219,8 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
     List<String> sections = new ArrayList<>();
     sections.add("programimpacts");
     sections.add("researchTopics");
-    sections.add("outcomes");
-    sections.add("outputs");
+    sections.add("outcomesList");
+    sections.add("outputsList");
 
     validSection = sections.contains(sectionName);
   }

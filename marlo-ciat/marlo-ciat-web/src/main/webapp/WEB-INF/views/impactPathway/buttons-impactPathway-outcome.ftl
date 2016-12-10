@@ -16,8 +16,8 @@
     [/#if]
     [#-- Hidden Parameters --]
     <input type="hidden" name="programID" value="${(selectedProgram.id)!}" />
-    <input type="hidden"  name="className" value="${(selectedProgram.class.name)!}"/>
-    <input type="hidden"  name="id" value="${(selectedProgram.id)!}"/>
+    <input type="hidden"  name="className" value="${(outcome.class.name)!}"/>
+    <input type="hidden"  name="id" value="${(outcome.id)!}"/>
     <input type="hidden"  name="modifiedBy.id" value="${(currentUser.id)!}"/>
     <input type="hidden"  name="actionName" value="${(actionName)!}"/>  
     <input type="hidden" name="outcomeID" value="${outcomeID}" />
