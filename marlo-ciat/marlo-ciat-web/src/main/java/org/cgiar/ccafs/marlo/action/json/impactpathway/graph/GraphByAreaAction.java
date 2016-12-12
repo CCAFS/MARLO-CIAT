@@ -95,6 +95,22 @@ public class GraphByAreaAction extends BaseAction {
       objectives = objectiveService.findAll().stream().filter(o -> o.isActive()).collect(Collectors.toList());
     }
 
+    int i = 1;
+    for (ResearchObjective researchObjective : objectives) {
+      // Strategic Objective Data
+      HashMap<String, Object> dataObjective = new HashMap<>();
+      HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
+      dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
+      dataObjectiveDetail.put("label", "Objective " + i);
+      dataObjectiveDetail.put("description", researchObjective.getObjective());
+      dataObjectiveDetail.put("color", "#FFFFFF");
+      dataObjectiveDetail.put("type", "SO");
+      dataObjective.put("data", dataObjectiveDetail);
+      dataNodes.add(dataObjective);
+
+      i++;
+    }
+
     List<ResearchProgram> programs =
       new ArrayList<>(area.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
@@ -120,7 +136,7 @@ public class GraphByAreaAction extends BaseAction {
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
 
-      int i = 1;
+      i = 1;
 
       for (ResearchImpact impact : impacts) {
         // Research Impact Data
@@ -228,20 +244,7 @@ public class GraphByAreaAction extends BaseAction {
         i++;
       }
 
-      for (ResearchObjective researchObjective : objectives) {
-        // Strategic Objective Data
-        HashMap<String, Object> dataObjective = new HashMap<>();
-        HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
-        dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
-        dataObjectiveDetail.put("label", "Objective " + i);
-        dataObjectiveDetail.put("description", researchObjective.getObjective());
-        dataObjectiveDetail.put("color", "#FFFFFF");
-        dataObjectiveDetail.put("type", "SO");
-        dataObjective.put("data", dataObjectiveDetail);
-        dataNodes.add(dataObjective);
 
-        i++;
-      }
     }
 
 
