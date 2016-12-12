@@ -120,25 +120,7 @@ public class GraphByAreaAction extends BaseAction {
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
 
-      int z = 1;
-
-      for (ResearchTopic topic : topics) {
-        // Research Topic Data
-        HashMap<String, Object> dataTopic = new HashMap<>();
-        HashMap<String, Object> dataTopicDetail = new HashMap<>();
-        dataTopicDetail.put("id", "T" + topic.getId());
-        dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
-        dataTopicDetail.put("label", "Research Topic " + z);
-        dataTopicDetail.put("description", topic.getResearchTopic());
-        dataTopicDetail.put("color", topic.getColor());
-        dataTopicDetail.put("type", "T");
-        dataTopic.put("data", dataTopicDetail);
-        dataNodes.add(dataTopic);
-
-        z++;
-      }
-
-      z = 1;
+      int i = 1;
 
       for (ResearchImpact impact : impacts) {
         // Research Impact Data
@@ -146,7 +128,7 @@ public class GraphByAreaAction extends BaseAction {
         HashMap<String, Object> dataImpactDetail = new HashMap<>();
         dataImpactDetail.put("id", "I" + impact.getId());
         dataImpactDetail.put("parent", "P" + impact.getResearchProgram().getId());
-        dataImpactDetail.put("label", "Program Impact " + z);
+        dataImpactDetail.put("label", "Impact " + i);
         dataImpactDetail.put("description", impact.getDescription());
         dataImpactDetail.put("color", impact.getColor());
         dataImpactDetail.put("type", "I");
@@ -156,15 +138,38 @@ public class GraphByAreaAction extends BaseAction {
         List<ResearchImpactObjective> impactObjectives = new ArrayList<>(
           impact.getResearchImpactObjectives().stream().filter(io -> io.isActive()).collect(Collectors.toList()));
 
-        for (ResearchImpactObjective researchImpactObjective : impactObjectives) {
-          if (!objectives.contains(researchImpactObjective.getResearchObjective())) {
-            objectives.add(researchImpactObjective.getResearchObjective());
-          }
+        for (ResearchImpactObjective impactObjective : impactObjectives) {
+          // Relation S Objective - Program Impact
+          HashMap<String, Object> dataEdgeImpact = new HashMap<>();
+          HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
+          dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchObjective().getId());
+          dataEdgeImpactDetail.put("target", "I" + impactObjective.getResearchImpact().getId());
+          dataEdgeImpact.put("data", dataEdgeImpactDetail);
+          dataEdges.add(dataEdgeImpact);
         }
 
+
+        i++;
+      }
+
+      i = 1;
+
+      for (ResearchTopic topic : topics) {
+        // Research Topic Data
+        HashMap<String, Object> dataTopic = new HashMap<>();
+        HashMap<String, Object> dataTopicDetail = new HashMap<>();
+        dataTopicDetail.put("id", "T" + topic.getId());
+        dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
+        dataTopicDetail.put("label", "Research Topic " + i);
+        dataTopicDetail.put("description", topic.getResearchTopic());
+        dataTopicDetail.put("color", topic.getColor());
+        dataTopicDetail.put("type", "T");
+        dataTopic.put("data", dataTopicDetail);
+        dataNodes.add(dataTopic);
+
         int j = 1;
-        List<ResearchOutcome> outcomes = new ArrayList<>(
-          impact.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+        List<ResearchOutcome> outcomes = new ArrayList<>(topic.getResearchOutcomes().stream()
+          .filter(ro -> ro.isActive() && ro.getResearchImpact() != null).collect(Collectors.toList()));
 
         for (ResearchOutcome outcome : outcomes) {
           // Research Outcome Data
@@ -176,8 +181,7 @@ public class GraphByAreaAction extends BaseAction {
           dataOutcomeDetail.put("description", outcome.getDescription());
           dataOutcomeDetail.put("color", outcome.getResearchImpact().getColor());
           dataOutcomeDetail.put("type", "OC");
-          dataOutcome.put("data", dataOutcomeDetail);
-          dataNodes.add(dataOutcome);
+
           // Relation Program Impact - Outcome
           HashMap<String, Object> dataEdgeOutcome = new HashMap<>();
           HashMap<String, Object> dataEdgeOutcomeDetail = new HashMap<>();
@@ -188,6 +192,10 @@ public class GraphByAreaAction extends BaseAction {
 
           List<ResearchOutput> outputs = new ArrayList<>(
             outcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+          dataOutcomeDetail.put("Nouptus", outputs.size());
+          dataOutcome.put("data", dataOutcomeDetail);
+          dataNodes.add(dataOutcome);
 
           int k = 1;
           for (ResearchOutput output : outputs) {
@@ -217,39 +225,23 @@ public class GraphByAreaAction extends BaseAction {
 
         }
 
-        z++;
+        i++;
       }
 
-    }
+      for (ResearchObjective researchObjective : objectives) {
+        // Strategic Objective Data
+        HashMap<String, Object> dataObjective = new HashMap<>();
+        HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
+        dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
+        dataObjectiveDetail.put("label", "Objective " + i);
+        dataObjectiveDetail.put("description", researchObjective.getObjective());
+        dataObjectiveDetail.put("color", "#FFFFFF");
+        dataObjectiveDetail.put("type", "SO");
+        dataObjective.put("data", dataObjectiveDetail);
+        dataNodes.add(dataObjective);
 
-    int i = 1;
-    for (ResearchObjective researchObjective : objectives) {
-      // Strategic Objective Data
-      HashMap<String, Object> dataObjective = new HashMap<>();
-      HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
-      dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
-      dataObjectiveDetail.put("label", "Strategic Objective " + i);
-      dataObjectiveDetail.put("description", researchObjective.getObjective());
-      dataObjectiveDetail.put("color", "#FFFFFF");
-      dataObjectiveDetail.put("type", "SO");
-      dataObjective.put("data", dataObjectiveDetail);
-      dataNodes.add(dataObjective);
-
-      List<ResearchImpactObjective> impactObjectives = new ArrayList<>(researchObjective.getResearchImpactObjectives()
-        .stream().filter(io -> io.isActive()).collect(Collectors.toList()));
-
-      for (ResearchImpactObjective impactObjective : impactObjectives) {
-        // Relation S Objective - Program Impact
-        HashMap<String, Object> dataEdgeImpact = new HashMap<>();
-        HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
-        dataEdgeImpactDetail.put("source", "SO" + impactObjective.getResearchImpact().getId());
-        dataEdgeImpactDetail.put("target", "I" + impactObjective.getResearchObjective().getId());
-        dataEdgeImpact.put("data", dataEdgeImpactDetail);
-        dataEdges.add(dataEdgeImpact);
+        i++;
       }
-
-
-      i++;
     }
 
 
