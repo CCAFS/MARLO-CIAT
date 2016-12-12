@@ -83,7 +83,7 @@ public class GraphByAreaAction extends BaseAction {
     HashMap<String, Object> dataArea = new HashMap<>();
     HashMap<String, Object> dataAreaDetail = new HashMap<>();
     dataAreaDetail.put("id", "A" + area.getId());
-    dataAreaDetail.put("label", area.getAcronym());
+    dataAreaDetail.put("label", area.getName());
     dataAreaDetail.put("description", area.getName());
     dataAreaDetail.put("color", area.getColor());
     dataAreaDetail.put("type", "A");
@@ -121,7 +121,7 @@ public class GraphByAreaAction extends BaseAction {
       HashMap<String, Object> dataProgramDetail = new HashMap<>();
       dataProgramDetail.put("id", "P" + program.getId());
       dataProgramDetail.put("parent", "A" + program.getResearchArea().getId());
-      dataProgramDetail.put("label", program.getAcronym());
+      dataProgramDetail.put("label", program.getName());
       dataProgramDetail.put("description", program.getName());
       dataProgramDetail.put("color", program.getColor());
       dataProgramDetail.put("type", "P");

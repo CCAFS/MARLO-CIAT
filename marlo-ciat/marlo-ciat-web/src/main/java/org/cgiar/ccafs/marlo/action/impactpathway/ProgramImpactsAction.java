@@ -534,6 +534,7 @@ public class ProgramImpactsAction extends BaseAction {
             researchImpactRew.setDescription(researchImpact.getDescription().trim());
           }
 
+
           if (!researchImpactRew.getColor().equals(researchImpact.getColor().trim())) {
             hasChanges = true;
             researchImpactRew.setColor(researchImpact.getColor().trim());

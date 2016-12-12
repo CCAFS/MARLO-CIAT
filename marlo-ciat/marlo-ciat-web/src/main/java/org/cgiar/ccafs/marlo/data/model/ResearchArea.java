@@ -48,14 +48,12 @@ public class ResearchArea implements Serializable, IAuditLog {
   @Expose
   private String acronym;
 
-
   @Expose
   private ResearchCenter researchCenter;
 
 
   @Expose
   private boolean active;
-
 
   @Expose
   private Date activeSince;
@@ -79,6 +77,10 @@ public class ResearchArea implements Serializable, IAuditLog {
 
   private Set<ResearchProgram> researchPrograms = new HashSet<ResearchProgram>(0);
 
+
+  private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
+
+
   /**
    * 
    */
@@ -87,7 +89,6 @@ public class ResearchArea implements Serializable, IAuditLog {
     // TODO Auto-generated constructor stub
   }
 
-
   /**
    * @param name
    */
@@ -95,6 +96,7 @@ public class ResearchArea implements Serializable, IAuditLog {
     super();
     this.name = name;
   }
+
 
   /**
    * @param name
@@ -109,12 +111,36 @@ public class ResearchArea implements Serializable, IAuditLog {
     this.acronym = acronym;
   }
 
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ResearchArea other = (ResearchArea) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
   /**
    * @return the acronym
    */
   public String getAcronym() {
     return acronym;
   }
+
 
   public Date getActiveSince() {
     return activeSince;
@@ -163,12 +189,23 @@ public class ResearchArea implements Serializable, IAuditLog {
     return researchCenter;
   }
 
+  public Set<ResearchLeader> getResearchLeaders() {
+    return researchLeaders;
+  }
 
   /**
    * @return the researchPrograms
    */
   public Set<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
 
@@ -186,15 +223,15 @@ public class ResearchArea implements Serializable, IAuditLog {
   }
 
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
-   */
-
   public void setActive(boolean active) {
     this.active = active;
   }
 
+
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
+   */
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -242,6 +279,11 @@ public class ResearchArea implements Serializable, IAuditLog {
    */
   public void setResearchCenter(ResearchCenter researchCenter) {
     this.researchCenter = researchCenter;
+  }
+
+
+  public void setResearchLeaders(Set<ResearchLeader> researchLeaders) {
+    this.researchLeaders = researchLeaders;
   }
 
   /**

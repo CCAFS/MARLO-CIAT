@@ -14,6 +14,7 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.utils;
 
+
 import org.cgiar.ccafs.marlo.config.APConfig;
 
 import java.io.UnsupportedEncodingException;
@@ -25,6 +26,7 @@ import javax.activation.DataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -80,12 +82,11 @@ public class SendMail {
     // Un-comment this line to watch javaMail debug
     // properties.put("mail.debug", "true");
 
-
     Session session = Session.getInstance(properties, new Authenticator() {
 
       @Override
-      protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-        return new javax.mail.PasswordAuthentication(config.getEmailUsername(), config.getEmailPassword());
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(config.getEmailUsername(), config.getEmailPassword());
       }
     });
 
@@ -94,20 +95,37 @@ public class SendMail {
 
     // Set the FROM and TO fields
     try {
+      if (!config.isProduction()) {
+        // Adding TEST words.
+        // Set the Test Header to list the emails that will send in production
+        StringBuilder testingHeader = new StringBuilder();
+        testingHeader.append("To: " + toEmail + "<br>");
+        testingHeader.append("CC: " + ccEmail + "<br>");
+        testingHeader.append("BBC: " + bbcEmail + "<br>");
+        testingHeader.append("----------------------------------------------------<br><br>");
+        subject = "TEST " + subject;
+        messageContent = testingHeader.toString() + messageContent;
+        // if (toEmail != null) {
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bbcEmail, false));
+        LOG.info("   - TO: " + bbcEmail);
+        // }
+      } else {
+        if (toEmail != null) {
+          msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+          LOG.info("   - TO: " + toEmail);
+        }
+        if (ccEmail != null) {
+          msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail, false));
+          LOG.info("   - CC: " + ccEmail);
+        }
+      }
       msg.setFrom(new InternetAddress(config.getEmailHost(), "MARLO Platform"));
-      if (toEmail != null) {
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-      }
-      if (ccEmail != null) {
-        msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail, false));
-      }
       if (bbcEmail != null) {
         msg.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bbcEmail, false));
+        LOG.info("   - BBC: " + bbcEmail);
       }
-      // Adding TEST word at the beginning of the subject.
-      if (!config.isProduction()) {
-        subject = "TEST " + subject;
-      }
+
+
       msg.setSubject(subject);
       msg.setSentDate(new Date());
 
@@ -117,6 +135,8 @@ public class SendMail {
       MimeBodyPart mimeBodyPart = new MimeBodyPart();
       if (isHtml) {
         mimeBodyPart.setContent(messageContent, "text/html; charset=utf-8");
+      } else {
+        mimeBodyPart.setContent(messageContent, "text; charset=utf-8");
       }
 
       mimeMultipart.addBodyPart(mimeBodyPart);
@@ -132,10 +152,7 @@ public class SendMail {
 
       msg.setContent(mimeMultipart);
       Transport.send(msg);
-      LOG.info("Message sent: " + subject);
-      LOG.info("   - TO: " + toEmail);
-      LOG.info("   - CC: " + ccEmail);
-      LOG.info("   - BBC: " + bbcEmail);
+      LOG.info("Message sent: \n" + subject);
 
     } catch (MessagingException e) {
       e.printStackTrace();

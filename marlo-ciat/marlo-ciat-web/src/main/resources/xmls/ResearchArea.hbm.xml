@@ -42,6 +42,12 @@
       </key>
       <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" />
     </set>
-		
+    <set lazy="true" name="researchLeaders" table="research_leaders" order-by="id"
+      cascade="save-update" fetch="select">
+      <key>
+        <column name="research_area_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchLeader" />
+    </set>		
 	</class>
 </hibernate-mapping>

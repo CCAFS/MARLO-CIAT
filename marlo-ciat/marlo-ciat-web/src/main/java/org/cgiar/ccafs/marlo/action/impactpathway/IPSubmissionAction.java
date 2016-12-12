@@ -18,19 +18,24 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
+import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
+import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.ISubmissionService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.SendMail;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +58,8 @@ public class IPSubmissionAction extends BaseAction {
   private ISectionStatusService sectionStatusService;
   private IResearchCycleService cycleService;
   private ICenterService centerService;
+  private IResearchLeaderService leaderService;
+  private SendMail sendMail;
 
 
   private ResearchProgram program;
@@ -64,13 +71,16 @@ public class IPSubmissionAction extends BaseAction {
 
   @Inject
   public IPSubmissionAction(APConfig config, ISubmissionService submissionService, IProgramService programService,
-    ISectionStatusService sectionStatusService, IResearchCycleService cycleService, ICenterService centerService) {
+    ISectionStatusService sectionStatusService, IResearchCycleService cycleService, ICenterService centerService,
+    IResearchLeaderService leaderService, SendMail sendMail) {
     super(config);
     this.programService = programService;
     this.submissionService = submissionService;
     this.sectionStatusService = sectionStatusService;
     this.cycleService = cycleService;
     this.centerService = centerService;
+    this.leaderService = leaderService;
+    this.sendMail = sendMail;
   }
 
   @Override
@@ -103,6 +113,7 @@ public class IPSubmissionAction extends BaseAction {
 
           if (submissionId > 0) {
             this.setSubmission(submissionService.getSubmissionById(submissionId));
+            this.sendNotficationEmail();
           }
 
         }
@@ -163,9 +174,97 @@ public class IPSubmissionAction extends BaseAction {
 
   }
 
+  private void sendNotficationEmail() {
+    // Building the email message
+    StringBuilder message = new StringBuilder();
+    String[] values = new String[5];
+    values[0] = this.getCurrentUser().getComposedCompleteName();
+    values[1] = loggedCenter.getName();
+    values[2] = program.getName();
+    values[3] = String.valueOf(this.getYear());
+    values[4] = cycle.getName();
+
+    String subject = null;
+    message.append(this.getText("impact.submit.email.message", values));
+    message.append(this.getText("email.support"));
+    message.append(this.getText("email.bye"));
+    subject = this.getText("impact.submit.email.subject", new String[] {program.getName()});
+
+
+    String toEmail = null;
+    String ccEmail = null;
+
+    // Send email to the user that is submitting the project.
+    // TO
+    toEmail = this.getCurrentUser().getEmail();
+    StringBuilder ccEmails = new StringBuilder();
+
+    // CC
+    ResearchArea area = program.getResearchArea();
+
+    List<ResearchLeader> areaLeaders =
+      new ArrayList<>(area.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+
+
+    if (!areaLeaders.isEmpty()) {
+      for (ResearchLeader leader : areaLeaders) {
+        ccEmails.append(leader.getUser().getEmail());
+        ccEmails.append(", ");
+      }
+    }
+
+    List<ResearchLeader> programLeaders =
+      new ArrayList<>(program.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+
+    if (!programLeaders.isEmpty()) {
+      for (ResearchLeader leader : programLeaders) {
+        ccEmails.append(leader.getUser().getEmail());
+        ccEmails.append(", ");
+      }
+    }
+
+    // CC will be the other MLs.
+    ccEmail = ccEmails.toString().isEmpty() ? null : ccEmails.toString();
+    // Detect if a last ; was added to CC and remove it
+    if (ccEmail != null && ccEmail.length() > 0 && ccEmail.charAt(ccEmail.length() - 2) == ',') {
+      ccEmail = ccEmail.substring(0, ccEmail.length() - 2);
+    }
+
+
+    // BBC will be our gmail notification email.
+    String bbcEmails = this.config.getEmailNotification();
+
+    // Send pdf
+    // Get the PDF from the Project report url.
+    ByteBuffer buffer = null;
+    String fileName = null;
+    String contentType = null;
+
+    /*
+     * TODO Create IP Summaries Action
+     * try {
+     * TODO The summaries IP Action.
+     * buffer = ByteBuffer.wrap(reportingSummaryAction.getBytesPDF());
+     * fileName = this.getFileName();
+     * contentType = "application/pdf";
+     * } catch (Exception e) {
+     * // Do nothing.
+     * LOG.error("There was an error trying to get the URL to download the PDF file: " + e.getMessage());
+     * }
+     */
+
+    if (buffer != null && fileName != null && contentType != null) {
+      sendMail.send(toEmail, ccEmail, bbcEmails, subject, message.toString(), buffer.array(), contentType, fileName,
+        true);
+    } else {
+      sendMail.send(toEmail, ccEmail, bbcEmails, subject, message.toString(), null, null, null, true);
+    }
+
+
+  }
+
   public void setProgramID(long programID) {
     this.programID = programID;
   }
-
 
 }

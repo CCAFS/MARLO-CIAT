@@ -72,7 +72,7 @@ public class OutputsValidator extends BaseValidator {
 
     this.validateOutput(baseAction, output);
 
-    this.saveMissingFields(selectedProgram, output, "outputs");
+    this.saveMissingFields(selectedProgram, output, "outputsList");
   }
 
   public void validateNextUser(BaseAction baseAction, ResearchOutputsNextUser nextUser, int i) {
