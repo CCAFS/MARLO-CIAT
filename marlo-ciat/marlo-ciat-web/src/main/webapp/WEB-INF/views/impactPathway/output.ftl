@@ -18,7 +18,8 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
 [#import "/WEB-INF/views/impactPathway/outputListTemplate.ftl" as outcomesList /]
-
+[#--  Research Otcomes Help Text--] 
+[@utils.helpInfos hlpInfo="researchOutputs.help" /]
 [#assign outputCustomName= "output" /]
 
 [#--  marlo cluster of activities--]
