@@ -453,11 +453,8 @@ $("#overlay .btn").on("click", function() {
 $("#changeGraph .btn").on("click", function() {
   //console.log("holi");
   if($(this).hasClass("currentGraph")) {
-    var url = baseURL + "/impactPathway/impactPathwayFullGraph.do";
-    var dataFull = {
-      crpID: currentCrpID
-    }
-    ajaxService(url, dataFull, "impactGraphic", true, true, 'concentric', false);
+    var url = baseURL + "/impactPathwayGraphByArea.do";
+    ajaxService(url, data, "impactGraphic", true, true, 'concentric', false);
     $(this).html("Show section graph");
     $(this).addClass("fullGraph");
     $(this).removeClass("currentGraph");
@@ -487,6 +484,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     setViewMore();
     // /////////
     console.log("done");
+    var currentX=0;
     var nodes = m.elements.nodes;
     var count = {
         SO: 0,
@@ -584,19 +582,27 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             y: 200
         };
       } else if(nodes[i].data.type == "P") {
-        move.P = (move.P + (nodeWidth + nodeMargin));
         nodes[i].position = {
             x: move.P,
             y: 200
         };
       } else if(nodes[i].data.type == "I") {
-        move.I = (move.I + (nodeWidth + nodeMargin + 20));
+        if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
+          currentX= currentX+ (nodeWidth + nodeMargin + 20);
+          move.I=currentX;
+        }else{
+          currentX= move.I+ (nodeWidth + nodeMargin + 20);
+          move.I = currentX;
+        }
         // console.log(move.KO);
         nodes[i].position = {
             x: move.I,
             y: 200
         };
       } else if(nodes[i].data.type == "T") {
+        if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
+          move.I=move.OC+(nodeWidth + nodeMargin + 20);
+        }
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC") {
         } else {
           move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
@@ -608,6 +614,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         };
       } else if(nodes[i].data.type == "OC") {
         move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
+        currentX= move.OC+ (nodeWidth + nodeMargin + 20);
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OC,
@@ -615,6 +622,12 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         };
       } else if(nodes[i].data.type == "OP") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T"){
+          currentX= move.OC+ (nodeWidth + nodeMargin + 20);
+          move.OP=300;
+        }else if(nodes[i + 1] && nodes[i + 1].data.type == "P"){
+          currentX= move.OC+ (nodeWidth + nodeMargin + 20);
+          move.P=currentX;
+          move.I=currentX;
           move.OP=300;
         }
         move.OP = (move.OP + 50);
