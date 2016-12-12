@@ -31,13 +31,13 @@
         class="org.cgiar.ccafs.marlo.interceptor.ValidSessionInterceptor" />
       <!-- validating if the user have edit privileges to impact pathway -->
       <interceptor name="editImpactPathway"
-        class="org.cgiar.ccafs.marlo.interceptor.EditImpactPathwayInterceptor" />
+        class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditImpactPathwayInterceptor" />
         <!-- validating if the user have edit privileges to impact pathway - outcomes -->
       <interceptor name="editOutcome"
-        class="org.cgiar.ccafs.marlo.interceptor.EditOutcomeInterceptor" />
+        class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditOutcomeInterceptor" />
         <!-- validating if the user have edit privileges to impact pathway - outputs -->
       <interceptor name="editOutput"
-        class="org.cgiar.ccafs.marlo.interceptor.EditOutputInterceptor" />
+        class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditOutputInterceptor" />
         
         
 			<!-- stack from home packgae -->

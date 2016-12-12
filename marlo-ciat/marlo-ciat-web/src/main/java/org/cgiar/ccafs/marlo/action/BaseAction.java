@@ -17,15 +17,20 @@ package org.cgiar.ccafs.marlo.action;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
+import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
+import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
@@ -68,42 +73,38 @@ import org.slf4j.LoggerFactory;
  * @author Héctor Fabio Tobón R.
  * @author Christian Garcia
  */
-// @SuppressWarnings("unused")
 public class BaseAction extends ActionSupport implements Preparable, SessionAware, ServletRequestAware {
 
-
-  public static final String CANCEL = "cancel";
-
+  private static final long serialVersionUID = -740360140511380630L;
 
   // Loggin
   private static final Logger LOG = LoggerFactory.getLogger(BaseAction.class);
 
+  public static final String CANCEL = "cancel";
   public static final String NEXT = "next";
-
-
   public static final String NOT_AUTHORIZED = "403";
-
   public static final String NOT_FOUND = "404";
-
   public static final String NOT_LOGGED = "401";
-
   public static final String SAVED_STATUS = "savedStatus";
-  private static final long serialVersionUID = -740360140511380630L;
+
+  @Inject
+  protected BaseSecurityContext securityContext;
   @Inject
   private IAuditLogService auditLogManager;
   @Inject
   private IResearchTopicService topicService;
-
   @Inject
   private IResearchImpactService impactService;
   @Inject
   private IResearchOutcomeService outcomeService;
-
   @Inject
   private IResearchOutputService outputService;
-
   @Inject
   private ISectionStatusService secctionStatusService;
+  @Inject
+  private IResearchCycleService cycleService;
+  @Inject
+  private IProgramService programServcie;
 
   protected boolean add;
   private String basePermission;
@@ -117,31 +118,22 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   protected boolean dataSaved;
   protected boolean delete;
   private boolean draft;
-  private boolean reportingActive;
-  private boolean planningActive;
-  private boolean lessonsActive;
-  private int reportingYear;
-  private int planningYear;
   private boolean fullEditable;
-  // User actions
-  private boolean isEditable; // If user is able to edit the form.
+  private boolean isEditable;
   // Justification of the changes
   private String justification;
   protected boolean next;
   private Map<String, Object> parameters;
   private HttpServletRequest request;
-  // button actions
+
   protected boolean save;
   private boolean saveable; // If user is able to see the save, cancel, delete
+
   // Set the invalid fields
   private HashMap<String, String> invalidFields;
-  // buttons
-  // Config Variables
-  @Inject
-  protected BaseSecurityContext securityContext;
+
   private Map<String, Object> session;
   protected boolean submit;
-
   private Submission submission;
 
   @Inject
@@ -610,6 +602,25 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return submit;
   }
 
+  public boolean isSubmitIP(long programID) {
+
+    ResearchProgram program = programServcie.getProgramById(programID);
+    if (program != null) {
+
+      ResearchCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.IMPACT_PATHWAY.getId());
+
+      List<Submission> submissions = new ArrayList<>(program.getSubmissions().stream()
+        .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
+        .collect(Collectors.toList()));
+
+      if (submissions != null && submissions.size() > 0) {
+        this.setSubmission(submissions.get(0));
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   public String next() {
     return NEXT;
@@ -678,28 +689,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     this.justification = justification;
   }
 
-  public void setLessonsActive(boolean lessonsActive) {
-    this.lessonsActive = lessonsActive;
-  }
-
   public void setNext(boolean next) {
     this.next = true;
-  }
-
-  public void setPlanningActive(boolean planningActive) {
-    this.planningActive = planningActive;
-  }
-
-  public void setPlanningYear(int planningYear) {
-    this.planningYear = planningYear;
-  }
-
-  public void setReportingActive(boolean reportingActive) {
-    this.reportingActive = reportingActive;
-  }
-
-  public void setReportingYear(int reportingYear) {
-    this.reportingYear = reportingYear;
   }
 
   public void setSave(boolean save) {

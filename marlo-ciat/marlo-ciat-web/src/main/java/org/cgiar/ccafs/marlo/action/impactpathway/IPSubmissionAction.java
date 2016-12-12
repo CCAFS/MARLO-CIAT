@@ -81,7 +81,7 @@ public class IPSubmissionAction extends BaseAction {
           ResearchProgram program = programService.getProgramById(programID);
 
           List<Submission> submissions = new ArrayList<>(program.getSubmissions().stream()
-            .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear() == (short) this.getYear())
+            .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
             .collect(Collectors.toList()));
 
           if (submissions != null && submissions.size() > 0) {

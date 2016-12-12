@@ -13,7 +13,7 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.interceptor;
+package org.cgiar.ccafs.marlo.interceptor.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
@@ -128,6 +128,10 @@ public class EditOutcomeInterceptor extends AbstractInterceptor implements Seria
         if (editParameter || parameters.get("save") != null) {
           hasPermissionToEdit = (baseAction.isAdmin()) ? true : baseAction
             .hasPermission(baseAction.generatePermission(Permission.RESEARCH_PROGRAM_FULL_PRIVILEGES, params));
+        }
+
+        if (baseAction.isSubmitIP(programID)) {
+          canEdit = false;
         }
 
         // Set the variable that indicates if the user can edit the section
