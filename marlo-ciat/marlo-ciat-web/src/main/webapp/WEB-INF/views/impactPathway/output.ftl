@@ -2,7 +2,7 @@
 [#assign title = "Output" /]
 [#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
 [#assign pageLibs = ["select2"] /]
-[#assign customJS = ["${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
+[#assign customJS = ["${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js", "${baseUrl}/js/global/autoSave.js"] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]
 [#assign currentSection = "impactPathway" /]
 [#assign currentStage = "outputs" /]
@@ -49,7 +49,7 @@
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
         
         [@s.form action=actionName enctype="multipart/form-data" ]
-        <h3 class="headTitle"> Output description </h3>
+        <h3 class="headTitle"> Output General Information </h3>
         <div class="borderBox">
           <!--h5 class="sectionSubTitle"> Output description</h5-->
           

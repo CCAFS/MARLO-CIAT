@@ -83,7 +83,7 @@ public class GraphByProgramAction extends BaseAction {
     HashMap<String, Object> dataArea = new HashMap<>();
     HashMap<String, Object> dataAreaDetail = new HashMap<>();
     dataAreaDetail.put("id", "A" + area.getId());
-    dataAreaDetail.put("label", area.getAcronym());
+    dataAreaDetail.put("label", area.getName());
     dataAreaDetail.put("description", area.getName());
     dataAreaDetail.put("color", area.getColor());
     dataAreaDetail.put("type", "A");
@@ -95,7 +95,7 @@ public class GraphByProgramAction extends BaseAction {
     HashMap<String, Object> dataProgramDetail = new HashMap<>();
     dataProgramDetail.put("id", "P" + program.getId());
     dataProgramDetail.put("parent", "A" + program.getResearchArea().getId());
-    dataProgramDetail.put("label", program.getAcronym());
+    dataProgramDetail.put("label", program.getName());
     dataProgramDetail.put("description", program.getName());
     dataProgramDetail.put("color", program.getColor());
     dataProgramDetail.put("type", "P");
@@ -123,7 +123,7 @@ public class GraphByProgramAction extends BaseAction {
       HashMap<String, Object> dataImpactDetail = new HashMap<>();
       dataImpactDetail.put("id", "I" + impact.getId());
       dataImpactDetail.put("parent", "P" + impact.getResearchProgram().getId());
-      dataImpactDetail.put("label", "Program Impact " + i);
+      dataImpactDetail.put("label", "Impact " + i);
       dataImpactDetail.put("description", impact.getDescription());
       dataImpactDetail.put("color", impact.getColor());
       dataImpactDetail.put("type", "I");

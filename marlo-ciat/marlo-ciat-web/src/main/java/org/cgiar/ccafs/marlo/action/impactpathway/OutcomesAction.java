@@ -275,13 +275,10 @@ public class OutcomesAction extends BaseAction {
 
         outcome = (ResearchOutcome) autoSaveReader.readFromJson(jReader);
 
-        System.out.println("");
-
         reader.close();
         this.setDraft(true);
       } else {
         this.setDraft(false);
-
 
         outcome.setMilestones(new ArrayList<>(
           outcome.getResearchMilestones().stream().filter(rm -> rm.isActive()).collect(Collectors.toList())));

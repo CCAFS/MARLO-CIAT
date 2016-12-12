@@ -46,12 +46,12 @@ public class OutcomesValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(ResearchProgram program, long centerID) {
+  private Path getAutoSaveFilePath(ResearchOutcome outcome, long centerID) {
     ResearchCenter center = centerService.getCrpById(centerID);
-    String composedClassName = program.getClass().getSimpleName();
+    String composedClassName = outcome.getClass().getSimpleName();
     String actionFile = ImpactPathwaySectionsEnum.OUTCOME.getStatus().replace("/", "_");
     String autoSaveFile =
-      program.getId() + "_" + composedClassName + "_" + center.getAcronym() + "_" + actionFile + ".json";
+      outcome.getId() + "_" + composedClassName + "_" + center.getAcronym() + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
@@ -62,10 +62,10 @@ public class OutcomesValidator extends BaseValidator {
     baseAction.setInvalidFields(new HashMap<>());
 
     if (!saving) {
-      Path path = this.getAutoSaveFilePath(selectedProgram, baseAction.getCrpID());
+      Path path = this.getAutoSaveFilePath(outcome, baseAction.getCrpID());
 
       if (path.toFile().exists()) {
-        this.addMissingField("researchTopic.action.draft");
+        this.addMissingField("outcome.action.draft");
       }
     }
 

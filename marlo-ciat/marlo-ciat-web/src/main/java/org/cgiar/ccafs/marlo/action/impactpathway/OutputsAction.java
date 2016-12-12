@@ -37,8 +37,13 @@ import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputsNextUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutputsValidator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,6 +51,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -117,10 +125,41 @@ public class OutputsAction extends BaseAction {
   }
 
 
+  @Override
+  public String cancel() {
+
+    Path path = this.getAutoSaveFilePath();
+
+    if (path.toFile().exists()) {
+
+      boolean fileDeleted = path.toFile().delete();
+    }
+
+    this.setDraft(false);
+    Collection<String> messages = this.getActionMessages();
+    if (!messages.isEmpty()) {
+      String validationMessage = messages.iterator().next();
+      this.setActionMessages(null);
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    } else {
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    }
+    messages = this.getActionMessages();
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
   }
 
+  private Path getAutoSaveFilePath() {
+    String composedClassName = output.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = output.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
+  }
 
   public List<ResearchLeader> getContacPersons() {
     return contacPersons;
@@ -231,6 +270,50 @@ public class OutputsAction extends BaseAction {
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
 
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+        BufferedReader reader = null;
+        reader = new BufferedReader(new FileReader(path.toFile()));
+        Gson gson = new GsonBuilder().create();
+        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        AutoSaveReader autoSaveReader = new AutoSaveReader();
+
+        output = (ResearchOutput) autoSaveReader.readFromJson(jReader);
+
+        if (output != null) {
+          if (output.getNextUsers() != null) {
+            List<ResearchOutputsNextUser> ouputNextUsers = new ArrayList<>(output.getNextUsers());
+            List<ResearchOutputsNextUser> autoSaveOutputNextrUsers = new ArrayList<>();
+            for (ResearchOutputsNextUser outputNextUser : ouputNextUsers) {
+              NextuserType nextuserType = nextUserService.getNextuserTypeById(outputNextUser.getNextuserType().getId());
+
+              ResearchOutputsNextUser autoSaveOutputNextUser = new ResearchOutputsNextUser();
+
+              autoSaveOutputNextUser.setNextuserType(nextuserType);
+
+              if (outputNextUser.getId() != null) {
+                autoSaveOutputNextUser.setId(outputNextUser.getId());
+              }
+
+              autoSaveOutputNextrUsers.add(autoSaveOutputNextUser);
+
+            }
+
+            output.setNextUsers(new ArrayList<>(autoSaveOutputNextrUsers));
+          }
+        }
+
+
+        reader.close();
+        this.setDraft(true);
+      } else {
+        this.setDraft(false);
+
+        output.setNextUsers(new ArrayList<>(
+          output.getResearchOutputsNextUsers().stream().filter(nu -> nu.isActive()).collect(Collectors.toList())));
+      }
+
       contacPersons = new ArrayList<>(
         selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
@@ -238,9 +321,6 @@ public class OutputsAction extends BaseAction {
         nextuserTypes = new ArrayList<>(nextUserService.findAll().stream()
           .filter(nu -> nu.isActive() && nu.getNextuserType() == null).collect(Collectors.toList()));
       }
-
-      output.setNextUsers(new ArrayList<>(
-        output.getResearchOutputsNextUsers().stream().filter(nu -> nu.isActive()).collect(Collectors.toList())));
 
       String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
       this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
@@ -282,6 +362,12 @@ public class OutputsAction extends BaseAction {
       output.setActiveSince(new Date());
       output.setModifiedBy(this.getCurrentUser());
       outputService.saveResearchOutput(output, this.getActionName(), relationsName);
+
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists()) {
+        path.toFile().delete();
+      }
 
       Collection<String> messages = this.getActionMessages();
 
