@@ -17,11 +17,7 @@ $(function() { // on dom ready
 });
 
 function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tooltip,nodeWidth) {
-  var crps;
-  var flagships;
-  var outcomes;
-  var clusters;
-  var keyOutputs;
+  
   cy = cytoscape({
       container: document.getElementById(graphicContent),
 
@@ -149,7 +145,9 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     cy.$('edge').css('target-arrow-color', '#eee');
     cy.$('edge').css('z-index', '1');
     $(".panel-body ul").empty();
+    so = [];
     areas = [];
+    programs=[];
     pImpacts = [];
     rTopics = [];
     outcomes = [];
@@ -207,7 +205,14 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
       if(inPopUp === true) {
         // add info in Relations panel
+        
+        so.forEach(function(ele) {
+          $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
+        });
         areas.forEach(function(ele) {
+          $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
+        });
+        programs.forEach(function(ele) {
           $(".panel-body ul").append("<label>" + ele[1] + ":</label><li>" + ele[0] + "</li>")
         });
         pImpacts.forEach(function(ele) {
@@ -242,7 +247,13 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     ele.css('target-arrow-color', '#999999');
 
     // Validate if the node exists in any array
-
+    
+    so.forEach(function(array) {
+      if(ele.data('description') === array[0]) {
+        //console.log("asd AREA");
+        stop = 1;
+      }
+    });
     // In flagships array
     areas.forEach(function(array) {
       if(ele.data('description') === array[0]) {
@@ -291,25 +302,33 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     // arrays information
     if(ele.data('description') != 'undefined' && ele.data('description') != null) {
       var data = [];
-      if(ele.data('type') === 'A') {
+      if(ele.data('type') === 'SO') {
         data.push(ele.data('description'));
-        data.push(ele.data('label'));
+        data.push(ele.data('title'));
+        so.push(data);
+      }else if(ele.data('type') === 'A') {
+        data.push(ele.data('description'));
+        data.push(ele.data('title'));
         areas.push(data);
+      }else if(ele.data('type') === 'P') {
+        data.push(ele.data('description'));
+        data.push(ele.data('title'));
+        programs.push(data);
       } else if(ele.data('type') === 'I') {
         data.push(ele.data('description'));
-        data.push(ele.data('label'));
+        data.push(ele.data('title'));
         pImpacts.push(data);
       } else if(ele.data('type') === 'T') {
         data.push(ele.data('description'));
-        data.push(ele.data('label'));
+        data.push(ele.data('title'));
         rTopics.push(data);
       } else if(ele.data('type') === 'OC') {
         data.push(ele.data('description'));
-        data.push(ele.data('label'));
+        data.push(ele.data('title'));
         outcomes.push(data);
       } else if(ele.data('type') === 'OP') {
         data.push(ele.data('description'));
-        data.push(ele.data('label'));
+        data.push(ele.data('title'));
         outputs.push(data);
       }
     }
@@ -320,7 +339,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
   $("#buttonDownload").on("click", function() {
     var image = new Image();
-    image = cy.jpg();
+    image = cy.jpg({full:true});
     var name = "impactPathway_Graphic";
     $('a.download').attr({
         href: image,
@@ -438,6 +457,10 @@ $("#overlay .btn").on("click", function() {
           effect: "fadeOut",
           duration: 500
       },
+      close:function(){
+        $("#changeGraph .btn").html("Show graph by area");
+        $("#changeGraph .btn").addClass("currentGraph");
+      },
       open: function(event,ui) {
         var url = baseURL + "/impactPathwayGraphByProgram.do";
         var crpProgram = $("input[name='programID']").val();
@@ -451,16 +474,16 @@ $("#overlay .btn").on("click", function() {
 });
 
 $("#changeGraph .btn").on("click", function() {
-  //console.log("holi");
+  $(".panel-body ul").empty();
   if($(this).hasClass("currentGraph")) {
     var url = baseURL + "/impactPathwayGraphByArea.do";
     ajaxService(url, data, "impactGraphic", true, true, 'concentric', false);
-    $(this).html("Show section graph");
+    $(this).html("Show graph by program");
     $(this).addClass("fullGraph");
     $(this).removeClass("currentGraph");
   } else {
-    $(this).html("Show full graph");
-    var url = baseURL + "/impactPathway/impactPathwayGraph.do";
+    $(this).html("Show graph by area");
+    var url = baseURL + "/impactPathwayGraphByProgram.do";
     ajaxService(url, data, "impactGraphic", true, true, 'breadthfirst', false);
     $(this).removeClass("fullGraph");
     $(this).addClass("currentGraph");
@@ -535,29 +558,21 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     totalWidth.OP = count.OP * (nodeWidth + nodeMargin);
     // totalWidth.KO = (count.KO * (nodeWidth + nodeMargin)) + totalWidth.CoA;
 
-    //console.log(count.T);
-    //console.log(count.OC);
-    //console.log(count.OP);
-    
-    //console.log(totalWidth.T);
-    //console.log(totalWidth.OC);
-   // console.log(totalWidth.OP);
-
     var widthTest = 0;
     if(totalWidth.T > totalWidth.OC) {
       widthTest = totalWidth.T;
     } else {
       widthTest = totalWidth.OC;
     }
-
-    if(widthTest > totalWidth.OP) {
+    
+    if(widthTest > totalWidth.I) {
       widthTest;
     } else {
-      widthTest = totalWidth.OP;
+      widthTest = totalWidth.I;
     }
 
     //console.log(widthTest);
-    currentX=widthTest;
+    currentX=-1*(widthTest/2);
 
     var move = {
         SO: -(totalWidth.SO / 2),
@@ -568,6 +583,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         OC: -(widthTest / 2),
         OP: 350
     };
+    
+    //console.log(totalWidth);
+   // console.log(widthTest);
+    //console.log(currentX);
 
     for(var i = 0; i < nodes.length; i++) {
       if(nodes[i].data.type == "SO") {
@@ -595,7 +614,6 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           move.I=move.P;
           move.OC=move.P;
         }else{
-          move.P= move.P+(nodeWidth + nodeMargin);
         }
         nodes[i].position = {
             x: move.I,
@@ -604,7 +622,8 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
       //PROGRAM IMPACT-----------------
       } else if(nodes[i].data.type == "I") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
-          currentX= currentX+ (nodeWidth + nodeMargin + 20);
+          
+          currentX= move.I+ (nodeWidth + nodeMargin + 20);
           move.I=currentX;
           move.OC=currentX;
         }else{
