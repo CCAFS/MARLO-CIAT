@@ -23,7 +23,6 @@ import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
@@ -126,28 +125,28 @@ public class IPSubmissionAction extends BaseAction {
     return programID;
   }
 
-  public boolean isCompleteIP(long programId) {
-
-    if (sectionStatusService.findAll() == null) {
-      return false;
-    }
-
-    ResearchProgram researchProgram = programService.getProgramById(programId);
-
-    List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
-      .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
-
-    if (sectionStatuses != null && sectionStatuses.size() > 0) {
-      for (SectionStatus sectionStatus : sectionStatuses) {
-        if (sectionStatus.getMissingFields().length() > 0) {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-    return true;
-  }
+  // public boolean isCompleteIP(long programId) {
+  //
+  // if (sectionStatusService.findAll() == null) {
+  // return false;
+  // }
+  //
+  // ResearchProgram researchProgram = programService.getProgramById(programId);
+  //
+  // List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
+  // .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
+  //
+  // if (sectionStatuses != null && sectionStatuses.size() > 0) {
+  // for (SectionStatus sectionStatus : sectionStatuses) {
+  // if (sectionStatus.getMissingFields().length() > 0) {
+  // return false;
+  // }
+  // }
+  // } else {
+  // return false;
+  // }
+  // return true;
+  // }
 
   @Override
   public void prepare() throws Exception {

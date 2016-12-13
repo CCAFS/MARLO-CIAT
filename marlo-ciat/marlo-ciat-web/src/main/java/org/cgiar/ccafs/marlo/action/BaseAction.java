@@ -18,6 +18,7 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
+import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
@@ -104,7 +105,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   @Inject
   private IResearchCycleService cycleService;
   @Inject
-  private IProgramService programServcie;
+  private IProgramService programService;
+  @Inject
+  private ISectionStatusService sectionStatusService;
 
   protected boolean add;
   private String basePermission;
@@ -510,6 +513,29 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return request;
   }
 
+  public boolean getSectionStatusIP(String section, long programID) {
+    ResearchProgram program = programService.getProgramById(programID);
+
+    if (ImpactPathwaySectionsEnum.getValue(section.toUpperCase()) == null) {
+      return false;
+    }
+
+    switch (ImpactPathwaySectionsEnum.getValue(section)) {
+      case PROGRAM_IMPACT:
+        return this.validateImpact(program, section);
+      case TOPIC:
+        return this.validateTopic(program, section);
+      case OUTCOME:
+        return this.validateOutcome(program);
+      case OUTPUT:
+        return this.validateOutput(program);
+
+
+    }
+
+    return true;
+  }
+
   public BaseSecurityContext getSecurityContext() {
     return securityContext;
   }
@@ -558,8 +584,16 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean hasPersmissionSubmit() {
-
     boolean permissions = this.hasPermission("submit");
+    return permissions;
+  }
+
+  public boolean hasPersmissionSubmitIP(long programID) {
+    ResearchProgram program = programService.getProgramById(programID);
+    String permission =
+      this.generatePermission(Permission.RESEARCH_PROGRAM_SUBMISSION_PERMISSION, this.getCurrentCenter().getAcronym(),
+        String.valueOf(program.getResearchArea().getId()), String.valueOf(programID));
+    boolean permissions = this.securityContext.hasPermission(permission);
     return permissions;
   }
 
@@ -573,6 +607,29 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean isCanEdit() {
     return canEdit;
+  }
+
+  public boolean isCompleteIP(long programId) {
+
+    if (sectionStatusService.findAll() == null) {
+      return false;
+    }
+
+    ResearchProgram researchProgram = programService.getProgramById(programId);
+
+    List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
+      .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
+
+    if (sectionStatuses != null && sectionStatuses.size() > 0) {
+      for (SectionStatus sectionStatus : sectionStatuses) {
+        if (sectionStatus.getMissingFields().length() > 0) {
+          return false;
+        }
+      }
+    } else {
+      return false;
+    }
+    return true;
   }
 
   public boolean isEditable() {
@@ -604,7 +661,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean isSubmitIP(long programID) {
 
-    ResearchProgram program = programServcie.getProgramById(programID);
+    ResearchProgram program = programService.getProgramById(programID);
     if (program != null) {
 
       ResearchCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.IMPACT_PATHWAY.getId());
@@ -726,5 +783,96 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public String submit() {
     return SUCCESS;
   }
+
+  public boolean validateImpact(ResearchProgram program, String sectionName) {
+
+    SectionStatus sectionStatus =
+      secctionStatusService.getSectionStatusByProgram(program.getId(), sectionName, this.getYear());
+
+    if (sectionStatus == null) {
+      return false;
+    }
+    if (sectionStatus.getMissingFields().length() != 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean validateOutcome(ResearchProgram program) {
+
+
+    if (program != null) {
+      List<ResearchTopic> topics =
+        new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+      if (topics != null) {
+        for (ResearchTopic researchTopic : topics) {
+          List<ResearchOutcome> outcomes = new ArrayList<>(
+            researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+          for (ResearchOutcome researchOutcome : outcomes) {
+            SectionStatus sectionStatus = this.getOutcomeStatus(researchOutcome.getId());
+            if (sectionStatus != null) {
+              return false;
+            }
+          }
+        }
+      }
+    } else {
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean validateOutput(ResearchProgram program) {
+
+    if (program != null) {
+      List<ResearchTopic> topics =
+        new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+      if (topics != null) {
+        for (ResearchTopic researchTopic : topics) {
+          List<ResearchOutcome> outcomes = new ArrayList<>(
+            researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+          for (ResearchOutcome researchOutcome : outcomes) {
+            researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
+              .filter(rm -> rm.isActive()).collect(Collectors.toList())));
+
+            List<ResearchOutput> outputs = new ArrayList<>(
+              researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+            for (ResearchOutput researchOutput : outputs) {
+              SectionStatus sectionStatus = this.getOutcomeStatus(researchOutput.getId());
+              if (sectionStatus != null) {
+                return false;
+              }
+            }
+          }
+        }
+      }
+    } else {
+      return false;
+    }
+
+    return true;
+
+  }
+
+  public boolean validateTopic(ResearchProgram program, String sectionName) {
+
+    SectionStatus sectionStatus =
+      secctionStatusService.getSectionStatusByProgram(program.getId(), sectionName, this.getYear());
+
+    if (sectionStatus == null) {
+      return false;
+    }
+    if (sectionStatus.getMissingFields().length() != 0) {
+      return false;
+    }
+
+    return true;
+  }
+
 
 }
