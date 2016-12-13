@@ -1,14 +1,17 @@
 $(document).ready(init);
-var currentSubIdo;
-var saveObj;
+var currentSubIdo, saveObj, MAX_YEAR, MIN_YEAR;
 
 function init() {
+
+  MIN_YEAR = 2017;
+  MAX_YEAR = 2050;
 
   /* Declaring Events */
   attachEvents();
 
   /* Init Select2 plugin */
   $('form select').select2();
+
   /* Numeric Inputs */
   $('input.targetValue , input.targetYear').numericInput();
 
@@ -49,28 +52,29 @@ function attachEvents() {
   // Remove a Milestone
   $('.removeMilestone').on('click', removeMilestone);
 
-  $('input.outcomeYear, input.milestoneYear').on('keyup', function() {
-    var $target = $(this);
-    var targetVal = parseInt($target.val());
-    var $milestonesYearInputs = $(this).parents('.outcome').find('.milestones-list input.targetYear');
+  // On Outcome year change
+  $('select.outcomeYear').on('change', function() {
+    var endYear = ($(this).val()) || MAX_YEAR;
 
-    $target.removeClass('fieldError');
-
-    if($target.hasClass('milestoneYear')) {
-      var outcomeYearVal = parseInt($(this).parents('.outcome').find('input.outcomeYear').val()) || 0;
-      if(targetVal > outcomeYearVal) {
-        $target.addClass('fieldError');
+    $('select.milestoneYear').each(function(i,select) {
+      var currentValue = $(select).val();
+      var startYear = MIN_YEAR;
+      console.log(i);
+      // Empty
+      $(select).empty();
+      // New Years list
+      while(startYear <= endYear) {
+        $(select).addOption(startYear, startYear)
+        startYear++;
       }
-    } else {
-      $milestonesYearInputs.each(function(i,input) {
-        $(input).removeClass('fieldError');
-        if(parseInt($(input).val()) > targetVal) {
-          $(input).addClass('fieldError');
-        }
-      });
-    }
+      // Set value
+      $(select).val(currentValue);
+      // Refresh select
+      $(select).trigger("change.select2");
+    });
+
   });
-  $('input.outcomeYear, input.milestoneYear').trigger('keyup');
+  $('select.outcomeYear').trigger('change');
 
 }
 
@@ -81,9 +85,9 @@ function attachEvents() {
 function addMilestone() {
   var $list = $('.milestones-list');
   var $item = $('#milestone-template').clone(true).removeAttr("id");
-  // $item.find('select').select2({
-  // width: '100%'
-  // });
+  $item.find('select').select2({
+    width: '100%'
+  });
   $list.append($item);
   updateAllIndexes();
   $item.show('slow');

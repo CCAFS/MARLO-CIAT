@@ -31,7 +31,7 @@
     [#assign customName]${(i18nkey?has_content)?string(i18nkey,name)}[/#assign]  
     [#assign customLabel][#if !editable]${customName}.readText[#else]${customName}[/#if][/#assign]
     [#assign customValue][#if value=="-NULL"][@s.property value="${name}"/][#else]${value}[/#if][/#assign]
-  	[#if showTitle]
+    [#if showTitle]
       <label for="${name}" class="${editable?string('editable', 'readOnly')}"> [@s.text name="${customLabel}"][@s.param]${paramText}[/@s.param][/@s.text]:[#if required && editable]<span class="red">*</span>[/#if]</label>
       [#if help != ""]<img src="${baseUrl}/images/global/icon-help2.png" title="[@s.text name="${help}"/]" />[/#if]
     [/#if]
@@ -120,13 +120,13 @@
   </div>
 [/#macro]
 
-[#macro select name listName label="" keyFieldName="" displayFieldName="" paramText="" value="-NULL" i18nkey="" disabled=false required=false errorField="" selected=false className="" multiple=false help="" headerKey="" headerValue="" display=true showTitle=true stringKey=false placeholder="" editable=true]
+[#macro select name listName label="" keyFieldName="" displayFieldName="" paramText="" value="-NULL" i18nkey="" disabled=false required=false errorField="" selected=false className="" multiple=false help="" header=true display=true showTitle=true stringKey=false placeholder="" editable=true]
   <div class="select" [#if !display]style="display: none;"[/#if]>
     [#assign labelTitle][#if i18nkey==""][@s.text name="${name}"][@s.param]${paramText}[/@s.param][/@s.text][#else][@s.text name="${i18nkey}"][@s.param]${paramText}[/@s.param][/@s.text][/#if][/#assign]
     [#assign placeholderText][@s.text name="${(placeholder?has_content)?string(placeholder,'form.select.placeholder')}" /][/#assign]
     [#if showTitle]
     <label for="">
-        [#if labelTitle != ""]${labelTitle}:[/#if] [@req required=required && editable /]
+        [#if labelTitle != ""]${labelTitle}:[/#if][@req required=required && editable /]
         [#if help != ""]<img src="${baseUrl}/images/global/icon-help2.png" title="[@s.text name="${help}"/]" />[/#if]
     </label>
     [/#if]
@@ -142,15 +142,23 @@
       [#if editable]
         [#if keyFieldName == ""]
           [#if multiple]
-            [@s.select name="${name}" list="${listName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" multiple="true" tooltip="${helpText}" headerKey="-1" headerValue=placeholderText  /]
+            [@s.select name="${name}" list="${listName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" multiple="true" tooltip="${helpText}"   /]
           [#else]
-            [@s.select name="${name}" list="${listName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" tooltip="${helpText}" headerKey="-1" headerValue="${placeholderText}"  /]
+            [#if header]
+              [@s.select name="${name}" list="${listName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" tooltip="${helpText}" headerKey="-1" headerValue=placeholderText /]
+            [#else]
+              [@s.select name="${name}" list="${listName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" tooltip="${helpText}" /]
+            [/#if]
           [/#if]
         [#else]
           [#if multiple]
-            [@s.select name="${name}" list="${listName}" listKey="${keyFieldName}" listValue="${displayFieldName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" multiple="true" tooltip="${helpText}" headerKey="-1" headerValue=placeholderText /]
+            [@s.select name="${name}" list="${listName}" listKey="${keyFieldName}" listValue="${displayFieldName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" multiple="true" tooltip="${helpText}" /]
           [#else]
-            [@s.select name="${name}" list="${listName}" listKey="${keyFieldName}" listValue="${displayFieldName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" tooltip="${helpText}" headerKey="-1" headerValue=placeholderText /]
+            [#if header]
+              [@s.select name="${name}" list="${listName}" listKey="${keyFieldName}" listValue="${displayFieldName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" tooltip="${helpText}" headerKey="-1" headerValue=placeholderText /]
+            [#else]
+              [@s.select name="${name}" list="${listName}" listKey="${keyFieldName}" listValue="${displayFieldName}" value="${customValue}" disabled="${disabled?string}" cssClass="${className} form-control input-sm" tooltip="${helpText}" /]
+            [/#if]
           [/#if]
         [/#if] 
       [#else]
@@ -167,14 +175,15 @@
               [#if !(key?has_content)]
                 ${requiredText}   [@s.text name="form.values.fieldEmpty" /]
               [/#if]
-            [/#if] 
+            [/#if]
+            
           [#else]
             [#if name?contains(".id")]
               [#assign customName]${name?replace('.id','')}[/#assign]
             [#else]
               [#assign customName]${name}[/#assign]
             [/#if]
-            [#assign customValue][@s.property value="${customName}.${displayFieldName}"/][/#assign]  
+            [#assign customValue][@s.property value="${customName}.${displayFieldName}"/][/#assign]
             [#if value=="-NULL"] 
               [#if !(customValue)?has_content] ${requiredText}   [@s.text name="form.values.fieldEmpty" /]
               [#else]${customValue}
@@ -220,31 +229,15 @@
 
 [#macro req required=true ][#if required]<span class="red">*</span>[/#if][/#macro]
 
-[#macro confirmJustification action="" namespace="/" nameId="" title="" outcomeID=""]
+[#macro confirmJustification action="" namespace="/" nameId="" title="" projectID=""]
   <div id="dialog-justification" title="${title}" style="display:none"> 
     <div class="dialog-content"> 
       [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
-        [@textArea name="justification" i18nkey="saving.justification.outcome" required=true className="justification"/]
+        [@textArea name="justification" i18nkey="saving.justification" required=true className="justification"/]
         [#if nameId != ""]
-          <input name="${nameId}" type="hidden" value="-1" />
+          <input class="nameId" name="${nameId}" type="hidden" value="-1" />
         [/#if]
-        <input name="outcomeID" type="hidden" value="${outcomeID}" />
-        <!-- Allow form submission with keyboard without duplicating the dialog button -->
-        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-      [/@s.form]
-    </div>  
-  </div>
-[/#macro]
-
-[#macro confirmJustificationOut action="" namespace="/" nameId="" title="" outputID=""]
-  <div id="dialog-justification" title="${title}" style="display:none"> 
-    <div class="dialog-content"> 
-      [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
-        [@textArea name="justification" i18nkey="saving.justification.output" required=true className="justification"/]
-        [#if nameId != ""]
-          <input name="${nameId}" type="hidden" value="-1" />
-        [/#if]
-        <input name="outputID" type="hidden" value="${outputID}" />
+        <input name="projectID" type="hidden" value="${projectID}" />
         <!-- Allow form submission with keyboard without duplicating the dialog button -->
         <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
       [/@s.form]
@@ -256,13 +249,18 @@
   [#assign score][@s.property value="${name}"/][/#assign]
   <div class="rankingBlock" style="text-align:center;">
     [#if editable]
-    <input class="hover-star required" type="radio" name="${name}" value="1" [#if score == "1"]checked[/#if] [#if disabled]disabled="disabled"[/#if] title=""/>
-    <input class="hover-star" type="radio" name="${name}" value="2" [#if score == "2"]checked[/#if] [#if disabled]disabled="disabled"[/#if] title=""/>
-    <input class="hover-star" type="radio" name="${name}" value="3" [#if score == "3"]checked[/#if] [#if disabled]disabled="disabled"[/#if] title="" />
-    <input class="hover-star" type="radio" name="${name}" value="4" [#if score == "4"]checked[/#if] [#if disabled]disabled="disabled"[/#if] title="" />
-    <input class="hover-star" type="radio" name="${name}" value="5" [#if score == "5"]checked[/#if] [#if disabled]disabled="disabled"[/#if] title="" />
-    <div class="hover-test" style=""></div> 
-    <div class="clearfix"></div>
+    <fieldset class="rating">
+    <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="5 stars"></label>
+    <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="4.5 stars"></label>
+    <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="4 stars"></label>
+    <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="3.5 stars"></label>
+    <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
+    <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="2.5 stars"></label>
+    <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
+    <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="1.5 stars"></label>
+    <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
+    <input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="0.5 stars"></label>
+    </fieldset>
     [#else]
       [#if score?has_content]Rate ${score}[#else]Not rated[/#if]
     [/#if]
