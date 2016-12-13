@@ -81,6 +81,13 @@
 				<param name="programID">${programID}</param>
 				<param name="edit">true</param>
 			</result>
+			<result name="cancel" type="redirectAction">
+        <param name="actionName">${centerSession}/outcomes</param>
+        <param name="outcomeID">${outcomeID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+        <param name="cancel">true</param>
+      </result>
 		</action>
 
 		<action name="{center}/outputsList"
@@ -101,6 +108,13 @@
 				<param name="programID">${programID}</param>
 				<param name="edit">true</param>
 			</result>
+			<result name="cancel" type="redirectAction">
+        <param name="actionName">${centerSession}/outputs</param>
+        <param name="outputID">${outputID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+        <param name="cancel">true</param>
+      </result>
 		</action>
 
 		<action name="{center}/outputsPartners"
@@ -126,7 +140,7 @@
 				<param name="outputID">${outputID}</param>
 				<param name="programID">${programID}</param>
 				<param name="edit">true</param>
-			</result>
+			</result>			
 		</action>
 
 		<action name="{center}/deleteOutput" method="delete"
