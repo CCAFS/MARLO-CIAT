@@ -557,14 +557,15 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     }
 
     //console.log(widthTest);
+    currentX=widthTest;
 
     var move = {
         SO: -(totalWidth.SO / 2),
-        A: -(totalWidth.A / 2),
-        P: -(totalWidth.P / 2),
+        A: -(widthTest / 2),
+        P: -(widthTest / 2),
         T: -(widthTest/ 2),
-        I: -(totalWidth.I / 2),
-        OC: -(totalWidth.OC / 2),
+        I: -(widthTest / 2),
+        OC: -(widthTest / 2),
         OP: 350
     };
 
@@ -576,59 +577,97 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             y: 0
         };
       } else if(nodes[i].data.type == "A") {
-        move.A = (move.A + (nodeWidth + nodeMargin));
+        if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
+          
+        }else{
+          move.A = (move.A + (nodeWidth + nodeMargin));  
+        }
+        
         nodes[i].position = {
             x: move.A,
             y: 200
         };
+      //PROGRAM-----------------
       } else if(nodes[i].data.type == "P") {
+        if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
+          currentX = (currentX + (nodeWidth + nodeMargin));  
+          move.P=currentX;
+          move.I=move.P;
+          move.OC=move.P;
+        }else{
+          move.P= move.P+(nodeWidth + nodeMargin);
+        }
         nodes[i].position = {
-            x: move.P,
+            x: move.I,
             y: 200
         };
+      //PROGRAM IMPACT-----------------
       } else if(nodes[i].data.type == "I") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
           currentX= currentX+ (nodeWidth + nodeMargin + 20);
           move.I=currentX;
+          move.OC=currentX;
         }else{
-          currentX= move.I+ (nodeWidth + nodeMargin + 20);
-          move.I = currentX;
+          if(currentX>move.I){
+            currentX= move.I+ (nodeWidth + nodeMargin + 20);
+            move.I = currentX;
+          }else{
+            move.I=move.I+ (nodeWidth + nodeMargin + 20);
+          }
+          //move.OC=currentX;
         }
         // console.log(move.KO);
         nodes[i].position = {
             x: move.I,
             y: 200
         };
+      //RESEARCH TOPIC-----------------
       } else if(nodes[i].data.type == "T") {
-        if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
-          move.I=move.OC+(nodeWidth + nodeMargin + 20);
-        }
+        
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC") {
         } else {
           move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
         }
+        if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
+          if(move.OC>move.I){
+            currentX=move.OC;
+          }else {
+            currentX=move.I;
+          }
+          move.I=currentX;
+        }
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OC,
             y: 300
         };
+      //OUTCOME-----------------
       } else if(nodes[i].data.type == "OC") {
         move.OC = (move.OC + (nodeWidth + nodeMargin + 20));
-        currentX= move.OC+ (nodeWidth + nodeMargin + 20);
+        if(move.OC>move.I){
+          currentX=move.OC;
+        }else {
+          currentX=move.I;
+        }
+        
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OC,
             y: 300
         };
+        
+      //OUTPUT-----------------
       } else if(nodes[i].data.type == "OP") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T"){
           currentX= move.OC+ (nodeWidth + nodeMargin + 20);
           move.OP=300;
         }else if(nodes[i + 1] && nodes[i + 1].data.type == "P"){
-          currentX= move.OC+ (nodeWidth + nodeMargin + 20);
-          move.P=currentX;
-          move.I=currentX;
           move.OP=300;
+          if(move.OC>move.I){
+            currentX=move.OC;
+          }else {
+            currentX=move.I;
+          }
         }
         move.OP = (move.OP + 50);
         // console.log(move.KO);
