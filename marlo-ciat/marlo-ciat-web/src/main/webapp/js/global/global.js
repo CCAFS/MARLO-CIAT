@@ -39,7 +39,6 @@ $(document)
         function() {
           showNotificationMessages();
           showHelpText();
-          applyWordCounter($("#justification"), justificationLimitWords);
 
           // Tawkto Widget
           var $dragButton = $("#draggable-button");
@@ -105,7 +104,14 @@ $(document)
               right: $(document).width() - ($buttons.offset().left + $buttons.width())
             });
 
-            setFixedElement($(window).scrollBottom() >= menuOffset());
+            setTimeout(function() {
+              setFixedElement($(window).scrollBottom() >= menuOffset());
+            }, 500);
+
+            $(document).on('updateComponent', function() {
+              setFixedElement($(window).scrollBottom() >= menuOffset());
+            });
+
             $(window).scroll(function() {
               setFixedElement($(window).scrollBottom() >= menuOffset());
             });
@@ -234,7 +240,7 @@ $(document)
             $(this).parent().parent().parent().find('.tickBox-toggle').slideToggle($(e.target).is(':checked'));
           }
 
-          // History log popup
+          // History log pop up
           $('.button-history').on('click', function() {
             $('#log-history').dialog({
                 modal: true,
@@ -248,6 +254,12 @@ $(document)
             });
           });
 
+          // Cancel button
+          $('#cancelButton').on('click', function() {
+            $('button[name="cancel"]').trigger('click');
+          });
+
+          // Set autogrow
           $("textarea[id!='justification']").autoGrow();
 
           // Generating hash from form information
@@ -359,11 +371,28 @@ function setWordCounterToInputs(cssName) {
 $('.selectedProgram, selectedProject').on('click', function() {
   $(this).parent().next().slideToggle('slow');
 });
-/* Updated Set View More */
+
+// event to inputs in login form
+$('input[name="user.email"] , input[name="user.password"]').on("keypress", function(event) {
+  if(event.keyCode === 10 || event.keyCode === 13) {
+    event.submit();
+  }
+});
+
+/* prevent enter key to inputs */
+
+$('input').on("keypress", function(event) {
+
+  if(event.keyCode === 10 || event.keyCode === 13) {
+    event.preventDefault();
+  }
+
+});
+
 function setViewMore() {
   var element = $('.helpText');
   if($(element).height() < 100) {
-// $(element).find('.viewMore').hide();
+    $(element).find('.viewMore').hide();
   } else {
     $(element).css({
       "height": 65
@@ -392,4 +421,22 @@ function expandViewMoreBlock() {
     $(this).removeClass("opened");
   }
 
+}
+
+/* Justification Status Functions */
+
+function isStatusCancelled(statusId) {
+  return(statusId == "5")
+}
+
+function isStatusComplete(statusId) {
+  return(statusId == "3")
+}
+
+function isStatusExtended(statusId) {
+  return(statusId == "4")
+}
+
+function isStatusOnGoing(statusId) {
+  return(statusId == "2")
 }

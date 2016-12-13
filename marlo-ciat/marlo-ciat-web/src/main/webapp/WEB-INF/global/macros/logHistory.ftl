@@ -17,9 +17,14 @@
         [#list list as log]
         <tr>
           <td class="type"><span class="logType ${log.action?lower_case}" title="${log.action?capitalize}">&nbsp;</span></td>
-          <td class="date"> ${log.createdDate?datetime} [#if log_index == 0]<span class="label label-primary">Current</span>[/#if]</td>
+          <td class="date"> 
+            ${log.createdDate?datetime} 
+            [#if log_index == 0]<!--span class="label label-primary">Current</span--> 
+              [#if canEdit]<a id="cancelButton" class="btn btn-danger btn-xs" href="#" role="button">[@s.text name="form.buttons.recover" /] this version</a>[/#if]
+            [/#if]
+          </td>
           <td class="person">${log.user.composedName?html}</td>
-          <td class="justification">${(log.justification)!'Prefilled if available'}</td>
+          <td class="justification">${(log.modificationJustification)!'Prefilled if available'}</td>
           <td class="view text-center">
             <a href="[@s.url][@s.param name=itemName value=itemId /][@s.param name="transactionId"]${log.transactionId}[/@s.param][/@s.url]">
              <span class="glyphicon glyphicon-eye-open"></span> View 
