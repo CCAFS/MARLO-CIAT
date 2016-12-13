@@ -1,36 +1,89 @@
 var tasksLength;
 var sections;
 var currentCycle;
+var selectedUrl, selectedAction;
 
 $(document).ready(function() {
-  sections = [
-      "outcomes", "clusterActivities"
-  ];
+
+  sections = $('#sectionsForChecking').text().split(',');
 
   // Progress bar
   tasksLength = sections.length;
   $(".progressbar").progressbar({
     max: tasksLength
   });
-  // Event for validate button inside each project
-  $('.projectValidateButton, .validateButton').on('click', validateButtonEvent);
 
-  // Refresh event when table is reloaded in project list section
-  $('table.projectsList').on('draw.dt', function() {
-    $('.projectValidateButton, .validateButton').on('click', validateButtonEvent);
-    $(".progressbar").progressbar({
-      max: tasksLength
-    });
-  });
+  // Event for validate button inside each program
+  $('.projectValidateButton, .validateButton').on('click', validateButtonEvent);
 
   // Click on submit button
   $('.submitButton, .projectSubmitButton').on('click', submitButtonEvent);
+
+  /* Validate justification for old programs */
+  var $justification = $('#justification');
+  var $parent = $justification.parent().parent();
+  var errorClass = 'fieldError';
+  $parent.prepend('<div class="loading" style="display:none"></div>');
+  $('[name=save]').on('click', function(e) {
+
+    // Cancel Auto Save
+    autoSaveActive = false;
+
+    $justification.removeClass(errorClass);
+
+    if(!validateField($('#justification'))) {
+      // If field is not valid
+      e.preventDefault();
+      $justification.addClass(errorClass);
+      // Go to justification field
+      if($justification.exists) {
+        $('html, body').animate({
+          scrollTop: $justification.offset().top - 110
+        }, 1500);
+      }
+      // Notify justification needs to be filled
+      var notyOptions = jQuery.extend({}, notyDefaultOptions);
+      notyOptions.text = 'The justification field needs to be filled';
+      noty(notyOptions);
+
+    }
+
+  });
+
+  // Pop up when exists a draft version $('header a, #mainMenu a, .subMainMenu a, #secondaryMenu a')
+  $('#secondaryMenu a').on('click', function(e) {
+    selectedUrl = $.trim($(this).attr("href"));
+    selectedAction = getClassParameter($(this), 'action');
+    // Prevent middle click
+    if(e.which == 2) {
+      return;
+    }
+    if((isChanged() || forceChange) && editable && draft && selectedUrl && (myTurn == 1)) {
+      e.preventDefault();
+      $('#discardChanges').modal();
+    }
+  });
+
 });
+
+function acceptChanges() {
+  $('#redirectionUrl').val(selectedAction);
+  $('button[name="save"]').trigger('click');
+  $('#discardChanges').modal('hide');
+}
+
+function cancel() {
+  window.location.replace(selectedUrl);
+  window.location.href = selectedUrl;
+  $('#discardChanges').modal('hide');
+}
 
 function submitButtonEvent(e) {
   e.preventDefault();
+  var message = 'Are you sure you want to submit the program now?';
+  message += 'Once submitted, you will no longer have editing rights.';
   noty({
-      text: 'Are you sure you want to submit the program impact pathway now?  Once submitted, you will no longer have editing rights.',
+      text: message,
       type: 'confirm',
       dismissQueue: true,
       layout: 'center',
@@ -76,9 +129,9 @@ function processTasks(tasks,id,button) {
       var $sectionMenu = $('#menu-' + sectionName + '');
       $
           .ajax({
-              url: baseURL + '/impactPathway/validateImpactPathway.do',
+              url: baseURL + '/validateImpactPathway.do',
               data: {
-                  crpProgramID: id,
+                  programID: id,
                   sectionName: sectionName,
               },
               beforeSend: function() {
@@ -108,7 +161,7 @@ function processTasks(tasks,id,button) {
                 if(index == tasksLength) {
                   if(completed == tasksLength) {
                     var notyOptions = jQuery.extend({}, notyDefaultOptions);
-                    notyOptions.text = 'The program impact pathway can be submmited now';
+                    notyOptions.text = 'The program can be submmited now';
                     notyOptions.type = 'success';
                     notyOptions.layout = 'center';
                     noty(notyOptions);
@@ -118,7 +171,7 @@ function processTasks(tasks,id,button) {
                   } else {
                     var notyOptions = jQuery.extend({}, notyDefaultOptions);
                     notyOptions.text =
-                        "The program impact pathway is still incomplete, please go to the sections without the green check mark and complete the missing fields before submitting your program impact pathway.";
+                        "The program is still incomplete, please go to the sections without the green check mark and complete the missing fields before submitting your program.";
                     notyOptions.type = 'confirm';
                     notyOptions.layout = 'center';
                     notyOptions.modal = true;
