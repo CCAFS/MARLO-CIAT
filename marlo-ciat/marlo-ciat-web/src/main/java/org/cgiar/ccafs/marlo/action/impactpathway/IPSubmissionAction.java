@@ -28,7 +28,6 @@ import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
-import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.ISubmissionService;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -58,7 +57,6 @@ public class IPSubmissionAction extends BaseAction {
   private ISectionStatusService sectionStatusService;
   private IResearchCycleService cycleService;
   private ICenterService centerService;
-  private IResearchLeaderService leaderService;
   private SendMail sendMail;
 
 
@@ -72,14 +70,13 @@ public class IPSubmissionAction extends BaseAction {
   @Inject
   public IPSubmissionAction(APConfig config, ISubmissionService submissionService, IProgramService programService,
     ISectionStatusService sectionStatusService, IResearchCycleService cycleService, ICenterService centerService,
-    IResearchLeaderService leaderService, SendMail sendMail) {
+    SendMail sendMail) {
     super(config);
     this.programService = programService;
     this.submissionService = submissionService;
     this.sectionStatusService = sectionStatusService;
     this.cycleService = cycleService;
     this.centerService = centerService;
-    this.leaderService = leaderService;
     this.sendMail = sendMail;
   }
 
