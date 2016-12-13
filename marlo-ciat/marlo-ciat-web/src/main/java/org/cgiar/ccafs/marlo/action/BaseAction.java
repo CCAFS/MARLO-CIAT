@@ -809,7 +809,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     if (program != null) {
       List<ResearchTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-      if (topics != null) {
+      if (topics != null && !topics.isEmpty()) {
         for (ResearchTopic researchTopic : topics) {
           List<ResearchOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
@@ -825,6 +825,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
             }
           }
         }
+      } else {
+        return false;
       }
     } else {
       return false;
@@ -838,30 +840,35 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     if (program != null) {
       List<ResearchTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-      if (topics != null) {
+      if (topics != null && !topics.isEmpty()) {
         for (ResearchTopic researchTopic : topics) {
           List<ResearchOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+          if (outcomes != null && !outcomes.isEmpty()) {
+            for (ResearchOutcome researchOutcome : outcomes) {
+              researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
+                .filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
-          for (ResearchOutcome researchOutcome : outcomes) {
-            researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
-              .filter(rm -> rm.isActive()).collect(Collectors.toList())));
+              List<ResearchOutput> outputs = new ArrayList<>(
+                researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
-            List<ResearchOutput> outputs = new ArrayList<>(
-              researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-            for (ResearchOutput researchOutput : outputs) {
-              SectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
-              if (sectionStatus == null) {
-                return false;
-              } else {
-                if (sectionStatus.getMissingFields().length() != 0) {
+              for (ResearchOutput researchOutput : outputs) {
+                SectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
+                if (sectionStatus == null) {
                   return false;
+                } else {
+                  if (sectionStatus.getMissingFields().length() != 0) {
+                    return false;
+                  }
                 }
               }
             }
+          } else {
+            return false;
           }
         }
+      } else {
+        return false;
       }
     } else {
       return false;
