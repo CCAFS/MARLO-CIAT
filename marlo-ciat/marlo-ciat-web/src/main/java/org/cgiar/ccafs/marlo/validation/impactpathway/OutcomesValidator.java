@@ -115,8 +115,12 @@ public class OutcomesValidator extends BaseValidator {
       this.addMessage(baseAction.getText("outcome.action.impactPathway.required"));
       baseAction.getInvalidFields().put("input-outcome.researchImpact", InvalidFieldsMessages.EMPTYFIELD);
     }
-
-    if (!this.isValidString(outcome.getDescription()) && this.wordCount(outcome.getDescription()) <= 100) {
+    if (outcome.getDescription() != null) {
+      if (!this.isValidString(outcome.getDescription()) && this.wordCount(outcome.getDescription()) <= 100) {
+        this.addMessage(baseAction.getText("outcome.action.statement.required"));
+        baseAction.getInvalidFields().put("input-outcome.description", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("outcome.action.statement.required"));
       baseAction.getInvalidFields().put("input-outcome.description", InvalidFieldsMessages.EMPTYFIELD);
     }
@@ -126,12 +130,19 @@ public class OutcomesValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-outcome.targetYear", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (!this.isValidNumber(String.valueOf(outcome.getValue()))) {
-      if (outcome.getTargetUnit().getId() != -1) {
-        this.addMessage(baseAction.getText("outcome.action.value.required"));
-        baseAction.getInvalidFields().put("input-outcome.value", InvalidFieldsMessages.EMPTYFIELD);
+    if (outcome.getTargetUnit() == null) {
+      this.addMessage(baseAction.getText("outcome.action.targetUnit.required"));
+      baseAction.getInvalidFields().put("input-outcome.value", InvalidFieldsMessages.EMPTYFIELD);
+
+      if (outcome.getTargetUnit().getId() != -1 && outcome.getValue() != null) {
+        if (!this.isValidNumber(String.valueOf(outcome.getValue()))) {
+          this.addMessage(baseAction.getText("outcome.action.value.required"));
+          baseAction.getInvalidFields().put("input-outcome.value", InvalidFieldsMessages.EMPTYFIELD);
+
+        }
       }
     }
+
 
     if (outcome.getResearchMilestones() == null || outcome.getMilestones().isEmpty()) {
       this.addMessage(baseAction.getText("outcome.action.milestones"));

@@ -124,23 +124,28 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
             for (ResearchTopic researchTopic : topics) {
               List<ResearchOutcome> outcomes = new ArrayList<>(
                 researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+              if (outcomes != null && !outcomes.isEmpty()) {
+                for (ResearchOutcome researchOutcome : outcomes) {
+                  sectionStatus = sectionStatusService.getSectionStatusByOutcome(program.getId(),
+                    researchOutcome.getId(), sectionName, this.getYear());
 
-              for (ResearchOutcome researchOutcome : outcomes) {
-                sectionStatus = sectionStatusService.getSectionStatusByOutcome(program.getId(), researchOutcome.getId(),
-                  sectionName, this.getYear());
-
-                if (sectionStatus == null) {
-                  sectionStatus = new SectionStatus();
-                  sectionStatus.setMissingFields("No section");
+                  if (sectionStatus == null) {
+                    sectionStatus = new SectionStatus();
+                    sectionStatus.setMissingFields("No section");
+                  }
+                  if (sectionStatus.getMissingFields().length() > 0) {
+                    section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
+                  }
                 }
-                if (sectionStatus.getMissingFields().length() > 0) {
-                  section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
-                }
+              } else {
+                sectionStatus = new SectionStatus();
+                sectionStatus.setMissingFields("No otucomes");
+                section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
               }
             }
           } else {
             sectionStatus = new SectionStatus();
-            sectionStatus.setMissingFields("No otucomes");
+            sectionStatus.setMissingFields("No research topics");
             section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
           }
         }
@@ -165,30 +170,35 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
                   List<ResearchOutput> outputs = new ArrayList<>(researchOutcome.getResearchOutputs().stream()
                     .filter(ro -> ro.isActive()).collect(Collectors.toList()));
+                  if (outputs != null && !outputs.isEmpty()) {
+                    for (ResearchOutput researchOutput : outputs) {
+                      sectionStatus = sectionStatusService.getSectionStatusByOutput(program.getId(),
+                        researchOutput.getId(), sectionName, this.getYear());
 
-                  for (ResearchOutput researchOutput : outputs) {
-                    sectionStatus = sectionStatusService.getSectionStatusByOutput(program.getId(),
-                      researchOutput.getId(), sectionName, this.getYear());
-
-                    if (sectionStatus == null) {
-                      sectionStatus = new SectionStatus();
-                      sectionStatus.setMissingFields("No section");
+                      if (sectionStatus == null) {
+                        sectionStatus = new SectionStatus();
+                        sectionStatus.setMissingFields("No section");
+                      }
+                      if (sectionStatus.getMissingFields().length() > 0) {
+                        section.put("missingFields",
+                          section.get("missingFields") + "-" + sectionStatus.getMissingFields());
+                      }
                     }
-                    if (sectionStatus.getMissingFields().length() > 0) {
-                      section.put("missingFields",
-                        section.get("missingFields") + "-" + sectionStatus.getMissingFields());
-                    }
+                  } else {
+                    sectionStatus = new SectionStatus();
+                    sectionStatus.setMissingFields("No outputs");
+                    section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
                   }
                 }
               } else {
                 sectionStatus = new SectionStatus();
-                sectionStatus.setMissingFields("No output");
+                sectionStatus.setMissingFields("No outcome");
                 section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
               }
             }
           } else {
             sectionStatus = new SectionStatus();
-            sectionStatus.setMissingFields("No otucomes");
+            sectionStatus.setMissingFields("No research topics");
             section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
           }
         }

@@ -621,6 +621,15 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return false;
     }
 
+
+    if (!this.validateOutcome(researchProgram)) {
+      return false;
+    }
+
+    if (!this.validateOutput(researchProgram)) {
+      return false;
+    }
+
     List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
       .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
 
@@ -804,8 +813,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean validateOutcome(ResearchProgram program) {
-
-
     if (program != null) {
       List<ResearchTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
@@ -813,16 +820,19 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         for (ResearchTopic researchTopic : topics) {
           List<ResearchOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-          for (ResearchOutcome researchOutcome : outcomes) {
-            SectionStatus sectionStatus = this.getOutcomeStatus(researchOutcome.getId());
-            if (sectionStatus == null) {
-              return false;
-            } else {
-              if (sectionStatus.getMissingFields().length() != 0) {
+          if (outcomes != null && !outcomes.isEmpty()) {
+            for (ResearchOutcome researchOutcome : outcomes) {
+              SectionStatus sectionStatus = this.getOutcomeStatus(researchOutcome.getId());
+              if (sectionStatus == null) {
                 return false;
+              } else {
+                if (sectionStatus.getMissingFields().length() != 0) {
+                  return false;
+                }
               }
             }
+          } else {
+            return false;
           }
         }
       } else {
@@ -851,16 +861,19 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
               List<ResearchOutput> outputs = new ArrayList<>(
                 researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-              for (ResearchOutput researchOutput : outputs) {
-                SectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
-                if (sectionStatus == null) {
-                  return false;
-                } else {
-                  if (sectionStatus.getMissingFields().length() != 0) {
+              if (outputs != null && !outputs.isEmpty()) {
+                for (ResearchOutput researchOutput : outputs) {
+                  SectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
+                  if (sectionStatus == null) {
                     return false;
+                  } else {
+                    if (sectionStatus.getMissingFields().length() != 0) {
+                      return false;
+                    }
                   }
                 }
+              } else {
+                return false;
               }
             }
           } else {

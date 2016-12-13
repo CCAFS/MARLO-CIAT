@@ -88,7 +88,7 @@ public class GraphByProgramAction extends BaseAction {
     } else {
       dataAreaDetail.put("label", area.getName());
     }
-    dataAreaDetail.put("title", area.getName());
+    dataAreaDetail.put("title", "Research Area");
     dataAreaDetail.put("description", area.getName());
     dataAreaDetail.put("color", area.getColor());
     dataAreaDetail.put("type", "A");
@@ -105,7 +105,7 @@ public class GraphByProgramAction extends BaseAction {
     } else {
       dataProgramDetail.put("label", program.getName());
     }
-    dataProgramDetail.put("title", program.getName());
+    dataProgramDetail.put("title", "Research Program");
     dataProgramDetail.put("description", program.getName());
     dataProgramDetail.put("color", program.getColor());
     dataProgramDetail.put("type", "P");
@@ -134,7 +134,7 @@ public class GraphByProgramAction extends BaseAction {
       dataImpactDetail.put("id", "I" + impact.getId());
       dataImpactDetail.put("parent", "P" + impact.getResearchProgram().getId());
       dataImpactDetail.put("label", "Impact " + i);
-      dataImpactDetail.put("title", impact.getDescription());
+      dataImpactDetail.put("title", "Impact " + i);
       dataImpactDetail.put("description", impact.getDescription());
       dataImpactDetail.put("color", impact.getColor());
       dataImpactDetail.put("type", "I");
@@ -167,7 +167,7 @@ public class GraphByProgramAction extends BaseAction {
       dataTopicDetail.put("id", "T" + topic.getId());
       dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
       dataTopicDetail.put("label", "Research Topic " + i);
-      dataTopicDetail.put("title", topic.getResearchTopic());
+      dataTopicDetail.put("title", "Research Topic " + i);
       dataTopicDetail.put("description", topic.getResearchTopic());
       dataTopicDetail.put("color", topic.getColor());
       dataTopicDetail.put("type", "T");
@@ -185,7 +185,7 @@ public class GraphByProgramAction extends BaseAction {
         dataOutcomeDetail.put("id", "OC" + outcome.getId());
         dataOutcomeDetail.put("parent", "T" + outcome.getResearchTopic().getId());
         dataOutcomeDetail.put("label", "Outcome " + j);
-        dataOutcomeDetail.put("title", outcome.getDescription());
+        dataOutcomeDetail.put("title", "Outcome " + j);
         dataOutcomeDetail.put("description", outcome.getDescription());
         dataOutcomeDetail.put("color", outcome.getResearchImpact().getColor());
         dataOutcomeDetail.put("type", "OC");
@@ -213,7 +213,7 @@ public class GraphByProgramAction extends BaseAction {
           dataOutputDetail.put("id", "OP" + output.getId());
           dataOutputDetail.put("parent", "T" + output.getResearchOutcome().getResearchTopic().getId());
           dataOutputDetail.put("label", "Output " + k);
-          dataOutputDetail.put("title", output.getTitle());
+          dataOutputDetail.put("title", "Output " + k);
           dataOutputDetail.put("description", output.getTitle());
           dataOutputDetail.put("color", output.getResearchOutcome().getResearchImpact().getColor());
           dataOutputDetail.put("type", "OP");
@@ -245,7 +245,7 @@ public class GraphByProgramAction extends BaseAction {
       HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
       dataObjectiveDetail.put("id", "SO" + researchObjective.getId());
       dataObjectiveDetail.put("label", "Objective " + i);
-      dataObjectiveDetail.put("title", researchObjective.getObjective());
+      dataObjectiveDetail.put("title", "Strategic Objective " + i);
       dataObjectiveDetail.put("description", researchObjective.getObjective());
       dataObjectiveDetail.put("color", "#FFFFFF");
       dataObjectiveDetail.put("type", "SO");
