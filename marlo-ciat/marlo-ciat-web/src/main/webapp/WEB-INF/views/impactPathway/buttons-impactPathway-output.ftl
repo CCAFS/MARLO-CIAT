@@ -2,8 +2,8 @@
 [#-- Program identifier --]
 <input type="hidden" name="programID" value="${programID}" />
 <input type="hidden" name="outputID" value="${outputID}" />
-<input type="hidden"  name="className" value="${(selectedProgram.class.name)!}"/>
-<input type="hidden"  name="id" value="${(selectedProgram.id)!}"/>
+<input type="hidden"  name="className" value="${(output.class.name)!}"/>
+<input type="hidden"  name="id" value="${(output.id)!}"/>
 <input type="hidden"  name="modifiedBy.id" value="${(currentUser.id)!}"/>
 <input type="hidden"  name="actionName" value="${(actionName)!}"/>  
 
