@@ -18,7 +18,7 @@
 [#-- Submission Message --]
 [#if submission]
   <div class="submission-mode text-center animated flipInX">
-    <p>[@s.text name="CrpProgram.message.submittedOn" ][@s.param]${submission.dateTime}[/@s.param][/@s.text]</p>
+    <p>[@s.text name="CrpProgram.message.submittedOn" ][/@s.text]</p>
   </div>
 [/#if]
 

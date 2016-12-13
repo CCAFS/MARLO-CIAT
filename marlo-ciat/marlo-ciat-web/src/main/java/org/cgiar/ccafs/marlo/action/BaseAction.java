@@ -516,7 +516,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public boolean getSectionStatusIP(String section, long programID) {
     ResearchProgram program = programService.getProgramById(programID);
 
-    if (ImpactPathwaySectionsEnum.getValue(section.toUpperCase()) == null) {
+    if (ImpactPathwaySectionsEnum.getValue(section) == null) {
       return false;
     }
 
@@ -529,8 +529,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         return this.validateOutcome(program);
       case OUTPUT:
         return this.validateOutput(program);
-
-
     }
 
     return true;
@@ -609,13 +607,13 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return canEdit;
   }
 
-  public boolean isCompleteIP(long programId) {
+  public boolean isCompleteIP(long programID) {
 
     if (sectionStatusService.findAll() == null) {
       return false;
     }
 
-    ResearchProgram researchProgram = programService.getProgramById(programId);
+    ResearchProgram researchProgram = programService.getProgramById(programID);
 
     List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
       .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
@@ -812,8 +810,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
           for (ResearchOutcome researchOutcome : outcomes) {
             SectionStatus sectionStatus = this.getOutcomeStatus(researchOutcome.getId());
-            if (sectionStatus != null) {
+            if (sectionStatus == null) {
               return false;
+            } else {
+              if (sectionStatus.getMissingFields().length() != 0) {
+                return false;
+              }
             }
           }
         }
@@ -843,9 +845,13 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
               researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
             for (ResearchOutput researchOutput : outputs) {
-              SectionStatus sectionStatus = this.getOutcomeStatus(researchOutput.getId());
-              if (sectionStatus != null) {
+              SectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
+              if (sectionStatus == null) {
                 return false;
+              } else {
+                if (sectionStatus.getMissingFields().length() != 0) {
+                  return false;
+                }
               }
             }
           }

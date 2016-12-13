@@ -10,7 +10,7 @@
 [#attempt]
   [#assign submission = (action.isSubmitIP(programID))! /]
   [#assign canSubmit = (action. hasPersmissionSubmitIP(programID))!false /]
-  [#assign completed = (action.isCompleteIP(programId))!false /]
+  [#assign completed = (action.isCompleteIP(programID))!false /]
 [#recover]
 error
   [#assign submission = false /]
