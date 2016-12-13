@@ -20,6 +20,7 @@ import org.cgiar.ccafs.marlo.data.dao.ISectionStatusDAO;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.inject.Inject;
 
@@ -36,6 +37,12 @@ public class SectionStatusDAO implements ISectionStatusDAO {
   public boolean deleteSectionStatus(long sectionStatusId) {
     SectionStatus sectionStatus = this.find(sectionStatusId);
     return dao.delete(sectionStatus);
+  }
+
+  @Override
+  public List<Map<String, Object>> distinctSectionStatus(long programID) {
+    String query = "select DISTINCT section_name from section_statuses where research_program_id=" + programID;
+    return dao.findCustomQuery(query);
   }
 
   @Override

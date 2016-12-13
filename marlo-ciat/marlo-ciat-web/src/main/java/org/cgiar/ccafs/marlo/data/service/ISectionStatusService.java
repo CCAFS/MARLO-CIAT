@@ -38,6 +38,15 @@ public interface ISectionStatusService {
 
 
   /**
+   * This method gets a list of sectionStatus to verify if the program have all the sections
+   * 
+   * @param programID - the program id
+   * @return List of SectionStatuss or null if the user is invalid or not have roles.
+   */
+  public List<String> distinctSectionStatus(long programID);
+
+
+  /**
    * This method validate if the sectionStatus identify with the given id exists in the system.
    * 
    * @param sectionStatusID is a sectionStatus identifier.
@@ -52,7 +61,6 @@ public interface ISectionStatusService {
    * @return a list from SectionStatus null if no exist records
    */
   public List<SectionStatus> findAll();
-
 
   /**
    * gets a SectionStatus of the one section by a specific research program

@@ -20,6 +20,7 @@ import org.cgiar.ccafs.marlo.data.dao.impl.SectionStatusDAO;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.inject.ImplementedBy;
 
@@ -33,6 +34,14 @@ public interface ISectionStatusDAO {
    * @return true if the sectionStatus was successfully deleted, false otherwise.
    */
   public boolean deleteSectionStatus(long sectionStatusId);
+
+  /**
+   * This method gets a list of sectionStatus to verify if the program have all the sections
+   * 
+   * @param programID - the program id
+   * @return List of SectionStatuss or null if the user is invalid or not have roles.
+   */
+  public List<Map<String, Object>> distinctSectionStatus(long programID);
 
   /**
    * This method validate if the sectionStatus identify with the given id exists in the system.
@@ -86,6 +95,7 @@ public interface ISectionStatusDAO {
    */
   public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName, int year);
 
+
   /**
    * gets a SectionStatus of the one section by a specific research program
    * 
@@ -94,7 +104,6 @@ public interface ISectionStatusDAO {
    * @return a SectionStatus Object
    */
   public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year);
-
 
   /**
    * This method gets a list of sectionStatuss belongs of the user

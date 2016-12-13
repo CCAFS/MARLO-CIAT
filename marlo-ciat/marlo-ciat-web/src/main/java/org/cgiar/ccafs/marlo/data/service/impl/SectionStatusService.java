@@ -19,7 +19,9 @@ import org.cgiar.ccafs.marlo.data.dao.ISectionStatusDAO;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.inject.Inject;
 
@@ -45,6 +47,20 @@ public class SectionStatusService implements ISectionStatusService {
   public boolean deleteSectionStatus(long sectionStatusId) {
 
     return sectionStatusDAO.deleteSectionStatus(sectionStatusId);
+  }
+
+  @Override
+  public List<String> distinctSectionStatus(long programID) {
+    List<String> status = new ArrayList<String>();
+
+    List<Map<String, Object>> data = sectionStatusDAO.distinctSectionStatus(programID);
+    if (data != null) {
+      for (Map<String, Object> map : data) {
+        status.add(map.get("section_name").toString());
+      }
+    }
+
+    return status;
   }
 
   @Override

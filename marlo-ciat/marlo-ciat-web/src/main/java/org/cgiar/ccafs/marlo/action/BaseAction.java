@@ -615,6 +615,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
     ResearchProgram researchProgram = programService.getProgramById(programID);
 
+    List<String> statuses = secctionStatusService.distinctSectionStatus(programID);
+
+    if (statuses.size() != 4) {
+      return false;
+    }
+
     List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
       .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
 
