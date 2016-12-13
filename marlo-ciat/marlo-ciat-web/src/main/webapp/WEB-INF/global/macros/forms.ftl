@@ -229,15 +229,30 @@
 
 [#macro req required=true ][#if required]<span class="red">*</span>[/#if][/#macro]
 
-[#macro confirmJustification action="" namespace="/" nameId="" title="" projectID=""]
+[#macro confirmJustification action="" namespace="/" nameId="" title="" outcomeID=""]
   <div id="dialog-justification" title="${title}" style="display:none"> 
     <div class="dialog-content"> 
       [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
-        [@textArea name="justification" i18nkey="saving.justification" required=true className="justification"/]
+        [@textArea name="justification" i18nkey="saving.justification.outcome" required=true className="justification"/]
         [#if nameId != ""]
-          <input class="nameId" name="${nameId}" type="hidden" value="-1" />
+          <input name="${nameId}" type="hidden" value="-1" />
         [/#if]
-        <input name="projectID" type="hidden" value="${projectID}" />
+        <input name="outcomeID" type="hidden" value="${outcomeID}" />
+        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      [/@s.form]
+    </div>  
+  </div>
+[/#macro]
+[#macro confirmJustificationOut action="" namespace="/" nameId="" title="" outputID=""]
+  <div id="dialog-justification" title="${title}" style="display:none"> 
+    <div class="dialog-content"> 
+      [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
+        [@textArea name="justification" i18nkey="saving.justification.output" required=true className="justification"/]
+        [#if nameId != ""]
+          <input name="${nameId}" type="hidden" value="-1" />
+        [/#if]
+        <input name="outputID" type="hidden" value="${outputID}" />
         <!-- Allow form submission with keyboard without duplicating the dialog button -->
         <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
       [/@s.form]
