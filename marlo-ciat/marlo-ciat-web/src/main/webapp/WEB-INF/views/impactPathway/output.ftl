@@ -1,6 +1,6 @@
 [#ftl]
 [#assign title = "Output" /]
-[#assign currentSectionString = "program-${actionName?replace('/','-')}-${programID}" /]
+[#assign currentSectionString = "program-${actionName?replace('/','-')}-${outputID}" /]
 [#assign pageLibs = ["select2"] /]
 [#assign customJS = ["${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js", "${baseUrl}/js/global/autoSave.js"] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outputList.css"] /]

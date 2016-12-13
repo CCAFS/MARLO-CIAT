@@ -51,11 +51,9 @@
             <label for="">Research Topic:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
               <option value="-1" >Select an option</option>
-              
                 [#list researchTopics as researchTopic]
                   <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
                 [/#list]
-              
             </select>
           </div>
           
@@ -65,11 +63,9 @@
             <label for="">Select Outcome:<span class="red">*</span></label>
             <select name="outcomes" id="outcomes">
               <option value="-1" >Select an option</option>
-              
                 [#list outcomes as outcome]
                   <option value="${outcome.id}"[#if (selectedResearchOutcome.id)?has_content && (selectedResearchOutcome.id== outcome.id)] selected="selected"[/#if]] >${outcome.description}</option>
                 [/#list]
-              
             </select>
           </div>  
          
@@ -79,6 +75,7 @@
             [#if outputs?has_content]
             <div style="">[@outputsList.outputsList outputs=outputs canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outputs"/]</div>
             [#else]
+            <div class="clearfix"></div>
               <div class="notOutcome">
               There are NO OUTPUTS added to "<b>${selectedResearchOutcome.description}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
               </div>
