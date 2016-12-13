@@ -6188,3 +6188,10 @@ span.errorTag {
 /*   background: #98FB98; */
   background: rgba(76, 175, 80, 0.5) /* Green background with 50% opacity */
 }
+
+
+
+/**** ****/
+#secondaryMenu span.glyphicon {
+  color: #d2d2d2;
+}

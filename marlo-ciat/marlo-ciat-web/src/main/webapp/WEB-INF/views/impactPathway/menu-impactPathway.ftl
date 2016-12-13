@@ -7,11 +7,19 @@
 ]/]
 
 
-[#assign submission = (action.submission)! /]
-[#assign canSubmit = (action.hasPersmissionSubmit())!false /]
+[#attempt]
+  [#assign submission = (action.isSubmitIP(programID))! /]
+  [#assign canSubmit = (action. hasPersmissionSubmitIP(programID))!false /]
+  [#assign completed = (action.isCompleteIP(programId))!false /]
+[#recover]
+  [#assign submission = false /]
+  [#assign canSubmit = false /]
+  [#assign completed = false /]
+[/#attempt]
+
+[#assign sectionsForChecking = [] /]
 
 <link rel="stylesheet" href="${baseUrl}/css/global/impactGraphic.css" />
-[#-- #assign completed = action.isCompleteImpact(programID) --]
 
 
 <nav id="secondaryMenu" class="">
@@ -20,11 +28,20 @@
     <li>
       <ul>
         [#list items as item]
-          <li id="menu-${item.action}" class="[#if item.slug == currentStage]currentSection[/#if] ${(item.active)?string('enabled','disabled')}">
+          [#assign submitStatus = (action.getprogramSectionStatus(item.action, programID))!false /]
+          <li id="menu-${item.action}" class="[#if item.slug == currentStage]currentSection[/#if] [#if canEdit]${submitStatus?string('submitted','toSubmit')}[/#if] ${(item.active)?string('enabled','disabled')}">
             <a href="[@s.url action="${centerSession}/${item.action}"][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]" onclick="return ${item.active?string}">
+              [#if item.slug == "outcomes"]
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+              [#elseif item.slug == "outputs"]
+                  &nbsp; <span class="glyphicon glyphicon-chevron-right"></span>
+              [/#if]
               [@s.text name=item.name/]
             </a>
           </li>
+          [#if item.active]
+              [#assign sectionsForChecking = sectionsForChecking + ["${item.action}"] /]
+            [/#if]
         [/#list] 
       </ul>
     </li>
@@ -33,6 +50,28 @@
 
 <div class="clearfix"></div>
 
+[#-- Sections for checking (Using by JS) --]
+<span id="sectionsForChecking" style="display:none">[#list sectionsForChecking as item]${item}[#if item_has_next],[/#if][/#list]</span>
+
+[#-- Submition message --]
+[#if !submission?has_content && completed && !canSubmit]
+  <p class="text-center" style="display:block">The Program can be submitted now.</p>
+[/#if]
+
+[#-- Check button --]
+[#if canEdit && !completed && !submission?has_content]
+  <p class="programValidateButton-message text-center">Check for missing fields.<br /></p>
+  <div id="validateProgram-${programID}" class="projectValidateButton">[@s.text name="form.buttons.check" /]</div>
+  <div id="progressbar-${programID}" class="progressbar" style="display:none"></div>
+[/#if]
+
+[#-- Submit button --]
+[#if canEdit]
+  [#assign showSubmit=(canSubmit && !submission?has_content && completed)]
+  <a id="submitProgram-${programID}" class="projectSubmitButton" style="display:${showSubmit?string('block','none')}" href="[@s.url action="${centerSession}/submit"][@s.param name='programID']${programID}[/@s.param][/@s.url]" >
+    [@s.text name="form.buttons.submit" /]
+  </a>
+[/#if]
 
 
 [#-- Mini-graph --]
@@ -80,5 +119,5 @@
 </div>
 
 
-[#-- Project Submit JS --]
-[#assign customJS = [ "${baseUrl}/js/global/impactGraphic.js" ] + customJS  /]
+[#-- program Submit JS --]
+[#assign customJS = [ "${baseUrl}/js/global/impactGraphic.js", "${baseUrl}/js/impactPathway/programSubmit.js" ] + customJS  /]
