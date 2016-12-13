@@ -120,7 +120,7 @@ public class GraphByAreaAction extends BaseAction {
     List<ResearchProgram> programs =
       new ArrayList<>(area.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-    int z = 1;
+
     for (ResearchProgram program : programs) {
 
       // Research Program Data
@@ -133,7 +133,7 @@ public class GraphByAreaAction extends BaseAction {
       } else {
         dataProgramDetail.put("label", program.getName());
       }
-      dataProgramDetail.put("title", "Research Program " + z);
+      dataProgramDetail.put("title", "Research Program ");
       dataProgramDetail.put("description", program.getName());
       dataProgramDetail.put("color", program.getColor());
       dataProgramDetail.put("type", "P");
@@ -259,8 +259,6 @@ public class GraphByAreaAction extends BaseAction {
 
         i++;
       }
-
-      z++;
     }
 
 
