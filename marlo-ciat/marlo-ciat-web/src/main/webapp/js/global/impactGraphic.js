@@ -261,6 +261,13 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
         stop = 1;
       }
     });
+    
+    programs.forEach(function(array) {
+      if(ele.data('description') === array[0]) {
+        //console.log("asd AREA");
+        stop = 1;
+      }
+    });
 
     // In Outcomes array
     pImpacts.forEach(function(array) {
