@@ -12,6 +12,7 @@
   [#assign canSubmit = (action. hasPersmissionSubmitIP(programID))!false /]
   [#assign completed = (action.isCompleteIP(programId))!false /]
 [#recover]
+error
   [#assign submission = false /]
   [#assign canSubmit = false /]
   [#assign completed = false /]
@@ -28,7 +29,7 @@
     <li>
       <ul>
         [#list items as item]
-          [#assign submitStatus = (action.getprogramSectionStatus(item.action, programID))!false /]
+          [#assign submitStatus = (action.getSectionStatusIP(item.action, programID))!false /]
           <li id="menu-${item.action}" class="[#if item.slug == currentStage]currentSection[/#if] [#if canEdit]${submitStatus?string('submitted','toSubmit')}[/#if] ${(item.active)?string('enabled','disabled')}">
             <a href="[@s.url action="${centerSession}/${item.action}"][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]" onclick="return ${item.active?string}">
               [#if item.slug == "outcomes"]

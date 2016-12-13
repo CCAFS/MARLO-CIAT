@@ -16,7 +16,7 @@
 [/#if]
 
 [#-- Submission Message --]
-[#if submission?has_content]
+[#if submission]
   <div class="submission-mode text-center animated flipInX">
     <p>[@s.text name="CrpProgram.message.submittedOn" ][@s.param]${submission.dateTime}[/@s.param][/@s.text]</p>
   </div>
