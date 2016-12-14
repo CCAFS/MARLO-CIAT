@@ -68,8 +68,12 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
 
   private List<ResearchTopic> topics;
 
+
   @Expose
   private String color;
+
+  @Expose
+  private String impactColor;
 
   @Expose
   private boolean active;
@@ -166,6 +170,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return this.id;
   }
 
+  public String getImpactColor() {
+    return impactColor;
+  }
+
   public List<ResearchImpact> getImpacts() {
     return impacts;
   }
@@ -177,10 +185,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return sb.toString();
   }
 
-
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   @Override
   public User getModifiedBy() {
@@ -241,10 +249,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.acronym = acronym;
   }
 
-
   public void setActive(boolean active) {
     this.active = active;
   }
+
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -254,7 +262,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.color = color;
   }
 
-
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
@@ -262,6 +269,11 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setImpactColor(String impactColor) {
+    this.impactColor = impactColor;
   }
 
   public void setImpacts(List<ResearchImpact> impacts) {

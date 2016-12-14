@@ -91,7 +91,6 @@
       
       <div class="row">
         <div class="col-sm-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
-        
         [#--] 
         [#if editable]
           [@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]
@@ -101,11 +100,7 @@
             <div class="selectList"><p> [#if element.targetYear?has_content][#if element.targetYear == -1] Not Selected [#else]${(element.targetYear)!'none'}[/#if][#else]Not Selected[/#if] </p></div> 
           </div>
         [/#if].
-        --]
-
-
-          
-  
+        --]  
       </div>
     </div>
     

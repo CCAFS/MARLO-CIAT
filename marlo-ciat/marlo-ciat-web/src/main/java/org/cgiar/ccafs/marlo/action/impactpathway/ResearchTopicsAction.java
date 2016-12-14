@@ -375,7 +375,7 @@ public class ResearchTopicsAction extends BaseAction {
           newResearchTopic.setCreatedBy(this.getCurrentUser());
           newResearchTopic.setModifiedBy(this.getCurrentUser());
           newResearchTopic.setResearchTopic(researchTopic.getResearchTopic().trim());
-          newResearchTopic.setColor("");
+          newResearchTopic.setColor("#ecf0f1");
           newResearchTopic.setResearchProgram(selectedProgram);
 
           researchTopicService.saveResearchTopic(newResearchTopic);

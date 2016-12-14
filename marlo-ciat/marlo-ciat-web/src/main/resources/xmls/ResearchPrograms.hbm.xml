@@ -19,6 +19,9 @@
 		<property name="color" type="string">
 			<column name="color" length="8" />
 		</property>
+		<property name="impactColor" type="string">
+      <column name="impact_color" length="8" />
+    </property>
 		<property name="acronym" type="string">
 			<column name="acronym" length="50" not-null="true" />
 		</property>
