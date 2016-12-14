@@ -90,10 +90,7 @@
     <div class="form-group"> 
       
       <div class="row">
-        <div class="col-sm-11">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
-        <div class="col-sm-1">
-          <label class="color" for="">Color</label>
-          <div class="color-picker" style="background:${(element.color)!};"><input type="hidden" name="${customName}.color" value="${(element.color)!}"></div>
+        <div class="col-sm-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="" required=true editable=editable /]</div>
         [#--] 
         [#if editable]
           [@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]

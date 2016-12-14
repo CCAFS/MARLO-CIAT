@@ -375,7 +375,7 @@ public class ResearchTopicsAction extends BaseAction {
           newResearchTopic.setCreatedBy(this.getCurrentUser());
           newResearchTopic.setModifiedBy(this.getCurrentUser());
           newResearchTopic.setResearchTopic(researchTopic.getResearchTopic().trim());
-          newResearchTopic.setColor(researchTopic.getColor());
+          newResearchTopic.setColor("");
           newResearchTopic.setResearchProgram(selectedProgram);
 
           researchTopicService.saveResearchTopic(newResearchTopic);
@@ -387,11 +387,6 @@ public class ResearchTopicsAction extends BaseAction {
           if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic().trim())) {
             hasChanges = true;
             researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic().trim());
-          }
-
-          if (!researchTopicPrew.getColor().equals(researchTopic.getColor().trim())) {
-            hasChanges = true;
-            researchTopicPrew.setColor(researchTopic.getColor().trim());
           }
 
           if (hasChanges) {

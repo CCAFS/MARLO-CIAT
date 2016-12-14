@@ -76,7 +76,7 @@ public class ProgramImpactsValidator extends BaseValidator {
     if (researchImpacts.size() == 0) {
       this.addMessage(baseAction.getText("programImpact.action.required"));
       baseAction.getInvalidFields().put("list-researchImpacts",
-        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"researchImpacts"}));
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Program Impacts"}));
 
     }
 
@@ -98,24 +98,24 @@ public class ProgramImpactsValidator extends BaseValidator {
     if (impactBeneficiary.getResearchRegion() != null) {
       if (impactBeneficiary.getResearchRegion().getId() == -1) {
         this.addMessage(baseAction.getText("programImpact.action.beneficiary.region", params));
-        baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
+        baseAction.getInvalidFields().put("input-impacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
           InvalidFieldsMessages.EMPTYFIELD);
       }
     } else {
       this.addMessage(baseAction.getText("programImpact.action.beneficiary.region", params));
-      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
+      baseAction.getInvalidFields().put("input-impacts[" + i + "].beneficiaries[" + j + "].researchRegion.id",
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
     if (impactBeneficiary.getBeneficiary() != null) {
       if (impactBeneficiary.getBeneficiary().getId() == -1) {
         this.addMessage(baseAction.getText("programImpact.action.beneficiary.focus", params));
-        baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
+        baseAction.getInvalidFields().put("input-impacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
           InvalidFieldsMessages.EMPTYFIELD);
       }
     } else {
       this.addMessage(baseAction.getText("programImpact.action.beneficiary.focus", params));
-      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
+      baseAction.getInvalidFields().put("input-impacts[" + i + "].beneficiaries[" + j + "].beneficiary.id",
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
@@ -123,7 +123,7 @@ public class ProgramImpactsValidator extends BaseValidator {
       if (impactBeneficiary.getBeneficiary().getBeneficiaryType().getId() == -1) {
         this.addMessage(baseAction.getText("programImpact.action.beneficiary.type", params));
         baseAction.getInvalidFields().put(
-          "input-researchImpacts[" + i + "].beneficiaries[" + j + "].beneficiary.beneficiaryType.id",
+          "input-impacts[" + i + "].beneficiaries[" + j + "].beneficiary.beneficiaryType.id",
           InvalidFieldsMessages.EMPTYFIELD);
       }
     }
@@ -137,8 +137,7 @@ public class ProgramImpactsValidator extends BaseValidator {
     if (!this.isValidString(researchImpact.getDescription())
       && this.wordCount(researchImpact.getDescription()) <= 150) {
       this.addMessage(baseAction.getText("programImpact.action.description.required", params));
-      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].description",
-        InvalidFieldsMessages.EMPTYFIELD);
+      baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
     }
 
     // if (researchImpact.getTargetYear() == -1) {
@@ -150,20 +149,18 @@ public class ProgramImpactsValidator extends BaseValidator {
     if (researchImpact.getObjectiveValue() != null) {
       if (researchImpact.getObjectiveValue().length() < 1) {
         this.addMessage(baseAction.getText("programImpact.action.objectiveValue.empty", params));
-        baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].objectiveValue",
-          InvalidFieldsMessages.CHECKBOX);
+        baseAction.getInvalidFields().put("input-impacts[" + i + "].objectiveValue", InvalidFieldsMessages.CHECKBOX);
       }
     } else {
       this.addMessage(baseAction.getText("programImpact.action.objectiveValue.empty", params));
-      baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].objectiveValue",
-        InvalidFieldsMessages.CHECKBOX);
+      baseAction.getInvalidFields().put("input-impacts[" + i + "].objectiveValue", InvalidFieldsMessages.CHECKBOX);
     }
 
 
     if (researchImpact.getBeneficiaries() != null) {
       if (researchImpact.getBeneficiaries().size() == 0) {
         this.addMessage(baseAction.getText("programImpact.action.beneficiary", params));
-        baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
+        baseAction.getInvalidFields().put("list-impacts[" + i + "].beneficiaries",
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
       } else {
         for (int j = 0; j < researchImpact.getBeneficiaries().size(); j++) {
@@ -173,7 +170,7 @@ public class ProgramImpactsValidator extends BaseValidator {
       }
     } else {
       this.addMessage(baseAction.getText("programImpact.action.beneficiary", params));
-      baseAction.getInvalidFields().put("list-researchImpacts[" + i + "].beneficiaries",
+      baseAction.getInvalidFields().put("list-impacts[" + i + "].beneficiaries",
         baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
     }
   }

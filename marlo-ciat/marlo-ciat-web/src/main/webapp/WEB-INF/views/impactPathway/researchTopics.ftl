@@ -37,7 +37,7 @@
           </div><div class="clearfix"></div>
         
         [@s.form action=actionName enctype="multipart/form-data" ]     
-          <div class="outcomes-list" listname="outcomes">
+          <div class="outcomes-list" listname="researchTopics">
           [#if topics?has_content]
             [#list topics as topic]
               [@topicMacro element=topic name="topics" index=topic_index /]
@@ -97,11 +97,7 @@
     [#-- Research Topic Name --]
     <div class="form-group"> 
       <div class="row">
-        <div class="col-sm-11">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
-        <div class="col-sm-1">
-          <label class="color" for="">Color</label>
-          <div class="color-picker" style="background:${(element.color)!};"><input type="hidden" name="${customName}.color" value="${(element.color)!}"></div>
-        </div>
+        <div class="col-sm-12">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
       </div>      
     </div>
   </div>  
