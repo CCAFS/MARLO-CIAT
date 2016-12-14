@@ -52,8 +52,8 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
       }).selector('edge').css({
           'width': 2,
           'source-arrow-shape': 'triangle',
-          'line-color': '#eee',
-          'source-arrow-color': '#eee',
+          'line-color': '#bab6b6',
+          'source-arrow-color': '#bab6b6',
           'curve-style': 'bezier',
           'z-index': '1'
       }).selector('.center-center').css({
@@ -84,6 +84,14 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     }
 
     // NODES WITH CHILDRENS
+    if(ele.data('type') === 'SO') {
+      ele.css({
+          'shape': 'rectangle',
+          'color': '#000000',
+          'text-outline-width': 0
+      });
+    }
+    
     if(ele.data('type') === 'A') {
       ele.css({
           'shape': 'rectangle',
@@ -106,7 +114,9 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
       });
       if(ele.children().length > 0) {
         ele.css({
-
+          'shape': 'rectangle',
+          'color': '#ffffff',
+          'text-outline-width': 0
         });
         ele.addClass('bottom-center');
       }
@@ -140,9 +150,9 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     cy.$('node').css('background-opacity', '0.4');
     cy.$('node').css('text-opacity', '0.4');
     cy.$('edge').css('line-opacity', '0.4');
-    cy.$('edge').css('line-color', '#eee');
-    cy.$('edge').css('source-arrow-color', '#eee');
-    cy.$('edge').css('target-arrow-color', '#eee');
+    cy.$('edge').css('line-color', '#bab6b6');
+    cy.$('edge').css('source-arrow-color', '#bab6b6');
+    cy.$('edge').css('target-arrow-color', '#bab6b6');
     cy.$('edge').css('z-index', '1');
     $(".panel-body ul").empty();
     so = [];
@@ -577,8 +587,14 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     } else {
       widthTest = totalWidth.I;
     }
+    
+    if(widthTest > totalWidth.P) {
+      widthTest;
+    } else {
+      widthTest = totalWidth.P;
+    }
 
-    //console.log(widthTest);
+    console.log(widthTest);
     currentX=-1*(widthTest/2);
 
     var move = {
@@ -588,7 +604,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         T: -(widthTest/ 2),
         I: -(widthTest / 2),
         OC: -(widthTest / 2),
-        OP: 350
+        OP: 380
     };
     
     //console.log(totalWidth);
@@ -620,7 +636,11 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           move.P=currentX;
           move.I=move.P;
           move.OC=move.P;
+        }
+        if(nodes[i + 1] && nodes[i + 1].data.type == "I") {
+          
         }else{
+          move.I=move.I+ (nodeWidth + nodeMargin);
         }
         nodes[i].position = {
             x: move.I,
@@ -686,9 +706,9 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
       } else if(nodes[i].data.type == "OP") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T"){
           currentX= move.OC+ (nodeWidth + nodeMargin + 20);
-          move.OP=300;
+          move.OP=330;
         }else if(nodes[i + 1] && nodes[i + 1].data.type == "P"){
-          move.OP=300;
+          move.OP=330;
           if(move.OC>move.I){
             currentX=move.OC;
           }else {
@@ -711,6 +731,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
     createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip,nodeWidth);
   });
 }
+
 
 function showHelpText() {
   $('.helpMessage').show();
