@@ -158,6 +158,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
   }
 
+
   private void fillSubreport(SubReport subReport, String query) {
     CompoundDataFactory cdf = CompoundDataFactory.normalize(subReport.getDataFactory());
     TableDataFactory sdf = (TableDataFactory) cdf.getDataFactoryForQuery(query);
@@ -180,6 +181,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     sdf.addTable(query, model);
     subReport.setDataFactory(cdf);
   }
+
 
   /**
    * Get all subreports and store then in a hash map.
@@ -502,7 +504,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       if (researchImpact.getDescription() == null || researchImpact.getDescription().isEmpty()) {
         title = "&lt;Not Defined&gt;";
       } else {
-        title = researchImpact.getId() + " - " + researchImpact.getDescription();
+        title = researchImpact.getDescription();
       }
 
       if (researchImpact.getResearchImpactObjectives() != null
@@ -524,6 +526,10 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
     }
     return model;
+  }
+
+  public ResearchProgram getResearchProgram() {
+    return researchProgram;
   }
 
   private TypedTableModel getResearchTopicsTableModel() {
@@ -554,6 +560,10 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
   public void setBytesPDF(byte[] bytesPDF) {
     this.bytesPDF = bytesPDF;
+  }
+
+  public void setResearchProgram(ResearchProgram researchProgram) {
+    this.researchProgram = researchProgram;
   }
 
 }

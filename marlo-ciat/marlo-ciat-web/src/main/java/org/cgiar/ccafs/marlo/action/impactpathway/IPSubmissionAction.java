@@ -16,6 +16,7 @@
 package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
+import org.cgiar.ccafs.marlo.action.summaries.ImpactSubmissionSummaryAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
@@ -34,6 +35,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
 
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +43,9 @@ import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
@@ -51,20 +56,24 @@ public class IPSubmissionAction extends BaseAction {
   private static final long serialVersionUID = 4882851743044518890L;
 
 
+  // LOG
+  private static Logger LOG = LoggerFactory.getLogger(IPSubmissionAction.class);
   private ISubmissionService submissionService;
   private IProgramService programService;
   private ISectionStatusService sectionStatusService;
   private IResearchCycleService cycleService;
   private ICenterService centerService;
+
+
   private SendMail sendMail;
-
-
   private ResearchProgram program;
   private ResearchCycle cycle;
-  private ResearchCenter loggedCenter;
 
+  private ResearchCenter loggedCenter;
   private long programID;
   private boolean isSubmited = false;
+  @Inject
+  ImpactSubmissionSummaryAction impactSubmissionSummaryAction;
 
   @Inject
   public IPSubmissionAction(APConfig config, ISubmissionService submissionService, IProgramService programService,
@@ -121,8 +130,15 @@ public class IPSubmissionAction extends BaseAction {
 
   }
 
-  public long getProgramID() {
-    return programID;
+  public String getFileName() {
+    StringBuffer fileName = new StringBuffer();
+    fileName.append("ImpactPathway-");
+    fileName.append(loggedCenter.getName() + "-");
+    fileName.append("IP" + programID + "-");
+    fileName.append(new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()));
+    fileName.append(".pdf");
+    return fileName.toString();
+
   }
 
   // public boolean isCompleteIP(long programId) {
@@ -147,6 +163,10 @@ public class IPSubmissionAction extends BaseAction {
   // }
   // return true;
   // }
+
+  public long getProgramID() {
+    return programID;
+  }
 
   @Override
   public void prepare() throws Exception {
@@ -235,19 +255,19 @@ public class IPSubmissionAction extends BaseAction {
     ByteBuffer buffer = null;
     String fileName = null;
     String contentType = null;
+    try {
+      ResearchProgram program = programService.getProgramById(programID);
+      impactSubmissionSummaryAction.setResearchProgram(program);
+      impactSubmissionSummaryAction.execute();
 
-    /*
-     * TODO Create IP Summaries Action
-     * try {
-     * TODO The summaries IP Action.
-     * buffer = ByteBuffer.wrap(reportingSummaryAction.getBytesPDF());
-     * fileName = this.getFileName();
-     * contentType = "application/pdf";
-     * } catch (Exception e) {
-     * // Do nothing.
-     * LOG.error("There was an error trying to get the URL to download the PDF file: " + e.getMessage());
-     * }
-     */
+      // Getting the file data.
+      buffer = ByteBuffer.wrap(impactSubmissionSummaryAction.getBytesPDF());
+      fileName = this.getFileName();
+      contentType = "application/pdf";
+    } catch (Exception e) {
+      // Do nothing.
+      LOG.error("There was an error trying to get the URL to download the PDF file: " + e.getMessage());
+    }
 
     if (buffer != null && fileName != null && contentType != null) {
       sendMail.send(toEmail, ccEmail, bbcEmails, subject, message.toString(), buffer.array(), contentType, fileName,
@@ -255,7 +275,6 @@ public class IPSubmissionAction extends BaseAction {
     } else {
       sendMail.send(toEmail, ccEmail, bbcEmails, subject, message.toString(), null, null, null, true);
     }
-
 
   }
 
