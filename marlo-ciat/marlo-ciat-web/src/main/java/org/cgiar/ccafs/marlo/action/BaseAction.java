@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -275,7 +276,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return INPUT;
   }
 
-
   public String generatePermission(String permission, String... params) {
     // TODO: Update the permission
     if (params != null) {
@@ -290,6 +290,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public String getActionName() {
     return ServletActionContext.getActionMapping().getName();
   }
+
 
   /**
    * This method calculates all the years between the start date and the end date.
@@ -446,7 +447,6 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return 0;
   }
 
-
   /**
    * This method gets the specific section status from the sectionStatuses array for a Deliverable.
    * 
@@ -470,6 +470,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
     return null;
   }
+
 
   /**
    * This method gets the specific section status from the sectionStatuses array for a Deliverable.
@@ -544,6 +545,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public Submission getSubmission() {
     return submission;
+  }
+
+  public String getTimeZone() {
+    TimeZone timeZone = TimeZone.getDefault();
+    String display = timeZone.getDisplayName();
+    return display;
   }
 
   public List<UserToken> getUsersOnline() {
