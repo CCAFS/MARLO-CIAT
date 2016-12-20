@@ -109,9 +109,19 @@ error
   </div>
   
   [#-- Change to full or current graph --]
-  <div id="changeGraph">
+  <div id="changeGraph" style="display:none;">
   <span class="btn btn-primary btn-md currentGraph">Show graph by area</span>
   </div>
+  
+  <div class="dropdown changeGraphic">
+  <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Change graph
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a id="programGraph" href="#">Show graph by program</a></li>
+    <li><a id="areaGraph" href="#">Show graph by area</a></li>
+    <li><a id="fullGraph" href="#">Show full graph</a></li>
+  </ul>
+</div>
   
   [#-- Download button--]
   <a class="download" href=""><span title="download" id="buttonDownload"><span class="glyphicon glyphicon-download-alt"></span></span></a>
