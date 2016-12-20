@@ -34,6 +34,8 @@
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway-output.ftl" /]
         
+        [#-- Impact pathway sub menu --]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
@@ -45,9 +47,6 @@
         </small>
         
         <div class="clearfix"></div>
-        
-        [#-- Impact pathway sub menu --]
-        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
         
         [@s.form action=actionName enctype="multipart/form-data" ]
         <h3 class="headTitle"> Output General Information </h3>

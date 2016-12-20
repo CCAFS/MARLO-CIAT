@@ -68,7 +68,8 @@
                 [/#list]
             </select>
           </div>  
-          [#-- Outcomes Table --]
+          [@s.form action=actionName enctype="multipart/form-data" ]
+          [#-- Output Table --]
           [#if outputs?has_content]
           <div style="">[@outputsList.outputsList outputs=outputs canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outputs"/]</div>
           [#else]
@@ -94,11 +95,12 @@
               </div>
             [/#if]
           [/#if]
+          [/@s.form]
         [#else]
-         <p class="text-center borderBox inf">Before completing this section, please add at least one Outcome by <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=selectedResearchTopic.id /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
+         <p class="text-center">Before completing this section, please add at least one Outcome by <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=selectedResearchTopic.id /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
         [/#if]
         [#else]
-         <p class="text-center borderBox inf">Before completing this section, please add at least one Research Topic by <a href="[@s.url action='${centerSession}/researchTopics'][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
+         <p class="text-center">Before completing this section, please add at least one Research Topic by <a href="[@s.url action='${centerSession}/researchTopics'][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
         [/#if]
       </div>
     </div>

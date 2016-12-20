@@ -460,11 +460,17 @@ public class OutcomesAction extends BaseAction {
                 milestonePrew.setValue(researchMilestone.getValue());
               }
             } else {
+              hasChanges = true;
               milestonePrew.setValue(researchMilestone.getValue());
             }
           }
 
-          if (!milestonePrew.getTargetYear().equals(researchMilestone.getTargetYear())) {
+          if (milestonePrew.getTargetYear() != null) {
+            if (!milestonePrew.getTargetYear().equals(researchMilestone.getTargetYear())) {
+              hasChanges = true;
+              milestonePrew.setTargetYear(researchMilestone.getTargetYear());
+            }
+          } else {
             hasChanges = true;
             milestonePrew.setTargetYear(researchMilestone.getTargetYear());
           }
