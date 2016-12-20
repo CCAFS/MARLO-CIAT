@@ -48,7 +48,7 @@ public class GraphByAreaAction extends BaseAction {
 
   private static final long serialVersionUID = -5892467002878824894L;
   // logger
-  private static final Logger LOG = LoggerFactory.getLogger(GraphByProgramAction.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GraphByAreaAction.class);
 
   // Managers -Services
   private IProgramService programService;

@@ -51,7 +51,7 @@ public class GraphByCenterAction extends BaseAction {
 
 
   // logger
-  private static final Logger LOG = LoggerFactory.getLogger(GraphByProgramAction.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GraphByCenterAction.class);
 
   // Managers -Services
   private IProgramService programService;
@@ -270,6 +270,10 @@ public class GraphByCenterAction extends BaseAction {
         }
       }
     }
+
+    elements.put("nodes", dataNodes);
+    elements.put("edges", dataEdges);
+
     return SUCCESS;
   }
 
