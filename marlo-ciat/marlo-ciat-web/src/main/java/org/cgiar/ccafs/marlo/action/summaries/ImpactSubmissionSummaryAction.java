@@ -396,16 +396,16 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
         if (target_unit.isEmpty()) {
           target_unit = "&lt;Not Defined&gt;";
         }
-        if (researchOutcome.getValue() != null) {
-          if (researchOutcome.getTargetUnit() != null
-            && researchOutcome.getTargetUnit().getName().equals("Not Aplicable")) {
-            target_value = "Not Aplicable";
-          } else {
+
+        if (target_unit.equals("Not Applicable")) {
+          target_value = "Not Applicable";
+        } else {
+          if (researchOutcome.getValue() != null) {
             target_value = researchOutcome.getValue().toString();
           }
-
         }
-        if (target_value.isEmpty()) {
+
+        if (target_value == null || target_value.isEmpty()) {
           target_value = "&lt;Not Defined&gt;";
         }
         if (researchOutcome.getTargetYear() != null) {
