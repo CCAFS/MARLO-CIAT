@@ -659,6 +659,13 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           currentX = move.I + (nodeWidth + nodeMargin + 20);
           move.I = currentX;
           move.OC = currentX;
+        } else if(nodes[i + 1] && nodes[i + 1].data.type == "A") {
+          if(move.OC > move.I) {
+            currentX = move.OC + (nodeWidth + nodeMargin + 20);
+          } else {
+            currentX = move.I + (nodeWidth + nodeMargin + 20);
+          }
+          move.I = currentX;
         } else {
           if(currentX > move.I) {
             currentX = move.I + (nodeWidth + nodeMargin + 20);
@@ -687,7 +694,15 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
             currentX = move.I;
           }
           move.I = currentX;
+        } else if(nodes[i + 1] && nodes[i + 1].data.type == "A") {
+          if(move.OC > move.I) {
+            currentX = move.OC;
+          } else {
+            currentX = move.I;
+          }
+          move.I = currentX;
         }
+
         // console.log(move.KO);
         nodes[i].position = {
             x: move.OC,
