@@ -75,6 +75,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private TargetUnit targetUnit;
   @Expose
   private String modificationJustification;
+
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);

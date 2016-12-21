@@ -48,7 +48,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
   private String acronym;
 
 
-  @Expose
   private EntityType programType;
 
   private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);

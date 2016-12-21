@@ -14,18 +14,16 @@
  *****************************************************************/
 package org.cgiar.ccafs.marlo.data.model;
 
+import org.cgiar.ccafs.marlo.data.IAuditLog;
 
-public class SectionStatus implements java.io.Serializable {
+public class SectionStatus implements java.io.Serializable, IAuditLog {
 
 
   private static final long serialVersionUID = -5830242271701358980L;
 
 
   private Long id;
-
   private ResearchProgram researchProgram;
-
-
   private ResearchOutcome researchOutcome;
   private ResearchOutput researchOutput;
   private String sectionName;
@@ -55,18 +53,31 @@ public class SectionStatus implements java.io.Serializable {
     return this.cycle;
   }
 
+  @Override
   public Long getId() {
     return this.id;
+  }
+
+  @Override
+  public String getLogDeatil() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Id : ").append(this.getId());
+    return sb.toString();
   }
 
   public String getMissingFields() {
     return this.missingFields;
   }
 
+
+  @Override
+  public User getModifiedBy() {
+    return researchProgram.getModifiedBy();
+  }
+
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
   }
-
 
   public ResearchOutput getResearchOutput() {
     return researchOutput;
@@ -82,6 +93,11 @@ public class SectionStatus implements java.io.Serializable {
 
   public Integer getYear() {
     return this.year;
+  }
+
+  @Override
+  public boolean isActive() {
+    return true;
   }
 
   public void setCycle(String cycle) {
