@@ -83,11 +83,7 @@ public class GraphByProgramAction extends BaseAction {
     HashMap<String, Object> dataArea = new HashMap<>();
     HashMap<String, Object> dataAreaDetail = new HashMap<>();
     dataAreaDetail.put("id", "A" + area.getId());
-    if (area.getName().length() > 16) {
-      dataAreaDetail.put("label", area.getName().substring(0, 15) + "...");
-    } else {
-      dataAreaDetail.put("label", area.getName());
-    }
+    dataAreaDetail.put("label", area.getAcronym());
     dataAreaDetail.put("title", "Research Area");
     dataAreaDetail.put("description", area.getName());
     dataAreaDetail.put("color", area.getColor());
@@ -100,11 +96,7 @@ public class GraphByProgramAction extends BaseAction {
     HashMap<String, Object> dataProgramDetail = new HashMap<>();
     dataProgramDetail.put("id", "P" + program.getId());
     dataProgramDetail.put("parent", "A" + program.getResearchArea().getId());
-    if (program.getName().length() > 16) {
-      dataProgramDetail.put("label", program.getName().substring(0, 15) + "...");
-    } else {
-      dataProgramDetail.put("label", program.getName());
-    }
+    dataProgramDetail.put("label", program.getAcronym());
     dataProgramDetail.put("title", "Research Program");
     dataProgramDetail.put("description", program.getName());
     dataProgramDetail.put("color", program.getColor());
