@@ -644,7 +644,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           move.OC = move.P;
         }
         if(nodes[i + 1] && nodes[i + 1].data.type == "I") {
-
+          move.I=currentX;
         } else {
           move.I = move.I + (nodeWidth + nodeMargin);
         }
@@ -655,7 +655,6 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         // PROGRAM IMPACT-----------------
       } else if(nodes[i].data.type == "I") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
-
           currentX = move.I + (nodeWidth + nodeMargin + 20);
           move.I = currentX;
           move.OC = currentX;
@@ -668,7 +667,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           move.I = currentX;
         } else {
           if(currentX > move.I) {
-            currentX = move.I + (nodeWidth + nodeMargin + 20);
+            currentX = currentX + (nodeWidth + nodeMargin + 20);
             move.I = currentX;
           } else {
             move.I = move.I + (nodeWidth + nodeMargin + 20);
@@ -715,6 +714,13 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           currentX = move.OC;
         } else {
           currentX = move.I;
+        }
+        if(nodes[i + 1] && nodes[i + 1].data.type == "P" || nodes[i + 1].data.type == "I") {
+          if(move.OC > move.I) {
+            currentX = move.OC;
+          } else {
+            currentX = move.I;
+          }
         }
 
         // console.log(move.KO);
