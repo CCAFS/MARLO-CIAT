@@ -337,16 +337,14 @@ public class OutputsListAction extends BaseAction {
 
               }
             }
-
           }
+        }
 
-          if (selectedResearchOutcome != null) {
-            if (selectedResearchOutcome.getResearchOutputs() != null) {
-              outputs = selectedResearchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
-                .collect(Collectors.toList());
-            }
+        if (selectedResearchOutcome != null) {
+          if (selectedResearchOutcome.getResearchOutputs() != null) {
+            outputs = selectedResearchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
+              .collect(Collectors.toList());
           }
-
         }
 
 
