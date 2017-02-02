@@ -31,11 +31,11 @@
         [#include "/WEB-INF/views/impactPathway/menu-impactPathway.ftl" /]
       </div>
       <div class="col-md-9">
+        [#-- Impact pathway sub menu --]
+        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway-output.ftl" /]
         
-        [#-- Impact pathway sub menu --]
-        [#include "/WEB-INF/views/impactPathway/submenu-impactPathway-output.ftl" /]
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         

@@ -24,12 +24,18 @@
         [#include "/WEB-INF/views/impactPathway/menu-impactPathway.ftl" /]
       </div>
       <div class="col-md-9">
-        [#-- Section Messages --]
-        [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
         [#-- Impact pathway sub menu --]
         [#include "/WEB-INF/views/impactPathway/submenu-impactPathway.ftl" /]
+        [#-- Section Messages --]
+        [#include "/WEB-INF/views/impactPathway/messages-impactPathway.ftl" /]
         
         [@s.form action=actionName enctype="multipart/form-data" ]
+        
+          [#-- Title --]
+          <div class="col-md-12">
+            <h3 class="subTitle headTitle outcomeListTitle">Program Impacts</h3>
+            <hr />
+          </div><div class="clearfix"></div>
           
           <div class="elements-list" listname="researchImpacts">
           [#if impacts?has_content]
