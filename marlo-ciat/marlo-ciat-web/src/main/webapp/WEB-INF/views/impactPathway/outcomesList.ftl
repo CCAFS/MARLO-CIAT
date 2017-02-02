@@ -12,6 +12,8 @@
   {"label":"outcomesList", "nameSpace":"", "action":""}
 ]/]
 [#assign leadersName = "leaders"/]
+[#assign editable = false /]
+
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
