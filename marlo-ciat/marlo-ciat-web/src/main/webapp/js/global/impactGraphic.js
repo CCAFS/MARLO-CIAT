@@ -734,7 +734,7 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T") {
           currentX = move.OC + (nodeWidth + nodeMargin + 20);
           move.OP = 330;
-        } else if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
+        } else if(nodes[i + 1] && nodes[i + 1].data.type == "P" || nodes[i + 1].data.type == "I") {
           move.OP = 330;
           if(move.OC > move.I) {
             currentX = move.OC;

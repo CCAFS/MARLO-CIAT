@@ -1406,7 +1406,7 @@ a#userLogOut {
 }
 
 #mainMenu .menuContent.positionFixedTop ul li ul.subMenu {
-  top:43px !important;
+  top: 34px !important;
 }
 
 
@@ -1454,7 +1454,7 @@ a#userLogOut {
    margin: 0 2px;
    font-weight: normal;
    font-size: 0.86em;
-   border-top: 1px solid #267898;
+   border-top: 1px solid #1d8953;
 }
 
 #mainMenu .menuContent ul li ul.subMenu li a{
@@ -1465,7 +1465,7 @@ a#userLogOut {
  z-index: 10;
  display:block;
  width: 200px;
- background: #23718F;
+ background: #2b915e;
  position: absolute;
  top: 57px;
  left: 0;
