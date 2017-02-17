@@ -35,7 +35,7 @@
           [#-- Project Outputs --]
           <td class=""> 
             [#if project.projectOutputs?has_content]
-              [#list projectOutputs as output]
+              [#list project.projectOutputs as output]
               <span>O${(output.id)!''}</span>
               [/#list]
             [#else]
