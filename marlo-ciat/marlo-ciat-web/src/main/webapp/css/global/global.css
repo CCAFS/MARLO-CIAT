@@ -6032,7 +6032,7 @@ span.programTag {
 	margin-top: 135px;
 }
 .footer:before {
-	background: url("./../../images/global/tract.png"),url("./../../images/global/tract.png"),url("./../../images/global/tract.png");
+	/* background: url("./../../images/global/tract.png"),url("./../../images/global/tract.png"),url("./../../images/global/tract.png"); */
 	display: block;
 	content: "";
 	position: relative;
