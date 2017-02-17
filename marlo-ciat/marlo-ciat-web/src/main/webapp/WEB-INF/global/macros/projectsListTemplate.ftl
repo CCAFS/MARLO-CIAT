@@ -34,9 +34,9 @@
           </td>
           [#-- Project Outputs --]
           <td class=""> 
-            [#if project.name?has_content]
+            [#if project.projectOutputs?has_content]
               [#list projectOutputs as output]
-              <span>O${(projectOutputs.id)!''}</span>
+              <span>O${(output.id)!''}</span>
               [/#list]
             [#else]
               [@s.text name="projectsList.projectTitles.none" /]

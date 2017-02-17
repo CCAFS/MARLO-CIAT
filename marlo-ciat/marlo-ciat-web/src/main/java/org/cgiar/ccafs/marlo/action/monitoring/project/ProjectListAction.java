@@ -18,6 +18,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
@@ -225,6 +226,8 @@ public class ProjectListAction extends BaseAction {
       }
 
       projects = new ArrayList<>(selectedProgram.getProjects());
+
+      List<ProjectOutput> list = new ArrayList<>(projects.get(0).getProjectOutputs());
 
       System.out.println(projects.size());
 
