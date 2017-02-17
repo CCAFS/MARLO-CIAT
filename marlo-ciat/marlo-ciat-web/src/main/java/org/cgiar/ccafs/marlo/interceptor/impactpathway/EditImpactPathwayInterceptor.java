@@ -51,7 +51,6 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
   private IProgramService programService;
   private IResearchAreaService areaServcie;
 
-  private BaseAction baseAction;
   private Map<String, Object> parameters;
   private Map<String, Object> session;
   private ResearchCenter researchCenter;
@@ -114,7 +113,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
   @Override
   public String intercept(ActionInvocation invocation) throws Exception {
 
-    baseAction = (BaseAction) invocation.getAction();
+
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
     researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
@@ -134,6 +133,7 @@ public class EditImpactPathwayInterceptor extends AbstractInterceptor implements
     boolean canEdit = false;
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
+    BaseAction baseAction = (BaseAction) invocation.getAction();
 
     ResearchProgram researchProgram = programService.getProgramById(programID);
 

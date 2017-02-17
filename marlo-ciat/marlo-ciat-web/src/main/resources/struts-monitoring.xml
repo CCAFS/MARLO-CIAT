@@ -5,6 +5,12 @@
 	<package name="monitoring" namespace="/monitoring"
 		extends="marlo-default">
 		
+		<action name="{center}/projectList"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
+      <interceptor-ref name="homeStack" />
+      <result name="input">/WEB-INF/views/monitoring/project/projectList.ftl
+      </result>
+    </action>
 
 	</package>
 </struts>

@@ -68,6 +68,9 @@
 		<mapping resource="xmls/ResearchOutputsNextUsers.hbm.xml" />
 		<mapping resource="xmls/ResearchCycles.hbm.xml" />
 		<mapping resource="xmls/Submissions.hbm.xml" />
+		<mapping resource="xmls/ProjectOutputs.hbm.xml" />
+		<mapping resource="xmls/Projects.hbm.xml" />
+		<mapping resource="xmls/ProjectStatus.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

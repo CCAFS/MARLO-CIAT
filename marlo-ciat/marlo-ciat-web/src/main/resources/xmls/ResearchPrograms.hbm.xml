@@ -20,8 +20,8 @@
 			<column name="color" length="8" />
 		</property>
 		<property name="impactColor" type="string">
-      <column name="impact_color" length="8" />
-    </property>
+			<column name="impact_color" length="8" />
+		</property>
 		<property name="acronym" type="string">
 			<column name="acronym" length="50" not-null="true" />
 		</property>
@@ -52,6 +52,13 @@
 				<column name="program_id" />
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
+		</set>
+		<set name="projects" table="projects" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="program_id" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Project" />
 		</set>
 		<set name="sectionStatuses" table="section_statuses" inverse="true"
 			lazy="true" fetch="select">

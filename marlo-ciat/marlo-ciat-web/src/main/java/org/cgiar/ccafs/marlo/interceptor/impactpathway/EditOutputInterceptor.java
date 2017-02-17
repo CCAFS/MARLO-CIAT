@@ -42,7 +42,6 @@ public class EditOutputInterceptor extends AbstractInterceptor implements Serial
   private IResearchOutputService outputService;
   private IProgramService programService;
 
-  private BaseAction baseAction;
   private Map<String, Object> parameters;
   private Map<String, Object> session;
   private ResearchCenter researchCenter;
@@ -59,7 +58,7 @@ public class EditOutputInterceptor extends AbstractInterceptor implements Serial
 
   @Override
   public String intercept(ActionInvocation invocation) throws Exception {
-    baseAction = (BaseAction) invocation.getAction();
+
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
     researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
@@ -83,7 +82,7 @@ public class EditOutputInterceptor extends AbstractInterceptor implements Serial
     boolean canEdit = false;
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
-
+    BaseAction baseAction = (BaseAction) invocation.getAction();
     ResearchOutput output = outputService.getResearchOutputById(outputID);
 
     if (output != null) {

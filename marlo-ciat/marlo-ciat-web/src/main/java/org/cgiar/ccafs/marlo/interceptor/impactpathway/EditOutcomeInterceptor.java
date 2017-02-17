@@ -43,8 +43,6 @@ public class EditOutcomeInterceptor extends AbstractInterceptor implements Seria
   private IResearchOutcomeService outcomeService;
 
   private IProgramService programService;
-
-  private BaseAction baseAction;
   private Map<String, Object> parameters;
 
   private Map<String, Object> session;
@@ -66,8 +64,6 @@ public class EditOutcomeInterceptor extends AbstractInterceptor implements Seria
 
   @Override
   public String intercept(ActionInvocation invocation) throws Exception {
-
-    baseAction = (BaseAction) invocation.getAction();
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
     researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
@@ -91,7 +87,7 @@ public class EditOutcomeInterceptor extends AbstractInterceptor implements Seria
     boolean canEdit = false;
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
-
+    BaseAction baseAction = (BaseAction) invocation.getAction();
     ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     if (outcome != null) {
