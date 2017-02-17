@@ -26,8 +26,10 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private User modifiedBy;
 
+
   @Expose
   private User contactPerson;
+
 
   @Expose
   private User projectLeader;
@@ -54,7 +56,7 @@ public class Project implements java.io.Serializable, IAuditLog {
   private boolean active;
 
   @Expose
-  private Date activeSice;
+  private Date activeSince;
 
   @Expose
   private String modificationJustification;
@@ -67,14 +69,12 @@ public class Project implements java.io.Serializable, IAuditLog {
   public Project() {
   }
 
-
   public Project(boolean active) {
     this.active = active;
   }
 
-
   public Project(User modifiedBy, User contactPerson, User projectLeader, User createdBy, ProjectStatus projectStatus,
-    String name, String shortName, Date startDate, Date endDate, boolean active, Date activeSice,
+    String name, String shortName, Date startDate, Date endDate, boolean active, Date activeSince,
     String modificationJustification, Set<ProjectOutput> projectOutputs) {
     this.modifiedBy = modifiedBy;
     this.contactPerson = contactPerson;
@@ -86,14 +86,14 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.startDate = startDate;
     this.endDate = endDate;
     this.active = active;
-    this.activeSice = activeSice;
+    this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
     this.projectOutputs = projectOutputs;
   }
 
 
-  public Date getActiveSice() {
-    return activeSice;
+  public Date getActiveSince() {
+    return activeSince;
   }
 
 
@@ -161,6 +161,7 @@ public class Project implements java.io.Serializable, IAuditLog {
     return researchProgram;
   }
 
+
   public String getShortName() {
     return shortName;
   }
@@ -178,9 +179,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.active = active;
   }
 
-  public void setActiveSice(Date activeSice) {
-    this.activeSice = activeSice;
+  public void setActiveSince(Date activeSince) {
+    this.activeSince = activeSince;
   }
+
 
   public void setContactPerson(User contactPerson) {
     this.contactPerson = contactPerson;

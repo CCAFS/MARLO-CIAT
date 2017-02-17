@@ -18,6 +18,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
@@ -33,6 +34,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +62,7 @@ public class ProjectListAction extends BaseAction {
   private List<Project> projects;
   private long programID;
   private long areaID;
+  private long ProjectID;
 
   @Inject
   public ProjectListAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -73,6 +76,30 @@ public class ProjectListAction extends BaseAction {
   }
 
 
+  @Override
+  public String add() {
+
+    Project project = new Project();
+    project.setActive(true);
+    project.setActiveSince(new Date());
+    project.setCreatedBy(this.getCurrentUser());
+    project.setModifiedBy(this.getCurrentUser());
+    project.setStartDate(new Date());
+    project.setResearchProgram(selectedProgram);
+    project.setProjectStatus(new ProjectStatus(new Long(2), true));
+
+    ProjectID = projectService.saveProject(project);
+
+    if (ProjectID > 0) {
+      return SUCCESS;
+    } else {
+      return INPUT;
+    }
+
+
+  }
+
+
   public long getAreaID() {
     return areaID;
   }
@@ -81,7 +108,6 @@ public class ProjectListAction extends BaseAction {
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
   }
-
 
   public long getProgramID() {
     return programID;
@@ -99,10 +125,10 @@ public class ProjectListAction extends BaseAction {
     return researchPrograms;
   }
 
+
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
-
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;

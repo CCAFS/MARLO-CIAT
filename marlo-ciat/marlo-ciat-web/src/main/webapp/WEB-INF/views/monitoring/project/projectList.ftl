@@ -20,7 +20,7 @@
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
     <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />
-    <p class="col-md-10"> [@s.text name="projectsList.help"][@s.param]${currentCycle}[/@s.param][/@s.text] </p>
+    <p class="col-md-10"> [@s.text name="projectsList.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
 </div>
@@ -28,7 +28,7 @@
 <section class="container">
   <article class="row" id="mainInformation">
     <div class="col-md-12">
-    
+      [#include "/WEB-INF/views/monitoring/project/submenu-project.ftl" /]
       [#-- Projects List (My Projects) --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Projects</h3>
       <div class="loadingBlock"></div>
@@ -38,8 +38,8 @@
       <div class="buttons">
         <div class="buttons-content">
         
-          <a class="addButton" href="[@s.url action='${crpSession}/addNewCoreProject'/]">[@s.text name="projectsList.addResearchProject" /]</a>
-          <a class="addButton" href="[@s.url action='${crpSession}/addNewAdminProject'/]">[@s.text name="projectsList.addManagementProject" /]</a>
+          <a class="addButton" href="[@s.url action='${centerSession}/addNewCoreProject'/]">[@s.text name="projectsList.addResearchProject" /]</a>
+          <a class="addButton" href="[@s.url action='${centerSession}/addNewAdminProject'/]">[@s.text name="projectsList.addManagementProject" /]</a>
           <div class="clearfix"></div>
         </div>
       </div>
