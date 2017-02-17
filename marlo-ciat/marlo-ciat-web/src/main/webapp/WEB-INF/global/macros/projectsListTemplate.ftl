@@ -34,7 +34,13 @@
           </td>
           [#-- Project Outputs --]
           <td class=""> 
-            [#if project.name?has_content]${(project.name)!"No existe"}[#else][@s.text name="projectsList.projectTitles.none" /][/#if]
+            [#if project.name?has_content]
+              [#list projectOutputs as output]
+              <span>O${(projectOutputs.id)!''}</span>
+              [/#list]
+            [#else]
+              [@s.text name="projectsList.projectTitles.none" /]
+            [/#if]
           </td>
           [#-- Contact person--]
           <td>
