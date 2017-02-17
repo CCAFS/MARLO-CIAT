@@ -19,7 +19,7 @@
 
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
-    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />
+    [#--  <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />--]
     <p class="col-md-10"> [@s.text name="projectsList.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
@@ -38,8 +38,7 @@
       <div class="buttons">
         <div class="buttons-content">
         
-          <a class="addButton" href="[@s.url action='${centerSession}/addNewCoreProject'/]">[@s.text name="projectsList.addResearchProject" /]</a>
-          <a class="addButton" href="[@s.url action='${centerSession}/addNewAdminProject'/]">[@s.text name="projectsList.addManagementProject" /]</a>
+          <a class="addButton" href="[@s.url action=''/]">[@s.text name="Add project" /]</a>
           <div class="clearfix"></div>
         </div>
       </div>
