@@ -24,4 +24,6 @@ $(document).ready(function() {
           }
       ]
   });
+
+  $('.loadingBlock').hide().next().fadeIn(500);
 });
