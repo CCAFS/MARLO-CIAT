@@ -226,6 +226,8 @@ public class ProjectListAction extends BaseAction {
 
       projects = new ArrayList<>(selectedProgram.getProjects());
 
+      System.out.println(projects.size());
+
 
     }
 
