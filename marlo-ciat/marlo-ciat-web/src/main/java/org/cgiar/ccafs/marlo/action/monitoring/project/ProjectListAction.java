@@ -47,23 +47,27 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ProjectListAction extends BaseAction {
 
+
   private static final long serialVersionUID = -5994329141897042670L;
 
+
   private ICenterService centerService;
+
   private IProgramService programService;
+
   private ProjectService projectService;
   private IUserService userService;
   private IResearchAreaService researchAreaService;
-
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
+
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
   private List<Project> projects;
   private long programID;
   private long areaID;
-  private long ProjectID;
+  private long projectID;
 
   @Inject
   public ProjectListAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -75,7 +79,6 @@ public class ProjectListAction extends BaseAction {
     this.userService = userService;
     this.researchAreaService = researchAreaService;
   }
-
 
   @Override
   public String add() {
@@ -89,9 +92,9 @@ public class ProjectListAction extends BaseAction {
     project.setResearchProgram(selectedProgram);
     project.setProjectStatus(new ProjectStatus(new Long(2), true));
 
-    ProjectID = projectService.saveProject(project);
+    projectID = projectService.saveProject(project);
 
-    if (ProjectID > 0) {
+    if (projectID > 0) {
       return SUCCESS;
     } else {
       return INPUT;
@@ -99,7 +102,6 @@ public class ProjectListAction extends BaseAction {
 
 
   }
-
 
   public long getAreaID() {
     return areaID;
@@ -110,8 +112,14 @@ public class ProjectListAction extends BaseAction {
     return loggedCenter;
   }
 
+
   public long getProgramID() {
     return programID;
+  }
+
+
+  public long getProjectID() {
+    return projectID;
   }
 
   public List<Project> getProjects() {
@@ -126,10 +134,10 @@ public class ProjectListAction extends BaseAction {
     return researchPrograms;
   }
 
-
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
+
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
@@ -246,6 +254,10 @@ public class ProjectListAction extends BaseAction {
 
   public void setProgramID(long programID) {
     this.programID = programID;
+  }
+
+  public void setProjectID(long projectID) {
+    this.projectID = projectID;
   }
 
   public void setProjects(List<Project> projects) {
