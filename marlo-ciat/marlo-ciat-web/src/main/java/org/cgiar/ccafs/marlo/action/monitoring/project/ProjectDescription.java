@@ -17,6 +17,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
@@ -78,7 +79,7 @@ public class ProjectDescription extends BaseAction {
 
 
   private long projectID;
-
+  private Project project;
 
   @Inject
   public ProjectDescription(APConfig config, ICenterService centerService, IProgramService programService,
@@ -91,10 +92,10 @@ public class ProjectDescription extends BaseAction {
     this.researchAreaService = researchAreaService;
   }
 
-
   public long getAreaID() {
     return areaID;
   }
+
 
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
@@ -105,10 +106,15 @@ public class ProjectDescription extends BaseAction {
     return programID;
   }
 
+  public Project getProject() {
+    return project;
+  }
+
 
   public long getProjectID() {
     return projectID;
   }
+
 
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
@@ -134,8 +140,16 @@ public class ProjectDescription extends BaseAction {
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
     } catch (Exception e) {
+      projectID = -1;
+    }
+
+    project = projectService.getProjectById(projectID);
+
+    if (project != null) {
+
 
     }
+
 
   }
 
@@ -149,6 +163,10 @@ public class ProjectDescription extends BaseAction {
 
   public void setProgramID(long programID) {
     this.programID = programID;
+  }
+
+  public void setProject(Project project) {
+    this.project = project;
   }
 
   public void setProjectID(long projectID) {
