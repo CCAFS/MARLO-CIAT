@@ -18,7 +18,6 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
@@ -51,23 +50,23 @@ public class ProjectListAction extends BaseAction {
   private static final long serialVersionUID = -5994329141897042670L;
 
 
+  private long areaID;
+
   private ICenterService centerService;
 
+  private ResearchCenter loggedCenter;
+  private long programID;
   private IProgramService programService;
+  private long projectID;
+  private List<Project> projects;
 
   private ProjectService projectService;
-  private IUserService userService;
-  private IResearchAreaService researchAreaService;
-  private ResearchArea selectedResearchArea;
-  private ResearchProgram selectedProgram;
-
-  private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
+  private IResearchAreaService researchAreaService;
   private List<ResearchProgram> researchPrograms;
-  private List<Project> projects;
-  private long programID;
-  private long areaID;
-  private long projectID;
+  private ResearchProgram selectedProgram;
+  private ResearchArea selectedResearchArea;
+  private IUserService userService;
 
   @Inject
   public ProjectListAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -234,11 +233,6 @@ public class ProjectListAction extends BaseAction {
       }
 
       projects = new ArrayList<>(selectedProgram.getProjects());
-
-      List<ProjectOutput> list = new ArrayList<>(projects.get(0).getProjectOutputs());
-
-      System.out.println(projects.size());
-
 
     }
 
