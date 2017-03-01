@@ -32,7 +32,7 @@
       [#-- Projects List (My Projects) --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Projects</h3>
       <div class="loadingBlock"></div>
-      <div style="display:none">[@projectList.projectsList projects=projects canValidate=true canEdit=true namespace="/projects" defaultAction="${(centerSession)!}/projectDescription" /]</div>
+      <div style="display:none">[@projectList.projectsList projects=projects canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/projectDescription" /]</div>
   
       [#-- Section Buttons --]
       <div class="buttons">

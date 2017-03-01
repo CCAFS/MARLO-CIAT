@@ -8,7 +8,7 @@
 
 [#assign breadCrumb = [
   {"label":"projectsList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/projectList"},
-  {"label":"projectDescription", "nameSpace":"/projects", "action":""}
+  {"label":"projectDescription", "nameSpace":"/monitoring", "action":""}
 ] /]
 
 
@@ -27,12 +27,12 @@
     <div class="row">
       [#-- Project Menu --]
       <div class="col-md-3">
-        [#include "/WEB-INF/views/projects/menu-projects.ftl" /]
+        [#include "/WEB-INF/views/monitoring/project/menu-projects.ftl" /]
       </div>
       [#-- Project Section Content --]
       <div class="col-md-9">
         [#-- Section Messages --]
-        [#include "/WEB-INF/views/projects/messages-projects.ftl" /]
+        [#--  --include "/WEB-INF/views/projects/messages-projects.ftl" / --]
       
         [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
           
@@ -70,8 +70,10 @@
             
             [#-- Funding source --]
             <div class="form-group">
-              <h4>Funding Source(s)</h4>
-              <div class="borderBox">
+              <div class="col-md-12">
+                <label>Funding Source(s)</label>
+                <div class="borderBox">
+              </div>
               </div>
             </div>
             
@@ -98,7 +100,7 @@
           </div> 
            
           [#-- Section Buttons & hidden inputs--]
-          [#include "/WEB-INF/views/projects/buttons-projects.ftl" /]
+          [#--  --include "/WEB-INF/views/projects/buttons-projects.ftl" / --]
              
          
           [/@s.form] 
