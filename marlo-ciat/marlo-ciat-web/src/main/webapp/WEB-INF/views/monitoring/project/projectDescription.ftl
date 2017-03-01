@@ -62,23 +62,23 @@
                 [@customForm.input name="project.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
-            <div class="form-group row">  
+            <div class="form-group row">
               [#-- Project contact --]
-              <div class="col-md-12">
+              <div class="col-md-12 form-group">
                 [@customForm.input name="project.contactPerons" i18nkey="Project contact(Project leader)" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
-            
+            <div class="clearfix"></div>
             [#-- Funding source --]
-            <div class="form-group">
-              <div class="col-md-12">
+            <div class="form-group col-md-12">
+              <div class="">
                 <label>Funding Source(s)</label>
                 <div class="borderBox">
-              </div>
+                </div>
               </div>
             </div>
-            
+            <div class="clearfix"></div>
               [#-- Select the cross-cutting dimension(s) to this project? --]
-              <div class="form-group">
+              <div class="form-group col-md-12">
                 <label for="">[@customForm.text name="project.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
                 <div class="row">
                   <div class="col-md-12">
