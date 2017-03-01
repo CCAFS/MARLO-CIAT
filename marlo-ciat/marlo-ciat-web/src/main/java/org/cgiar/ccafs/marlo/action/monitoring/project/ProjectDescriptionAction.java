@@ -28,7 +28,9 @@ import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -36,53 +38,31 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
  */
-public class ProjectDescription extends BaseAction {
+public class ProjectDescriptionAction extends BaseAction {
 
 
   private static final long serialVersionUID = 3034101967516313023L;
 
 
   private ICenterService centerService;
-
-
   private IProgramService programService;
-
-
   private ProjectService projectService;
-
-
   private IUserService userService;
-
-
   private IResearchAreaService researchAreaService;
 
-
   private ResearchArea selectedResearchArea;
-
-
   private ResearchProgram selectedProgram;
-
-
   private ResearchCenter loggedCenter;
-
-
   private List<ResearchArea> researchAreas;
-
-
   private List<ResearchProgram> researchPrograms;
 
-
   private long programID;
-
-
   private long areaID;
-
-
   private long projectID;
   private Project project;
 
   @Inject
-  public ProjectDescription(APConfig config, ICenterService centerService, IProgramService programService,
+  public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProgramService programService,
     ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService) {
     super(config);
     this.centerService = centerService;
@@ -137,6 +117,9 @@ public class ProjectDescription extends BaseAction {
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
+    researchAreas = new ArrayList<>(
+      loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
+
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
     } catch (Exception e) {
@@ -146,6 +129,19 @@ public class ProjectDescription extends BaseAction {
     project = projectService.getProjectById(projectID);
 
     if (project != null) {
+
+      selectedProgram = project.getResearchProgram();
+      programID = selectedProgram.getId();
+      selectedResearchArea = selectedProgram.getResearchArea();
+      areaID = selectedResearchArea.getId();
+      researchPrograms = new ArrayList<>(
+        selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
+
+      project.setOutputs(
+        new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList())));
+
+      project.setFundingSources(new ArrayList<>(
+        project.getProjectFundingSources().stream().filter(fs -> fs.isActive()).collect(Collectors.toList())));
 
 
     }

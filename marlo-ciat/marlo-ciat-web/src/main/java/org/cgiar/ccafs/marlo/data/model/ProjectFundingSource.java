@@ -16,7 +16,7 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
   private static final long serialVersionUID = 738010291598228873L;
 
   @Expose
-  private Integer id;
+  private Long id;
 
   @Expose
   private User modifiedBy;
@@ -89,7 +89,7 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
 
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -139,7 +139,7 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     this.fundingSourceType = fundingSourceType;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

@@ -60,10 +60,10 @@ public class Clones {
   public static void generateDao(String nome) {
     File target = new File(pathdao + "\\I" + nome + "DAO.java");
     try {
-      copy(new File(pathdao + "\\IUserRoleDAO.java"), target);
+      copy(new File(pathdao + "\\IProjectDAO.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("UserRole", nome);
-      content = content.replaceAll("userRole", miniscula(nome));
+      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
     } catch (IOException e) {
@@ -76,10 +76,10 @@ public class Clones {
   public static void generateManager(String nome) {
     File target = new File(pathmanager + "\\I" + nome + "Service.java");
     try {
-      copy(new File(pathmanager + "\\IUserRoleService.java"), target);
+      copy(new File(pathmanager + "\\IProjectService.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("UserRole", nome);
-      content = content.replaceAll("userRole", miniscula(nome));
+      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
     } catch (IOException e) {
@@ -93,10 +93,10 @@ public class Clones {
   public static void generateManagerImpl(String nome) {
     File target = new File(pathmanagerimpl + "\\" + nome + "Service.java");
     try {
-      copy(new File(pathmanagerimpl + "\\UserRoleService.java"), target);
+      copy(new File(pathmanagerimpl + "\\ProjectService.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("UserRole", nome);
-      content = content.replaceAll("userRole", miniscula(nome));
+      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
     } catch (IOException e) {
@@ -109,10 +109,10 @@ public class Clones {
   public static void generateMysqlDao(String nome) {
     File target = new File(pathmysqldao + "\\" + nome + "DAO.java");
     try {
-      copy(new File(pathmysqldao + "\\UserRoleDAO.java"), target);
+      copy(new File(pathmysqldao + "\\ProjectDAO.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("UserRole", nome);
-      content = content.replaceAll("userRole", miniscula(nome));
+      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
     } catch (IOException e) {
@@ -136,7 +136,7 @@ public class Clones {
      */
 
 
-    String[] model = {"Project", "ProjectOutput", "ProjectStatus"};
+    String[] model = {"FundingSourceType", "ProjectFundingSource"};
 
     for (int i = 0; i < model.length; i++) {
       generateDao(model[i]);

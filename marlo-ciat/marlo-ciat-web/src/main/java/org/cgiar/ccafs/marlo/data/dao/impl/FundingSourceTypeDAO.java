@@ -16,33 +16,33 @@
 
 package org.cgiar.ccafs.marlo.data.dao.impl;
 
-import org.cgiar.ccafs.marlo.data.dao.IProjectStatusDAO;
-import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
+import org.cgiar.ccafs.marlo.data.dao.IFundingSourceTypeDAO;
+import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 
 import java.util.List;
 
 import com.google.inject.Inject;
 
-public class ProjectStatusDAO implements IProjectStatusDAO {
+public class FundingSourceTypeDAO implements IFundingSourceTypeDAO {
 
   private StandardDAO dao;
 
   @Inject
-  public ProjectStatusDAO(StandardDAO dao) {
+  public FundingSourceTypeDAO(StandardDAO dao) {
     this.dao = dao;
   }
 
   @Override
-  public boolean deleteProjectStatus(long projectStatusId) {
-    ProjectStatus projectStatus = this.find(projectStatusId);
-    projectStatus.setActive(false);
-    return this.save(projectStatus) > 0;
+  public boolean deleteFundingSourceType(long fundingSourceTypeId) {
+    FundingSourceType fundingSourceType = this.find(fundingSourceTypeId);
+    fundingSourceType.setActive(false);
+    return this.save(fundingSourceType) > 0;
   }
 
   @Override
-  public boolean existProjectStatus(long projectStatusID) {
-    ProjectStatus projectStatus = this.find(projectStatusID);
-    if (projectStatus == null) {
+  public boolean existFundingSourceType(long fundingSourceTypeID) {
+    FundingSourceType fundingSourceType = this.find(fundingSourceTypeID);
+    if (fundingSourceType == null) {
       return false;
     }
     return true;
@@ -50,15 +50,15 @@ public class ProjectStatusDAO implements IProjectStatusDAO {
   }
 
   @Override
-  public ProjectStatus find(long id) {
-    return dao.find(ProjectStatus.class, id);
+  public FundingSourceType find(long id) {
+    return dao.find(FundingSourceType.class, id);
 
   }
 
   @Override
-  public List<ProjectStatus> findAll() {
-    String query = "from " + ProjectStatus.class.getName();
-    List<ProjectStatus> list = dao.findAll(query);
+  public List<FundingSourceType> findAll() {
+    String query = "from " + FundingSourceType.class.getName();
+    List<FundingSourceType> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;
     }
@@ -67,19 +67,19 @@ public class ProjectStatusDAO implements IProjectStatusDAO {
   }
 
   @Override
-  public List<ProjectStatus> getProjectStatussByUserId(long userId) {
-    String query = "from " + ProjectStatus.class.getName() + " where user_id=" + userId;
+  public List<FundingSourceType> getFundingSourceTypesByUserId(long userId) {
+    String query = "from " + FundingSourceType.class.getName() + " where user_id=" + userId;
     return dao.findAll(query);
   }
 
   @Override
-  public long save(ProjectStatus projectStatus) {
-    if (projectStatus.getId() == null) {
-      dao.save(projectStatus);
+  public long save(FundingSourceType fundingSourceType) {
+    if (fundingSourceType.getId() == null) {
+      dao.save(fundingSourceType);
     } else {
-      dao.update(projectStatus);
+      dao.update(fundingSourceType);
     }
-    return projectStatus.getId();
+    return fundingSourceType.getId();
   }
 
 

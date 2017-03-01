@@ -6,6 +6,7 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -34,20 +35,26 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private User projectLeader;
 
+
   @Expose
   private User createdBy;
+
 
   @Expose
   private ProjectStatus projectStatus;
 
+
   @Expose
   private String name;
+
 
   @Expose
   private String shortName;
 
+
   @Expose
   private Date startDate;
+
 
   @Expose
   private Date endDate;
@@ -65,6 +72,12 @@ public class Project implements java.io.Serializable, IAuditLog {
   private ResearchProgram researchProgram;
 
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
+
+  private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
+
+  private List<ProjectOutput> outputs;
+
+  private List<ProjectFundingSource> fundingSources;
 
   public Project() {
   }
@@ -91,26 +104,25 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.projectOutputs = projectOutputs;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
-
 
   public User getContactPerson() {
     return contactPerson;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
-
 
   public Date getEndDate() {
     return endDate;
   }
 
+  public List<ProjectFundingSource> getFundingSources() {
+    return fundingSources;
+  }
 
   @Override
   public Long getId() {
@@ -142,6 +154,16 @@ public class Project implements java.io.Serializable, IAuditLog {
   }
 
 
+  public List<ProjectOutput> getOutputs() {
+    return outputs;
+  }
+
+
+  public Set<ProjectFundingSource> getProjectFundingSources() {
+    return projectFundingSources;
+  }
+
+
   public User getProjectLeader() {
     return projectLeader;
   }
@@ -166,14 +188,17 @@ public class Project implements java.io.Serializable, IAuditLog {
     return shortName;
   }
 
+
   public Date getStartDate() {
     return startDate;
   }
+
 
   @Override
   public boolean isActive() {
     return active;
   }
+
 
   public void setActive(boolean active) {
     this.active = active;
@@ -182,7 +207,6 @@ public class Project implements java.io.Serializable, IAuditLog {
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setContactPerson(User contactPerson) {
     this.contactPerson = contactPerson;
@@ -194,6 +218,11 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
+  }
+
+
+  public void setFundingSources(List<ProjectFundingSource> fundingSources) {
+    this.fundingSources = fundingSources;
   }
 
   public void setId(Long id) {
@@ -210,6 +239,14 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public void setOutputs(List<ProjectOutput> outputs) {
+    this.outputs = outputs;
+  }
+
+  public void setProjectFundingSources(Set<ProjectFundingSource> projectFundingSources) {
+    this.projectFundingSources = projectFundingSources;
   }
 
   public void setProjectLeader(User projectLeader) {
