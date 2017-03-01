@@ -17,11 +17,16 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
@@ -45,17 +50,23 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private ICenterService centerService;
+
+
   private IProgramService programService;
+
+
   private ProjectService projectService;
   private IUserService userService;
   private IResearchAreaService researchAreaService;
-
+  private IFundingSourceTypeService fundingSourceService;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
+
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
-
+  private List<FundingSourceType> fundingSourceTypes;
+  private List<ResearchOutput> outputs;
   private long programID;
   private long areaID;
   private long projectID;
@@ -63,33 +74,62 @@ public class ProjectDescriptionAction extends BaseAction {
 
   @Inject
   public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProgramService programService,
-    ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService) {
+    ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
+    IFundingSourceTypeService fundingSourceService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.projectService = projectService;
     this.userService = userService;
     this.researchAreaService = researchAreaService;
+    this.fundingSourceService = fundingSourceService;
   }
 
   public long getAreaID() {
     return areaID;
   }
 
+  public List<FundingSourceType> getFundingSourceTypes() {
+    return fundingSourceTypes;
+  }
 
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
   }
 
+  public List<ResearchOutput> getOutputs() {
+    return outputs;
+  }
 
   public long getProgramID() {
     return programID;
   }
 
+
+  public void getProgramOutputs() {
+
+    outputs = new ArrayList<>();
+
+    List<ResearchTopic> researchTopics = new ArrayList<>(
+      selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+
+    for (ResearchTopic researchTopic : researchTopics) {
+      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+        researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+      for (ResearchOutcome researchOutcome : researchOutcomes) {
+        List<ResearchOutput> researchOutputs = new ArrayList<>(
+          researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+        for (ResearchOutput researchOutput : researchOutputs) {
+          outputs.add(researchOutput);
+        }
+      }
+    }
+  }
+
+
   public Project getProject() {
     return project;
   }
-
 
   public long getProjectID() {
     return projectID;
@@ -99,6 +139,7 @@ public class ProjectDescriptionAction extends BaseAction {
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
+
 
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
@@ -143,6 +184,10 @@ public class ProjectDescriptionAction extends BaseAction {
       project.setFundingSources(new ArrayList<>(
         project.getProjectFundingSources().stream().filter(fs -> fs.isActive()).collect(Collectors.toList())));
 
+      fundingSourceTypes = new ArrayList<>(
+        fundingSourceService.findAll().stream().filter(fst -> fst.isActive()).collect(Collectors.toList()));
+
+      this.getProgramOutputs();
 
     }
 
@@ -153,8 +198,16 @@ public class ProjectDescriptionAction extends BaseAction {
     this.areaID = areaID;
   }
 
+  public void setFundingSourceTypes(List<FundingSourceType> fundingSourceTypes) {
+    this.fundingSourceTypes = fundingSourceTypes;
+  }
+
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
+  }
+
+  public void setOutputs(List<ResearchOutput> outputs) {
+    this.outputs = outputs;
   }
 
   public void setProgramID(long programID) {

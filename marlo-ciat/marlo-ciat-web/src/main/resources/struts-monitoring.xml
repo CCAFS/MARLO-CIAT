@@ -14,8 +14,8 @@
     
     <action name="{center}/projectDescription"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectDescriptionAction">
-      <interceptor-ref name="impactPathwayStack" />
-      <result name="input">/WEB-INF/views/impactPathway/programImpacts.ftl
+      <interceptor-ref name="homeStack" />
+      <result name="input">/WEB-INF/views/monitoring/project/projectDescription.ftl
       </result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/projectDescription</param>
