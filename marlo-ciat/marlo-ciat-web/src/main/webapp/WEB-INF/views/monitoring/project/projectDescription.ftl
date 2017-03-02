@@ -5,6 +5,7 @@
 [#assign customJS = ["", "",""] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
+[#assign editable = true /]
 
 [#assign breadCrumb = [
   {"label":"projectsList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/projectList"},
@@ -79,7 +80,7 @@
             <div class="clearfix"></div>
               [#-- Select the cross-cutting dimension(s) to this project? --]
               <div class="form-group col-md-12">
-                <label for="">[@customForm.text name="project.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
+                <label for="">[@customForm.text name="projectDescription.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
                 <div class="row">
                   <div class="col-md-12">
                     [#if editable]

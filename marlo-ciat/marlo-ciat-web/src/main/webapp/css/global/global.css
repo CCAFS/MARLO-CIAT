@@ -1714,22 +1714,14 @@ a.currentReportingSection li, a.currentSection li {
 }
 
 #secondaryMenu ul p.menuTitle{
-  
-list-style: none;
-  
-margin: 0;
-  
-padding: 2px 0;
-  
-font-weight: lighter;
-  
-color: #ffffff;
-  
-background: #0b7ba6;
-  
-text-align: center;
-  
-border-radius: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+  font-weight: lighter;
+  color: #ffffff;
+  background: #1a8c56;
+  text-align: center;
+  border-radius: 2px;
 }
 
 #secondaryMenu ul p.subText {
@@ -1851,7 +1843,7 @@ border-radius: 2px;
 
 
 #secondaryMenu > p{
-  color: #1da5ce;
+  color: #058247;
   text-align: center;
   font-size: 1.3em;
   line-height: 0.9em;
