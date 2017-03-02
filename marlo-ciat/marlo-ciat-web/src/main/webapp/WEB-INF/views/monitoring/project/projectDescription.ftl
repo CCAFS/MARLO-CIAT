@@ -41,7 +41,7 @@
           <div id="projectDescription" class="borderBox">
             [#-- Project Title --]
             <div class="form-group">
-              [@customForm.textArea name="project.title" i18nkey="Title" required=true className="project-title" editable=editable && action.hasPermission("title") /]
+              [@customForm.textArea name="project.name" i18nkey="Title" required=true className="project-title" editable=editable && action.hasPermission("title") /]
             </div>
             <div class="form-group row">  
             [#-- Short name --]
@@ -50,7 +50,7 @@
               </div> 
               [#-- End Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.pi" i18nkey="PI" type="text" disabled=!editable required=true editable=editable /]
+                [@customForm.input name="project.pl" i18nkey="Pl" type="text" disabled=!editable required=true editable=editable /]
               </div>
             </div>
             <div class="form-group row">  
