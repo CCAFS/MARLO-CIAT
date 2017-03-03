@@ -16,8 +16,24 @@ function init() {
   $(".addFundingSource").on("click", addFundingSource);
   $(".removeFundingSource").on("click", removeFundingSource);
   
-  $(".addOutput").on("click", addOutput);
+  $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
+  
+  $('.blockTitle').on('click', function() {
+    if($(this).hasClass('closed')) {
+      $(this).parent().find('.blockTitle').removeClass('opened').addClass('closed');
+      $(this).removeClass('closed').addClass('opened');
+    } else {
+      $(this).removeClass('opened').addClass('closed');
+    }
+    $(this).next().slideToggle('slow', function() {
+      $(this).find('textarea').autoGrow();
+      $(this).find(".errorTag").hide();
+      console.log($(this).find(".errorTag"));
+      $(this).find(".errorTag").css("left", $(this).find(".deliverableWrapper").outerWidth());
+      $(this).find(".errorTag").fadeIn(2000);
+    });
+  });
 }
 
 /** FUNCTIONS Funding Sources * */
@@ -70,43 +86,70 @@ function checkItems(block) {
 
 //Add a new funding source element
 function addOutput() {
-var $list = $(".outputList");
-var $item = $("#output-template").clone(true).removeAttr("id");
-$list.append($item);
-$item.show('slow');
-checkItems($list);
-updateFundingSource();
+  var $select=$(this);
+  var option=$select.find("option:selected");
+  if(option.val()!="-1"){
+    $.ajax({
+      url: baseURL + "/outputInfo.do",
+      type: 'GET',
+      data: {
+        outputID: option.val()
+      },
+      success: function(m) {
+        console.log(m);
+        var $list = $(".outputList");
+        var $item = $("#output-template").clone(true).removeAttr("id");
+        $item.find("span.index").text("O"+m.outputInfo.id);
+        $item.find("div.oStatement").text(option.text());
+        $item.find("div.rTopic").text(m.outputInfo.topicName);
+        $item.find("div.outcome").text(m.outputInfo.otucomeName);
+        $item.find(".outputId").val(m.outputInfo.id);
+        $list.append($item);
+        $item.show('slow');
+        updateOutputs();
+        checkOutputItems($list);
+        $select.find(option).remove();
+        $select.val("-1").trigger("change");
+      },
+      error: function(e) {
+        console.log(e);
+      }
+    });
+  }
+
 
 }
 
 //Remove Funding source element
 function removeOutput() {
-var $list = $(this).parents('.outputList');
-var $item = $(this).parents('.output');
-$item.hide(1000, function() {
- $item.remove();
- checkOutputItems($list);
- updateOutputs();
-});
+  var $list = $(this).parents('.outputList');
+  var $item = $(this).parents('.outputs');
+  var $select=$(".outputSelect");
+  $select.addOption($item.find("input.outputId").val(),$item.find("div.oStatement").text());
+  $item.hide(1000, function() {
+   $item.remove();
+   checkOutputItems($list);
+   updateOutputs();
+  });
 
 }
 
 function updateOutputs() {
-$(".outputList").find('.output').each(function(i,e) {
+$(".outputList").find('.outputs').each(function(i,e) {
  // Set indexes
  $(e).setNameIndexes(1, i);
 });
 }
 
 function checkOutputItems(block) {
-console.log(block);
-var items = $(block).find('.output').length;
+var items = $(block).find('.outputs').length;
 if(items == 0) {
- $(block).parent().find('p.outputInf').fadeIn();
+ $(block).find('p.outputInf').fadeIn();
 } else {
- $(block).parent().find('p.outputInf').fadeOut();
+ $(block).find('p.outputInf').fadeOut();
 }
 }
+
 
 /**
  * Attach to the date fields the datepicker plugin

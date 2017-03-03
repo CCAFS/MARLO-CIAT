@@ -41,45 +41,45 @@
           <div id="projectDescription" class="borderBox">
             [#-- Project Title --]
             <div class="form-group">
-              [@customForm.textArea name="project.name" i18nkey="Title" required=true className="project-title" editable=editable && action.hasPermission("title") /]
+              [@customForm.textArea name="project.name" i18nkey="projectDescription.name" required=true className="project-title" editable=editable && action.hasPermission("title") /]
             </div>
             <div class="form-group row">  
             [#-- Short name --]
               <div class="col-md-6">
-                [@customForm.input name="project.shortName" i18nkey="CIAT short name" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               [#-- End Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.pl" i18nkey="Pl" type="text" disabled=!editable required=true editable=editable /]
+                [@customForm.input name="project.pl" i18nkey="projectDescription.pl" type="text" disabled=!editable required=true editable=editable /]
               </div>
             </div>
             <div class="form-group row">  
               [#-- Start Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.startDate" i18nkey="Start date" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="project.startDate" i18nkey="projectDescription.startDate" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               [#-- End Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
+                [@customForm.input name="project.endDate" i18nkey="projectDescription.endDate" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
             <div class="form-group row">
               [#-- Project contact --]
               <div class="col-md-12 form-group">
-                [@customForm.input name="project.contactPerons" i18nkey="Project contact(Project leader)" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="project.contactPerons" i18nkey="projectDescription.contactPerson" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
             <div class="clearfix"></div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
               <div class="">
-                <label>Funding Source(s)</label>
+                <label>[@s.text name="projectDescription.fundingSource" /]</label>
                 <div class="borderBox fundingSourceList" listname="project.fundingSources">
-                  [#if project?has_content]
+                  [#if project.fundingSources?has_content]
                     [#list project.fundingSources as fundingSource]
-                        [@fundingSourceMacro element=fundingSource name="project.fundingSources"  index=fundingSource_index /]
+                      [@fundingSourceMacro element=fundingSource name="project.fundingSources"  index=fundingSource_index /]
                     [/#list]
                   [/#if]
-                  <p class="text-center inf" style="display:${(project?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
+                  <p class="text-center inf" style="display:${(project.fundingSources?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
                 </div>
                 <div class="text-right">
                   <div class="button-green addFundingSource"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a funding source" /]</div>
@@ -93,14 +93,18 @@
                 <div class="row">
                   <div class="col-md-12">
                     [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingGender"   id="gender"   value="true" > Gender</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingYouth"    id="youth"    value="true" > Youth</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingCapacity" id="capacity" value="true" > Capacity Development</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingNa"       id="na"       value="true" > N/A</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.climateChange"   id="climate"   value="true" > Climate Change</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.genderYouth"    id="youth"    value="true" > Gender and Youth</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" > Policies and Institutions</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" > Capacity Development</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" > Big Data</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" > N/A</label>
                     [#else]
-                       <p class="checked"> Gender</p>
-                       <p class="checked"> Youth</p>
+                      <p class="checked"> Climate Change</p>
+                      <p class="checked"> Gender and Youth</p>
+                      <p class="checked"> Policies and Institutions</p>
                       <p class="checked"> Capacity Development</p>
+                      <p class="checked"> Big Data</p>
                       <p class="checked"> N/A</p>
                     [/#if]
                   </div>
@@ -110,20 +114,26 @@
           </div> 
            
           [#-- Section Buttons & hidden inputs--]
-          <label>Project output(s)</label>
-          <div class="row borderBox outputList">
-            [#if project?has_content]
-              [#list project.outputs as output]
-                  [@outputsMacro element=output name="project.outputs"  index=output_index /]
-              [/#list]
-            [/#if]
-            <p class="text-center outputInf" style="display:${(project?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
-          </div>
-          <div class="row">
-            <div class="col-md-5">
-              [@customForm.select name="" label=""  i18nkey="Select to add an output" listName="outputs" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
-            </div>
-          </div>
+          <div class="fullPartBlock">      
+            <div class="output panel tertiary">
+              <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
+              <div class="panel-body"> 
+                <ul id="outputsBlock" class="list outputList">
+                [#if  project.outputs?has_content]  
+                  [#list project.outputss as output] 
+                     [@crpContribution element=crp name="project.crpContributions" index=crp_index /]
+                  [/#list] 
+                [#else]
+                  <p class="text-center outputInf"> [@s.text name="projectDescription.notOutputs" /] </p>  
+                [/#if]  
+                </ul>
+                [#if editable]
+                  [@customForm.select name="" label="" disabled=!canEdit i18nkey="" listName="outputs" keyFieldName="id"  displayFieldName="title" className="outputSelect" value="" /]
+                [/#if] 
+              </div>
+            </div> 
+          </div>          
+          
       </div>
       [#-- Section Buttons & hidden inputs--]
           [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
@@ -156,32 +166,39 @@
 
 [#macro outputMacro element name index=-1 isTemplate=false]  
   [#assign outputCustomName = "${name}[${index}]" /]
-  <div id="output-${isTemplate?string('template',(element.id)!)}" class="outputs  borderBox row"  style="display:${isTemplate?string('none','block')}">
+  <li id="output-${isTemplate?string('template',(element.id)!)}" class="outputs  borderBox expandableBlock row "  style="display:${isTemplate?string('none','block')}">
+  <input type="hidden" class="outputId" name="${outputCustomName}.researchOutput.id" value=""/>
     [#if editable] [#--&& (isTemplate) --]
       <div class="removeLink">
         <div id="removeOutput" class="removeOutput removeElement removeLink" title="[@s.text name='projectDecription.removeOutput' /]"></div>
       </div>
     [/#if]
     <div class="leftHead">
-        <span class="index">Output - O${(element.id)!}</span>
+        <span class="index">O${(element.id)!}</span>
       </div>
     [#-- output Title --]
-    <div class="blockTitle closed">
-      [#if element.title?has_content]
-      ${(element.title)!'New output'}
-      [#else]
-      Output
-      [/#if]
+    <div class="blockTitle closed form-group" style="margin-top:30px;">
+      <label for="">Output statement</label>
+      <div class="oStatement">
+        [#if element.title?has_content]
+        ${(element.title)!'New output'}
+        [#else]
+        Output
+        [/#if]
+      </div>
         
       <div class="clearfix"></div>
     </div>
     
-    <div class="blockContent" style="display:none">
-      <label for="">Research topic:</label>
-      <div>${(element.researchOutput.researchOutcome.researchTopic.name)!}</div>
-      <br />
-      <label for="">Outcome:</label>
-      <div>${(element.researchOutput.rsearchOutcome.name)!}</div>
+    <div class="blockContent " style="display:none">
+      <div class="form-group">
+        <label for="">Research topic:</label>
+        <div class="rTopic">${(element.researchOutput.researchOutcome.researchTopic.name)!}</div>
+      </div>
+      <div class="form-group">
+        <label for="">Outcome:</label>
+        <div class="outcome">${(element.researchOutput.rsearchOutcome.name)!}</div>
+      </div>
     </div>
-  </div>
+  </li>
 [/#macro]
