@@ -103,6 +103,11 @@ public class SectionStatusService implements ISectionStatusService {
   }
 
   @Override
+  public SectionStatus getSectionStatusByProject(long programId, long projectId, String sectionName, int year) {
+    return sectionStatusDAO.getSectionStatusByProject(programId, projectId, sectionName, year);
+  }
+
+  @Override
   public List<SectionStatus> getSectionStatussByUserId(Long userId) {
     return sectionStatusDAO.getSectionStatussByUserId(userId);
   }

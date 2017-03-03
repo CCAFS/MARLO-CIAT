@@ -67,8 +67,10 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private Date activeSince;
 
+
   @Expose
   private String modificationJustification;
+
 
   @Expose
   private ResearchProgram researchProgram;
@@ -76,7 +78,10 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private ProjectCrosscutingTheme projectCrosscutingTheme;
 
+  private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
+
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
+
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
 
   private List<ProjectOutput> outputs;
@@ -143,12 +148,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     return modificationJustification;
   }
 
-
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
-
 
   public String getName() {
     return name;
@@ -190,6 +193,11 @@ public class Project implements java.io.Serializable, IAuditLog {
   }
 
 
+  public Set<SectionStatus> getSectionStatuses() {
+    return sectionStatuses;
+  }
+
+
   public String getShortName() {
     return shortName;
   }
@@ -215,6 +223,7 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
+
   public void setContactPerson(User contactPerson) {
     this.contactPerson = contactPerson;
   }
@@ -231,10 +240,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.fundingSources = fundingSources;
   }
 
-
   public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
@@ -272,9 +281,13 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.projectStatus = projectStatus;
   }
 
-
   public void setResearchProgram(ResearchProgram researchProgram) {
     this.researchProgram = researchProgram;
+  }
+
+
+  public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
+    this.sectionStatuses = sectionStatuses;
   }
 
   public void setShortName(String shortName) {
