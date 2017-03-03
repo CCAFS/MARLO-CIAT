@@ -93,14 +93,18 @@
                 <div class="row">
                   <div class="col-md-12">
                     [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingGender"   id="gender"   value="true" > Gender</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingYouth"    id="youth"    value="true" > Youth</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingCapacity" id="capacity" value="true" > Capacity Development</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.crossCuttingNa"       id="na"       value="true" > N/A</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.climateChange"   id="climate"   value="true" > Climate Change</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.genderYouth"    id="youth"    value="true" > Gender and Youth</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" > Policies and Institutions</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" > Capacity Development</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" > Big Data</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" > N/A</label>
                     [#else]
-                       <p class="checked"> Gender</p>
-                       <p class="checked"> Youth</p>
+                      <p class="checked"> Climate Change</p>
+                      <p class="checked"> Gender and Youth</p>
+                      <p class="checked"> Policies and Institutions</p>
                       <p class="checked"> Capacity Development</p>
+                      <p class="checked"> Big Data</p>
                       <p class="checked"> N/A</p>
                     [/#if]
                   </div>
