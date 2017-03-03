@@ -110,16 +110,31 @@
           </div> 
            
           [#-- Section Buttons & hidden inputs--]
-          [#--  --include "/WEB-INF/views/projects/buttons-projects.ftl" / --]
-             
-         
-          [/@s.form] 
+          <label>Project output(s)</label>
+          <div class="row borderBox outputList">
+            [#if project?has_content]
+              [#list project.outputs as output]
+                  [@outputsMacro element=output name="project.outputs"  index=output_index /]
+              [/#list]
+            [/#if]
+            <p class="text-center outputInf" style="display:${(project?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              [@customForm.select name="" label=""  i18nkey="Select to add an output" listName="outputs" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
+            </div>
+          </div>
       </div>
+      [#-- Section Buttons & hidden inputs--]
+          [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
+             
+          [/@s.form] 
     </div>  
 </section>
 
 
 [@fundingSourceMacro element={} name="project.fundingSources"  index=-1 isTemplate=true /]
+[@outputMacro element={} name="project.outputs"  index=-1 isTemplate=true /]
   
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
@@ -136,5 +151,37 @@
       [@customForm.input name="${fundingSourceCustomName}.donor" i18nkey="Donor" type="text" disabled=!editable  required=false editable=editable /]
     </div>
     <div class="clearfix"></div>
+  </div>
+[/#macro]
+
+[#macro outputMacro element name index=-1 isTemplate=false]  
+  [#assign outputCustomName = "${name}[${index}]" /]
+  <div id="output-${isTemplate?string('template',(element.id)!)}" class="outputs  borderBox row"  style="display:${isTemplate?string('none','block')}">
+    [#if editable] [#--&& (isTemplate) --]
+      <div class="removeLink">
+        <div id="removeOutput" class="removeOutput removeElement removeLink" title="[@s.text name='projectDecription.removeOutput' /]"></div>
+      </div>
+    [/#if]
+    <div class="leftHead">
+        <span class="index">Output - O${(element.id)!}</span>
+      </div>
+    [#-- output Title --]
+    <div class="blockTitle closed">
+      [#if element.title?has_content]
+      ${(element.title)!'New output'}
+      [#else]
+      Output
+      [/#if]
+        
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="blockContent" style="display:none">
+      <label for="">Research topic:</label>
+      <div>${(element.researchOutput.researchOutcome.researchTopic.name)!}</div>
+      <br />
+      <label for="">Outcome:</label>
+      <div>${(element.researchOutput.rsearchOutcome.name)!}</div>
+    </div>
   </div>
 [/#macro]
