@@ -162,7 +162,7 @@ public class ProjectDescriptionAction extends BaseAction {
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
 
     try {
-      projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_AREA_ID)));
+      projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
     } catch (Exception e) {
       projectID = -1;
     }
