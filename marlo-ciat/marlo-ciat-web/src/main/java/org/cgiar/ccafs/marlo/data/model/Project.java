@@ -59,8 +59,10 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private Date endDate;
 
+
   @Expose
   private boolean active;
+
 
   @Expose
   private Date activeSince;
@@ -71,12 +73,13 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private ResearchProgram researchProgram;
 
-  private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
+  @Expose
+  private ProjectCrosscutingTheme projectCrosscutingTheme;
 
+  private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
 
   private List<ProjectOutput> outputs;
-
   private List<ProjectFundingSource> fundingSources;
 
   public Project() {
@@ -129,14 +132,12 @@ public class Project implements java.io.Serializable, IAuditLog {
     return id;
   }
 
-
   @Override
   public String getLogDeatil() {
     StringBuilder sb = new StringBuilder();
     sb.append("Id : ").append(this.getId());
     return sb.toString();
   }
-
 
   public String getModificationJustification() {
     return modificationJustification;
@@ -156,6 +157,11 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public List<ProjectOutput> getOutputs() {
     return outputs;
+  }
+
+
+  public ProjectCrosscutingTheme getProjectCrosscutingTheme() {
+    return projectCrosscutingTheme;
   }
 
 
@@ -204,6 +210,7 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
@@ -220,10 +227,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.endDate = endDate;
   }
 
-
   public void setFundingSources(List<ProjectFundingSource> fundingSources) {
     this.fundingSources = fundingSources;
   }
+
 
   public void setId(Long id) {
     this.id = id;
@@ -243,6 +250,10 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public void setOutputs(List<ProjectOutput> outputs) {
     this.outputs = outputs;
+  }
+
+  public void setProjectCrosscutingTheme(ProjectCrosscutingTheme projectCrosscutingTheme) {
+    this.projectCrosscutingTheme = projectCrosscutingTheme;
   }
 
   public void setProjectFundingSources(Set<ProjectFundingSource> projectFundingSources) {

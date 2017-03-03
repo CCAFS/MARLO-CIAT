@@ -47,6 +47,7 @@
         <property name="modificationJustification" type="string">
             <column name="modification_justification" length="65535" />
         </property>
+        <one-to-one name="projectCrosscutingTheme" class="org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme"></one-to-one>
         <set name="projectOutputs" table="project_outputs" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="project_id" />

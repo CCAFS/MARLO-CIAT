@@ -29,6 +29,27 @@
         <param name="cancel">true</param>
       </result>
     </action>
+    
+    <action name="{center}/addNewProject" method="add"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
+      <interceptor-ref name="homeStack" />
+      <result name="input">/WEB-INF/views/monitoring/project/projectList.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/projectDescription</param>
+        <param name="projectID">${projectID}</param>
+        <param name="edit">true</param>
+      </result>     
+    </action>
+    
+    <action name="{center}/deleteProject" method="delete"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
+      <interceptor-ref name="homeStack" />
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/projectList</param>
+        <param name="programID">${programID}</param>
+      </result>
+    </action>
 
 	</package>
 </struts>
