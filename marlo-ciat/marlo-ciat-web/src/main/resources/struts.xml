@@ -18,61 +18,79 @@
 		</result-types>
 
 		<interceptors>
-		
+
 			<interceptor name="requireUser"
 				class="org.cgiar.ccafs.marlo.interceptor.RequireUserInterceptor" />
-				<!-- custom interceptor to preserve action messages across redirects -->
-      <interceptor name="keepRedirectMessages"
-        class="org.cgiar.ccafs.marlo.interceptor.RedirectMessageInterceptor" />
+			<!-- custom interceptor to preserve action messages across redirects -->
+			<interceptor name="keepRedirectMessages"
+				class="org.cgiar.ccafs.marlo.interceptor.RedirectMessageInterceptor" />
 			<interceptor name="i18nFile"
 				class="org.cgiar.ccafs.marlo.interceptor.InternationalitazionFileInterceptor" />
-      <!-- validating if the url is valid in the open session -->
-      <interceptor name="validSession"
-        class="org.cgiar.ccafs.marlo.interceptor.ValidSessionInterceptor" />
-      <!-- validating if the user have edit privileges to impact pathway -->
-      <interceptor name="editImpactPathway"
-        class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditImpactPathwayInterceptor" />
-        <!-- validating if the user have edit privileges to impact pathway - outcomes -->
-      <interceptor name="editOutcome"
-        class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditOutcomeInterceptor" />
-        <!-- validating if the user have edit privileges to impact pathway - outputs -->
-      <interceptor name="editOutput"
-        class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditOutputInterceptor" />
-        
-        
+			<!-- validating if the url is valid in the open session -->
+			<interceptor name="validSession"
+				class="org.cgiar.ccafs.marlo.interceptor.ValidSessionInterceptor" />
+			<!-- validating if the user have edit privileges to impact pathway -->
+			<interceptor name="editImpactPathway"
+				class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditImpactPathwayInterceptor" />
+			<!-- validating if the user have edit privileges to impact pathway - outcomes -->
+			<interceptor name="editOutcome"
+				class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditOutcomeInterceptor" />
+			<!-- validating if the user have edit privileges to impact pathway - outputs -->
+			<interceptor name="editOutput"
+				class="org.cgiar.ccafs.marlo.interceptor.impactpathway.EditOutputInterceptor" />
+			<!-- validating if the user have edit privileges to impact pathway -->
+			<interceptor name="editProject"
+				class="org.cgiar.ccafs.marlo.interceptor.monitoring.project.EditProjectInterceptor" />
+
+
 			<!-- stack from home packgae -->
 			<interceptor-stack name="homeStack">
 				<interceptor-ref name="i18nFile" />
 				<interceptor-ref name="requireUser" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
-			
-			 <interceptor-stack name="impactPathwayStack">
-        <interceptor-ref name="i18nFile" />
-        <interceptor-ref name="requireUser" />
-        <interceptor-ref name="editImpactPathway" />
-        <interceptor-ref name="keepRedirectMessages" />
-        <interceptor-ref name="defaultStack" />
-      </interceptor-stack>
-      
-      <interceptor-stack name="outcomeStack">
-        <interceptor-ref name="i18nFile" />
-        <interceptor-ref name="requireUser" />
-        <interceptor-ref name="editOutcome" />
-        <interceptor-ref name="keepRedirectMessages" />
-        <interceptor-ref name="defaultStack" />
-      </interceptor-stack>
-      
-      <interceptor-stack name="outputStack">
-        <interceptor-ref name="i18nFile" />
-        <interceptor-ref name="requireUser" />
-        <interceptor-ref name="editOutput" />
-        <interceptor-ref name="keepRedirectMessages" />
-        <interceptor-ref name="defaultStack" />
-      </interceptor-stack>
-      
+
+			<interceptor-stack name="sectionStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="impactPathwayStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="editImpactPathway" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="projectStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="editProject" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="outcomeStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="editOutcome" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="outputStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="editOutput" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
 		</interceptors>
-		
+
 		<default-action-ref name="login" />
 		<global-results>
 			<result name="savedStatus">
@@ -110,9 +128,9 @@
 	</package>
 
 	<include file="struts-home.xml" />
-	<include file="struts-impactPathway.xml"/>
-	<include file="struts-monitoring.xml"/>
-	<include file="struts-json.xml"/>
-	<include file="struts-summaries.xml"/>
+	<include file="struts-impactPathway.xml" />
+	<include file="struts-monitoring.xml" />
+	<include file="struts-json.xml" />
+	<include file="struts-summaries.xml" />
 
 </struts>

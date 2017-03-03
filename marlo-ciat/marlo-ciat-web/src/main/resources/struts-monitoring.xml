@@ -7,14 +7,14 @@
 		
 		<action name="{center}/projectList"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
-      <interceptor-ref name="homeStack" />
+      <interceptor-ref name="sectionStack" />
       <result name="input">/WEB-INF/views/monitoring/project/projectList.ftl
       </result>
     </action>
     
     <action name="{center}/projectDescription"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectDescriptionAction">
-      <interceptor-ref name="homeStack" />
+      <interceptor-ref name="projectStack" />
       <result name="input">/WEB-INF/views/monitoring/project/projectDescription.ftl
       </result>
       <result name="success" type="redirectAction">
@@ -32,7 +32,7 @@
     
     <action name="{center}/addNewProject" method="add"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
-      <interceptor-ref name="homeStack" />
+      <interceptor-ref name="sectionStack" />
       <result name="input">/WEB-INF/views/monitoring/project/projectList.ftl
       </result>
       <result name="success" type="redirectAction">
@@ -44,7 +44,7 @@
     
     <action name="{center}/deleteProject" method="delete"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
-      <interceptor-ref name="homeStack" />
+      <interceptor-ref name="sectionStack" />
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/projectList</param>
         <param name="programID">${programID}</param>
