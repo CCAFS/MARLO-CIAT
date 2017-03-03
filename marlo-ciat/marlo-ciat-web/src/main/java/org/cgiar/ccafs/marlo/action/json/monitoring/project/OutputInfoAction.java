@@ -32,9 +32,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OutputInfoAction extends BaseAction {
 
+
   private static final long serialVersionUID = 6056401366531194841L;
 
+
   private IResearchOutputService outputService;
+
 
   private long outputID;
 
@@ -61,11 +64,19 @@ public class OutputInfoAction extends BaseAction {
     return SUCCESS;
   }
 
+  public Map<String, Object> getOutputInfo() {
+    return outputInfo;
+  }
 
   @Override
   public void prepare() throws Exception {
     Map<String, Object> parameters = this.getParameters();
     outputID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.OUTPUT_ID))[0]));
+  }
+
+
+  public void setOutputInfo(Map<String, Object> outputInfo) {
+    this.outputInfo = outputInfo;
   }
 
 }
