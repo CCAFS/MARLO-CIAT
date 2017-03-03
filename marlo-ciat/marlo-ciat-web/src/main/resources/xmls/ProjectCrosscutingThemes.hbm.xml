@@ -32,6 +32,9 @@
         <property name="bigData" type="java.lang.Boolean">
             <column name="big_data" />
         </property>
+        <property name="na" type="java.lang.Boolean">
+            <column name="n_a" />
+        </property>
         <property name="active" type="boolean">
             <column name="is_active" not-null="true" />
         </property>

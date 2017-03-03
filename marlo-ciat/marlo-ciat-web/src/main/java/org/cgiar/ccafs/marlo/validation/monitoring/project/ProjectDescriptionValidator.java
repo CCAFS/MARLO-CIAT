@@ -15,12 +15,50 @@
 
 package org.cgiar.ccafs.marlo.validation.monitoring.project;
 
+import org.cgiar.ccafs.marlo.action.BaseAction;
+import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
+
+import java.util.HashMap;
 
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
  */
 public class ProjectDescriptionValidator extends BaseValidator {
+
+  public void validate(BaseAction baseAction, Project project, ResearchProgram selectedProgram, boolean saving) {
+
+    baseAction.setInvalidFields(new HashMap<>());
+
+    // TODO Autosave Draft validator.
+
+    if (!baseAction.getFieldErrors().isEmpty()) {
+      baseAction.addActionError(baseAction.getText("saving.fields.required"));
+    }
+
+    this.validateProjectDescription(baseAction, project);
+
+    this.saveMissingFields(selectedProgram, project, "projectDescription");
+
+  }
+
+  public void validateProjectDescription(BaseAction baseAction, Project project) {
+
+    if (project.getFundingSources() == null || project.getFundingSources().isEmpty()) {
+      this.addMessage(baseAction.getText("outcome.action.milestones"));
+      baseAction.getInvalidFields().put("list-outcome.milestones",
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Milestones"}));
+    } else {
+      for (int i = 0; i < project.getFundingSources().size(); i++) {
+        // TODO
+        // this.validateMilestones(baseAction, outcome.getMilestones().get(i), i);
+      }
+
+    }
+
+  }
 
 
 }

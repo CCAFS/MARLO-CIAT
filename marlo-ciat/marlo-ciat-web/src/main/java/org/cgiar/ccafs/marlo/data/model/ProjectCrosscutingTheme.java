@@ -43,6 +43,9 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
   private Boolean bigData;
 
   @Expose
+  private Boolean na;
+
+  @Expose
   private boolean active;
 
   @Expose
