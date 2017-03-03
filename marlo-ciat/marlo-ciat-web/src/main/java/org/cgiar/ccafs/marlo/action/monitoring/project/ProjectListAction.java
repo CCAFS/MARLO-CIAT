@@ -18,6 +18,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
@@ -27,6 +28,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -54,29 +57,35 @@ public class ProjectListAction extends BaseAction {
 
   private ICenterService centerService;
 
+
+  private IProjectCrosscutingThemeService projectCrosscutingService;
+
   private ResearchCenter loggedCenter;
   private long programID;
   private IProgramService programService;
   private long projectID;
   private List<Project> projects;
-
   private ProjectService projectService;
   private List<ResearchArea> researchAreas;
+
   private IResearchAreaService researchAreaService;
   private List<ResearchProgram> researchPrograms;
   private ResearchProgram selectedProgram;
   private ResearchArea selectedResearchArea;
   private IUserService userService;
+  private String justification;
 
   @Inject
   public ProjectListAction(APConfig config, ICenterService centerService, IProgramService programService,
-    ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService) {
+    ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
+    IProjectCrosscutingThemeService projectCrosscutingService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
     this.projectService = projectService;
     this.userService = userService;
     this.researchAreaService = researchAreaService;
+    this.projectCrosscutingService = projectCrosscutingService;
   }
 
   @Override
@@ -93,7 +102,29 @@ public class ProjectListAction extends BaseAction {
 
     projectID = projectService.saveProject(project);
 
+
     if (projectID > 0) {
+
+      project = projectService.getProjectById(projectID);
+
+      ProjectCrosscutingTheme projectCrosscutingTheme = new ProjectCrosscutingTheme();
+
+      projectCrosscutingTheme.setId(projectID);
+      projectCrosscutingTheme.setProject(project);
+      projectCrosscutingTheme.setActive(true);
+      projectCrosscutingTheme.setActiveSince(new Date());
+      projectCrosscutingTheme.setCreatedBy(this.getCurrentUser());
+      projectCrosscutingTheme.setModifiedBy(this.getCurrentUser());
+      projectCrosscutingTheme.setModificationJustification("");
+
+      projectCrosscutingTheme.setClimateChange(false);
+      projectCrosscutingTheme.setGenderYouth(false);
+      projectCrosscutingTheme.setPoliciesInstitutions(false);
+      projectCrosscutingTheme.setCapacityDevelopment(false);
+      projectCrosscutingTheme.setBigData(false);
+
+      projectCrosscutingService.saveProjectCrosscutingTheme(projectCrosscutingTheme);
+
       return SUCCESS;
     } else {
       return INPUT;
@@ -102,10 +133,36 @@ public class ProjectListAction extends BaseAction {
 
   }
 
+  @Override
+  public String delete() {
+    Map<String, Object> parameters = this.getParameters();
+    projectID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.PROJECT_ID))[0]));
+
+    Project project = projectService.getProjectById(projectID);
+
+    if (project != null) {
+      programID = project.getResearchProgram().getId();
+      project
+        .setModificationJustification(this.getJustification() == null ? "Project deleted" : this.getJustification());
+      project.setModifiedBy(this.getCurrentUser());
+
+      projectService.saveProject(project);
+
+      projectService.deleteProject(project.getId());
+
+      this.addActionMessage("message:" + this.getText("deleting.success"));
+    }
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
   }
 
+  public String getJustification() {
+    return justification;
+  }
 
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
@@ -120,6 +177,7 @@ public class ProjectListAction extends BaseAction {
   public long getProjectID() {
     return projectID;
   }
+
 
   public List<Project> getProjects() {
     return projects;
@@ -137,10 +195,10 @@ public class ProjectListAction extends BaseAction {
     return selectedProgram;
   }
 
-
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -240,6 +298,11 @@ public class ProjectListAction extends BaseAction {
 
   public void setAreaID(long areaID) {
     this.areaID = areaID;
+  }
+
+  @Override
+  public void setJustification(String justification) {
+    this.justification = justification;
   }
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
