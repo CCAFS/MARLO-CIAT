@@ -38,7 +38,7 @@
       <div class="buttons">
         <div class="buttons-content">
         
-          <a class="addButton" href="[@s.url action=''/]">[@s.text name="Add project" /]</a>
+          <a class="addButton" href="[@s.url action='${(centerSession)!}/addNewProject'/]">[@s.text name="Add project" /]</a>
           <div class="clearfix"></div>
         </div>
       </div>
