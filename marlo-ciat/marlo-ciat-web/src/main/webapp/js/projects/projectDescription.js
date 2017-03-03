@@ -86,31 +86,36 @@ function checkItems(block) {
 
 //Add a new funding source element
 function addOutput() {
-  var option=$(this).find("option:selected");
-  $.ajax({
-    url: baseURL + "/outputInfo.do",
-    type: 'GET',
-    data: {
-      outputID: option.val()
-    },
-    success: function(m) {
-      console.log(m);
-    var $list = $(".outputList");
-    var $item = $("#output-template").clone(true).removeAttr("id");
-    $item.find("span.index").text("O"+m.outputInfo.id);
-    $item.find("div.oStatement").text(option.text());
-    $item.find("div.rTopic").text(m.outputInfo.topicName);
-    $item.find("div.outcome").text(m.outputInfo.otucomeName);
-    $item.find(".outputId").val(m.outputInfo.id);
-    $list.append($item);
-    $item.show('slow');
-    updateOutputs();
-    checkOutputItems($list);
-    },
-    error: function(e) {
-      console.log(e);
-    }
-});
+  var $select=$(this);
+  var option=$select.find("option:selected");
+  if(option.val()!="-1"){
+    $.ajax({
+      url: baseURL + "/outputInfo.do",
+      type: 'GET',
+      data: {
+        outputID: option.val()
+      },
+      success: function(m) {
+        console.log(m);
+        var $list = $(".outputList");
+        var $item = $("#output-template").clone(true).removeAttr("id");
+        $item.find("span.index").text("O"+m.outputInfo.id);
+        $item.find("div.oStatement").text(option.text());
+        $item.find("div.rTopic").text(m.outputInfo.topicName);
+        $item.find("div.outcome").text(m.outputInfo.otucomeName);
+        $item.find(".outputId").val(m.outputInfo.id);
+        $list.append($item);
+        $item.show('slow');
+        updateOutputs();
+        checkOutputItems($list);
+        $select.find(option).remove();
+        $select.val("-1").trigger("change");
+      },
+      error: function(e) {
+        console.log(e);
+      }
+    });
+  }
 
 
 }
@@ -119,6 +124,8 @@ function addOutput() {
 function removeOutput() {
   var $list = $(this).parents('.outputList');
   var $item = $(this).parents('.outputs');
+  var $select=$(".outputSelect");
+  $select.addOption($item.find("input.outputId").val(),$item.find("div.oStatement").text());
   $item.hide(1000, function() {
    $item.remove();
    checkOutputItems($list);

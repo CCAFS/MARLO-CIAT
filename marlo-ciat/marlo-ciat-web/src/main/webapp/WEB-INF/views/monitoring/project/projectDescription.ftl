@@ -41,42 +41,42 @@
           <div id="projectDescription" class="borderBox">
             [#-- Project Title --]
             <div class="form-group">
-              [@customForm.textArea name="project.name" i18nkey="Title" required=true className="project-title" editable=editable && action.hasPermission("title") /]
+              [@customForm.textArea name="project.name" i18nkey="projectDescription.name" required=true className="project-title" editable=editable && action.hasPermission("title") /]
             </div>
             <div class="form-group row">  
             [#-- Short name --]
               <div class="col-md-6">
-                [@customForm.input name="project.shortName" i18nkey="CIAT short name" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               [#-- End Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.pl" i18nkey="Pl" type="text" disabled=!editable required=true editable=editable /]
+                [@customForm.input name="project.pl" i18nkey="projectDescription.pl" type="text" disabled=!editable required=true editable=editable /]
               </div>
             </div>
             <div class="form-group row">  
               [#-- Start Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.startDate" i18nkey="Start date" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="project.startDate" i18nkey="projectDescription.startDate" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               [#-- End Date --]
               <div class="col-md-6">
-                [@customForm.input name="project.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
+                [@customForm.input name="project.endDate" i18nkey="projectDescription.endDate" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
             <div class="form-group row">
               [#-- Project contact --]
               <div class="col-md-12 form-group">
-                [@customForm.input name="project.contactPerons" i18nkey="Project contact(Project leader)" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="project.contactPerons" i18nkey="projectDescription.contactPerson" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
             <div class="clearfix"></div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
               <div class="">
-                <label>Funding Source(s)</label>
+                <label>[@s.text name="projectDescription.fundingSource" /]</label>
                 <div class="borderBox fundingSourceList" listname="project.fundingSources">
                   [#if project.fundingSources?has_content]
                     [#list project.fundingSources as fundingSource]
-                        [@fundingSourceMacro element=fundingSource name="project.fundingSources"  index=fundingSource_index /]
+                      [@fundingSourceMacro element=fundingSource name="project.fundingSources"  index=fundingSource_index /]
                     [/#list]
                   [/#if]
                   <p class="text-center inf" style="display:${(project.fundingSources?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
@@ -116,7 +116,7 @@
           [#-- Section Buttons & hidden inputs--]
           <div class="fullPartBlock">      
             <div class="output panel tertiary">
-              <div class="panel-head"><label for="">[@customForm.text name="Project output(s)" readText=!editable /]</label></div> 
+              <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
               <div class="panel-body"> 
                 <ul id="outputsBlock" class="list outputList">
                 [#if  project.outputs?has_content]  
@@ -124,7 +124,7 @@
                      [@crpContribution element=crp name="project.crpContributions" index=crp_index /]
                   [/#list] 
                 [#else]
-                  <p class="text-center outputInf"> [@s.text name="There are not output(s) added yet." /] </p>  
+                  <p class="text-center outputInf"> [@s.text name="projectDescription.notOutputs" /] </p>  
                 [/#if]  
                 </ul>
                 [#if editable]
