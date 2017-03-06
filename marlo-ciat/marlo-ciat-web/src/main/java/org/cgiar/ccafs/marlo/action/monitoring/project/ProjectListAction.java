@@ -97,6 +97,7 @@ public class ProjectListAction extends BaseAction {
     project.setCreatedBy(this.getCurrentUser());
     project.setModifiedBy(this.getCurrentUser());
     project.setStartDate(new Date());
+    project.setDateCreated(new Date());
     project.setResearchProgram(selectedProgram);
     project.setProjectStatus(new ProjectStatus(new Long(2), true));
 

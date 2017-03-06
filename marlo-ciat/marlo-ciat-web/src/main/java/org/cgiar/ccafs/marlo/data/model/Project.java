@@ -19,7 +19,6 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -4480927754617355650L;
 
-
   @Expose
   private Long id;
 
@@ -69,22 +68,30 @@ public class Project implements java.io.Serializable, IAuditLog {
 
 
   @Expose
+  private Date dateCreated;
+
+
+  @Expose
   private String modificationJustification;
 
 
   @Expose
   private ResearchProgram researchProgram;
 
+
   @Expose
   private ProjectCrosscutingTheme projectCrosscutingTheme;
 
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
+
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
+
 
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
 
   private List<ProjectOutput> outputs;
+
   private List<ProjectFundingSource> fundingSources;
 
   public Project() {
@@ -112,6 +119,28 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.projectOutputs = projectOutputs;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    Project other = (Project) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
   public Date getActiveSince() {
     return activeSince;
   }
@@ -122,6 +151,10 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public User getCreatedBy() {
     return createdBy;
+  }
+
+  public Date getDateCreated() {
+    return dateCreated;
   }
 
   public Date getEndDate() {
@@ -157,11 +190,9 @@ public class Project implements java.io.Serializable, IAuditLog {
     return name;
   }
 
-
   public List<ProjectOutput> getOutputs() {
     return outputs;
   }
-
 
   public ProjectCrosscutingTheme getProjectCrosscutingTheme() {
     return projectCrosscutingTheme;
@@ -209,6 +240,15 @@ public class Project implements java.io.Serializable, IAuditLog {
 
 
   @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+
+  @Override
   public boolean isActive() {
     return active;
   }
@@ -228,8 +268,13 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.contactPerson = contactPerson;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
+  }
+
+  public void setDateCreated(Date dateCreated) {
+    this.dateCreated = dateCreated;
   }
 
   public void setEndDate(Date endDate) {

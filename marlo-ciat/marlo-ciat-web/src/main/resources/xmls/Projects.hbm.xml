@@ -32,6 +32,9 @@
         <property name="shortName" type="string">
             <column name="short_name" length="65535" />
         </property>
+        <property name="dateCreated" type="timestamp">
+            <column name="date_created" length="19" />
+        </property>
         <property name="startDate" type="timestamp">
             <column name="start_date" length="19" />
         </property>

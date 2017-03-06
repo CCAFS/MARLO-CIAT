@@ -47,11 +47,7 @@
             [#-- Short name --]
               <div class="col-md-6">
                 [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
-              </div> 
-              [#-- End Date --]
-              <div class="col-md-6">
-                [@customForm.input name="project.pl" i18nkey="projectDescription.pl" type="text" disabled=!editable required=true editable=editable /]
-              </div>
+              </div>               
             </div>
             <div class="form-group row">  
               [#-- Start Date --]
@@ -115,7 +111,7 @@
            
           [#-- Section Buttons & hidden inputs--]
           <div class="fullPartBlock">      
-            <div class="output panel tertiary">
+            <div class="output panel tertiary" listname="project.outputs">
               <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
               <div class="panel-body"> 
                 <ul id="outputsBlock" class="list outputList">

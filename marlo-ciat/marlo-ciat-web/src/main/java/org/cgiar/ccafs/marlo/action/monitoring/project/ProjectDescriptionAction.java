@@ -19,21 +19,31 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
+import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
+import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.validation.monitoring.project.ProjectDescriptionValidator;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,15 +60,16 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private ICenterService centerService;
-
-
   private IProgramService programService;
-
-
   private ProjectService projectService;
   private IUserService userService;
   private IResearchAreaService researchAreaService;
+  private IResearchOutputService outputService;
   private IFundingSourceTypeService fundingSourceService;
+  private IProjectOutputService projectOutputService;
+  private IProjectFundingSourceService projectFundingSourceService;
+  private ProjectDescriptionValidator validator;
+
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
 
@@ -75,7 +86,9 @@ public class ProjectDescriptionAction extends BaseAction {
   @Inject
   public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProgramService programService,
     ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
-    IFundingSourceTypeService fundingSourceService) {
+    IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
+    IResearchOutputService outputService, IProjectOutputService projectOutputService,
+    IProjectFundingSourceService projectFundingSourceService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -83,6 +96,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.userService = userService;
     this.researchAreaService = researchAreaService;
     this.fundingSourceService = fundingSourceService;
+    this.validator = validator;
+    this.outputService = outputService;
+    this.projectFundingSourceService = projectFundingSourceService;
+    this.projectOutputService = projectOutputService;
   }
 
   public long getAreaID() {
@@ -191,6 +208,172 @@ public class ProjectDescriptionAction extends BaseAction {
 
     }
 
+    String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+    this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
+
+    if (this.isHttpPost()) {
+      if (outputs != null) {
+        outputs.clear();
+      }
+
+      if (fundingSourceTypes != null) {
+        fundingSourceTypes.clear();
+      }
+
+      if (project.getProjectCrosscutingTheme() != null) {
+        project.getProjectCrosscutingTheme().setPoliciesInstitutions(null);
+        project.getProjectCrosscutingTheme().setGenderYouth(null);
+        project.getProjectCrosscutingTheme().setClimateChange(null);
+        project.getProjectCrosscutingTheme().setCapacityDevelopment(null);
+        project.getProjectCrosscutingTheme().setNa(null);
+        project.getProjectCrosscutingTheme().setBigData(null);
+      }
+    }
+
+
+  }
+
+  @Override
+  public String save() {
+    if (this.hasPermission("*")) {
+
+      Project projectDB = projectService.getProjectById(projectID);
+
+      projectDB.setName(project.getName());
+      projectDB.setShortName(project.getShortName());
+
+      projectDB.setStartDate(project.getStartDate());
+      projectDB.setEndDate(project.getEndDate());
+
+      if (project.getProjectLeader().getId() != null) {
+        User projectLeader = userService.getUser(project.getProjectLeader().getId());
+        projectDB.setProjectLeader(projectLeader);
+      }
+
+      projectDB.setProjectCrosscutingTheme(project.getProjectCrosscutingTheme());
+
+      projectService.saveProject(projectDB);
+
+      this.saveFundingSources(projectDB);
+      this.saveOutputs(projectDB);
+
+      Collection<String> messages = this.getActionMessages();
+      if (!this.getInvalidFields().isEmpty()) {
+        this.setActionMessages(null);
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+      } else {
+        this.addActionMessage("message:" + this.getText("saving.saved"));
+      }
+      messages = this.getActionMessages();
+
+      return SUCCESS;
+    } else {
+      return NOT_AUTHORIZED;
+    }
+  }
+
+  public void saveFundingSources(Project projectDB) {
+
+    if (projectDB.getProjectFundingSources() != null && projectDB.getProjectFundingSources().size() > 0) {
+      List<ProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
+        projectDB.getProjectFundingSources().stream().filter(pfs -> pfs.isActive()).collect(Collectors.toList()));
+
+      for (ProjectFundingSource projectFundingSource : fundingSourcesPrew) {
+        if (!project.getFundingSources().contains(projectFundingSource)) {
+          projectFundingSourceService.deleteProjectFundingSource(projectFundingSource.getId());
+        }
+      }
+    }
+
+    if (project.getFundingSources() != null) {
+
+      for (ProjectFundingSource projectFundingSource : project.getFundingSources()) {
+        if (projectFundingSource.getId() == null || projectFundingSource.getId() == -1) {
+
+          ProjectFundingSource fundingSourceSave = new ProjectFundingSource();
+
+          FundingSourceType fundingSourceType =
+            fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
+          Project project = projectService.getProjectById(projectID);
+
+          fundingSourceSave.setProject(project);
+          fundingSourceSave.setFundingSourceType(fundingSourceType);
+          fundingSourceSave.setActive(true);
+          fundingSourceSave.setActiveSince(new Date());
+          fundingSourceSave.setCreatedBy(this.getCurrentUser());
+          fundingSourceSave.setModifiedBy(this.getCurrentUser());
+          fundingSourceSave.setModificationJustification("");
+
+          projectFundingSourceService.saveProjectFundingSource(fundingSourceSave);
+
+        } else {
+          boolean hasChanges = false;
+          ProjectFundingSource fundingSourcePrew =
+            projectFundingSourceService.getProjectFundingSourceById(projectFundingSource.getId());
+
+          if (!fundingSourcePrew.getFundingSourceType().equals(projectFundingSource.getFundingSourceType())) {
+            hasChanges = true;
+            FundingSourceType fundingSourceType =
+              fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
+            fundingSourcePrew.setFundingSourceType(fundingSourceType);
+          }
+
+          if (!fundingSourcePrew.getDonor().equals(projectFundingSource.getDonor())) {
+            hasChanges = true;
+            fundingSourcePrew.setDonor(projectFundingSource.getDonor());
+          }
+
+          if (hasChanges) {
+            fundingSourcePrew.setModifiedBy(this.getCurrentUser());
+            projectFundingSourceService.saveProjectFundingSource(fundingSourcePrew);
+          }
+
+        }
+      }
+
+
+    }
+
+  }
+
+  public void saveOutputs(Project projectDB) {
+
+    if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
+      List<ProjectOutput> outputsPrew = new ArrayList<>(
+        projectDB.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
+
+      for (ProjectOutput output : outputsPrew) {
+        if (!project.getOutputs().contains(output)) {
+          projectService.deleteProject(output.getId());
+        }
+      }
+    }
+
+    if (project.getOutputs() != null) {
+      for (ProjectOutput output : project.getOutputs()) {
+        if (output.getId() == null || output.getId() == -1) {
+          ProjectOutput outputSave = new ProjectOutput();
+
+          ResearchOutput researchOutput = outputService.getResearchOutputById(output.getId());
+          Project project = projectService.getProjectById(projectID);
+
+          outputSave.setProject(project);
+          outputSave.setResearchOutput(researchOutput);
+          outputSave.setActive(true);
+          outputSave.setCreatedBy(this.getCurrentUser());
+          outputSave.setModifiedBy(this.getCurrentUser());
+          outputSave.setActiveSince(new Date());
+          outputSave.setModificationJustification("");
+
+          projectOutputService.saveProjectOutput(outputSave);
+
+        }
+      }
+    }
+
 
   }
 
@@ -238,6 +421,13 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  @Override
+  public void validate() {
+    if (save) {
+      validator.validate(this, project, selectedProgram, true);
+    }
   }
 
 

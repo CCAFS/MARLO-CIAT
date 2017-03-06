@@ -13,10 +13,13 @@ import com.google.gson.annotations.Expose;
  */
 public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog {
 
+
   private static final long serialVersionUID = -742468038373623053L;
+
 
   @Expose
   private Long id;
+
 
   @Expose
   private User modifiedBy;
@@ -54,10 +57,8 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
   @Expose
   private String modificationJustification;
 
-
   public ProjectCrosscutingTheme() {
   }
-
 
   public ProjectCrosscutingTheme(Project project, boolean active) {
     this.project = project;
@@ -130,9 +131,15 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     return modificationJustification;
   }
 
+
   @Override
   public User getModifiedBy() {
     return modifiedBy;
+  }
+
+
+  public Boolean getNa() {
+    return na;
   }
 
   public Boolean getPoliciesInstitutions() {
@@ -184,9 +191,13 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     this.modificationJustification = modificationJustification;
   }
 
-
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
+  }
+
+
+  public void setNa(Boolean na) {
+    this.na = na;
   }
 
   public void setPoliciesInstitutions(Boolean policiesInstitutions) {
