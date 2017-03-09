@@ -101,11 +101,9 @@ public class ProjectListAction extends BaseAction {
     project.setResearchProgram(selectedProgram);
     project.setProjectStatus(new ProjectStatus(new Long(2), true));
 
-    // projectID = projectService.saveProject(project);
 
-    // if (projectID > 0) {
     ProjectCrosscutingTheme projectCrosscutingTheme = new ProjectCrosscutingTheme();
-    // project = projectService.getProjectById(projectID);
+
 
     projectCrosscutingTheme.setActive(true);
     projectCrosscutingTheme.setActiveSince(new Date());
@@ -123,12 +121,14 @@ public class ProjectListAction extends BaseAction {
     project.setProjectCrosscutingTheme(projectCrosscutingTheme);
     projectCrosscutingTheme.setProject(project);
 
-    projectService.saveProject(project);
-    // projectCrosscutingService.saveProjectCrosscutingTheme(projectCrosscutingTheme);
-    // }
+    projectID = projectService.saveProject(project);
 
 
-    return SUCCESS;
+    if (projectID > 0) {
+      return SUCCESS;
+    } else {
+      return NOT_FOUND;
+    }
 
 
   }
