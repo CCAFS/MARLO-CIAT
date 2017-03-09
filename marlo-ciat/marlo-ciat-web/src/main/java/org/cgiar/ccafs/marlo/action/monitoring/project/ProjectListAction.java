@@ -101,35 +101,34 @@ public class ProjectListAction extends BaseAction {
     project.setResearchProgram(selectedProgram);
     project.setProjectStatus(new ProjectStatus(new Long(2), true));
 
-    projectID = projectService.saveProject(project);
+    // projectID = projectService.saveProject(project);
+
+    // if (projectID > 0) {
+    ProjectCrosscutingTheme projectCrosscutingTheme = new ProjectCrosscutingTheme();
+    // project = projectService.getProjectById(projectID);
+
+    projectCrosscutingTheme.setActive(true);
+    projectCrosscutingTheme.setActiveSince(new Date());
+    projectCrosscutingTheme.setCreatedBy(this.getCurrentUser());
+    projectCrosscutingTheme.setModifiedBy(this.getCurrentUser());
+    projectCrosscutingTheme.setModificationJustification("");
+
+    projectCrosscutingTheme.setClimateChange(false);
+    projectCrosscutingTheme.setGenderYouth(false);
+    projectCrosscutingTheme.setPoliciesInstitutions(false);
+    projectCrosscutingTheme.setCapacityDevelopment(false);
+    projectCrosscutingTheme.setBigData(false);
+    projectCrosscutingTheme.setNa(false);
+
+    project.setProjectCrosscutingTheme(projectCrosscutingTheme);
+    projectCrosscutingTheme.setProject(project);
+
+    projectService.saveProject(project);
+    // projectCrosscutingService.saveProjectCrosscutingTheme(projectCrosscutingTheme);
+    // }
 
 
-    if (projectID > 0) {
-
-      project = projectService.getProjectById(projectID);
-
-      ProjectCrosscutingTheme projectCrosscutingTheme = new ProjectCrosscutingTheme();
-
-      projectCrosscutingTheme.setId(projectID);
-      projectCrosscutingTheme.setProject(project);
-      projectCrosscutingTheme.setActive(true);
-      projectCrosscutingTheme.setActiveSince(new Date());
-      projectCrosscutingTheme.setCreatedBy(this.getCurrentUser());
-      projectCrosscutingTheme.setModifiedBy(this.getCurrentUser());
-      projectCrosscutingTheme.setModificationJustification("");
-
-      projectCrosscutingTheme.setClimateChange(false);
-      projectCrosscutingTheme.setGenderYouth(false);
-      projectCrosscutingTheme.setPoliciesInstitutions(false);
-      projectCrosscutingTheme.setCapacityDevelopment(false);
-      projectCrosscutingTheme.setBigData(false);
-
-      projectCrosscutingService.saveProjectCrosscutingTheme(projectCrosscutingTheme);
-
-      return SUCCESS;
-    } else {
-      return INPUT;
-    }
+    return SUCCESS;
 
 
   }
