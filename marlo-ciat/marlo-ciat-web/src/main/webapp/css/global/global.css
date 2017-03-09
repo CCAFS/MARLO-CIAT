@@ -5923,7 +5923,7 @@ hr {
 .button-float {
     position: absolute;
     bottom: 1px;
-    right: 1px;
+    right: 15px;
     height: 25px;
 }
 
