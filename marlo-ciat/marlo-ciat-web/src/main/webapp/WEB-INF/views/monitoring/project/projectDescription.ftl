@@ -116,8 +116,7 @@
               <div class="panel-body"> 
                 <ul id="outputsBlock" class="list outputList">
                 [#if  project.outputs?has_content]  
-                  [#list project.outputs as output] 
-                  ${output.id}
+                  [#list project.outputs as output]
                      [@outputMacro element=output name="project.outputs" index=output_index isTemplate=false/]
                   [/#list] 
                 [#else]
@@ -171,16 +170,16 @@
       </div>
     [/#if]
     <div class="leftHead">
-        <span class="index">O${(element.id)!}</span>
+        <span class="index">O${(element.researchOutput.id)!}</span>
       </div>
     [#-- output Title --]
     <div class="blockTitle closed form-group" style="margin-top:30px;">
       <label for="">Output statement</label>
       <div class="oStatement">
-        [#if element.title?has_content]
-        ${(element.title)!'New output'}
+        [#if element.researchOutput?? && element.researchOutput.title?has_content]
+        ${(element.researchOutput.title)!'New output'}
         [#else]
-        Output
+        No Output
         [/#if]
       </div>
         
@@ -190,11 +189,11 @@
     <div class="blockContent " style="display:none">
       <div class="form-group">
         <label for="">Research topic:</label>
-        <div class="rTopic">${(element.researchOutput.researchOutcome.researchTopic.name)!}</div>
+        <div class="rTopic">${(element.researchOutput.researchOutcome.researchTopic.researchTopic)!}</div>
       </div>
       <div class="form-group">
         <label for="">Outcome:</label>
-        <div class="outcome">${(element.researchOutput.researchOutcome.name)!}</div>
+        <div class="outcome">${(element.researchOutput.researchOutcome.description)!}</div>
       </div>
     </div>
   </li>
