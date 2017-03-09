@@ -6,19 +6,19 @@ function init() {
   $('form select').select2({
     width: "100%"
   });
-  
+
   datePickerConfig({
-    "startDate": "#project\\.startDate",
-    "endDate": "#project\\.endDate"
-});
+      "startDate": "#project\\.startDate",
+      "endDate": "#project\\.endDate"
+  });
 
   // Events
   $(".addFundingSource").on("click", addFundingSource);
   $(".removeFundingSource").on("click", removeFundingSource);
-  
+
   $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
-  
+
   $('.blockTitle').on('click', function() {
     if($(this).hasClass('closed')) {
       $(this).parent().find('.blockTitle').removeClass('opened').addClass('closed');
@@ -84,72 +84,70 @@ function checkItems(block) {
 
 /** FUNCTIONS Outputs* */
 
-//Add a new funding source element
+// Add a new funding source element
 function addOutput() {
-  var $select=$(this);
-  var option=$select.find("option:selected");
-  if(option.val()!="-1"){
+  var $select = $(this);
+  var option = $select.find("option:selected");
+  if(option.val() != "-1") {
     $.ajax({
-      url: baseURL + "/outputInfo.do",
-      type: 'GET',
-      data: {
-        outputID: option.val()
-      },
-      success: function(m) {
-        console.log(m);
-        var $list = $(".outputList");
-        var $item = $("#output-template").clone(true).removeAttr("id");
-        $item.find("span.index").text("O"+m.outputInfo.id);
-        $item.find("div.oStatement").text(option.text());
-        $item.find("div.rTopic").text(m.outputInfo.topicName);
-        $item.find("div.outcome").text(m.outputInfo.otucomeName);
-        $item.find(".outputId").val(m.outputInfo.id);
-        $list.append($item);
-        $item.show('slow');
-        updateOutputs();
-        checkOutputItems($list);
-        $select.find(option).remove();
-        $select.val("-1").trigger("change");
-      },
-      error: function(e) {
-        console.log(e);
-      }
+        url: baseURL + "/outputInfo.do",
+        type: 'GET',
+        data: {
+          outputID: option.val()
+        },
+        success: function(m) {
+          console.log(m);
+          var $list = $(".outputList");
+          var $item = $("#output-template").clone(true).removeAttr("id");
+          $item.find("span.index").text("O" + m.outputInfo.id);
+          $item.find("div.oStatement").text(option.text());
+          $item.find("div.rTopic").text(m.outputInfo.topicName);
+          $item.find("div.outcome").text(m.outputInfo.outcomeName);
+          $item.find(".outputId").val(m.outputInfo.id);
+          $list.append($item);
+          $item.show('slow');
+          updateOutputs();
+          checkOutputItems($list);
+          $select.find(option).remove();
+          $select.val("-1").trigger("change");
+        },
+        error: function(e) {
+          console.log(e);
+        }
     });
   }
 
-
 }
 
-//Remove Funding source element
+// Remove Funding source element
 function removeOutput() {
   var $list = $(this).parents('.outputList');
   var $item = $(this).parents('.outputs');
-  var $select=$(".outputSelect");
-  $select.addOption($item.find("input.outputId").val(),$item.find("div.oStatement").text());
+  var $select = $(".outputSelect");
+  $select.addOption($item.find("input.outputId").val(), $item.find("div.oStatement").text());
   $item.hide(1000, function() {
-   $item.remove();
-   checkOutputItems($list);
-   updateOutputs();
+    $item.remove();
+    checkOutputItems($list);
+    updateOutputs();
   });
 
 }
 
 function updateOutputs() {
-$(".outputList").find('.outputs').each(function(i,e) {
- // Set indexes
- $(e).setNameIndexes(1, i);
-});
+  $(".outputList").find('.outputs').each(function(i,e) {
+    // Set indexes
+    $(e).setNameIndexes(1, i);
+  });
 }
 
 function checkOutputItems(block) {
-var items = $(block).find('.outputs').length;
-if(items == 0) {
- $(block).find('p.outputInf').fadeIn();
-} else {
- $(block).find('p.outputInf').fadeOut();
+  var items = $(block).find('.outputs').length;
+  if(items == 0) {
+    $(block).find('p.outputInf').fadeIn();
+  } else {
+    $(block).find('p.outputInf').fadeOut();
+  }
 }
-}
-
 
 /**
  * Attach to the date fields the datepicker plugin
