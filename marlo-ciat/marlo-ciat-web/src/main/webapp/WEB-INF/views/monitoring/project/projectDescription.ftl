@@ -60,10 +60,13 @@
               </div>
             </div>
             <div class="form-group row">
-              [#-- Project contact --]
-              <div class="col-md-12 form-group">
-                [@customForm.input name="project.contactPerons" i18nkey="projectDescription.contactPerson" type="text" disabled=!editable  required=true editable=editable /]
-              </div> 
+            [#-- Project contact --]
+            <div class="col-md-12 partnerPerson-email userField  form-group">
+              <input type="hidden" class="canEditEmail" value="" />
+              [@customForm.input name="project.contactPerons" className='userName' type="text" disabled=!canEdit i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
+              <input class="userId" type="hidden" name="" value="" />   
+              [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
+            </div>
             <div class="clearfix"></div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
