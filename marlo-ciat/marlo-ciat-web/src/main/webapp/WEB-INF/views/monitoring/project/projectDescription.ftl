@@ -116,8 +116,9 @@
               <div class="panel-body"> 
                 <ul id="outputsBlock" class="list outputList">
                 [#if  project.outputs?has_content]  
-                  [#list project.outputss as output] 
-                     [@crpContribution element=crp name="project.crpContributions" index=crp_index /]
+                  [#list project.outputs as output] 
+                  ${output.id}
+                     [@outputMacro element=output name="project.outputs" index=output_index isTemplate=false/]
                   [/#list] 
                 [#else]
                   <p class="text-center outputInf"> [@s.text name="projectDescription.notOutputs" /] </p>  
@@ -193,7 +194,7 @@
       </div>
       <div class="form-group">
         <label for="">Outcome:</label>
-        <div class="outcome">${(element.researchOutput.rsearchOutcome.name)!}</div>
+        <div class="outcome">${(element.researchOutput.researchOutcome.name)!}</div>
       </div>
     </div>
   </li>
