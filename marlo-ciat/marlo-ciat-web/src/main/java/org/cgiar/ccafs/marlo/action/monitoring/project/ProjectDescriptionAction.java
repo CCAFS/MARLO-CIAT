@@ -238,6 +238,14 @@ public class ProjectDescriptionAction extends BaseAction {
         project.getProjectCrosscutingTheme().setNa(null);
         project.getProjectCrosscutingTheme().setBigData(null);
       }
+
+      if (project.getFundingSources() != null) {
+        project.getFundingSources().clear();
+      }
+
+      if (project.getOutputs() != null) {
+        project.getOutputs().clear();
+      }
     }
 
 
@@ -386,7 +394,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
       for (ProjectOutput output : outputsPrew) {
         if (!project.getOutputs().contains(output)) {
-          projectService.deleteProject(output.getId());
+          projectOutputService.deleteProjectOutput(output.getId());
         }
       }
     }
