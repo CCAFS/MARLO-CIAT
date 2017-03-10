@@ -2,6 +2,7 @@ $(document).ready(init);
 var countID = 0;
 
 function init() {
+  checkOutputsToRemove();
   /* Init Select2 plugin */
   $('form select').select2({
     width: "100%"
@@ -147,6 +148,13 @@ function checkOutputItems(block) {
   } else {
     $(block).find('p.outputInf').fadeOut();
   }
+}
+
+function checkOutputsToRemove(){
+  $(".outputList").find(".outputs").each(function(i,e){
+    var option=$(".outputSelect").find("option[value='"+$(e).find(".outputId").val()+"']");
+    option.remove();
+  });
 }
 
 /**
