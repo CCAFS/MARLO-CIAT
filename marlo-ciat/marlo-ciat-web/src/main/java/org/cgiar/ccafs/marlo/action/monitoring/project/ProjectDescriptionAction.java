@@ -200,6 +200,11 @@ public class ProjectDescriptionAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
+      ProjectCrosscutingTheme crosscutingTheme =
+        projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
+
+      project.setProjectCrosscutingTheme(crosscutingTheme);
+
       project.setOutputs(
         new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList())));
 
@@ -302,10 +307,10 @@ public class ProjectDescriptionAction extends BaseAction {
     crosscutingThemeSave.setNa(crosscutingTheme.getNa() != null ? crosscutingTheme.getNa() : false);
 
     crosscutingThemeSave.setProject(projectDB);
-    projectDB.setProjectCrosscutingTheme(crosscutingThemeSave);
-
 
     projectCrosscutingThemeService.saveProjectCrosscutingTheme(crosscutingThemeSave);
+
+
   }
 
   public void saveFundingSources(Project projectDB) {
