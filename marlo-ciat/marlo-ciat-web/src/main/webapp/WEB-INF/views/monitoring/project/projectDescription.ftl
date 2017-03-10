@@ -32,6 +32,7 @@
       </div>
       [#-- Project Section Content --]
       <div class="col-md-9">
+        [#include "/WEB-INF/views/monitoring/project/submenu-project.ftl" /]
         [#-- Section Messages --]
         [#--  --include "/WEB-INF/views/projects/messages-projects.ftl" / --]
       
