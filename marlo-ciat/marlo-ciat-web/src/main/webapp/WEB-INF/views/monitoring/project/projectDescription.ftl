@@ -66,8 +66,8 @@
             [#-- Project contact --]
             <div class="col-md-12 partnerPerson-email userField  form-group">
               <input type="hidden" class="canEditEmail" value="" />
-              [@customForm.input name="project.contactPerons.name" className='userName' type="text"  i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
-              <input class="userId" type="hidden" name="project.contactPerons.id" value="" />   
+              [@customForm.input name="project.projectLeader.composedName" className='userName' type="text"  i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
+              <input class="userId" type="hidden" name="project.projectLeader.id" value="${(project.projectLeader.id)!}" />   
               [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
             </div>
             <div class="clearfix"></div>

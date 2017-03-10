@@ -19,6 +19,7 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
 import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
@@ -31,6 +32,7 @@ import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
 import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
@@ -68,6 +70,7 @@ public class ProjectDescriptionAction extends BaseAction {
   private IFundingSourceTypeService fundingSourceService;
   private IProjectOutputService projectOutputService;
   private IProjectFundingSourceService projectFundingSourceService;
+  private IProjectCrosscutingThemeService projectCrosscutingThemeService;
   private ProjectDescriptionValidator validator;
 
   private ResearchArea selectedResearchArea;
@@ -88,7 +91,8 @@ public class ProjectDescriptionAction extends BaseAction {
     ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
     IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
     IResearchOutputService outputService, IProjectOutputService projectOutputService,
-    IProjectFundingSourceService projectFundingSourceService) {
+    IProjectFundingSourceService projectFundingSourceService,
+    IProjectCrosscutingThemeService projectCrosscutingThemeService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -100,6 +104,7 @@ public class ProjectDescriptionAction extends BaseAction {
     this.outputService = outputService;
     this.projectFundingSourceService = projectFundingSourceService;
     this.projectOutputService = projectOutputService;
+    this.projectCrosscutingThemeService = projectCrosscutingThemeService;
   }
 
   public long getAreaID() {
@@ -195,6 +200,11 @@ public class ProjectDescriptionAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
+      ProjectCrosscutingTheme crosscutingTheme =
+        projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
+
+      project.setProjectCrosscutingTheme(crosscutingTheme);
+
       project.setOutputs(
         new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList())));
 
@@ -250,9 +260,13 @@ public class ProjectDescriptionAction extends BaseAction {
         projectDB.setProjectLeader(projectLeader);
       }
 
-      projectDB.setProjectCrosscutingTheme(project.getProjectCrosscutingTheme());
+      long projectSaveID = projectService.saveProject(projectDB);
 
-      projectService.saveProject(projectDB);
+      projectDB = projectService.getProjectById(projectSaveID);
+
+      if (project.getProjectCrosscutingTheme() != null) {
+        this.saveCrossCuting(projectDB);
+      }
 
       this.saveFundingSources(projectDB);
       this.saveOutputs(projectDB);
@@ -273,6 +287,30 @@ public class ProjectDescriptionAction extends BaseAction {
     } else {
       return NOT_AUTHORIZED;
     }
+  }
+
+  public void saveCrossCuting(Project projectDB) {
+    ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
+
+    ProjectCrosscutingTheme crosscutingThemeSave =
+      projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getProjectCrosscutingTheme().getId());
+
+    crosscutingThemeSave
+      .setClimateChange(crosscutingTheme.getClimateChange() != null ? crosscutingTheme.getClimateChange() : false);
+    crosscutingThemeSave
+      .setGenderYouth(crosscutingTheme.getGenderYouth() != null ? crosscutingTheme.getGenderYouth() : false);
+    crosscutingThemeSave.setPoliciesInstitutions(
+      crosscutingTheme.getPoliciesInstitutions() != null ? crosscutingTheme.getPoliciesInstitutions() : false);
+    crosscutingThemeSave.setCapacityDevelopment(
+      crosscutingTheme.getCapacityDevelopment() != null ? crosscutingTheme.getCapacityDevelopment() : false);
+    crosscutingThemeSave.setBigData(crosscutingTheme.getBigData() != null ? crosscutingTheme.getBigData() : false);
+    crosscutingThemeSave.setNa(crosscutingTheme.getNa() != null ? crosscutingTheme.getNa() : false);
+
+    crosscutingThemeSave.setProject(projectDB);
+
+    projectCrosscutingThemeService.saveProjectCrosscutingTheme(crosscutingThemeSave);
+
+
   }
 
   public void saveFundingSources(Project projectDB) {
@@ -301,6 +339,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
           fundingSourceSave.setProject(project);
           fundingSourceSave.setFundingSourceType(fundingSourceType);
+          fundingSourceSave.setDonor(projectFundingSource.getDonor());
           fundingSourceSave.setActive(true);
           fundingSourceSave.setActiveSince(new Date());
           fundingSourceSave.setCreatedBy(this.getCurrentUser());
@@ -357,7 +396,7 @@ public class ProjectDescriptionAction extends BaseAction {
         if (output.getId() == null || output.getId() == -1) {
           ProjectOutput outputSave = new ProjectOutput();
 
-          ResearchOutput researchOutput = outputService.getResearchOutputById(output.getId());
+          ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
           Project project = projectService.getProjectById(projectID);
 
           outputSave.setProject(project);
