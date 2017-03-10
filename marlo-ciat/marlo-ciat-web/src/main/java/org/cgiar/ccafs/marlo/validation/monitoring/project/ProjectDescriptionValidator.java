@@ -92,7 +92,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
 
     if (project.getProjectLeader() == null) {
       this.addMessage(baseAction.getText("projectDescription.action.projectLeader"));
-      baseAction.getInvalidFields().put("input-project.projectLeader", InvalidFieldsMessages.EMPTYFIELD);
+      baseAction.getInvalidFields().put("input-project.projectLeader.composedName", InvalidFieldsMessages.EMPTYFIELD);
     }
 
     // TODO project.getProjectCrosscutingTheme() Validation
