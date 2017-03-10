@@ -95,19 +95,19 @@
                 <div class="row">
                   <div class="col-md-12">
                     [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.climateChange"   id="climate"   value="true" > Climate Change</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.genderYouth"    id="youth"    value="true" > Gender and Youth</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" > Policies and Institutions</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" > Capacity Development</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" > Big Data</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" > N/A</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (project.projectCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > Climate Change</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.genderYouth"    id="youth"    value="true" [#if (project.projectCrosscutingTheme.genderYouth)!false ]checked="checked"[/#if] > Gender and Youth</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" [#if (project.projectCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" [#if (project.projectCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
                     [#else]
-                      <p class="checked"> Climate Change</p>
-                      <p class="checked"> Gender and Youth</p>
-                      <p class="checked"> Policies and Institutions</p>
-                      <p class="checked"> Capacity Development</p>
-                      <p class="checked"> Big Data</p>
-                      <p class="checked"> N/A</p>
+                      [#if (project.projectCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.genderYouth)!false ]<p class="checked"> Gender and Youth</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]
                     [/#if]
                   </div>
                 </div>
