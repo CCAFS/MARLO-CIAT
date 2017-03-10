@@ -2,7 +2,7 @@
 [#assign title = "Project Description" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${projectID}" /]
 [#assign pageLibs = ["select2"] /]
-[#assign customJS = ["${baseUrl}/js/projects/projectDescription.js", "",""] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/projects/projectDescription.js"] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
 [#assign editable = true /]
@@ -15,6 +15,8 @@
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
+[#-- Search users Interface --]
+[#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
 
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
@@ -63,8 +65,8 @@
             [#-- Project contact --]
             <div class="col-md-12 partnerPerson-email userField  form-group">
               <input type="hidden" class="canEditEmail" value="" />
-              [@customForm.input name="project.contactPerons" className='userName' type="text" disabled=!canEdit i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
-              <input class="userId" type="hidden" name="" value="" />   
+              [@customForm.input name="project.contactPerons.name" className='userName' type="text"  i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
+              <input class="userId" type="hidden" name="project.contactPerons.id" value="" />   
               [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
             </div>
             <div class="clearfix"></div>
@@ -144,6 +146,7 @@
 
 [@fundingSourceMacro element={} name="project.fundingSources"  index=-1 isTemplate=true /]
 [@outputMacro element={} name="project.outputs"  index=-1 isTemplate=true /]
+[@usersForm.searchUsers/]
   
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
