@@ -170,10 +170,10 @@
 [#macro outputMacro element name index=-1 isTemplate=false]  
   [#assign outputCustomName = "${name}[${index}]" /]
   <li id="output-${isTemplate?string('template',(element.id)!)}" class="outputs  borderBox expandableBlock row "  style="display:${isTemplate?string('none','block')}">
-  <input type="hidden" class="outputId" name="${outputCustomName}.researchOutput.id" value=""/>
+  <input type="hidden" class="outputId" name="${outputCustomName}.researchOutput.id" value="${(element.researchOutput.id)!}"/>
     [#if editable] [#--&& (isTemplate) --]
       <div class="removeLink">
-        <div id="removeOutput" class="removeOutput removeElement removeLink" title="[@s.text name='projectDecription.removeOutput' /]"></div>
+        <div id="" class="removeOutput removeElement removeLink" title="[@s.text name='projectDecription.removeOutput' /]"></div>
       </div>
     [/#if]
     <div class="leftHead">
