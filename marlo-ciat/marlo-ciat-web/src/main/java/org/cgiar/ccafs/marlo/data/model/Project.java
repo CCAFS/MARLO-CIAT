@@ -19,13 +19,13 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -4480927754617355650L;
 
+
   @Expose
   private Long id;
 
 
   @Expose
   private User modifiedBy;
-
 
   @Expose
   private User contactPerson;
@@ -82,13 +82,17 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private ProjectCrosscutingTheme projectCrosscutingTheme;
 
+
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
 
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
 
-
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
+
+
+  private Set<Deliverable> deliverables = new HashSet<Deliverable>(0);
+
 
   private List<ProjectOutput> outputs;
 
@@ -157,6 +161,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     return dateCreated;
   }
 
+  public Set<Deliverable> getDeliverables() {
+    return deliverables;
+  }
+
   public Date getEndDate() {
     return endDate;
   }
@@ -197,7 +205,6 @@ public class Project implements java.io.Serializable, IAuditLog {
   public ProjectCrosscutingTheme getProjectCrosscutingTheme() {
     return projectCrosscutingTheme;
   }
-
 
   public Set<ProjectFundingSource> getProjectFundingSources() {
     return projectFundingSources;
@@ -273,8 +280,13 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.createdBy = createdBy;
   }
 
+
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
+  }
+
+  public void setDeliverables(Set<Deliverable> deliverables) {
+    this.deliverables = deliverables;
   }
 
   public void setEndDate(Date endDate) {

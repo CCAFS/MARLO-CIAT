@@ -73,7 +73,9 @@
 		<mapping resource="xmls/ProjectStatus.hbm.xml" />
 		<mapping resource="xmls/FundingSourceTypes.hbm.xml" />
 		<mapping resource="xmls/ProjectFundingSources.hbm.xml" />
-		<mapping resource="xmls/ProjectCrosscutingThemes.hbm.xml" />		
+		<mapping resource="xmls/ProjectCrosscutingThemes.hbm.xml" />	
+		<mapping resource="xmls/Deliverables.hbm.xml" />
+		<mapping resource="xmls/DeliverableTypes.hbm.xml" />		
 	</session-factory>
 
 </hibernate-configuration>

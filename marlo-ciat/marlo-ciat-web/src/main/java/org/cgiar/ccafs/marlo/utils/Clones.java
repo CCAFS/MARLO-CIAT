@@ -136,7 +136,7 @@ public class Clones {
      */
 
 
-    String[] model = {"ProjectCrosscutingTheme"};
+    String[] model = {"DeliverableType", "Deliverable"};
 
     for (int i = 0; i < model.length; i++) {
       generateDao(model[i]);
