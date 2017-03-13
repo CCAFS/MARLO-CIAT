@@ -32,6 +32,7 @@ import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -291,6 +292,9 @@ public class ProjectListAction extends BaseAction {
       }
 
       projects = new ArrayList<>(selectedProgram.getProjects());
+
+      String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+      this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
 
     }
 

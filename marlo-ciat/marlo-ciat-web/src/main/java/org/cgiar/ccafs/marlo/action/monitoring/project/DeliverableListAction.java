@@ -19,15 +19,18 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Deliverable;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +71,30 @@ public class DeliverableListAction extends BaseAction {
     this.deliverableService = deliverableService;
   }
 
+  @Override
+  public String add() {
+
+    Deliverable deliverable = new Deliverable();
+
+
+    deliverable.setActive(true);
+    deliverable.setActiveSince(new Date());
+    deliverable.setCreatedBy(this.getCurrentUser());
+    deliverable.setModifiedBy(this.getCurrentUser());
+    deliverable.setStartDate(new Date());
+    deliverable.setDateCreated(new Date());
+    deliverable.setProject(project);
+    deliverable.setProjectStatus(new ProjectStatus(new Long(2), true));
+
+    deliverableID = deliverableService.saveDeliverable(deliverable);
+
+    if (deliverableID > 0) {
+      return SUCCESS;
+    } else {
+      return NOT_FOUND;
+    }
+  }
+
   public long getAreaID() {
     return areaID;
   }
@@ -88,6 +115,7 @@ public class DeliverableListAction extends BaseAction {
     return programID;
   }
 
+
   public Project getProject() {
     return project;
   }
@@ -106,7 +134,6 @@ public class DeliverableListAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
-
 
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
@@ -143,6 +170,9 @@ public class DeliverableListAction extends BaseAction {
 
       deliverables =
         new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
+
+      String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+      this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
 
     }
   }

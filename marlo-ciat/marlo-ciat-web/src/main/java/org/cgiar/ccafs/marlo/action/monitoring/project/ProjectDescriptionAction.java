@@ -32,12 +32,10 @@ import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
 import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -45,7 +43,6 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.validation.monitoring.project.ProjectDescriptionValidator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,10 +60,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private ICenterService centerService;
-  private IProgramService programService;
   private IProjectService projectService;
   private IUserService userService;
-  private IResearchAreaService researchAreaService;
   private IResearchOutputService outputService;
   private IFundingSourceTypeService fundingSourceService;
   private IProjectOutputService projectOutputService;
@@ -88,18 +83,15 @@ public class ProjectDescriptionAction extends BaseAction {
   private String principalInvestigator;
 
   @Inject
-  public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
-    IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
+  public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProjectService projectService,
+    IUserService userService, IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
     IResearchOutputService outputService, IProjectOutputService projectOutputService,
     IProjectFundingSourceService projectFundingSourceService,
     IProjectCrosscutingThemeService projectCrosscutingThemeService) {
     super(config);
     this.centerService = centerService;
-    this.programService = programService;
     this.projectService = projectService;
     this.userService = userService;
-    this.researchAreaService = researchAreaService;
     this.fundingSourceService = fundingSourceService;
     this.validator = validator;
     this.outputService = outputService;
@@ -291,7 +283,7 @@ public class ProjectDescriptionAction extends BaseAction {
       this.saveFundingSources(projectDB);
       this.saveOutputs(projectDB);
 
-      Collection<String> messages = this.getActionMessages();
+
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
         List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
@@ -301,7 +293,7 @@ public class ProjectDescriptionAction extends BaseAction {
       } else {
         this.addActionMessage("message:" + this.getText("saving.saved"));
       }
-      messages = this.getActionMessages();
+
 
       return SUCCESS;
     } else {

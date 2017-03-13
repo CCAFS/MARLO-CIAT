@@ -50,6 +50,45 @@
         <param name="programID">${programID}</param>
       </result>
     </action>
+    
+    <action name="{center}/deliverableList"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.DeliverableListAction">
+      <interceptor-ref name="projectStack" />
+      <result name="input">/WEB-INF/views/monitoring/project/deliverableList.ftl
+      </result>
+    </action>
+    
+    <action name="{center}/projectDeliverable"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectDeliverableAction">
+      <interceptor-ref name="projectStack" /> <!--  TODO deliverableStack -->
+      <result name="input">/WEB-INF/views/monitoring/project/ProjectDeliverable.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/projectDeliverable</param>
+        <param name="deliverableID">${deliverableID}</param>
+        <param name="edit">true</param>
+      </result>
+      <result name="cancel" type="redirectAction">
+        <param name="actionName">${centerSession}/projectDeliverable</param>
+        <param name="deliverableID">${deliverableID}</param>
+        <param name="edit">true</param>
+        <param name="cancel">true</param>
+      </result>
+    </action>
+    
+    <action name="{center}/addNewDeliverable" method="add"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.DeliverableListAction">
+      <interceptor-ref name="projectStack" />
+      <result name="input">/WEB-INF/views/monitoring/project/deliverableList.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/projectDeliverable</param>
+        <param name="deliverableID">${deliverableID}</param>
+        <param name="edit">true</param>
+      </result>     
+    </action>
+    
+    
 
 	</package>
 </struts>
