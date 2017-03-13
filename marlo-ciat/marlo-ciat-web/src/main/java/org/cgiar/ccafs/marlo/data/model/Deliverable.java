@@ -24,8 +24,10 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   @Expose
   private User modifiedBy;
 
+
   @Expose
   private User createdBy;
+
 
   @Expose
   private ProjectStatus projectStatus;
@@ -52,6 +54,9 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   private Date activeSince;
 
   @Expose
+  private Date dateCreated;
+
+  @Expose
   private String modificationJustification;
 
   public Deliverable() {
@@ -61,7 +66,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.project = project;
     this.active = active;
   }
-
 
   public Deliverable(User modifiedBy, User createdBy, ProjectStatus projectStatus, Project project,
     DeliverableType deliverableType, String name, Date startDate, Date endDate, boolean active, Date activeSince,
@@ -79,7 +83,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
@@ -87,6 +90,11 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   public User getCreatedBy() {
     return createdBy;
+  }
+
+
+  public Date getDateCreated() {
+    return dateCreated;
   }
 
 
@@ -134,6 +142,7 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return project;
   }
 
+
   public ProjectStatus getProjectStatus() {
     return projectStatus;
   }
@@ -157,6 +166,10 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
+  }
+
+  public void setDateCreated(Date dateCreated) {
+    this.dateCreated = dateCreated;
   }
 
   public void setDeliverableType(DeliverableType deliverableType) {

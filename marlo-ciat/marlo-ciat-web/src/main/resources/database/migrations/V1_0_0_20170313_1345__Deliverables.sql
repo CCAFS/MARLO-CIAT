@@ -10,6 +10,7 @@ CREATE TABLE `deliverables` (
   `type_id` bigint(20) DEFAULT NULL,
   `status_id` int(11) DEFAULT NULL,
   `name` text,
+  `date_created` timestamp NULL DEFAULT NULL,
   `start_date` timestamp NULL DEFAULT NULL,
   `end_date` timestamp NULL DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL,

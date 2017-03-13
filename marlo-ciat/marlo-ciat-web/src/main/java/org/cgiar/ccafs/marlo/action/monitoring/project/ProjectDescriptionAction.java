@@ -36,10 +36,10 @@ import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
 import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
+import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
-import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.validation.monitoring.project.ProjectDescriptionValidator;
@@ -63,11 +63,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private ICenterService centerService;
-
   private IProgramService programService;
-
-
-  private ProjectService projectService;
+  private IProjectService projectService;
   private IUserService userService;
   private IResearchAreaService researchAreaService;
   private IResearchOutputService outputService;
@@ -76,12 +73,11 @@ public class ProjectDescriptionAction extends BaseAction {
   private IProjectFundingSourceService projectFundingSourceService;
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
   private ProjectDescriptionValidator validator;
+
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
-
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
-
   private List<ResearchProgram> researchPrograms;
   private List<FundingSourceType> fundingSourceTypes;
   private List<ResearchOutput> outputs;
@@ -93,7 +89,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
   @Inject
   public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProgramService programService,
-    ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
+    IProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
     IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
     IResearchOutputService outputService, IProjectOutputService projectOutputService,
     IProjectFundingSourceService projectFundingSourceService,
