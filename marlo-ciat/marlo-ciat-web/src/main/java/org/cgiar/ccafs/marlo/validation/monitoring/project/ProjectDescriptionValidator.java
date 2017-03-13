@@ -66,6 +66,20 @@ public class ProjectDescriptionValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].fundingSourceType.donor",
         InvalidFieldsMessages.EMPTYFIELD);
     }
+
+    if (!this.isValidString(fundingSource.getTitle()) && this.wordCount(fundingSource.getTitle()) <= 100) {
+      this.addMessage(
+        baseAction.getText("projectDescription.action.fundingSources.fundingSourceType.title", String.valueOf(i + 1)));
+      baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].fundingSourceType.title",
+        InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (!this.isValidString(fundingSource.getOcsCode()) && this.wordCount(fundingSource.getOcsCode()) <= 20) {
+      this.addMessage(
+        baseAction.getText("projectDescription.action.fundingSources.fundingSourceType.ocs", String.valueOf(i + 1)));
+      baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].fundingSourceType.ocsCode",
+        InvalidFieldsMessages.EMPTYFIELD);
+    }
   }
 
 

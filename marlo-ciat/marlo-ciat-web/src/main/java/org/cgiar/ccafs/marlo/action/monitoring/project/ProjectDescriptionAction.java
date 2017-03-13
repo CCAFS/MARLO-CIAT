@@ -24,6 +24,7 @@ import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
 import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
@@ -62,7 +63,10 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private ICenterService centerService;
+
   private IProgramService programService;
+
+
   private ProjectService projectService;
   private IUserService userService;
   private IResearchAreaService researchAreaService;
@@ -72,12 +76,12 @@ public class ProjectDescriptionAction extends BaseAction {
   private IProjectFundingSourceService projectFundingSourceService;
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
   private ProjectDescriptionValidator validator;
-
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
 
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
+
   private List<ResearchProgram> researchPrograms;
   private List<FundingSourceType> fundingSourceTypes;
   private List<ResearchOutput> outputs;
@@ -85,6 +89,7 @@ public class ProjectDescriptionAction extends BaseAction {
   private long areaID;
   private long projectID;
   private Project project;
+  private String principalInvestigator;
 
   @Inject
   public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProgramService programService,
@@ -123,6 +128,16 @@ public class ProjectDescriptionAction extends BaseAction {
     return outputs;
   }
 
+  private String getPI() {
+    List<ResearchLeader> leaders = new ArrayList<>(
+      selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
+    return leaders.get(0).getUser().getComposedCompleteName();
+  }
+
+  public String getPrincipalInvestigator() {
+    return principalInvestigator;
+  }
+
   public long getProgramID() {
     return programID;
   }
@@ -134,7 +149,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
     List<ResearchTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-
+    principalInvestigator = this.getPI();
     for (ResearchTopic researchTopic : researchTopics) {
       List<ResearchOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
@@ -194,6 +209,7 @@ public class ProjectDescriptionAction extends BaseAction {
     if (project != null) {
 
       selectedProgram = project.getResearchProgram();
+
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
@@ -348,11 +364,16 @@ public class ProjectDescriptionAction extends BaseAction {
           fundingSourceSave.setProject(project);
           fundingSourceSave.setFundingSourceType(fundingSourceType);
           fundingSourceSave.setDonor(projectFundingSource.getDonor());
+          fundingSourceSave.setTitle(projectFundingSource.getTitle());
+          fundingSourceSave.setOcsCode(projectFundingSource.getOcsCode());
           fundingSourceSave.setActive(true);
           fundingSourceSave.setActiveSince(new Date());
           fundingSourceSave.setCreatedBy(this.getCurrentUser());
           fundingSourceSave.setModifiedBy(this.getCurrentUser());
           fundingSourceSave.setModificationJustification("");
+
+          // TODO when implement the OCS service
+          fundingSourceSave.setSync(false);
 
           projectFundingSourceService.saveProjectFundingSource(fundingSourceSave);
 
@@ -440,6 +461,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.outputs = outputs;
   }
 
+  public void setPrincipalInvestigator(String principalInvestigator) {
+    this.principalInvestigator = principalInvestigator;
+  }
+
   public void setProgramID(long programID) {
     this.programID = programID;
   }
@@ -448,10 +473,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.project = project;
   }
 
+
   public void setProjectID(long projectID) {
     this.projectID = projectID;
   }
-
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
@@ -461,10 +486,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
+
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
-
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;

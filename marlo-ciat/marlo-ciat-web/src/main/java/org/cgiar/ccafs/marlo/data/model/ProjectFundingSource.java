@@ -13,6 +13,7 @@ import com.google.gson.annotations.Expose;
  */
 public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
 
+
   private static final long serialVersionUID = 738010291598228873L;
 
 
@@ -23,26 +24,41 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
   @Expose
   private User modifiedBy;
 
+
   @Expose
   private User createdBy;
+
 
   @Expose
   private FundingSourceType fundingSourceType;
 
+
   @Expose
   private Project project;
+
 
   @Expose
   private String donor;
 
+
   @Expose
   private boolean active;
+
 
   @Expose
   private Date activeSince;
 
   @Expose
   private String modificationJustification;
+
+  @Expose
+  private String ocsCode;
+
+  @Expose
+  private String title;
+
+  @Expose
+  private boolean sync;
 
   public ProjectFundingSource() {
   }
@@ -53,7 +69,6 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     this.donor = donor;
     this.active = active;
   }
-
 
   public ProjectFundingSource(User modifiedBy, User createdBy, FundingSourceType fundingSourceType, Project project,
     String donor, boolean active, Date activeSince, String modificationJustification) {
@@ -66,7 +81,6 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
   }
-
 
   @Override
   public boolean equals(Object obj) {
@@ -90,21 +104,17 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     return true;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
-
 
   public User getCreatedBy() {
     return createdBy;
   }
 
-
   public String getDonor() {
     return donor;
   }
-
 
   public FundingSourceType getFundingSourceType() {
     return fundingSourceType;
@@ -129,14 +139,27 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     return modificationJustification;
   }
 
+
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
 
+
+  public String getOcsCode() {
+    return ocsCode;
+  }
+
+
   public Project getProject() {
     return project;
   }
+
+
+  public String getTitle() {
+    return title;
+  }
+
 
   @Override
   public int hashCode() {
@@ -146,9 +169,14 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     return result;
   }
 
+
   @Override
   public boolean isActive() {
     return active;
+  }
+
+  public boolean isSync() {
+    return sync;
   }
 
   public void setActive(boolean active) {
@@ -175,7 +203,6 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     this.id = id;
   }
 
-
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
@@ -184,9 +211,22 @@ public class ProjectFundingSource implements java.io.Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+  public void setOcsCode(String ocsCode) {
+    this.ocsCode = ocsCode;
+  }
+
 
   public void setProject(Project project) {
     this.project = project;
+  }
+
+  public void setSync(boolean sync) {
+    this.sync = sync;
+  }
+
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
 }

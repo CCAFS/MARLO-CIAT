@@ -21,10 +21,19 @@
             <column name="project_id" not-null="true" />
         </many-to-one>
         <property name="donor" type="string">
-            <column name="donor" length="65535" not-null="true" />
+            <column name="donor" length="65535"/>
+        </property>
+        <property name="ocsCode" type="string">
+            <column name="ocs_code" length="65535"/>
+        </property>
+        <property name="title" type="string">
+            <column name="title" length="65535"/>
         </property>
         <property name="active" type="boolean">
             <column name="is_active" not-null="true" />
+        </property>
+        <property name="sync" type="boolean">
+            <column name="sync" not-null="true" />
         </property>
         <property name="activeSince" type="timestamp">
             <column name="active_since" length="19" />
