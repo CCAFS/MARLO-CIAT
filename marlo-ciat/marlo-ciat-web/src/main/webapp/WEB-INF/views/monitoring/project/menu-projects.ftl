@@ -3,7 +3,7 @@
   [#assign menus= [
     { 'title': 'General Information', 'show': true,
       'items': [
-      { 'slug': 'description',  'name': 'projects.menu.description',  'action': 'description',  'active': true  },
+      { 'slug': 'description',  'name': 'projects.menu.description',  'action': '${(centerSession)!}/projectDescription',  'active': true  },
       { 'slug': 'projectPartners',  'name': 'projects.menu.partners',  'action': 'projectPartners',  'active': false  },
       { 'slug': 'deliverables',  'name': 'projects.menu.deliverables',  'action': 'deliverable',  'active': false  }
       ]
