@@ -30,7 +30,6 @@ function init() {
     $(this).next().slideToggle('slow', function() {
       $(this).find('textarea').autoGrow();
       $(this).find(".errorTag").hide();
-      console.log($(this).find(".errorTag"));
       $(this).find(".errorTag").css("left", $(this).find(".deliverableWrapper").outerWidth());
       $(this).find(".errorTag").fadeIn(2000);
     });
@@ -74,7 +73,6 @@ function updateFundingSource() {
 }
 
 function checkItems(block) {
-  console.log(block);
   var items = $(block).find('.fundingSources').length;
   if(items == 0) {
     $(block).parent().find('p.inf').fadeIn();

@@ -5,7 +5,7 @@
       'items': [
       { 'slug': 'description',  'name': 'projects.menu.description',  'action': '${(centerSession)!}/projectDescription',  'active': true  },
       { 'slug': 'projectPartners',  'name': 'projects.menu.partners',  'action': 'projectPartners',  'active': false  },
-      { 'slug': 'deliverables',  'name': 'projects.menu.deliverables',  'action': 'deliverable',  'active': false  }
+      { 'slug': 'deliverables',  'name': 'projects.menu.deliverables',  'action': 'deliverableList',  'active': true  }
       ]
     }
     

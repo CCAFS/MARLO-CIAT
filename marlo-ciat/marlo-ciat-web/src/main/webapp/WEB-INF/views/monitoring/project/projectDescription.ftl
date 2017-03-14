@@ -191,7 +191,7 @@
       </div>
     [#-- output Title --]
     <div class="blockTitle closed form-group" style="margin-top:30px;">
-      <label for="">Output statement</label>
+      <label for="">Output statement:</label>
       <div class="oStatement">
         [#if element.researchOutput?? && element.researchOutput.title?has_content]
         ${(element.researchOutput.title)!'New output'}
