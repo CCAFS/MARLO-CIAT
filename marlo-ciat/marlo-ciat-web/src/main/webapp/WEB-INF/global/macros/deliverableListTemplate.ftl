@@ -9,7 +9,7 @@
         <th id="deliverablesType" >[@s.text name="deliverableList.deliverablesType" /]</th>
         <th id="deliverablesStartDate">[@s.text name="deliverableList.deliverablesStartDate" /]</th>
         <th id="deliverablesEndDate">[@s.text name="deliverableList.deliverablesEndDate" /]</th>
-        <th id="deliverableDelete">[@s.text name="deliverableList.deliverablesRemove" /]</th>  
+        <!-- <th id="deliverableDelete">[@s.text name="deliverableList.deliverablesRemove" /]</th>  -->
       </tr>
     </thead>
     <tbody>
@@ -34,8 +34,8 @@
           </td>
           [#-- deliverable type --]
           <td class=""> 
-            [#if deliverable.type?has_content]
-              ${(deliverable)!}
+            [#if deliverable.deliverableType?has_content]
+              ${(deliverable.deliverableType.name)!}
             [/#if]
           </td>
           [#-- start date --]
@@ -46,13 +46,16 @@
           <td>
            [#if deliverable.endDate?has_content]${(deliverable.endDate)!""}[#else][@s.text name="deliverableList.none" /][/#if]
           </td>
-          [#-- Delete Deliverable--]
+          
+          [#-- Delete Deliverable
+          [#--
           <td class="text-center">
               <a id="removeDeliverable-${deliverable.id}" class="removeDeliverable" href="${baseUrl}/projects/${centerSession}/deleteDeliverable.do?deliverableID=${deliverable.id}" title="">
                 <img src="${baseUrl}/images/global/trash.png" title="[@s.text name="project.deliverable.removeDeliverable" /]" /> 
               </a>
           </td>
         </tr>  
+        --]
       [/#list]
     [/#if]
     </tbody>
