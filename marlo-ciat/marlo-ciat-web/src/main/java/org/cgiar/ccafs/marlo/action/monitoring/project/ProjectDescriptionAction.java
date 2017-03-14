@@ -197,7 +197,6 @@ public class ProjectDescriptionAction extends BaseAction {
     if (project != null) {
 
       selectedProgram = project.getResearchProgram();
-
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
@@ -222,8 +221,9 @@ public class ProjectDescriptionAction extends BaseAction {
 
     }
 
-    String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
-    this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
+    String params[] =
+      {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
+    this.setBasePermission(this.getText(Permission.PROJECT_DESCRIPTION_BASE_PERMISSION, params));
 
     if (this.isHttpPost()) {
       if (outputs != null) {

@@ -42,13 +42,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class DeliverableListAction extends BaseAction {
 
-
   private static final long serialVersionUID = 2828289817791232470L;
-
 
   private ICenterService centerService;
   private IProjectService projectService;
   private IDeliverableService deliverableService;
+
 
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
@@ -171,8 +170,9 @@ public class DeliverableListAction extends BaseAction {
       deliverables =
         new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
 
-      String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
-      this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
+      String params[] =
+        {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
+      this.setBasePermission(this.getText(Permission.PROJECT_BASE_PERMISSION, params));
 
     }
   }
