@@ -32,7 +32,6 @@
         [#include "/WEB-INF/views/monitoring/project/menu-projects.ftl" /]
       </div>
     <div class="col-md-9">
-      [#include "/WEB-INF/views/monitoring/project/submenu-project.ftl" /]
       [#-- deliverable List (My Projects) --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Project Key Deliverables</h3>
       <div class="loadingBlock"></div>
