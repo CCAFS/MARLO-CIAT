@@ -50,6 +50,10 @@
             [#-- Short name --]
               <div class="col-md-6">
                 [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
+              </div>  
+              [#-- Principal Investigator --]
+              <div class="col-md-6">
+                [@customForm.input name="principalInvestigator" i18nkey="projectDescription.pl" type="text" disabled=!editable  required=true editable=false /]
               </div>               
             </div>
             <div class="form-group row">  
@@ -157,6 +161,12 @@
   <div id="fundingSource-${isTemplate?string('template',(element.id)!)}" class="fundingSources  borderBox row"  style="display:${isTemplate?string('none','block')}">
     [#if editable]<div class="removeFundingSource removeIcon" title="Remove funding source"></div>[/#if] 
     <input class="id" type="hidden" name="${fundingSourceCustomName}.id" value="${(element.id)!-1}" />
+    <div class="col-md-4">
+      [@customForm.input name="${fundingSourceCustomName}.fundingSourceType.ocsCode" i18nkey="OCS code" type="text" disabled=!editable required=false editable=editable /]
+    </div>
+    <div class="col-md-12">
+      [@customForm.input name="${fundingSourceCustomName}.fundingSourceType.title" i18nkey="Title" type="text" disabled=!editable required=false editable=editable /]
+    </div>
     <div class="col-md-4">
       [@customForm.select name="${fundingSourceCustomName}.fundingSourceType.id" label=""  i18nkey="Funding source" listName="fundingSourceTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
     </div>
