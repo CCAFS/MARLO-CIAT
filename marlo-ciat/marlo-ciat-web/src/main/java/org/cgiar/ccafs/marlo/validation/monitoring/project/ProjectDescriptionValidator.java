@@ -115,7 +115,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
     if (project.getFundingSources() == null || project.getFundingSources().isEmpty()) {
       this.addMessage(baseAction.getText("projectDescription.action.fundingSources"));
       baseAction.getInvalidFields().put("list-project.fundingSources",
-        baseAction.getText(InvalidFieldsMessages.EMPTYLIST));
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Funding source"}));
     } else {
       for (int i = 0; i < project.getFundingSources().size(); i++) {
         this.validateFundingSource(baseAction, project.getFundingSources().get(i), i);
@@ -124,7 +124,8 @@ public class ProjectDescriptionValidator extends BaseValidator {
 
     if (project.getOutputs() == null || project.getOutputs().isEmpty()) {
       this.addMessage(baseAction.getText("projectDescription.actio.outputs"));
-      baseAction.getInvalidFields().put("list-project.outputs", baseAction.getText(InvalidFieldsMessages.EMPTYLIST));
+      baseAction.getInvalidFields().put("list-project.outputs",
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Outputs"}));
     }
 
 
