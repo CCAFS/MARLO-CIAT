@@ -54,7 +54,7 @@
     <action name="{center}/deliverableList"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.DeliverableListAction">
       <interceptor-ref name="projectStack" />
-      <result name="input">/WEB-INF/views/monitoring/project/deliverableList.ftl
+      <result name="input">/WEB-INF/views/monitoring/deliverable/deliverableList.ftl
       </result>
     </action>
     
