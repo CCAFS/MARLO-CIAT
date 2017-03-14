@@ -162,10 +162,10 @@
     [#if editable]<div class="removeFundingSource removeIcon" title="Remove funding source"></div>[/#if] 
     <input class="id" type="hidden" name="${fundingSourceCustomName}.id" value="${(element.id)!-1}" />
     <div class="col-md-4">
-      [@customForm.input name="${fundingSourceCustomName}.fundingSourceType.ocsCode" i18nkey="OCS code" type="text" disabled=!editable required=false editable=editable /]
+      [@customForm.input name="${fundingSourceCustomName}.ocsCode" i18nkey="OCS code" type="text" disabled=!editable required=false editable=editable /]
     </div>
     <div class="col-md-12">
-      [@customForm.input name="${fundingSourceCustomName}.fundingSourceType.title" i18nkey="Title" type="text" disabled=!editable required=false editable=editable /]
+      [@customForm.input name="${fundingSourceCustomName}.title" i18nkey="Title" type="text" disabled=!editable required=false editable=editable /]
     </div>
     <div class="col-md-4">
       [@customForm.select name="${fundingSourceCustomName}.fundingSourceType.id" label=""  i18nkey="Funding source" listName="fundingSourceTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]

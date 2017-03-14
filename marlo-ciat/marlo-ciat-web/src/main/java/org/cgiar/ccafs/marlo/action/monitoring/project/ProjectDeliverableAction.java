@@ -17,6 +17,8 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 
 import com.google.inject.Inject;
 
@@ -26,6 +28,13 @@ import com.google.inject.Inject;
 public class ProjectDeliverableAction extends BaseAction {
 
   private static final long serialVersionUID = 6553033204498654741L;
+
+
+  private long deliverableID;
+  private long projectID;
+  private ResearchCenter loggedCenter;
+
+  private Deliverable deliverable;
 
   @Inject
   public ProjectDeliverableAction(APConfig config) {
