@@ -40,7 +40,7 @@
       [#-- Section Buttons --]
       <div class="buttons">
         <div class="buttons-content">        
-          <a class="addButton" href="[@s.url action='${(centerSession)!}/addNewDeliverable'][@s.param name='programID']${selectedProgram.id?c}[/@s.param][/@s.url]">[@s.text name="Add deliverable" /]</a>
+          <a class="addButton" href="[@s.url action='${(centerSession)!}/addNewDeliverable'][@s.param name='projectID']${projectID}[/@s.param][/@s.url]">[@s.text name="Add deliverable" /]</a>
           <div class="clearfix"></div>
         </div>
       </div>
