@@ -6,3 +6,7 @@ table thead tr{
   height: 40px;
   background-color: #7B9074;
 }
+
+tbody tr{
+	    height:35px;;
+}
