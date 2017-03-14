@@ -3,9 +3,9 @@
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
 [#assign pageLibs = ["datatables.net", "datatables.net-bs"] /]
 [#assign customJS = ["${baseUrl}/js/deliverable/deliverableList.js" ] /]
-[#assign customCSS = ["${baseUrl}/css/global/customDataTable.css"] /]
-[#assign currentSection = "deliverables" /]
-[#assign currentStage = (filterBy)!"all" /]
+[#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/deliverable/projectDeliverable.css"] /]
+[#assign currentSection = "monitoring" /]
+[#assign currentStage = "deliverables" /]
 
 
 [#assign breadCrumb = [
@@ -35,7 +35,7 @@
       [#-- deliverable List (My Projects) --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Project Key Deliverables</h3>
       <div class="loadingBlock"></div>
-      <div style="display:none">[@deliverableList.deliverableList deliverables=delverables canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/projectDeliverable" /]</div>
+      <div style="display:none">[@deliverableList.deliverableList deliverables=deliverables canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/projectDeliverable" /]</div>
   
       [#-- Section Buttons --]
       <div class="buttons">

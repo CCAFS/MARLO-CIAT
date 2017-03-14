@@ -1,0 +1,8 @@
+table thead{
+font-weight: bold !important;	
+}
+
+table thead tr{
+  height: 40px;
+  background-color: #7B9074;
+}
