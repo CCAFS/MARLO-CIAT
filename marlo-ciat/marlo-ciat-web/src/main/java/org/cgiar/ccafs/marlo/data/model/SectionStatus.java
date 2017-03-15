@@ -23,13 +23,11 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
 
 
   private Long id;
-
   private ResearchProgram researchProgram;
-
-
   private ResearchOutcome researchOutcome;
   private ResearchOutput researchOutput;
   private Project project;
+  private Deliverable deliverable;
   private String sectionName;
   private String missingFields;
   private String cycle;
@@ -57,6 +55,10 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
     return this.cycle;
   }
 
+  public Deliverable getDeliverable() {
+    return deliverable;
+  }
+
   @Override
   public Long getId() {
     return this.id;
@@ -82,10 +84,10 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
     return project;
   }
 
-
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
   }
+
 
   public ResearchOutput getResearchOutput() {
     return researchOutput;
@@ -110,6 +112,10 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
 
   public void setCycle(String cycle) {
     this.cycle = cycle;
+  }
+
+  public void setDeliverable(Deliverable deliverable) {
+    this.deliverable = deliverable;
   }
 
   public void setId(Long id) {

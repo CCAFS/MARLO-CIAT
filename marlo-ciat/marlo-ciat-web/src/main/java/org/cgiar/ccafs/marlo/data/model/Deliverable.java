@@ -19,6 +19,7 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = 1756645330425186871L;
 
+
   @Expose
   private Long id;
 
@@ -33,7 +34,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   @Expose
   private ProjectStatus projectStatus;
-
 
   @Expose
   private Project project;
@@ -58,14 +58,20 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   @Expose
   private boolean active;
 
+
   @Expose
   private Date activeSince;
+
 
   @Expose
   private Date dateCreated;
 
+
   @Expose
   private String modificationJustification;
+
+
+  private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
   private Set<DeliverableDocument> deliverableDocuments = new HashSet<DeliverableDocument>(0);
 
@@ -141,17 +147,14 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return documents;
   }
 
-
   public Date getEndDate() {
     return endDate;
   }
-
 
   @Override
   public Long getId() {
     return id;
   }
-
 
   @Override
   public String getLogDeatil() {
@@ -159,7 +162,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     sb.append("Id : ").append(this.getId());
     return sb.toString();
   }
-
 
   public String getModificationJustification() {
     return modificationJustification;
@@ -187,6 +189,11 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   }
 
 
+  public Set<SectionStatus> getSectionStatuses() {
+    return sectionStatuses;
+  }
+
+
   public Date getStartDate() {
     return startDate;
   }
@@ -206,9 +213,11 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return active;
   }
 
+
   public void setActive(boolean active) {
     this.active = active;
   }
+
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
@@ -234,7 +243,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.documents = documents;
   }
 
-
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }
@@ -242,6 +250,7 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
@@ -255,13 +264,17 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.name = name;
   }
 
-
   public void setProject(Project project) {
     this.project = project;
   }
 
   public void setProjectStatus(ProjectStatus projectStatus) {
     this.projectStatus = projectStatus;
+  }
+
+
+  public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
+    this.sectionStatuses = sectionStatuses;
   }
 
 
