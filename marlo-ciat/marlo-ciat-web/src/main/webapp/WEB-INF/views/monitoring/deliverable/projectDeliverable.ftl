@@ -49,7 +49,7 @@
             <div class="form-group row">
               [#-- deliverable tpye --]
               <div class="col-md-12">
-                [@customForm.select name="deliverable.deliverableType"  i18nkey="Type" listName="deliverableTypes" keyFieldName="id"  displayFieldName="name" className="deliverableTypeSelect" value="" /]
+                [@customForm.select name="deliverable.deliverableType.id"  i18nkey="Type" listName="deliverableTypes" keyFieldName="id"  displayFieldName="name" className="deliverableTypeSelect" value="deliverable.deliverableType.id" /]
               </div>  
             </div>
             <div class="form-group row">  
@@ -84,7 +84,7 @@
 </section>
 
 
-[@documentMacro element={} name="project.fundingSources"  index=-1 isTemplate=true /]
+[@documentMacro element={} name="deliverable.documents"  index=-1 isTemplate=true /]
   
 [#include "/WEB-INF/global/pages/footer.ftl"]
 

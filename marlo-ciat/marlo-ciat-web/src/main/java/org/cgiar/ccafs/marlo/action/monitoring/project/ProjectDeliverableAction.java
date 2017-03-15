@@ -31,6 +31,7 @@ import org.cgiar.ccafs.marlo.data.service.IDeliverableTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.validation.monitoring.project.DeliverableValidator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class ProjectDeliverableAction extends BaseAction {
   private IDeliverableDocumentService deliverableDocumentService;
   private ICenterService centerService;
   private IProjectService projectService;
+  private DeliverableValidator validator;
 
   private long deliverableID;
   private long projectID;
@@ -71,13 +73,15 @@ public class ProjectDeliverableAction extends BaseAction {
   @Inject
   public ProjectDeliverableAction(APConfig config, ICenterService centerService,
     IDeliverableTypeService deliverableTypeService, IDeliverableService deliverableService,
-    IProjectService projectService, IDeliverableDocumentService deliverableDocumentService) {
+    IProjectService projectService, IDeliverableDocumentService deliverableDocumentService,
+    DeliverableValidator validator) {
     super(config);
     this.centerService = centerService;
     this.deliverableTypeService = deliverableTypeService;
     this.deliverableService = deliverableService;
     this.projectService = projectService;
     this.deliverableDocumentService = deliverableDocumentService;
+    this.validator = validator;
   }
 
   public long getAreaID() {
@@ -172,6 +176,16 @@ public class ProjectDeliverableAction extends BaseAction {
       projectID + "", deliverableID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DEIVERABLE_BASE_PERMISSION, params));
 
+    if (this.isHttpPost()) {
+      if (deliverableTypes != null) {
+        deliverableTypes.clear();
+      }
+
+      if (deliverable.getDocuments() != null) {
+        deliverable.getDocuments().clear();
+      }
+    }
+
   }
 
   @Override
@@ -194,6 +208,8 @@ public class ProjectDeliverableAction extends BaseAction {
       long deliverableSaveID = deliverableService.saveDeliverable(deliverableDB);
 
       deliverableDB = deliverableService.getDeliverableById(deliverableSaveID);
+
+      this.saveDocuments(deliverableDB);
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
@@ -313,6 +329,13 @@ public class ProjectDeliverableAction extends BaseAction {
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  @Override
+  public void validate() {
+    if (save) {
+      validator.validate(this, deliverable, project, selectedProgram, true);
+    }
   }
 
 
