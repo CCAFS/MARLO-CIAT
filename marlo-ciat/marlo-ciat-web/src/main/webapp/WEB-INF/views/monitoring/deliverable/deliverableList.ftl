@@ -7,10 +7,10 @@
 [#assign currentSection = "monitoring" /]
 [#assign currentStage = "deliverables" /]
 
-
 [#assign breadCrumb = [
+  {"label":"projectsList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/projectList"},
   {"label":"deliverables", "nameSpace":"/monitoring", "action":"${(centerSession)!}/deliverableList"}
-]/]
+] /]
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
