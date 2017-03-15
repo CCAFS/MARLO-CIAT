@@ -34,6 +34,7 @@
     <div class="col-md-9">
       [#-- deliverable List (My Projects) --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Project Key Deliverables</h3>
+      <br />
       <div class="loadingBlock"></div>
       <div style="display:none">[@deliverableList.deliverableList deliverables=deliverables canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/projectDeliverable" /]</div>
   
