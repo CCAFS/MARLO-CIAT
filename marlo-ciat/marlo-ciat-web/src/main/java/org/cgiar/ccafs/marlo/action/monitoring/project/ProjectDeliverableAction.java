@@ -195,6 +195,15 @@ public class ProjectDeliverableAction extends BaseAction {
 
       deliverableDB = deliverableService.getDeliverableById(deliverableSaveID);
 
+      if (!this.getInvalidFields().isEmpty()) {
+        this.setActionMessages(null);
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+      } else {
+        this.addActionMessage("message:" + this.getText("saving.saved"));
+      }
 
       return SUCCESS;
     } else {
