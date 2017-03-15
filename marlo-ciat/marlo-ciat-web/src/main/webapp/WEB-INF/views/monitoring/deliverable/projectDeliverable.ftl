@@ -3,6 +3,7 @@
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${deliverableID}" /]
 [#assign pageLibs = ["select2"] /]
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/deliverable/projectDeliverable.js"] /]
+[#assign customCSS = ["${baseUrl}/css/deliverable/projectDeliverable.css"] /]
 [#assign currentSection = "monitoring" /]
 [#assign currentStage = "deliverables" /]
 [#assign editable = true /]
@@ -37,17 +38,19 @@
       
         [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
           
-          <h3 class="headTitle">[@s.text name="projectDescription.title" /]</h3>  
+          <h3 class="headTitle">[@s.text name="Key deliverable information" /]</h3>  
           <div id="projectDeliverable" class="borderBox">
             <div class="form-group row">  
             [#-- Deliverable title --]
               <div class="col-md-12">
                 [@customForm.input name="deliverable.name" i18nkey="Title" type="text" disabled=!editable  required=true editable=editable /]
               </div>  
+            </div>
+            <div class="form-group row">
               [#-- deliverable tpye --]
               <div class="col-md-12">
                 [@customForm.select name="deliverable.deliverableType"  i18nkey="Type" listName="deliverableTypes" keyFieldName="id"  displayFieldName="name" className="deliverableTypeSelect" value="" /]
-              </div>               
+              </div>  
             </div>
             <div class="form-group row">  
               [#-- Start Date --]
@@ -66,16 +69,17 @@
                 [@documentMacro element=document name="deliverable.documents"  index=document_index isTemplate=false /]
               [/#list]
             [/#if]
-            <p class="text-center inf" style="display:${(deliverable.documents?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
+            <p class="text-center inf" style="display:${(deliverable.documents?has_content)?string('none','block')}">[@s.text name="There are not document(s) added yet." /]</p>
           </div>
           <div class="text-right">
             <div class="button-green addDocument"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a support document" /]</div>
           </div>
+        </div>
       [#-- Section Buttons & hidden inputs--]
           [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
              
           [/@s.form] 
-      </div>
+      
     </div>  
 </section>
 
@@ -87,10 +91,11 @@
 
 [#macro documentMacro element name index=-1 isTemplate=false]
   [#assign documentCustomName = "${name}[${index}]" /]
-  <div id="document-${isTemplate?string('template',(element.id)!)}" class="documents  borderBox row"  style="display:${isTemplate?string('none','block')}">
-    [#if editable]<div class="removeDocument removeIcon" title="Remove document"></div>[/#if] 
+  <div id="document-${isTemplate?string('template',(element.id)!)}" class="documents form-group row"  style="display:${isTemplate?string('none','block')}">
+    
     <input class="id" type="hidden" name="${documentCustomName}.id" value="${(element.id)!-1}" />
     <div class="col-md-12">
+    [#if editable]<div class="removeDocument removeIcon" title="Remove document"></div>[/#if] 
       [@customForm.input name="${documentCustomName}.link" i18nkey="Link" type="text" disabled=!editable required=false editable=editable /]
     </div>
   </div>

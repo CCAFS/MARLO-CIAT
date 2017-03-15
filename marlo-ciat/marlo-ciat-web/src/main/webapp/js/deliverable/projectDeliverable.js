@@ -2,15 +2,14 @@ $(document).ready(init);
 var countID = 0;
 
 function init() {
-  checkOutputsToRemove();
   /* Init Select2 plugin */
   $('form select').select2({
     width: "100%"
   });
 
   datePickerConfig({
-      "startDate": "#project\\.startDate",
-      "endDate": "#project\\.endDate"
+      "startDate": "#deliverable\\.startDate",
+      "endDate": "#deliverable\\.endDate"
   });
 
   // Events
@@ -27,7 +26,7 @@ function addDocument() {
   $list.append($item);
   $item.show('slow');
   checkItems($list);
-  updateFundingSource();
+  updateDocument();
 
 }
 

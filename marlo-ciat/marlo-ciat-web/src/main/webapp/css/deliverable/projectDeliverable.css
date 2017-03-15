@@ -10,3 +10,8 @@ table thead tr{
 tbody tr{
 	    height:35px;;
 }
+
+.removeDocument{
+	top: 23px;
+	right:17px;
+}
