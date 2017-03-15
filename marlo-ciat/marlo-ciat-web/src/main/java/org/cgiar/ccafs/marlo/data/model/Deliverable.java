@@ -5,6 +5,9 @@ package org.cgiar.ccafs.marlo.data.model;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
@@ -32,14 +35,18 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   @Expose
   private ProjectStatus projectStatus;
 
+
   @Expose
   private Project project;
+
 
   @Expose
   private DeliverableType deliverableType;
 
+
   @Expose
   private String name;
+
 
   @Expose
   private Date startDate;
@@ -58,6 +65,10 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   @Expose
   private String modificationJustification;
+
+  private Set<DeliverableDocument> deliverableDocuments = new HashSet<DeliverableDocument>(0);
+
+  private List<DeliverableDocument> documents;
 
   public Deliverable() {
   }
@@ -87,19 +98,25 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return activeSince;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
-
 
   public Date getDateCreated() {
     return dateCreated;
   }
 
+  public Set<DeliverableDocument> getDeliverableDocuments() {
+    return deliverableDocuments;
+  }
 
   public DeliverableType getDeliverableType() {
     return deliverableType;
+  }
+
+
+  public List<DeliverableDocument> getDocuments() {
+    return documents;
   }
 
 
@@ -147,9 +164,11 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return projectStatus;
   }
 
+
   public Date getStartDate() {
     return startDate;
   }
+
 
   @Override
   public boolean isActive() {
@@ -172,8 +191,16 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.dateCreated = dateCreated;
   }
 
+  public void setDeliverableDocuments(Set<DeliverableDocument> deliverableDocuments) {
+    this.deliverableDocuments = deliverableDocuments;
+  }
+
   public void setDeliverableType(DeliverableType deliverableType) {
     this.deliverableType = deliverableType;
+  }
+
+  public void setDocuments(List<DeliverableDocument> documents) {
+    this.documents = documents;
   }
 
 

@@ -162,12 +162,26 @@ public class ProjectDeliverableAction extends BaseAction {
       deliverableTypes = new ArrayList<>(
         deliverableTypeService.findAll().stream().filter(dt -> dt.isActive()).collect(Collectors.toList()));
 
+      deliverable.setDocuments(new ArrayList<>(
+        deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
+
     }
 
     String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "",
       projectID + "", deliverableID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DEIVERABLE_BASE_PERMISSION, params));
 
+  }
+
+  @Override
+  public String save() {
+    if (this.hasPermission("*")) {
+
+
+      return SUCCESS;
+    } else {
+      return NOT_AUTHORIZED;
+    }
   }
 
 
