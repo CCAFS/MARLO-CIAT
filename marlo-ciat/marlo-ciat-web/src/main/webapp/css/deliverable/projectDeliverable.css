@@ -1,8 +1,8 @@
-table thead{
+table.deliverablesList thead{
 font-weight: bold !important;	
 }
 
-table thead tr{
+table.deliverablesList thead tr{
   height: 40px;
   background-color: #7B9074;
 }
