@@ -76,7 +76,7 @@
           </div>
         </div>
       [#-- Section Buttons & hidden inputs--]
-          [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
+          [#include "/WEB-INF/views/monitoring/deliverable/buttons-deliverable.ftl" /]
              
           [/@s.form] 
       
