@@ -235,7 +235,7 @@ public class ProjectDeliverableAction extends BaseAction {
 
       for (DeliverableDocument deliverableDocument : deliverableDocuments) {
         if (!deliverable.getDocuments().contains(deliverableDocument)) {
-          deliverableService.deleteDeliverable(deliverableDocument.getId());
+          deliverableDocumentService.deleteDeliverableDocument(deliverableDocument.getId());
         }
       }
     }

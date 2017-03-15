@@ -64,7 +64,7 @@ public class DeliverableValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-deliverable.endDate", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (deliverable.getDeliverableType() == null) {
+    if (deliverable.getDeliverableType().getId() == null || deliverable.getDeliverableType().getId() == -1) {
       this.addMessage(baseAction.getText("deliverable.action.deliverablesType"));
       baseAction.getInvalidFields().put("input-deliverable.deliverableType", InvalidFieldsMessages.EMPTYFIELD);
     }
