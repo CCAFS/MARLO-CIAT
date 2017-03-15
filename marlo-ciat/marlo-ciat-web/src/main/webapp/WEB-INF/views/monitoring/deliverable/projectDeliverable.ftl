@@ -1,7 +1,7 @@
 [#ftl]
 [#assign title = "Project Deliverable" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${deliverableID}" /]
-[#assign pageLibs = ["select2"] /]
+[#assign pageLibs = ["select2","jsUri"] /]
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/deliverable/projectDeliverable.js"] /]
 [#assign customCSS = ["${baseUrl}/css/deliverable/projectDeliverable.css"] /]
 [#assign currentSection = "monitoring" /]
@@ -96,7 +96,7 @@
     <input class="id" type="hidden" name="${documentCustomName}.id" value="${(element.id)!-1}" />
     <div class="col-md-12">
     [#if editable]<div class="removeDocument removeIcon" title="Remove document"></div>[/#if] 
-      [@customForm.input name="${documentCustomName}.link" i18nkey="Link" type="text" disabled=!editable required=false editable=editable /]
+      [@customForm.input name="${documentCustomName}.link" i18nkey="Link" type="text" className="link" disabled=!editable required=false editable=editable /]
     </div>
   </div>
 [/#macro]

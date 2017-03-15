@@ -15,11 +15,26 @@ function init() {
   // Events
   $(".addDocument").on("click", addDocument);
   $(".removeDocument").on("click", removeDocument);
+  $(".link").on("keyup",checkUrl);
 }
 
-/** FUNCTIONS Funding Sources * */
+/** FUNCTIONS documents * */
 
-// Add a new funding source element
+function checkUrl() {
+  var input = $(this);
+  var inputData = $.trim(input.val());
+  var uri = new Uri(inputData);
+  $(input).removeClass("fieldError");
+  if(inputData != "") {
+    if(uri.protocol()=="http" || uri.protocol()=="https"){
+      $(input).removeClass("fieldError");
+    }else{
+      $(input).addClass("fieldError");
+    }
+  }
+}
+
+// Add a new document element
 function addDocument() {
   var $list = $(".documentList");
   var $item = $("#document-template").clone(true).removeAttr("id");
@@ -30,7 +45,7 @@ function addDocument() {
 
 }
 
-// Remove Funding source element
+// Remove document element
 function removeDocument() {
   var $list = $(this).parents('.documentList');
   var $item = $(this).parents('.documents');
