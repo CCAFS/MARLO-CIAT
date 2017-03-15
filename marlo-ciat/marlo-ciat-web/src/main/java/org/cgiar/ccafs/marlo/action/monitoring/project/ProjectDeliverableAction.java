@@ -18,12 +18,14 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
 import org.cgiar.ccafs.marlo.data.model.DeliverableType;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IDeliverableDocumentService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
@@ -31,6 +33,7 @@ import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,16 +50,13 @@ public class ProjectDeliverableAction extends BaseAction {
 
 
   private IDeliverableService deliverableService;
-
   private IDeliverableTypeService deliverableTypeService;
-
-
+  private IDeliverableDocumentService deliverableDocumentService;
   private ICenterService centerService;
   private IProjectService projectService;
+
   private long deliverableID;
   private long projectID;
-
-
   private long programID;
   private long areaID;
   private Project project;
@@ -71,12 +71,13 @@ public class ProjectDeliverableAction extends BaseAction {
   @Inject
   public ProjectDeliverableAction(APConfig config, ICenterService centerService,
     IDeliverableTypeService deliverableTypeService, IDeliverableService deliverableService,
-    IProjectService projectService) {
+    IProjectService projectService, IDeliverableDocumentService deliverableDocumentService) {
     super(config);
     this.centerService = centerService;
     this.deliverableTypeService = deliverableTypeService;
     this.deliverableService = deliverableService;
     this.projectService = projectService;
+    this.deliverableDocumentService = deliverableDocumentService;
   }
 
   public long getAreaID() {
@@ -177,6 +178,23 @@ public class ProjectDeliverableAction extends BaseAction {
   public String save() {
     if (this.hasPermission("*")) {
 
+      Deliverable deliverableDB = deliverableService.getDeliverableById(deliverableID);
+
+      deliverableDB.setName(deliverable.getName());
+      deliverableDB.setStartDate(deliverable.getStartDate());
+      deliverableDB.setEndDate(deliverable.getEndDate());
+
+
+      if (deliverable.getDeliverableType().getId() != null) {
+        DeliverableType deliverableType =
+          deliverableTypeService.getDeliverableTypeById(deliverable.getDeliverableType().getId());
+        deliverableDB.setDeliverableType(deliverableType);
+      }
+
+      long deliverableSaveID = deliverableService.saveDeliverable(deliverableDB);
+
+      deliverableDB = deliverableService.getDeliverableById(deliverableSaveID);
+
 
       return SUCCESS;
     } else {
@@ -184,6 +202,60 @@ public class ProjectDeliverableAction extends BaseAction {
     }
   }
 
+  public void saveDocuments(Deliverable deliverableDB) {
+
+    if (deliverableDB.getDeliverableDocuments() != null && deliverableDB.getDeliverableDocuments().size() > 0) {
+      List<DeliverableDocument> deliverableDocuments = new ArrayList<>(
+        deliverableDB.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList()));
+
+      for (DeliverableDocument deliverableDocument : deliverableDocuments) {
+        if (!deliverable.getDocuments().contains(deliverableDocument)) {
+          deliverableService.deleteDeliverable(deliverableDocument.getId());
+        }
+      }
+    }
+
+    if (deliverable.getDocuments() != null) {
+      for (DeliverableDocument deliverableDocument : deliverable.getDocuments()) {
+
+        if (deliverableDocument.getId() == null || deliverableDocument.getId() == -1) {
+          DeliverableDocument documentSave = new DeliverableDocument();
+
+          documentSave.setActive(true);
+          documentSave.setCreatedBy(this.getCurrentUser());
+          documentSave.setModifiedBy(this.getCurrentUser());
+          documentSave.setActiveSince(new Date());
+          documentSave.setModificationJustification("");
+          documentSave.setLink(deliverableDocument.getLink());
+
+          Deliverable deliverable = deliverableService.getDeliverableById(deliverableID);
+          documentSave.setDeliverable(deliverable);
+
+          deliverableDocumentService.saveDeliverableDocument(documentSave);
+
+
+        } else {
+          boolean hasChanges = false;
+          DeliverableDocument documentPrew =
+            deliverableDocumentService.getDeliverableDocumentById(deliverableDocument.getId());
+
+          if (!documentPrew.getLink().equals(deliverableDocument.getLink())) {
+            hasChanges = true;
+            documentPrew.setLink(deliverableDocument.getLink());
+          }
+
+          if (hasChanges) {
+            documentPrew.setModifiedBy(this.getCurrentUser());
+            documentPrew.setActiveSince(new Date());
+            deliverableDocumentService.saveDeliverableDocument(documentPrew);
+          }
+
+        }
+
+      }
+    }
+
+  }
 
   public void setAreaID(long areaID) {
     this.areaID = areaID;

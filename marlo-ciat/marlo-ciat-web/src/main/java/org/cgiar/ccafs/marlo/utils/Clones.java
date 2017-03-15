@@ -136,7 +136,7 @@ public class Clones {
      */
 
 
-    String[] model = {"DeliverableType", "Deliverable"};
+    String[] model = {"DeliverableDocument"};
 
     for (int i = 0; i < model.length; i++) {
       generateDao(model[i]);

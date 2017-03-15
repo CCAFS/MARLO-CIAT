@@ -360,7 +360,7 @@ public class ProjectDescriptionAction extends BaseAction {
           fundingSourceSave.setModifiedBy(this.getCurrentUser());
           fundingSourceSave.setModificationJustification("");
 
-          // TODO when implement the OCS service
+          // TODO when be to implement the OCS service
           fundingSourceSave.setSync(false);
 
           projectFundingSourceService.saveProjectFundingSource(fundingSourceSave);
@@ -384,6 +384,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
           if (hasChanges) {
             fundingSourcePrew.setModifiedBy(this.getCurrentUser());
+            fundingSourcePrew.setActiveSince(new Date());
             projectFundingSourceService.saveProjectFundingSource(fundingSourcePrew);
           }
 

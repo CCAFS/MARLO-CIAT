@@ -76,6 +76,7 @@
 		<mapping resource="xmls/ProjectCrosscutingThemes.hbm.xml" />	
 		<mapping resource="xmls/Deliverables.hbm.xml" />
 		<mapping resource="xmls/DeliverableTypes.hbm.xml" />		
+		<mapping resource="xmls/DeliverableDocuments.hbm.xml" />  
 	</session-factory>
 
 </hibernate-configuration>

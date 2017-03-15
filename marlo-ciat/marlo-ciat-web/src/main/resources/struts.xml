@@ -58,6 +58,8 @@
 			<!-- validating if the user have edit privileges to impact pathway -->
 			<interceptor name="editProject"
 				class="org.cgiar.ccafs.marlo.interceptor.monitoring.project.EditProjectInterceptor" />
+				<interceptor name="editDeliverable"
+        class="org.cgiar.ccafs.marlo.interceptor.monitoring.project.EditDeliverableInterceptor" />
 
 
 			<!-- stack from home packgae -->
@@ -89,6 +91,14 @@
 				<interceptor-ref name="keepRedirectMessages" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
+			
+			<interceptor-stack name="deliverableStack">
+        <interceptor-ref name="i18nFile" />
+        <interceptor-ref name="requireUser" />
+        <interceptor-ref name="editDeliverable" />
+        <interceptor-ref name="keepRedirectMessages" />
+        <interceptor-ref name="defaultStack" />
+      </interceptor-stack>
 
 			<interceptor-stack name="outcomeStack">
 				<interceptor-ref name="i18nFile" />

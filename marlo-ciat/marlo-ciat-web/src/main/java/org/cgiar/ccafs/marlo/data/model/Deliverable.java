@@ -19,7 +19,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = 1756645330425186871L;
 
-
   @Expose
   private Long id;
 
@@ -51,8 +50,10 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   @Expose
   private Date startDate;
 
+
   @Expose
   private Date endDate;
+
 
   @Expose
   private boolean active;
@@ -94,6 +95,28 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    Deliverable other = (Deliverable) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
+  }
+
   public Date getActiveSince() {
     return activeSince;
   }
@@ -113,7 +136,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   public DeliverableType getDeliverableType() {
     return deliverableType;
   }
-
 
   public List<DeliverableDocument> getDocuments() {
     return documents;
@@ -167,6 +189,15 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   public Date getStartDate() {
     return startDate;
+  }
+
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
 

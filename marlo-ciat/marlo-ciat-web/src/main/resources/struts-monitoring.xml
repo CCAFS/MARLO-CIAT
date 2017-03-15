@@ -60,8 +60,8 @@
     
     <action name="{center}/projectDeliverable"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectDeliverableAction">
-      <interceptor-ref name="projectStack" /> <!--  TODO deliverableStack -->
-      <result name="input">/WEB-INF/views/monitoring/project/ProjectDeliverable.ftl
+      <interceptor-ref name="deliverableStack" />
+      <result name="input">/WEB-INF/views/monitoring/deliverable/projectDeliverable.ftl
       </result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/projectDeliverable</param>
@@ -79,7 +79,7 @@
     <action name="{center}/addNewDeliverable" method="add"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.DeliverableListAction">
       <interceptor-ref name="projectStack" />
-      <result name="input">/WEB-INF/views/monitoring/project/deliverableList.ftl
+      <result name="input">/WEB-INF/views/monitoring/deliverable/projectDeliverable.ftl
       </result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/projectDeliverable</param>
