@@ -2,7 +2,7 @@
 [#assign title = "Project Deliverable" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${deliverableID}" /]
 [#assign pageLibs = ["select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js""${baseUrl}/js/global/usersManagement.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/deliverable/projectDeliverable.js"] /]
 [#assign currentSection = "monitoring" /]
 [#assign currentStage = "deliverables" /]
 [#assign editable = true /]
@@ -23,7 +23,7 @@
   </div> 
   <div style="display:none" class="viewMore closed"></div>
 </div>
-    
+
 <section class="container">
     <div class="row">
       [#-- Project Menu --]
@@ -85,9 +85,9 @@
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
 
-[#macro documentMacro element name index=-1 isTemplate=false]  
+[#macro documentMacro element name index=-1 isTemplate=false]
   [#assign documentCustomName = "${name}[${index}]" /]
-  <div id="document-${isTemplate?string('template',(element.id)!)}" class="document  borderBox row"  style="display:${isTemplate?string('none','block')}">
+  <div id="document-${isTemplate?string('template',(element.id)!)}" class="documents  borderBox row"  style="display:${isTemplate?string('none','block')}">
     [#if editable]<div class="removeDocument removeIcon" title="Remove document"></div>[/#if] 
     <input class="id" type="hidden" name="${documentCustomName}.id" value="${(element.id)!-1}" />
     <div class="col-md-12">
