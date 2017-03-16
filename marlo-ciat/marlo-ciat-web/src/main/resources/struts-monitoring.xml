@@ -88,6 +88,13 @@
       </result>     
     </action>
     
+    <action name="{center}/monitoringOutcomesList"
+      class="org.cgiar.ccafs.marlo.action.monitoring.outcome.MonitoringOutcomesListAction">
+      <interceptor-ref name="sectionStack" />
+      <result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
+      </result>
+    </action>
+    
     
 
 	</package>
