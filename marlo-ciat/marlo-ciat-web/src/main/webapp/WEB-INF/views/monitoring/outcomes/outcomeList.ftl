@@ -30,6 +30,17 @@
       [#include "/WEB-INF/views/monitoring/project/submenu-project.ftl" /]
       [#-- Outcomes List --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Outcomes</h3>
+      <div class="simpleBox col-md-12">
+        <label for="">Research Topic:<span class="red">*</span></label>
+        <select name="researchTopics" id="researchTopics">
+          <option value="-1" >Select an option</option>
+          
+            [#list researchTopics as researchTopic]
+              <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
+            [/#list]
+           
+        </select>            
+      </div>
       <div class="loadingBlock"></div>
       <div style="display:none">[@outcomesListMonitoring.outcomesListMonitoring outcomes=outcome canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/outcomes" /]</div>
       <div class="clearfix"></div>
