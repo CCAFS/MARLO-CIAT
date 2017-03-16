@@ -38,7 +38,13 @@
       
         [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
           
-          <h3 class="headTitle">[@s.text name="Key deliverable information" /]</h3>  
+          [#-- Back --]
+            <small class="pull-right">
+              <a href="[@s.url action='${centerSession}/deliverableList'][@s.param name="projectID" value=project.id /][/@s.url]">
+                <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the deliverables list
+              </a>
+            </small>  
+          <h3 class="headTitle">[@s.text name="Key deliverable information" /]</h3>
           <div id="projectDeliverable" class="borderBox">
             <div class="form-group row">  
             [#-- Deliverable title --]
