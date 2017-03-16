@@ -95,6 +95,26 @@
       </result>
     </action>
     
+    <action name="{center}/monitoringOutcome"
+      class="org.cgiar.ccafs.marlo.action.monitoring.outcome.MonitoringOutcomeAction">
+      <interceptor-ref name="sectionStack" />
+      <result name="input">/WEB-INF/views/impactPathway/outcome.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/monitoringOutcome</param>
+        <param name="outcomeID">${outcomeID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+      </result>
+      <result name="cancel" type="redirectAction">
+        <param name="actionName">${centerSession}/monitoringOutcome</param>
+        <param name="outcomeID">${outcomeID}</param>
+        <param name="programID">${programID}</param>
+        <param name="edit">true</param>
+        <param name="cancel">true</param>
+      </result>
+    </action>
+    
     
 
 	</package>

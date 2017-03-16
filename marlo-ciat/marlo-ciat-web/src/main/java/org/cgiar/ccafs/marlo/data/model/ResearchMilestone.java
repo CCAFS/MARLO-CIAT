@@ -23,6 +23,8 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gson.annotations.Expose;
 
@@ -38,8 +40,11 @@ public class ResearchMilestone implements Serializable, IAuditLog {
 
   @Expose
   private Long id;
+
   @Expose
   private String title;
+
+
   @Expose
   private Integer targetYear;
   @Expose
@@ -58,6 +63,7 @@ public class ResearchMilestone implements Serializable, IAuditLog {
   private ResearchOutcome researchOutcome;
   @Expose
   private TargetUnit targetUnit;
+  private Set<MonitoringMilestone> monitoringMilestones = new HashSet<MonitoringMilestone>(0);
 
   public ResearchMilestone() {
     super();
@@ -136,6 +142,10 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
+  public Set<MonitoringMilestone> getMonitoringMilestones() {
+    return monitoringMilestones;
+  }
+
   /**
    * @return the impactOutcome
    */
@@ -154,13 +164,13 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return targetYear;
   }
 
-
   /**
    * @return the title
    */
   public String getTitle() {
     return title;
   }
+
 
   public BigDecimal getValue() {
     return value;
@@ -173,7 +183,6 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
-
 
   /**
    * @return the active
@@ -191,10 +200,10 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -216,6 +225,11 @@ public class ResearchMilestone implements Serializable, IAuditLog {
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
+  }
+
+
+  public void setMonitoringMilestones(Set<MonitoringMilestone> monitoringMilestones) {
+    this.monitoringMilestones = monitoringMilestones;
   }
 
 

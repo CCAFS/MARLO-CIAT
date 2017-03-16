@@ -76,15 +76,18 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   @Expose
   private TargetUnit targetUnit;
+
   @Expose
   private String modificationJustification;
 
+
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
+
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
   private Set<MonitoringOutcome> monitoringOutcomes = new HashSet<MonitoringOutcome>(0);
-
   private List<ResearchMilestone> milestones;
+  private List<MonitoringOutcome> monitorings;
 
   public ResearchOutcome() {
     super();
@@ -159,6 +162,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return monitoringOutcomes;
   }
 
+  public List<MonitoringOutcome> getMonitorings() {
+    return monitorings;
+  }
+
   /**
    * @return the researchImpact
    */
@@ -230,7 +237,6 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.description = description;
   }
 
-
   /**
    * @param id the id to set
    */
@@ -256,6 +262,11 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   public void setMonitoringOutcomes(Set<MonitoringOutcome> monitoringOutcomes) {
     this.monitoringOutcomes = monitoringOutcomes;
+  }
+
+
+  public void setMonitorings(List<MonitoringOutcome> monitorings) {
+    this.monitorings = monitorings;
   }
 
 
