@@ -28,7 +28,7 @@
 <section class="container">
   <article class="row" id="mainInformation">
     <div class="col-md-12">
-      [#include "/WEB-INF/views/monitoring/project/submenu-project.ftl" /]
+      [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
       [#-- Outcomes List --]
       <h3 class="headTitle text-center">${selectedProgram.name} - Outcomes</h3>
       <div class="simpleBox col-md-12">
