@@ -6,7 +6,7 @@
   { 'slug': 'monitoring', 'name': 'menu.monitoring',      'namespace': '/monitoring',       'action': '${(centerSession)!}/projectList',    'visible': logged, 'active': true,
     'subItems' : [
       { 'slug': 'monitoring.projects', 'name': 'menu.monitoring.projects', 'namespace': '/monitoring',  'action': '${(centerSession)!}/projectList',  'visible': logged, 'active': true },
-      { 'slug': 'monitoring.outcomes', 'name': 'menu.monitoring.outcomes', 'namespace': '/monitoring',  'action': '${(centerSession)!}/programimpacts',  'visible': logged, 'active': true }
+      { 'slug': 'monitoring.outcomes', 'name': 'menu.monitoring.outcomes', 'namespace': '/monitoring',  'action': '${(centerSession)!}/monitoringOutcomesList',  'visible': logged, 'active': true }
     ]
   }]/]
 

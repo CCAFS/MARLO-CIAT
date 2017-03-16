@@ -28,7 +28,7 @@ $(document).ready(
 
       $('.loadingBlock').hide().next().fadeIn(500);
 
-      $('form select').select2({
+      $('select').select2({
         width: '100%'
       });
 
@@ -39,8 +39,8 @@ $(document).ready(
             var option = $(this).find("option:selected");
             if(option.val() != "-1") {
               var url =
-                  baseURL + "/impactPathway/" + centerSession + "/outcomesList.do?programID=" + programID + "&edit="
-                      + editable + "&topicID=" + option.val();
+                  baseURL + "/monitoring/" + centerSession + "/monitoringOutcomesList.do?programID=" + programID
+                      + "&edit=" + editable + "&topicID=" + option.val();
               window.location = url;
             }
           });

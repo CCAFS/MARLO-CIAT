@@ -73,13 +73,13 @@
 [/#macro]
 
 [#macro outcomesListMonitoring outcomes={} owned=true canValidate=false canEdit=false isPlanning=false namespace="/" defaultAction=""]
-  <table class="outcomeListMonitoring" id="outcomes">
+  <table class="outcomeListMonitoring" id="outcomesListM">
     <thead>
       <tr class="subHeader">
         <th id="idsM">[@s.text name="programImpact.outcomeList.idTable" /]</th>
         <th id="outcomeTitlesM" >[@s.text name="programImpact.outcomeList.statement" /]</th>
         <th id="outcomeTargetYearM">[@s.text name="programImpact.outcomeList.targetYear" /]</th>
-        <th id="statusM">[@s.text name="programImpact.outcomeList.status" /]</th>
+        <th id="statusM">[@s.text name="outcomeList.status" /]</th>
       </tr>
     </thead>
     <tbody>
