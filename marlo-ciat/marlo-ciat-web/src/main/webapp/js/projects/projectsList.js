@@ -27,20 +27,4 @@ $(document).ready(function() {
 
   $('.loadingBlock').hide().next().fadeIn(500);
   
-  $('form select').select2({
-    width: '100%'
-  });
-
-  $("#researchTopics").on(
-      "change",
-      function() {
-        var programID = $("#programSelected").html();
-        var option = $(this).find("option:selected");
-        if(option.val() != "-1") {
-          var url =
-              baseURL + "/impactPathway/" + centerSession + "/outcomesList.do?programID=" + programID + "&edit="
-                  + editable + "&topicID=" + option.val();
-          window.location = url;
-        }
-      });
 });
