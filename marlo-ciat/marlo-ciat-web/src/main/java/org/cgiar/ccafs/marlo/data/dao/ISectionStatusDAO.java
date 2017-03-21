@@ -76,6 +76,16 @@ public interface ISectionStatusDAO {
   public List<SectionStatus> getSectionStatus(long programId, String sectionName);
 
   /**
+   * gets a SectionStatus of the one section by a specific deliverable
+   * 
+   * @param deliverableId
+   * @param projectId
+   * @param sectionName
+   * @return a SectionStatus Object
+   */
+  public SectionStatus getSectionStatusByDeliverable(long deliverableId, long projectId, String sectionName, int year);
+
+  /**
    * gets a SectionStatus of the one section by a specific research program
    * 
    * @param programId
@@ -84,6 +94,7 @@ public interface ISectionStatusDAO {
    * @return a SectionStatus Object
    */
   public SectionStatus getSectionStatusByOutcome(long programId, long outcomeId, String sectionName, int year);
+
 
   /**
    * gets a SectionStatus of the one section by a specific research program
@@ -95,7 +106,6 @@ public interface ISectionStatusDAO {
    */
   public SectionStatus getSectionStatusByOutput(long programId, long outputId, String sectionName, int year);
 
-
   /**
    * gets a SectionStatus of the one section by a specific research program
    * 
@@ -106,13 +116,23 @@ public interface ISectionStatusDAO {
   public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year);
 
   /**
+   * gets a SectionStatus of the one section by a specific project
+   * 
+   * @param programId
+   * @param projectId
+   * @param sectionName
+   * @return a SectionStatus Object
+   */
+  public SectionStatus getSectionStatusByProject(long programId, long projectId, String sectionName, int year);
+
+
+  /**
    * This method gets a list of sectionStatuss belongs of the user
    * 
    * @param userId - the user id
    * @return List of SectionStatuss or null if the user is invalid or not have roles.
    */
   public List<SectionStatus> getSectionStatussByUserId(long userId);
-
 
   /**
    * This method saves the information of the given sectionStatus

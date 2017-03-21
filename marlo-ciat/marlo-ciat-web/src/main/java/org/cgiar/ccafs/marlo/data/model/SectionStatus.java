@@ -26,6 +26,8 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
   private ResearchProgram researchProgram;
   private ResearchOutcome researchOutcome;
   private ResearchOutput researchOutput;
+  private Project project;
+  private Deliverable deliverable;
   private String sectionName;
   private String missingFields;
   private String cycle;
@@ -53,6 +55,10 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
     return this.cycle;
   }
 
+  public Deliverable getDeliverable() {
+    return deliverable;
+  }
+
   @Override
   public Long getId() {
     return this.id;
@@ -69,15 +75,19 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
     return this.missingFields;
   }
 
-
   @Override
   public User getModifiedBy() {
     return researchProgram.getModifiedBy();
   }
 
+  public Project getProject() {
+    return project;
+  }
+
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
   }
+
 
   public ResearchOutput getResearchOutput() {
     return researchOutput;
@@ -104,12 +114,20 @@ public class SectionStatus implements java.io.Serializable, IAuditLog {
     this.cycle = cycle;
   }
 
+  public void setDeliverable(Deliverable deliverable) {
+    this.deliverable = deliverable;
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
 
   public void setMissingFields(String missingFields) {
     this.missingFields = missingFields;
+  }
+
+  public void setProject(Project project) {
+    this.project = project;
   }
 
   public void setResearchOutcome(ResearchOutcome researchOutcome) {

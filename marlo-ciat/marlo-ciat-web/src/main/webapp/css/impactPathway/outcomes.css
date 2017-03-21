@@ -147,6 +147,17 @@ p.contributioRem {
     padding-bottom: 0px;
 }
 
-.outcomeListTitle{
-	
+/** Outcome List(monitoring) **/
+
+table.outcomeListMonitoring thead{
+font-weight: bold !important; 
+}
+
+table.outcomeListMonitoring thead tr{
+  height: 40px;
+  background-color: #7B9074;
+}
+
+tbody tr{
+      height:35px;;
 }

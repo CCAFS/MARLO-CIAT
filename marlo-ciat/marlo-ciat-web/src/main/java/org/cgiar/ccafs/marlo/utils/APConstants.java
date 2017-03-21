@@ -64,6 +64,8 @@ public final class APConstants {
   public static final String OUTPUT_ID = "outputID";
   public static final String BENEFICIARY_TYPE_ID = "beneficiaryTypeID";
   public static final String NEXT_USER_ID = "nextUserID";
+  public static final String PROJECT_ID = "projectID";
+  public static final String DELIVERABLE_ID = "deliverableID";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";

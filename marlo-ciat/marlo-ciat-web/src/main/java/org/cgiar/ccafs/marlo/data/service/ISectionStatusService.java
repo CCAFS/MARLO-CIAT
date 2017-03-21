@@ -72,6 +72,16 @@ public interface ISectionStatusService {
   public List<SectionStatus> getSectionStatus(long programId, String sectionName);
 
   /**
+   * gets a SectionStatus of the one section by a specific deliverable
+   * 
+   * @param deliverableId
+   * @param projectId
+   * @param sectionName
+   * @return a SectionStatus Object
+   */
+  public SectionStatus getSectionStatusByDeliverable(long deliverableId, long projectId, String sectionName, int year);
+
+  /**
    * This method gets a sectionStatus object by a given sectionStatus identifier.
    * 
    * @param sectionStatusID is the sectionStatus identifier.
@@ -107,6 +117,16 @@ public interface ISectionStatusService {
    * @return a SectionStatus Object
    */
   public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year);
+
+  /**
+   * gets a SectionStatus of the one section by a specific project
+   * 
+   * @param programId
+   * @param projectId
+   * @param sectionName
+   * @return a SectionStatus Object
+   */
+  public SectionStatus getSectionStatusByProject(long programId, long projectId, String sectionName, int year);
 
   /**
    * This method gets a list of sectionStatuss belongs of the user

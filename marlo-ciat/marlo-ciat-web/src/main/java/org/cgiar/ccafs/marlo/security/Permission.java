@@ -21,8 +21,6 @@ package org.cgiar.ccafs.marlo.security;
  * 
  * @author Hernán David Carvajal
  * @author Hermes Jiménez - CIAT/CCAFS
- *         Represents the User of the system.
- *         Modified by @author nmatovu last on Sep 29, 2016
  */
 public class Permission {
 
@@ -33,5 +31,14 @@ public class Permission {
   public static final String RESEARCH_PROGRAM_BASE_PERMISSION = "center:{0}:area:{1}:program:{2}";
 
   public static final String RESEARCH_PROGRAM_SUBMISSION_PERMISSION = "center:{0}:area:{1}:program:{2}:submitIP";
+
+  // Monitoring
+  public static final String PROJECT_BASE_PERMISSION = "center:{0}:area:{1}:program:{2}:project:{3}";
+  public static final String PROJECT_DESCRIPTION_BASE_PERMISSION =
+    "center:{0}:area:{1}:program:{2}:project:{3}:projectDescription";
+  public static final String PROJECT_PARTNERS_BASE_PERMISSION =
+    "center:{0}:area:{1}:program:{2}:project:{3}:projectPartners";
+  public static final String PROJECT_DEIVERABLE_BASE_PERMISSION =
+    "center:{0}:area:{1}:program:{2}:project:{3}:deliverable:{4}";
 
 }

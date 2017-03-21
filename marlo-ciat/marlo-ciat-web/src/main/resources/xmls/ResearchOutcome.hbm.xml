@@ -69,5 +69,12 @@
       </key>
       <one-to-many class="org.cgiar.ccafs.marlo.data.model.SectionStatus" />
     </set>
+    <set name="monitoringOutcomes" table="monitoring_outcomes" inverse="true"
+      lazy="true" fetch="select">
+      <key>
+        <column name="outcome_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.MonitoringOutcome" />
+    </set>
 	</class>
 </hibernate-mapping>

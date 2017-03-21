@@ -1406,7 +1406,7 @@ a#userLogOut {
 }
 
 #mainMenu .menuContent.positionFixedTop ul li ul.subMenu {
-  top:43px !important;
+  top: 34px !important;
 }
 
 
@@ -1454,7 +1454,7 @@ a#userLogOut {
    margin: 0 2px;
    font-weight: normal;
    font-size: 0.86em;
-   border-top: 1px solid #267898;
+   border-top: 1px solid #1d8953;
 }
 
 #mainMenu .menuContent ul li ul.subMenu li a{
@@ -1465,7 +1465,7 @@ a#userLogOut {
  z-index: 10;
  display:block;
  width: 200px;
- background: #23718F;
+ background: #2b915e;
  position: absolute;
  top: 57px;
  left: 0;
@@ -1714,22 +1714,14 @@ a.currentReportingSection li, a.currentSection li {
 }
 
 #secondaryMenu ul p.menuTitle{
-  
-list-style: none;
-  
-margin: 0;
-  
-padding: 2px 0;
-  
-font-weight: lighter;
-  
-color: #ffffff;
-  
-background: #0b7ba6;
-  
-text-align: center;
-  
-border-radius: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+  font-weight: lighter;
+  color: #ffffff;
+  background: #1a8c56;
+  text-align: center;
+  border-radius: 2px;
 }
 
 #secondaryMenu ul p.subText {
@@ -1851,7 +1843,7 @@ border-radius: 2px;
 
 
 #secondaryMenu > p{
-  color: #1da5ce;
+  color: #058247;
   text-align: center;
   font-size: 1.3em;
   line-height: 0.9em;
@@ -5925,13 +5917,13 @@ hr {
 }
 
 .expandableBlock .blockContent{
-  padding: 0 15px 20px 15px;
+  padding: 0 15px 20px 20px;
 }
 
 .button-float {
     position: absolute;
     bottom: 1px;
-    right: 1px;
+    right: 15px;
     height: 25px;
 }
 
@@ -6032,7 +6024,7 @@ span.programTag {
 	margin-top: 135px;
 }
 .footer:before {
-	background: url("./../../images/global/tract.png"),url("./../../images/global/tract.png"),url("./../../images/global/tract.png");
+	/* background: url("./../../images/global/tract.png"),url("./../../images/global/tract.png"),url("./../../images/global/tract.png"); */
 	display: block;
 	content: "";
 	position: relative;

@@ -82,6 +82,11 @@ public class SectionStatusService implements ISectionStatusService {
   }
 
   @Override
+  public SectionStatus getSectionStatusByDeliverable(long deliverableId, long projectId, String sectionName, int year) {
+    return sectionStatusDAO.getSectionStatusByDeliverable(deliverableId, projectId, sectionName, year);
+  }
+
+  @Override
   public SectionStatus getSectionStatusById(long sectionStatusID) {
 
     return sectionStatusDAO.find(sectionStatusID);
@@ -100,6 +105,11 @@ public class SectionStatusService implements ISectionStatusService {
   @Override
   public SectionStatus getSectionStatusByProgram(long programId, String sectionName, int year) {
     return sectionStatusDAO.getSectionStatusByProgram(programId, sectionName, year);
+  }
+
+  @Override
+  public SectionStatus getSectionStatusByProject(long programId, long projectId, String sectionName, int year) {
+    return sectionStatusDAO.getSectionStatusByProject(programId, projectId, sectionName, year);
   }
 
   @Override

@@ -2,7 +2,13 @@
 [#assign mainMenu= [
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'login',                                              'visible': !logged, 'active': true },
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'dashboard',                      'icon': 'home',     'visible': logged, 'active': true },
-  { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/programimpacts',                          'visible': logged, 'active': true }]/]
+  { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/programimpacts',                          'visible': logged, 'active': true },
+  { 'slug': 'monitoring', 'name': 'menu.monitoring',      'namespace': '/monitoring',       'action': '${(centerSession)!}/projectList',    'visible': logged, 'active': true,
+    'subItems' : [
+      { 'slug': 'monitoring.projects', 'name': 'menu.monitoring.projects', 'namespace': '/monitoring',  'action': '${(centerSession)!}/projectList',  'visible': logged, 'active': true },
+      { 'slug': 'monitoring.outcomes', 'name': 'menu.monitoring.outcomes', 'namespace': '/monitoring',  'action': '${(centerSession)!}/monitoringOutcomesList',  'visible': logged, 'active': true }
+    ]
+  }]/]
 
 [#macro mainMenuList]
   [#list mainMenu as item]
@@ -12,6 +18,20 @@
         [#if item.icon?has_content]<span class="glyphicon glyphicon-${item.icon}"></span> [/#if]
         [@s.text name=item.name ][@s.param]${(crpSession?upper_case)!'CRP'}[/@s.param] [/@s.text]
       </a>
+      [#if item.subItems?has_content]
+        <ul class="subMenu">
+          [#list item.subItems as subItem]
+            [#if subItem.visible]
+            <li id="${subItem.slug}" class="[#if currentStage?? && currentStage == subItem.slug ]currentSection[/#if] ${(subItem.active)?string('enabled','disabled')}">
+              <a href="[@s.url namespace=subItem.namespace action='${subItem.action}'][#if logged][@s.param name="edit" value="true"/][/#if][/@s.url]" onclick="return ${subItem.active?string}" class="action-${subItem.action}">
+                [#if subItem.icon?has_content]<span class="glyphicon glyphicon-${subItem.icon}"></span> [/#if]
+                [@s.text name=subItem.name ][/@s.text]
+              </a>
+            </li>
+            [/#if]
+          [/#list]
+        </ul>
+      [/#if]
     </li>
     [/#if]
   [/#list]

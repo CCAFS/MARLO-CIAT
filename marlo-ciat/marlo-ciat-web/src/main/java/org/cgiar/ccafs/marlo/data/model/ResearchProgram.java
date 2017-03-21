@@ -60,8 +60,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
 
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
-  private Set<Submission> submissions = new HashSet<Submission>(0);
+  private Set<Project> projects = new HashSet<Project>(0);
 
+
+  private Set<Submission> submissions = new HashSet<Submission>(0);
 
   private List<ResearchImpact> impacts;
 
@@ -73,6 +75,7 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
 
   @Expose
   private String impactColor;
+
 
   @Expose
   private boolean active;
@@ -188,7 +191,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return modificationJustification;
   }
 
-
   @Override
   public User getModifiedBy() {
     return modifiedBy;
@@ -198,11 +200,16 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     return this.name;
   }
 
+
   /**
    * @return the programType
    */
   public EntityType getProgramType() {
     return programType;
+  }
+
+  public Set<Project> getProjects() {
+    return projects;
   }
 
   /**
@@ -252,10 +259,10 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.active = active;
   }
 
-
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
+
 
   public void setColor(String color) {
     this.color = color;
@@ -264,7 +271,6 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
-
 
   public void setId(Long id) {
     this.id = id;
@@ -275,19 +281,19 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
     this.impactColor = impactColor;
   }
 
+
   public void setImpacts(List<ResearchImpact> impacts) {
     this.impacts = impacts;
   }
-
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
 
+
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
-
 
   public void setName(String name) {
     this.name = name;
@@ -299,6 +305,11 @@ public class ResearchProgram implements java.io.Serializable, IAuditLog {
    */
   public void setProgramType(EntityType programType) {
     this.programType = programType;
+  }
+
+
+  public void setProjects(Set<Project> projects) {
+    this.projects = projects;
   }
 
 
