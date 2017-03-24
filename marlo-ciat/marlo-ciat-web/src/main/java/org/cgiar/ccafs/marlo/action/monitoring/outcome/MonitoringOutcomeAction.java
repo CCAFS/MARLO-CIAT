@@ -129,6 +129,9 @@ public class MonitoringOutcomeAction extends BaseAction {
   public void fillOutcomeYear() {
     outcome.setMonitorings(new ArrayList<>());
 
+    int sYear = this.getYear();
+    int eYear = outcome.getTargetYear();
+
     Calendar calendarStart = Calendar.getInstance();
     calendarStart.set(Calendar.YEAR, this.getYear());
     Calendar calendarEnd = Calendar.getInstance();
@@ -159,6 +162,7 @@ public class MonitoringOutcomeAction extends BaseAction {
       }
 
       outcome.getMonitorings().add(monitoringOutcome);
+      calendarStart.add(Calendar.YEAR, 1);
     }
   }
 
