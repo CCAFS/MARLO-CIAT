@@ -91,14 +91,14 @@
     <action name="{center}/monitoringOutcomesList"
       class="org.cgiar.ccafs.marlo.action.monitoring.outcome.MonitoringOutcomesListAction">
       <interceptor-ref name="sectionStack" />
-      <result name="input">/WEB-INF/views/impactPathway/outcomesList.ftl
+      <result name="input">/WEB-INF/views/monitoring/outcomes/outcomeList.ftl
       </result>
     </action>
     
     <action name="{center}/monitoringOutcome"
       class="org.cgiar.ccafs.marlo.action.monitoring.outcome.MonitoringOutcomeAction">
       <interceptor-ref name="sectionStack" />
-      <result name="input">/WEB-INF/views/impactPathway/outcome.ftl
+      <result name="input">/WEB-INF/views/monitoring/outcomes/outcomeList.ftl
       </result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/monitoringOutcome</param>
