@@ -32,6 +32,7 @@
       [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
       
       [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
+      
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
       <div class="simpleBox col-md-12">
@@ -123,6 +124,8 @@
   </article>
 </section>
 
+[#-- Bilateral Co-Funded Project Popup --]
+[#include "/WEB-INF/global/macros/milestonePopup.ftl"]
 
 [#-- Evidence macro --]
 [@evidenceMacro evidence={} name="outcome.monitorings[-1].evidence" index=-1 isTemplate=true /]
