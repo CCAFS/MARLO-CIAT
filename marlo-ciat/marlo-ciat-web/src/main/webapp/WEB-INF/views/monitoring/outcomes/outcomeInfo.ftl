@@ -81,6 +81,19 @@
               <p class="message text-center">[@s.text name="outcome.milestones.emptyMessage"/]</p>
             [/#if]
           </div>
+            <br />
+            [#-- EVIDENCE OF USE --]
+            <div class="col-md-12 form-group">
+            <h5 class="sectionSubTitle">Evidence of use:</h5>
+              [#-- EVIDENCE LIST --]
+            [#if outcome.evidences?has_content]
+              [#list outcome.evidences as evidence]
+                [@evidenceMacro milestone=evidence name="outcome.monitorings[${outcome_index}].evidence" index=evidence_index /]
+              [/#list]
+            [#else]
+              <p class="message text-center">[@s.text name="There are not Evicences associated to this outcome as of yet"/]</p>
+            [/#if]
+            </div>
           
           </div>
         [/#list] 
@@ -104,7 +117,7 @@
       <span class="index">${index+1}</span>
       <span class="elementId">[@s.text name="outcome.milestone.index.title"/]</span>
     </div>
-     <input type="hidden" class="mileStoneId" name="${milestoneCustomName}.id" value="${(milestone.id)!}"/>
+     <input type="hidden" class="mileStoneId" name="${milestoneCustomName}.researchMilestone.id" value="${(milestone.researchMilestone.id)!}"/>
     [#-- Remove Button --]
     [#if editable=!editable]
       <div class="removeMilestone removeElement sm" title="Remove Milestone"></div>
@@ -112,24 +125,32 @@
     
     [#-- Milestone Statement --]
     <div class="form-group" style="margin-top: 15px;">
-      [@customForm.textArea name="${milestoneCustomName}.milestone.title" i18nkey="outcome.milestone.index.statement" required=true className="milestone-statement limitWords-50" editable=false /]
+      [@customForm.textArea name="${milestoneCustomName}.researchMilestone.title" i18nkey="outcome.milestone.index.statement" required=true className="milestone-statement limitWords-50" editable=false /]
     </div>
     <div class="row form-group target-block">      
       [#-- Target Unit --]
       <div class="col-md-3">
-        [@customForm.input name="${milestoneCustomName}.targetUnit.id" i18nkey="Achieved value" required=false editable=editable /]
+        [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value" required=false editable=editable /]
       </div>
       
       <div class="col-md-3 col-md-offset-3">
-        [@customForm.input name="${milestoneCustomName}.targetUnit.id" i18nkey="Expected completion year" required=false editable=false /]
+        [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" required=false editable=false /]
       </div>
       
       
     </div>
-    [#-- Milestone Statement --]
+    [#-- Milestone narrative --]
     <div class="form-group" style="margin-top: 15px;">
-      [@customForm.textArea name="${milestoneCustomName}.title" i18nkey="outcome.milestone.index.statement" required=true className="milestone-statement limitWords-100" editable=editable /]
+      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this outcome milestone" required=true className="milestone-statement limitWords-100" editable=editable /]
     </div> 
     
+  </div>
+[/#macro]
+
+[#macro evidenceMacro milestone name index isTemplate=false]
+  [#assign evidenceCustomName = "${name}[${index}]" /]
+  <div  id="evidence-${isTemplate?string('template', index)}" class="evidence simpleBox" style="display:${isTemplate?string('none','block')}" >
+    <div class="removeMilestone removeElement sm" title="Remove evidence"></div>
+    [@customForm.input name="${evidenceCustomName}.evidence" i18nkey="Evidence" placeholder="Link" required=true editable=editable /]
   </div>
 [/#macro]
