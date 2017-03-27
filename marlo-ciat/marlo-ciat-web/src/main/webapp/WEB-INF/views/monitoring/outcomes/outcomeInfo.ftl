@@ -30,6 +30,8 @@
   <article class="row" id="mainInformation">
     <div class="col-md-12">
       [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
+      
+      [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
       <div class="simpleBox col-md-12">
@@ -73,6 +75,7 @@
             </div>
             <br />
             [#-- MILESTONE LIST --]
+            <div class="milestoneList simpleBox">
             [#if outcome.milestones?has_content]
               [#list outcome.milestones as milestone]
                 [@milestoneMacro milestone=milestone name="outcome.monitorings[${outcome_index}].milestones" index=milestone_index /]
@@ -80,19 +83,28 @@
             [#else]
               <p class="message text-center">[@s.text name="outcome.milestones.emptyMessage"/]</p>
             [/#if]
+            </div>
+            <div class="text-center">
+              <div class="button-green addMilestone"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a milestone" /]</div>
+            </div>
           </div>
             <br />
             [#-- EVIDENCE OF USE --]
             <div class="col-md-12 form-group">
-            <h5 class="sectionSubTitle">Evidence of use:</h5>
-              [#-- EVIDENCE LIST --]
-            [#if outcome.evidences?has_content]
-              [#list outcome.evidences as evidence]
-                [@evidenceMacro milestone=evidence name="outcome.monitorings[${outcome_index}].evidence" index=evidence_index /]
-              [/#list]
-            [#else]
-              <p class="message text-center">[@s.text name="There are not Evicences associated to this outcome as of yet"/]</p>
-            [/#if]
+              <h5 class="sectionSubTitle">Evidence of use:</h5>
+                [#-- EVIDENCE LIST --]
+              <div class="evidenceList simpleBox">
+              [#if outcome.evidences?has_content]
+                [#list outcome.evidences as evidence]
+                  [@evidenceMacro milestone=evidence name="outcome.monitorings[${outcome_index}].evidence" index=evidence_index /]
+                [/#list]
+              [#else]
+                <p class="message text-center">[@s.text name="There are not Evicences associated to this outcome as of yet"/]</p>
+              [/#if]
+              </div>
+              <div class="text-center">
+                <div class="button-green addEvidence"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a evidence" /]</div>
+              </div>
             </div>
           
           </div>
@@ -102,8 +114,10 @@
       
          
       <div class="clearfix"></div>
+          [#-- Section Buttons & hidden inputs--]
+          [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
     </div>
-    
+    [/@s.form] 
   </article>
 </section>
 
