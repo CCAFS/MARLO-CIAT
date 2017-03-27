@@ -42,8 +42,8 @@
           <p>${(outcome.description)!}</p>
         </div>
         <div class="col-md-4">
-          <label for="">Expected for ${(outcome.year)!"null"}:  </label>
-          <p>${(outcome.value)!}</p>
+          <label for="">Expected for ${(outcome.targetYear)!"null"}:  </label>
+          <p>${(outcome.value)!"Not Applicable"}</p>
         </div>
       </div>
     <div class="clearfix"></div>

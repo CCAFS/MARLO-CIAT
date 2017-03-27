@@ -42,13 +42,13 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
-
   @Expose
   private String description;
 
 
   @Expose
   private Integer targetYear;
+
 
   @Expose
   private BigDecimal value;
@@ -86,13 +86,15 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private boolean impactPathway;
 
   @Expose
-  private int baseline;
+  private Integer baseline;
+
 
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
+
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
+
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
   private Set<MonitoringOutcome> monitoringOutcomes = new HashSet<MonitoringOutcome>(0);
-
   private List<ResearchMilestone> milestones;
   private List<MonitoringOutcome> monitorings;
 
@@ -126,13 +128,14 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return activeSince;
   }
 
-  public int getBaseline() {
+  public Integer getBaseline() {
     return baseline;
   }
 
   public User getCreatedBy() {
     return createdBy;
   }
+
 
   /**
    * @return the description
@@ -241,9 +244,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
-  public void setBaseline(int baseline) {
+  public void setBaseline(Integer baseline) {
     this.baseline = baseline;
   }
+
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;

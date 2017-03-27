@@ -49,10 +49,10 @@
 			<column name="is_active" not-null="true" />
 		</property>
 		<property name="impactPathway" type="boolean">
-      <column name="is_impact_pathway" not-null="true" />
+      <column name="is_impact_pathway"/>
     </property>
-    <property name="baseline" type="int">
-      <column name="baseline" not-null="true" />
+    <property name="baseline" type="java.lang.Integer">
+      <column name="baseline"/>
     </property>
 		<set name="researchMilestones" table="research_milestones"
 			inverse="true" lazy="true" fetch="select">

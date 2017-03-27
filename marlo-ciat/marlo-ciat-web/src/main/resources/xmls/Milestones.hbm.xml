@@ -42,7 +42,7 @@
 			<column name="is_active" not-null="true" />
 		</property>
 		<property name="impactPathway" type="boolean">
-      <column name="is_impact_pathway" not-null="true" />
+      <column name="is_impact_pathway"/>
     </property>
 		<property name="activeSince" type="timestamp">
 			<column name="active_since" length="19" not-null="true" />
