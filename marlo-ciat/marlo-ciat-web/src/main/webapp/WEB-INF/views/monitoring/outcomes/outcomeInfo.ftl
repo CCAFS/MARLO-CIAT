@@ -35,15 +35,15 @@
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
       <div class="simpleBox col-md-12">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label for="">Research topic:  </label>
           <p>${selectedResearchTopic.researchTopic}</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="">Outcome name:  </label>
           <p>${(outcome.description)!}</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="">Expected for ${(outcome.targetYear)!"null"}:  </label>
           <p>${(outcome.value)!"Not Applicable"}</p>
         </div>
@@ -125,7 +125,7 @@
 
 
 [#-- Evidence macro --]
-[@evidenceMacro milestone={} name="outcome.monitorings[-1].evidence" index=-1 isTemplate=true /]
+[@evidenceMacro evidence={} name="outcome.monitorings[-1].evidence" index=-1 isTemplate=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
