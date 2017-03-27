@@ -2,7 +2,7 @@
 [#assign title = "MiLE outcome information" /]
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
 [#assign pageLibs = ["select2"] /]
-[#assign customJS = ["" ] /]
+[#assign customJS = ["${baseUrl}/js/monitoring/outcomes/outcomeInfo.js" ] /]
 [#assign customCSS = [""] /]
 [#assign currentSection = "monitoring" /]
 
@@ -61,7 +61,7 @@
       <br />
         [#list outcome.monitorings as outcome]
         
-          <div role="tabpanel" class="tab-pane [#if outcome.year == action.getYear()]active[/#if]" id="outcomeYear-${outcome.year}">
+          <div role="tabpanel" class="outcomeTab tab-pane [#if outcome.year == action.getYear()]active[/#if]" id="outcomeYear-${outcome.year}">
           [#if outcome_index==0]
           <div class="col-md-2">
             [@customForm.input name="outcome.baseline" i18nkey="Initial Baseline" required=true editable=true /]
@@ -122,6 +122,9 @@
 </section>
 
 
+[#-- Evidence macro --]
+[@evidenceMacro milestone={} name="outcome.monitorings[-1].evidence" index=-1 isTemplate=true /]
+
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
 [#macro milestoneMacro milestone name index isTemplate=false]
@@ -164,7 +167,7 @@
 [#macro evidenceMacro milestone name index isTemplate=false]
   [#assign evidenceCustomName = "${name}[${index}]" /]
   <div  id="evidence-${isTemplate?string('template', index)}" class="evidence simpleBox" style="display:${isTemplate?string('none','block')}" >
-    <div class="removeMilestone removeElement sm" title="Remove evidence"></div>
+    <div class="removeEvidence removeElement sm" title="Remove evidence"></div>
     [@customForm.input name="${evidenceCustomName}.evidence" i18nkey="Evidence" placeholder="Link" required=true editable=editable /]
   </div>
 [/#macro]
