@@ -62,6 +62,8 @@
         [#list outcome.monitorings as outcome]
         
           <div role="tabpanel" class="outcomeTab tab-pane [#if outcome.year == action.getYear()]active[/#if]" id="outcomeYear-${outcome.year}">
+          [#-- element id --]
+          <input type="hidden" value="${(outcome.id)!}" />
           [#if outcome_index==0]
           <div class="col-md-2">
             [@customForm.input name="outcome.baseline" i18nkey="Initial Baseline" required=true editable=true /]
@@ -134,6 +136,8 @@
       <span class="index">${index+1}</span>
       <span class="elementId">[@s.text name="outcome.milestone.index.title"/]</span>
     </div>
+    [#-- element id --]
+     <input type="hidden" value="${(milestone.id)!}" />
      <input type="hidden" class="mileStoneId" name="${milestoneCustomName}.researchMilestone.id" value="${(milestone.researchMilestone.id)!}"/>
     [#-- Remove Button --]
     [#if editable=!editable]
@@ -164,9 +168,11 @@
   </div>
 [/#macro]
 
-[#macro evidenceMacro milestone name index isTemplate=false]
+[#macro evidenceMacro evidence name index isTemplate=false]
   [#assign evidenceCustomName = "${name}[${index}]" /]
   <div  id="evidence-${isTemplate?string('template', index)}" class="evidence simpleBox" style="display:${isTemplate?string('none','block')}" >
+    [#-- element id --]
+    <input type="hidden" value="${(evidence.id)!}" />
     <div class="removeEvidence removeElement sm" title="Remove evidence"></div>
     [@customForm.input name="${evidenceCustomName}.evidence" i18nkey="Evidence" placeholder="Link" required=true editable=editable /]
   </div>
