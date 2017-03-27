@@ -52,6 +52,7 @@ public class MilestoneAddAction extends BaseAction {
   private static String TARGET_UNIT = "targetUnit";
   private static String YEAR = "year";
   private static String VALUE = "value";
+  private static String OUTCOME_ID = "outcomeID";
 
   private long outcomeID;
   private IMonitoringMilestoneService monitoringMilestoneService;
@@ -63,19 +64,23 @@ public class MilestoneAddAction extends BaseAction {
 
   @Inject
   public MilestoneAddAction(APConfig config, IMonitoringMilestoneService monitoringMilestoneService,
-    IResearchMilestoneService milestoneService, ITargetUnitService targetUnitService) {
+    IResearchMilestoneService milestoneService, ITargetUnitService targetUnitService,
+    IResearchOutcomeService outcomeService) {
     super(config);
     this.monitoringMilestoneService = monitoringMilestoneService;
     this.milestoneService = milestoneService;
     this.targetUnitService = targetUnitService;
+    this.outcomeService = outcomeService;
   }
 
   @Override
   public String execute() throws Exception {
 
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
-
     Map<String, Object> parameters = ActionContext.getContext().getParameters();
+
+    outcomeID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(OUTCOME_ID))[0]));
+
+    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     Map<String, Object> milestoneData = new HashMap<>();
     ResearchMilestone milestone = new ResearchMilestone();
