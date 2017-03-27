@@ -17,6 +17,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.outcome;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.MonitorignOutcomeEvidence;
 import org.cgiar.ccafs.marlo.data.model.MonitoringMilestone;
 import org.cgiar.ccafs.marlo.data.model.MonitoringOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
@@ -329,18 +330,114 @@ public class MonitoringOutcomeAction extends BaseAction {
   @Override
   public String save() {
     if (this.hasPermission("*")) {
+
+      this.setInvalidFields(new HashMap<>());
+
+      ResearchOutcome outcomeDB = outcomeService.getResearchOutcomeById(outcomeID);
+      outcomeDB.setBaseline(outcome.getBaseline());
+
+      outcomeService.saveResearchOutcome(outcomeDB);
+
       if (outcome.getMonitorings() != null || !outcome.getMonitorings().isEmpty()) {
         for (MonitoringOutcome monitoringOutcome : outcome.getMonitorings()) {
+
           MonitoringOutcome monitoringOutcomeDB =
             monitoringOutcomeService.getMonitoringOutcomeById(monitoringOutcome.getId());
+
+          List<MonitoringMilestone> monitoringMilestones = monitoringOutcome.getMilestones();
+
+          for (MonitoringMilestone monitoringMilestone : monitoringMilestones) {
+
+            MonitoringMilestone monitoringMilestoneDB =
+              monitoringMilestoneService.getMonitoringMilestoneById(monitoringMilestone.getId());
+
+            monitoringMilestoneDB.setAchievedValue(monitoringMilestone.getAchievedValue());
+            monitoringMilestoneDB.setNarrative(monitoringMilestone.getNarrative());
+
+            monitoringMilestoneService.saveMonitoringMilestone(monitoringMilestoneDB);
+
+          }
+
+
+          monitoringOutcomeDB.setNarrative(monitoringOutcome.getNarrative());
+          monitoringOutcomeService.saveMonitoringOutcome(monitoringOutcomeDB);
+
+          this.saveEvidences(monitoringOutcomeDB, monitoringOutcome);
+
+
         }
       }
 
+      if (!this.getInvalidFields().isEmpty()) {
+        this.setActionMessages(null);
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
+          this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
+        }
+      } else {
+        this.addActionMessage("message:" + this.getText("saving.saved"));
+      }
 
       return SUCCESS;
     } else {
 
       return NOT_AUTHORIZED;
+    }
+  }
+
+  public void saveEvidences(MonitoringOutcome monitoringOutcomeDB, MonitoringOutcome monitoringOutcome) {
+
+    if (monitoringOutcomeDB.getEvidences() != null && monitoringOutcomeDB.getEvidences().size() > 0) {
+
+      List<MonitorignOutcomeEvidence> evidences = new ArrayList<>(monitoringOutcomeDB.getMonitorignOutcomeEvidences()
+        .stream().filter(ev -> ev.isActive()).collect(Collectors.toList()));
+
+      for (MonitorignOutcomeEvidence monitorignOutcomeEvidence : evidences) {
+        if (!monitoringOutcome.getEvidences().contains(monitorignOutcomeEvidence)) {
+          evidenceService.deleteMonitorignOutcomeEvidence(monitorignOutcomeEvidence.getId());
+        }
+      }
+    }
+
+
+    if (monitoringOutcome.getEvidences() != null) {
+      for (MonitorignOutcomeEvidence monitorignOutcomeEvidence : monitoringOutcome.getEvidences()) {
+
+        if (monitorignOutcomeEvidence.getId() == null || monitorignOutcomeEvidence.getId() == -1) {
+
+
+          MonitorignOutcomeEvidence evidenceSave = new MonitorignOutcomeEvidence();
+
+          evidenceSave.setActive(true);
+          evidenceSave.setCreatedBy(this.getCurrentUser());
+          evidenceSave.setModifiedBy(this.getCurrentUser());
+          evidenceSave.setActiveSince(new Date());
+          evidenceSave.setModificationJustification("");
+          evidenceSave.setEvidenceLink(monitorignOutcomeEvidence.getEvidenceLink());
+
+          evidenceSave.setMonitoringOutcome(monitoringOutcomeDB);
+
+
+          evidenceService.saveMonitorignOutcomeEvidence(evidenceSave);
+
+        } else {
+          boolean hasChanges = false;
+          MonitorignOutcomeEvidence evidencePrew =
+            evidenceService.getMonitorignOutcomeEvidenceById(monitorignOutcomeEvidence.getId());
+
+          if (!evidencePrew.getEvidenceLink().equals(monitorignOutcomeEvidence.getEvidenceLink())) {
+            hasChanges = true;
+            evidencePrew.setEvidenceLink(monitorignOutcomeEvidence.getEvidenceLink());
+          }
+
+          if (hasChanges) {
+            evidencePrew.setModifiedBy(this.getCurrentUser());
+            evidencePrew.setActiveSince(new Date());
+            evidenceService.saveMonitorignOutcomeEvidence(evidencePrew);
+          }
+        }
+
+      }
     }
   }
 
