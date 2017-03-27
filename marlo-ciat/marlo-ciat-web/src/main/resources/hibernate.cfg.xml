@@ -79,6 +79,7 @@
 		<mapping resource="xmls/DeliverableDocuments.hbm.xml" />
 		<mapping resource="xmls/MonitoringOutcomes.hbm.xml" />
 		<mapping resource="xmls/MonitoringMilestones.hbm.xml" />
+		<mapping resource="xmls/MonitorignOutcomeEvidences.hbm.xml" />		
 	</session-factory>
 
 </hibernate-configuration>

@@ -19,7 +19,6 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = 6260380573367662563L;
 
-
   @Expose
   private Long id;
 
@@ -27,15 +26,17 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
   @Expose
   private User modifiedBy;
 
-
   @Expose
   private User createdBy;
+
 
   @Expose
   private ResearchOutcome researchOutcome;
 
+
   @Expose
   private int year;
+
 
   @Expose
   private String narrative;
@@ -43,15 +44,22 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
   @Expose
   private boolean active;
 
+
   @Expose
   private Date activeSince;
+
 
   @Expose
   private String modificationJustification;
 
+
   private Set<MonitoringMilestone> monitoringMilestones = new HashSet<MonitoringMilestone>(0);
 
   private List<MonitoringMilestone> milestones;
+
+  private Set<MonitorignOutcomeEvidence> monitorignOutcomeEvidences = new HashSet<MonitorignOutcomeEvidence>(0);
+
+  private List<MonitorignOutcomeEvidence> evidences;
 
   public MonitoringOutcome() {
   }
@@ -78,17 +86,18 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
     return activeSince;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
 
+  public List<MonitorignOutcomeEvidence> getEvidences() {
+    return evidences;
+  }
 
   @Override
   public Long getId() {
     return id;
   }
-
 
   @Override
   public String getLogDeatil() {
@@ -97,20 +106,22 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
     return sb.toString();
   }
 
-
   public List<MonitoringMilestone> getMilestones() {
     return milestones;
   }
-
 
   public String getModificationJustification() {
     return modificationJustification;
   }
 
-
   @Override
   public User getModifiedBy() {
     return modifiedBy;
+  }
+
+
+  public Set<MonitorignOutcomeEvidence> getMonitorignOutcomeEvidences() {
+    return monitorignOutcomeEvidences;
   }
 
 
@@ -128,14 +139,22 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
     return researchOutcome;
   }
 
+
   public int getYear() {
     return year;
   }
+
 
   @Override
   public boolean isActive() {
     return active;
   }
+
+
+  public List<MonitoringMilestone> monitoringMilestones() {
+    return milestones;
+  }
+
 
   public void setActive(boolean active) {
     this.active = active;
@@ -147,6 +166,10 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
+  }
+
+  public void setEvidences(List<MonitorignOutcomeEvidence> evidences) {
+    this.evidences = evidences;
   }
 
   public void setId(Long id) {
@@ -164,6 +187,11 @@ public class MonitoringOutcome implements java.io.Serializable, IAuditLog {
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
+
+  public void setMonitorignOutcomeEvidences(Set<MonitorignOutcomeEvidence> monitorignOutcomeEvidences) {
+    this.monitorignOutcomeEvidences = monitorignOutcomeEvidences;
+  }
+
 
   public void setMonitoringMilestones(Set<MonitoringMilestone> monitoringMilestones) {
     this.monitoringMilestones = monitoringMilestones;
