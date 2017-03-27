@@ -42,6 +42,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
+
   @Expose
   private String description;
 
@@ -81,11 +82,17 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private String modificationJustification;
 
 
+  @Expose
+  private boolean impactPathway;
+
+  @Expose
+  private int baseline;
+
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
-
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
   private Set<MonitoringOutcome> monitoringOutcomes = new HashSet<MonitoringOutcome>(0);
+
   private List<ResearchMilestone> milestones;
   private List<MonitoringOutcome> monitorings;
 
@@ -117,6 +124,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   public Date getActiveSince() {
     return activeSince;
+  }
+
+  public int getBaseline() {
+    return baseline;
   }
 
   public User getCreatedBy() {
@@ -215,6 +226,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return active;
   }
 
+  public boolean isImpactPathway() {
+    return impactPathway;
+  }
+
   /**
    * @param active the active to set
    */
@@ -224,6 +239,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
+  }
+
+  public void setBaseline(int baseline) {
+    this.baseline = baseline;
   }
 
   public void setCreatedBy(User createdBy) {
@@ -242,6 +261,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public void setImpactPathway(boolean impactPathway) {
+    this.impactPathway = impactPathway;
   }
 
 

@@ -48,6 +48,12 @@
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
 		</property>
+		<property name="impactPathway" type="boolean">
+      <column name="is_impact_pathway" not-null="true" />
+    </property>
+    <property name="baseline" type="int">
+      <column name="baseline" not-null="true" />
+    </property>
 		<set name="researchMilestones" table="research_milestones"
 			inverse="true" lazy="true" fetch="select">
 			<key>

@@ -47,8 +47,11 @@ public class ResearchMilestone implements Serializable, IAuditLog {
 
   @Expose
   private Integer targetYear;
+
   @Expose
   private BigDecimal value;
+
+
   @Expose
   private boolean active;
   @Expose
@@ -63,6 +66,8 @@ public class ResearchMilestone implements Serializable, IAuditLog {
   private ResearchOutcome researchOutcome;
   @Expose
   private TargetUnit targetUnit;
+  @Expose
+  private boolean impactPathway;
   private Set<MonitoringMilestone> monitoringMilestones = new HashSet<MonitoringMilestone>(0);
 
   public ResearchMilestone() {
@@ -171,7 +176,6 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return title;
   }
 
-
   public BigDecimal getValue() {
     return value;
   }
@@ -184,6 +188,7 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return result;
   }
 
+
   /**
    * @return the active
    */
@@ -192,6 +197,9 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     return active;
   }
 
+  public boolean isImpactPathway() {
+    return impactPathway;
+  }
 
   /**
    * @param active the active to set
@@ -205,16 +213,21 @@ public class ResearchMilestone implements Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
-
 
   /**
    * @param id the id to set
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setImpactPathway(boolean impactPathway) {
+    this.impactPathway = impactPathway;
   }
 
 

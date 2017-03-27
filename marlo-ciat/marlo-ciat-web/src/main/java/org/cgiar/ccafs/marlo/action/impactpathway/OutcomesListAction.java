@@ -96,6 +96,7 @@ public class OutcomesListAction extends BaseAction {
     outcome.setModifiedBy(this.getCurrentUser());
     outcome.setResearchTopic(selectedResearchTopic);
     outcome.setTargetYear(-1);
+    outcome.setImpactPathway(true);
     outcomeID = outcomeService.saveResearchOutcome(outcome);
 
     if (outcomeID > 0) {

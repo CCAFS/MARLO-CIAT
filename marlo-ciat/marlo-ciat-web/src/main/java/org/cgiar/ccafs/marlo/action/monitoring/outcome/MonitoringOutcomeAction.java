@@ -35,6 +35,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchMilestoneService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.ITargetUnitService;
+import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -268,6 +269,31 @@ public class MonitoringOutcomeAction extends BaseAction {
 
     }
 
+    String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
+    this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
+
+    if (this.isHttpPost()) {
+      if (targetUnitList != null) {
+        targetUnitList.clear();
+      }
+
+      if (outcome.getMonitoringOutcomes() != null) {
+        outcome.getMonitoringOutcomes().clear();
+      }
+    }
+
+
+  }
+
+  @Override
+  public String save() {
+    if (this.hasPermission("*")) {
+
+      return SUCCESS;
+    } else {
+
+      return NOT_AUTHORIZED;
+    }
   }
 
   public void setAreaID(long areaID) {

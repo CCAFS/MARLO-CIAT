@@ -423,6 +423,7 @@ public class OutcomesAction extends BaseAction {
           milestone.setActiveSince(new Date());
           milestone.setCreatedBy(this.getCurrentUser());
           milestone.setModifiedBy(this.getCurrentUser());
+          milestone.setImpactPathway(true);
 
           TargetUnit targetUnit = targetUnitService.getTargetUnitById(researchMilestone.getTargetUnit().getId());
           milestone.setTargetUnit(targetUnit);
