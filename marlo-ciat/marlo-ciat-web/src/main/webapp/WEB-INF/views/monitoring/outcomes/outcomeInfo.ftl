@@ -91,6 +91,13 @@
               <div class="button-green addMilestone"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a milestone" /]</div>
             </div>
           </div>
+            [#-- Milestone narrative --]
+            <div class="col-md-12 form-group">
+            <h5 class="sectionSubTitle">Progress towards your long-term outcome target contribution:</h5>
+            <div class="form-group" style="margin-top: 15px;">
+              [@customForm.textArea name="outcome.monitorings[${outcome_index}].narrative" i18nkey="Narrative for your level of progress on this long-term outcome" required=true className="outcome-narrative limitWords-100" editable=editable /]
+            </div> 
+            </div>
             <br />
             [#-- EVIDENCE OF USE --]
             <div class="col-md-12 form-group">
@@ -168,7 +175,7 @@
     </div>
     [#-- Milestone narrative --]
     <div class="form-group" style="margin-top: 15px;">
-      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this outcome milestone" required=true className="milestone-narrative limitWords-100" editable=editable /]
+      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this milestone" required=true className="milestone-narrative limitWords-100" editable=editable /]
     </div> 
     
   </div>
