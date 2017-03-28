@@ -185,8 +185,8 @@
   [#assign evidenceCustomName = "${name}[${index}]" /]
   <div  id="evidence-${isTemplate?string('template', index)}" class="evidence simpleBox" style="display:${isTemplate?string('none','block')}" >
     [#-- element id --]
-    <input type="hidden" value="${(evidence.id)!}" />
+    <input type="hidden" name="${evidenceCustomName}.id" value="${(evidence.id)!}" />
     <div class="removeEvidence removeElement sm" title="Remove evidence"></div>
-    [@customForm.input name="${evidenceCustomName}.evidence" i18nkey="Evidence" placeholder="Link" required=true editable=editable /]
+    [@customForm.input name="${evidenceCustomName}.evidenceLink" i18nkey="Evidence" placeholder="Link" required=true editable=editable /]
   </div>
 [/#macro]
