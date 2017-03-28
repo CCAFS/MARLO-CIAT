@@ -65,11 +65,18 @@ $(document).ready(function() {
           $dialogContent.find('.loading').show();
         },
         success: function(response) {
-          if(response.status == "OK") {
-            console.log(response);
-          } else {
-            $dialogContent.find('.warning-info').text(response.message).fadeIn('slow');
-          }
+          var $list = $(".milestoneList");
+          $list.each(function(i,e) {
+            var $item = $("#milestone-template").clone(true).removeAttr("id");
+            $item.find(".milestone-statement").parent().find("p").text(response.newMilestone[0].title);
+            $item.find(".milestone-targetYear").val(response.newMilestone[0].targetYear);
+            $item.find(".milestone-targetYear").parent().find("p").text(response.newMilestone[0].targetYear);
+            $item.find(".mileStoneId").val(response.newMilestone[0].id);
+            $(e).append($item);
+            $($item).show("slow");
+          });
+          updateAllIndexes();
+          dialog.dialog("close");
         },
         complete: function(response) {
           $dialogContent.find('.loading').fadeOut();
@@ -84,6 +91,24 @@ $(document).ready(function() {
 
   /** Functions * */
 
+  function updateAllIndexes() {
+    $('form .outcomeTab').each(function(i,outcome) {
+
+      $(outcome).setNameIndexes(1, i);
+
+      // Update evidences
+      $(outcome).find('.milestone').each(function(i,m) {
+        $(m).find(".index").text(i + 1);
+        $(m).setNameIndexes(2, i);
+
+      });
+    });
+
+    // Update component event
+    $(document).trigger('updateComponent');
+
+  }
+
   openSearchDialog = function(selected) {
 
     $elementSelected = $(selected);
@@ -94,15 +119,6 @@ $(document).ready(function() {
 
     dialog.dialog("open");
 
-  }
-
-  addProject = function(fundingSource) {
-    dialog.dialog("close");
-  }
-
-  addUserMessage = function(message) {
-    $elementSelected.parent().find('.username-message').remove();
-    $elementSelected.after("<p class='username-message note animated flipInX'>" + message + "</p>");
   }
 
 });// End document ready event
