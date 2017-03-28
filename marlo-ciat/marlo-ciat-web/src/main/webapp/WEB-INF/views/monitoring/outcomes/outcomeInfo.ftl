@@ -36,15 +36,15 @@
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
       <div class="simpleBox col-md-12">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="">Research topic:  </label>
           <p>${selectedResearchTopic.researchTopic}</p>
         </div>
-        <div class="col-md-3">
-          <label for="">Outcome name:  </label>
+        <div class="col-md-6">
+          <label for="">Outcome statement:  </label>
           <p>${(outcome.description)!}</p>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           <label for="">Expected for ${(outcome.targetYear)!"null"}:  </label>
           <p>${(outcome.value)!"Not Applicable"}</p>
         </div>
@@ -127,6 +127,9 @@
 [#-- Bilateral Co-Funded Project Popup --]
 [#include "/WEB-INF/global/macros/milestonePopup.ftl"]
 
+[#-- Milestone macro --]
+[@milestoneMacro milestone={} name="outcome.monitorings[-1].milestones" index=-1 isTemplate=true /]
+
 [#-- Evidence macro --]
 [@evidenceMacro evidence={} name="outcome.monitorings[-1].evidence" index=-1 isTemplate=true /]
 
@@ -154,18 +157,18 @@
     <div class="row form-group target-block">      
       [#-- Target Unit --]
       <div class="col-md-3">
-        [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value" required=false editable=editable /]
+        [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value"  required=false editable=editable /]
       </div>
       
       <div class="col-md-3 col-md-offset-3">
-        [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" required=false editable=false /]
+        [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" className="milestone-targetYear" required=false editable=false /]
       </div>
       
       
     </div>
     [#-- Milestone narrative --]
     <div class="form-group" style="margin-top: 15px;">
-      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this outcome milestone" required=true className="milestone-statement limitWords-100" editable=editable /]
+      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this outcome milestone" required=true className="milestone-narrative limitWords-100" editable=editable /]
     </div> 
     
   </div>

@@ -46,35 +46,49 @@ $(document).ready(function() {
     $dialogContent.find('.warning-info').empty().hide();
     var targetUnit = "-1";
     var targetValue = null;
+    var statement = $(".statementPopup").val();
+    var targetYear = $(".targetYearPopup").find("option:selected").val();
     if($(".tagetUnitPopup").find("option:selected").val() != "-1") {
       targetUnit = $(".tagetUnitPopup").find("option:selected").val();
       targetValue = $(".targetValuePopup").val();
     }
-    var data = {
-        title: $(".statementPopup").val(),
-        targetUnit: targetUnit,
-        value: targetValue,
-        year: $(".targetYearPopup").find("option:selected").val(),
-        outcomeID: $("input[name='outcomeID']").val()
-    }
-    $.ajax({
-        'url': baseURL + '/addMilestone.do',
-        method: 'POST',
-        data: data,
-        beforeSend: function() {
-          $dialogContent.find('.loading').show();
-        },
-        success: function(response) {
-          if(response.status == "OK") {
-            console.log(response);
-          } else {
-            $dialogContent.find('.warning-info').text(response.message).fadeIn('slow');
+    if(statement.trim() == "" || targetValue.trim() == "") {
+      console.log("faltan campos");
+      return false;
+    } else {
+      var data = {
+          title: statement,
+          targetUnit: targetUnit,
+          value: targetValue,
+          year: targetYear,
+          outcomeID: $("input[name='outcomeID']").val()
+      }
+      $.ajax({
+          'url': baseURL + '/addMilestone.do',
+          method: 'POST',
+          data: data,
+          beforeSend: function() {
+            $dialogContent.find('.loading').show();
+          },
+          success: function(response) {
+            var $list = $(".milestoneList");
+            $list.each(function(i,e) {
+              var $item = $("#milestone-template").clone(true).removeAttr("id");
+              $item.find(".milestone-statement").parent().find("p").text(response.newMilestone[0].title);
+              $item.find(".milestone-targetYear").val(response.newMilestone[0].targetYear);
+              $item.find(".milestone-targetYear").parent().find("p").text(response.newMilestone[0].targetYear);
+              $item.find(".mileStoneId").val(response.newMilestone[0].id);
+              $(e).append($item);
+              $($item).show("slow");
+            });
+            updateAllIndexes();
+            dialog.dialog("close");
+          },
+          complete: function(response) {
+            $dialogContent.find('.loading').fadeOut();
           }
-        },
-        complete: function(response) {
-          $dialogContent.find('.loading').fadeOut();
-        }
-    });
+      });
+    }
 
   });
 
@@ -83,6 +97,24 @@ $(document).ready(function() {
   });
 
   /** Functions * */
+
+  function updateAllIndexes() {
+    $('form .outcomeTab').each(function(i,outcome) {
+
+      $(outcome).setNameIndexes(1, i);
+
+      // Update evidences
+      $(outcome).find('.milestone').each(function(i,m) {
+        $(m).find(".index").text(i + 1);
+        $(m).setNameIndexes(2, i);
+
+      });
+    });
+
+    // Update component event
+    $(document).trigger('updateComponent');
+
+  }
 
   openSearchDialog = function(selected) {
 
@@ -93,16 +125,12 @@ $(document).ready(function() {
     selectedYear = $elementSelected.parents('.tab-pane').attr('id').split('-')[1];
 
     dialog.dialog("open");
-
-  }
-
-  addProject = function(fundingSource) {
-    dialog.dialog("close");
-  }
-
-  addUserMessage = function(message) {
-    $elementSelected.parent().find('.username-message').remove();
-    $elementSelected.after("<p class='username-message note animated flipInX'>" + message + "</p>");
+    $('form select').select2({
+      width: "100%"
+    });
+    $.ui.dialog.prototype._allowInteraction = function(e) {
+      return !!$(e.target).closest('.ui-dialog, .ui-datepicker, .select2-dropdown').length;
+    };
   }
 
 });// End document ready event

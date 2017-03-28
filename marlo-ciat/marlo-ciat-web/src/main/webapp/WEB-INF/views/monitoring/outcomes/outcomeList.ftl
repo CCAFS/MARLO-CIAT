@@ -2,7 +2,7 @@
 [#assign title = "MiLE outcomes monitoring" /]
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
 [#assign pageLibs = ["select2","datatables.net", "datatables.net-bs"] /]
-[#assign customJS = ["${baseUrl}/js/outcomes/outcomesList.js" ] /]
+[#assign customJS = ["${baseUrl}/js/monitoring/outcomes/outcomesList.js" ] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/impactPathway/outcomes.css"] /]
 [#assign currentSection = "monitoring" /]
 
