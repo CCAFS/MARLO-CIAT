@@ -301,6 +301,8 @@ public class MonitoringOutcomeAction extends BaseAction {
           monitoringOutcome.setMilestones(new ArrayList<>(monitoringOutcome.getMonitoringMilestones().stream()
             .filter(mm -> mm.isActive()).collect(Collectors.toList())));
 
+          Collections.sort(monitoringOutcome.getMilestones(), (mil1, mil2) -> mil1.getId().compareTo(mil2.getId()));
+
         }
       }
 
