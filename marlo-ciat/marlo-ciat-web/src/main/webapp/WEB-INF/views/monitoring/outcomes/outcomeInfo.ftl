@@ -64,7 +64,7 @@
         
           <div role="tabpanel" class="outcomeTab tab-pane [#if outcome.year == action.getYear()]active[/#if]" id="outcomeYear-${outcome.year}">
           [#-- element id --]
-          <input type="hidden" value="${(outcome.id)!}" />
+          <input type="hidden" name="outcome.monitorings[${outcome_index}].id" value="${(outcome.id)!}" />
           [#if outcome_index==0]
           <div class="col-md-2">
             [@customForm.input name="outcome.baseline" i18nkey="Initial Baseline" required=true editable=true /]
@@ -150,7 +150,7 @@
       <span class="elementId">[@s.text name="outcome.milestone.index.title"/]</span>
     </div>
     [#-- element id --]
-     <input type="hidden" value="${(milestone.id)!}" />
+     <input type="hidden" name="${milestoneCustomName}.id" value="${(milestone.id)!}" />
      <input type="hidden" class="mileStoneId" name="${milestoneCustomName}.researchMilestone.id" value="${(milestone.researchMilestone.id)!}"/>
     [#-- Remove Button --]
     [#if editable=!editable]
