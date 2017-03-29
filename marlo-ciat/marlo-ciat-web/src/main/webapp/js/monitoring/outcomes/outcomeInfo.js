@@ -17,11 +17,26 @@ function attachEvents() {
   // Remove a Milestone
   $('.removeEvidence').on('click', removeEvidence);
 
+  $(".link").on("keyup", checkUrl);
 }
 
 /**
  * Milestone Functions
  */
+
+function checkUrl() {
+  var input = $(this);
+  var inputData = $.trim(input.val());
+  var uri = new Uri(inputData);
+  $(input).removeClass("fieldError");
+  if(inputData != "") {
+    if(uri.protocol() == "http" || uri.protocol() == "https") {
+      $(input).removeClass("fieldError");
+    } else {
+      $(input).addClass("fieldError");
+    }
+  }
+}
 
 function addEvidence() {
   console.log(this);

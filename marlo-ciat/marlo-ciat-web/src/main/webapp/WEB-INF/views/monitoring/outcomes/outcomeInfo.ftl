@@ -1,7 +1,7 @@
 [#ftl]
 [#assign title = "MiLE outcome information" /]
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
-[#assign pageLibs = ["select2"] /]
+[#assign pageLibs = ["select2","jsUri"] /]
 [#assign customJS = ["${baseUrl}/js/monitoring/outcomes/outcomeInfo.js" ] /]
 [#assign customCSS = [""] /]
 [#assign currentSection = "monitoring" /]
@@ -86,6 +86,9 @@
             [#else]
               <p class="message text-center">[@s.text name="outcome.milestones.emptyMessage"/]</p>
             [/#if]
+            </div>
+            <div class="note left">
+            If you want to report on milestones that were not previously defined in the Impact Pathway, please click on the button below:
             </div>
             <div class="text-center">
               <div class="button-green addMilestone"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a milestone" /]</div>
@@ -187,6 +190,6 @@
     [#-- element id --]
     <input type="hidden" name="${evidenceCustomName}.id" value="${(evidence.id)!}" />
     <div class="removeEvidence removeElement sm" title="Remove evidence"></div>
-    [@customForm.input name="${evidenceCustomName}.evidenceLink" i18nkey="Evidence" placeholder="Link" required=true editable=editable /]
+    [@customForm.input name="${evidenceCustomName}.evidenceLink" i18nkey="Evidence" placeholder="Link" className="link" required=true editable=editable /]
   </div>
 [/#macro]
