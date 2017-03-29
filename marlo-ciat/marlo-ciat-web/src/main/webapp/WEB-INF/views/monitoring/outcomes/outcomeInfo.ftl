@@ -109,7 +109,7 @@
               <div class="evidenceList simpleBox">
               [#if outcome.evidences?has_content]
                 [#list outcome.evidences as evidence]
-                  [@evidenceMacro milestone=evidence name="outcome.monitorings[${outcome_index}].evidence" index=evidence_index /]
+                  [@evidenceMacro evidence=evidence name="outcome.monitorings[${outcome_index}].evidences" index=evidence_index /]
                 [/#list]
               [#else]
                 <p class="message text-center">[@s.text name="There are not Evicences associated to this outcome as of yet"/]</p>
@@ -141,7 +141,7 @@
 [@milestoneMacro milestone={} name="outcome.monitorings[-1].milestones" index=-1 isTemplate=true /]
 
 [#-- Evidence macro --]
-[@evidenceMacro evidence={} name="outcome.monitorings[-1].evidence" index=-1 isTemplate=true /]
+[@evidenceMacro evidence={} name="outcome.monitorings[-1].evidences" index=-1 isTemplate=true /]
 
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
