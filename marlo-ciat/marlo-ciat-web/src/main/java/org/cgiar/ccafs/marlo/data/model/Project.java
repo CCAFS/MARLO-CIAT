@@ -27,6 +27,7 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private User modifiedBy;
 
+
   @Expose
   private User contactPerson;
 
@@ -41,7 +42,6 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   @Expose
   private ProjectStatus projectStatus;
-
 
   @Expose
   private String name;
@@ -88,6 +88,7 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
 
+
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
 
 
@@ -96,7 +97,14 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   private List<ProjectOutput> outputs;
 
+
   private List<ProjectFundingSource> fundingSources;
+
+  private Set<ProjectPartner> projectPartners = new HashSet<ProjectPartner>(0);
+
+
+  private List<ProjectPartner> partners;
+
 
   public Project() {
   }
@@ -202,6 +210,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     return outputs;
   }
 
+  public List<ProjectPartner> getPartners() {
+    return partners;
+  }
+
   public ProjectCrosscutingTheme getProjectCrosscutingTheme() {
     return projectCrosscutingTheme;
   }
@@ -210,14 +222,16 @@ public class Project implements java.io.Serializable, IAuditLog {
     return projectFundingSources;
   }
 
-
   public User getProjectLeader() {
     return projectLeader;
   }
 
-
   public Set<ProjectOutput> getProjectOutputs() {
     return projectOutputs;
+  }
+
+  public Set<ProjectPartner> getProjectPartners() {
+    return projectPartners;
   }
 
 
@@ -285,9 +299,11 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.dateCreated = dateCreated;
   }
 
+
   public void setDeliverables(Set<Deliverable> deliverables) {
     this.deliverables = deliverables;
   }
+
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
@@ -301,7 +317,6 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.id = id;
   }
 
-
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
@@ -310,12 +325,17 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   public void setName(String name) {
     this.name = name;
   }
 
   public void setOutputs(List<ProjectOutput> outputs) {
     this.outputs = outputs;
+  }
+
+  public void setPartners(List<ProjectPartner> partners) {
+    this.partners = partners;
   }
 
   public void setProjectCrosscutingTheme(ProjectCrosscutingTheme projectCrosscutingTheme) {
@@ -332,6 +352,10 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public void setProjectOutputs(Set<ProjectOutput> projectOutputs) {
     this.projectOutputs = projectOutputs;
+  }
+
+  public void setProjectPartners(Set<ProjectPartner> projectPartners) {
+    this.projectPartners = projectPartners;
   }
 
   public void setProjectStatus(ProjectStatus projectStatus) {
