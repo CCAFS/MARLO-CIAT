@@ -30,6 +30,24 @@
       </result>
     </action>
     
+    <action name="{center}/projectPartners"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectPartnersAction">
+      <interceptor-ref name="projectStack" />
+      <result name="input">/WEB-INF/views/monitoring/project/projectPartners.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/projectPartners</param>
+        <param name="projectID">${projectID}</param>
+        <param name="edit">true</param>
+      </result>
+      <result name="cancel" type="redirectAction">
+        <param name="actionName">${centerSession}/projectPartners</param>
+        <param name="projectID">${projectID}</param>
+        <param name="edit">true</param>
+        <param name="cancel">true</param>
+      </result>
+    </action>
+    
     <action name="{center}/addNewProject" method="add"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectListAction">
       <interceptor-ref name="sectionStack" />

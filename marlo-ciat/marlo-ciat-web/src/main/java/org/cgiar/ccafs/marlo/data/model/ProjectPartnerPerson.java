@@ -16,14 +16,17 @@ public class ProjectPartnerPerson implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -5721682159549693547L;
 
+
   @Expose
   private Long id;
 
   @Expose
-  private User userId;
+  private User user;
+
 
   @Expose
   private User modifiedBy;
+
 
   @Expose
   private User createdBy;
@@ -40,25 +43,44 @@ public class ProjectPartnerPerson implements java.io.Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
   public ProjectPartnerPerson() {
   }
-
 
   public ProjectPartnerPerson(boolean active) {
     this.active = active;
   }
 
-
-  public ProjectPartnerPerson(User userId, User modifiedBy, User createdBy, ProjectPartner projectPartner,
-    boolean active, Date activeSince, String modificationJustification) {
-    this.userId = userId;
+  public ProjectPartnerPerson(User user, User modifiedBy, User createdBy, ProjectPartner projectPartner, boolean active,
+    Date activeSince, String modificationJustification) {
+    this.user = user;
     this.modifiedBy = modifiedBy;
     this.createdBy = createdBy;
     this.projectPartner = projectPartner;
     this.active = active;
     this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ProjectPartnerPerson other = (ProjectPartnerPerson) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -90,18 +112,30 @@ public class ProjectPartnerPerson implements java.io.Serializable, IAuditLog {
     return modificationJustification;
   }
 
+
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
 
+
   public ProjectPartner getProjectPartner() {
     return projectPartner;
   }
 
-  public User getUserId() {
-    return userId;
+
+  public User getUser() {
+    return user;
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
 
   @Override
   public boolean isActive() {
@@ -128,18 +162,17 @@ public class ProjectPartnerPerson implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
-
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
+
 
   public void setProjectPartner(ProjectPartner projectPartner) {
     this.projectPartner = projectPartner;
   }
 
-
-  public void setUserId(User userId) {
-    this.userId = userId;
+  public void setUser(User user) {
+    this.user = user;
   }
 
 

@@ -6,6 +6,7 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -15,11 +16,11 @@ import com.google.gson.annotations.Expose;
  */
 public class ProjectPartner implements java.io.Serializable, IAuditLog {
 
-
   private static final long serialVersionUID = -564182537522358471L;
 
   @Expose
   private Long id;
+
 
   @Expose
   private User modifiedBy;
@@ -45,20 +46,18 @@ public class ProjectPartner implements java.io.Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
   private Set<ProjectPartnerPerson> projectPartnerPersons = new HashSet<ProjectPartnerPerson>(0);
 
+  private List<ProjectPartnerPerson> users;
 
   public ProjectPartner() {
   }
-
 
   public ProjectPartner(Institution institution, Project project, boolean active) {
     this.institution = institution;
     this.project = project;
     this.active = active;
   }
-
 
   public ProjectPartner(User modifiedBy, User createdBy, Institution institution, Project project, boolean internal,
     boolean active, Date activeSince, String modificationJustification,
@@ -72,6 +71,28 @@ public class ProjectPartner implements java.io.Serializable, IAuditLog {
     this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
     this.projectPartnerPersons = projectPartnerPersons;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ProjectPartner other = (ProjectPartner) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -114,12 +135,27 @@ public class ProjectPartner implements java.io.Serializable, IAuditLog {
     return modifiedBy;
   }
 
+
   public Project getProject() {
     return project;
   }
 
+
   public Set<ProjectPartnerPerson> getProjectPartnerPersons() {
     return projectPartnerPersons;
+  }
+
+
+  public List<ProjectPartnerPerson> getUsers() {
+    return users;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override
@@ -159,18 +195,22 @@ public class ProjectPartner implements java.io.Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
-
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
+
 
   public void setProject(Project project) {
     this.project = project;
   }
 
-
   public void setProjectPartnerPersons(Set<ProjectPartnerPerson> projectPartnerPersons) {
     this.projectPartnerPersons = projectPartnerPersons;
+  }
+
+
+  public void setUsers(List<ProjectPartnerPerson> users) {
+    this.users = users;
   }
 
 }
