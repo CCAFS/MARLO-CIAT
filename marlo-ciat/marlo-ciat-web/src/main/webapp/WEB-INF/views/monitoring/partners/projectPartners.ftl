@@ -43,7 +43,7 @@
         [@s.form action=actionName enctype="multipart/form-data" ]
 
         
-        <h3 class="headTitle"> Partners </h3>
+        <h3 class="headTitle"> Project Partners </h3>
         <div class="parntersBlock">
           <div class="partnersList" listname="partners">
             [#if project.partners?has_content]
