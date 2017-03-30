@@ -9,7 +9,7 @@
 
 [#assign breadCrumb = [
   {"label":"projectsList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/projectList"},
-  {"label":"projectPartners", "nameSpace":"${centerSession}/projectPartners", "action":"projectPartners"}]/]
+  {"label":"projectPartners", "nameSpace":"/monitoring", "action":""}]/]
   
 [#assign leadersName = "leaders"/]
 [#include "/WEB-INF/global/pages/header.ftl" /]
