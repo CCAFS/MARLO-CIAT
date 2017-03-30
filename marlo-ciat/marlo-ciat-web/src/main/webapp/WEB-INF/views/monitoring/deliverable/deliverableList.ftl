@@ -2,7 +2,7 @@
 [#assign title = "MiLE Deliverables" /]
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
 [#assign pageLibs = ["datatables.net", "datatables.net-bs"] /]
-[#assign customJS = ["${baseUrl}/js/deliverable/deliverableList.js" ] /]
+[#assign customJS = ["${baseUrl}/js/deliverable/monitoring/deliverableList.js" ] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css","${baseUrl}/css/deliverable/projectDeliverable.css"] /]
 [#assign currentSection = "monitoring" /]
 [#assign currentStage = "deliverables" /]

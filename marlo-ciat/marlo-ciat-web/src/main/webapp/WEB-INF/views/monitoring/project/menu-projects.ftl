@@ -4,7 +4,7 @@
     { 'title': 'General Information', 'show': true,
       'items': [
       { 'slug': 'description',  'name': 'projects.menu.description',  'action': '${(centerSession)!}/projectDescription',  'active': true  },
-      { 'slug': 'projectPartners',  'name': 'projects.menu.partners',  'action': 'projectPartners',  'active': false  },
+      { 'slug': 'projectPartners',  'name': 'projects.menu.partners',  'action': 'projectPartners',  'active': true  },
       { 'slug': 'deliverables',  'name': 'projects.menu.deliverables',  'action': 'deliverableList',  'active': true  }
       ]
     }

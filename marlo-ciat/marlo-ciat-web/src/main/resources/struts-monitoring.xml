@@ -33,7 +33,7 @@
     <action name="{center}/projectPartners"
       class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectPartnersAction">
       <interceptor-ref name="projectStack" />
-      <result name="input">/WEB-INF/views/monitoring/project/projectPartners.ftl
+      <result name="input">/WEB-INF/views/monitoring/partners/projectPartners.ftl
       </result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/projectPartners</param>

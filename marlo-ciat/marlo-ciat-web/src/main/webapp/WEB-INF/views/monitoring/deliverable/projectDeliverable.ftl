@@ -2,7 +2,7 @@
 [#assign title = "Project Deliverable" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${deliverableID}" /]
 [#assign pageLibs = ["select2","jsUri"] /]
-[#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/deliverable/projectDeliverable.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/monitoring/deliverable/projectDeliverable.js"] /]
 [#assign customCSS = ["${baseUrl}/css/deliverable/projectDeliverable.css"] /]
 [#assign currentSection = "monitoring" /]
 [#assign currentStage = "deliverables" /]
