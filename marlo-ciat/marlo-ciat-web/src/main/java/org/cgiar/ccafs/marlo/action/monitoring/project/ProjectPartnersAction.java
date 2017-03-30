@@ -88,7 +88,7 @@ public class ProjectPartnersAction extends BaseAction {
   @Inject
   public ProjectPartnersAction(APConfig config, ICenterService centerService, IProjectService projectService,
     IProjectPartnerService partnerService, IProjectPartnerPersonService partnerPersonService,
-    IInstitutionService institutionService, IUserService userService) {
+    IInstitutionService institutionService, IUserService userService, ProjectPartnerValidator validator) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -96,6 +96,7 @@ public class ProjectPartnersAction extends BaseAction {
     this.partnerPersonService = partnerPersonService;
     this.institutionService = institutionService;
     this.userService = userService;
+    this.validator = validator;
   }
 
   public long getAreaID() {
