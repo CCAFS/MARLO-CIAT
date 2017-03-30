@@ -66,8 +66,6 @@
         [#-- Section Buttons & hidden inputs--]
           [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
         
-        [#-- Hidden inputs --]
-        <input type="hidden" name="projectID" value="${projectID}" />
           
         [/@s.form]
         
