@@ -23,6 +23,7 @@ import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -38,6 +39,10 @@ public class ProjectPartnerValidator extends BaseValidator {
   }
 
   public void validate(BaseAction baseAction, Project project, ResearchProgram selectedProgram, boolean saving) {
+
+    baseAction.setInvalidFields(new HashMap<>());
+
+    // TODO Autosave Draft validator.
 
     if (!baseAction.getFieldErrors().isEmpty()) {
       baseAction.addActionError(baseAction.getText("saving.fields.required"));
