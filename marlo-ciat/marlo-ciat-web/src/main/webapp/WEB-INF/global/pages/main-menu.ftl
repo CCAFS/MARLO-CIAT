@@ -3,7 +3,7 @@
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'login',                                              'visible': !logged, 'active': true },
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'dashboard',                      'icon': 'home',     'visible': logged, 'active': true },
   { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/programimpacts',                          'visible': logged, 'active': true },
-  { 'slug': 'monitoring', 'name': 'menu.monitoring.projects',      'namespace': '/monitoring',       'action': '${(centerSession)!}/projectList',    'visible': logged, 'active': ${(canAccessSuperAdmin?c)!} }]
+  { 'slug': 'monitoring', 'name': 'menu.monitoring.projects',      'namespace': '/monitoring',       'action': '${(centerSession)!}/projectList',    'visible': logged, 'active':action.canAccessSuperAdmin() }]
   /]
 
 [#macro mainMenuList]
