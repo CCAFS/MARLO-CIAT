@@ -21,7 +21,10 @@
           <p>[@s.text name="dashboard.decisionTree.defineImpact" /]</p>
         </a>
       </div>
-      <div id="startMonitoring" class="option disabled" title="This link is disabled"><p>[@s.text name="dashboard.decisionTree.startMonitoring" /]</p></div>
+      <div id="startMonitoring" class="option">
+      <a href="[@s.url action="monitoring/${centerSession}/projectList"][@s.param name="edit" value="true"/][/@s.url]">
+        <p>[@s.text name="dashboard.decisionTree.startMonitoring" /]</p></div>
+      </a>  
       <div id="finalDes" class="option disabled" title="This link is disabled"><p>[@s.text name="dashboard.decisionTree.finishDes" /]</p></div>
       <div class="clearfix"></div>
     </div>
