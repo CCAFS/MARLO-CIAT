@@ -32,17 +32,17 @@
         
         [#-- Title --]
           <div class="col-md-12">
-        [#-- Back --]
-        <small class="pull-right">
-          <a href="[@s.url action='${centerSession}/projectList'][@s.param name="programID" value=programID /][@s.param name="projectID" value=projectID /][@s.param name="edit" value=true /][/@s.url]">
-            <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the proejct list
-          </a>
-        </small>
+        
         
         <div class="clearfix"></div>
         [@s.form action=actionName enctype="multipart/form-data" ]
 
-        
+        [#-- Back --]
+        <div class="pull-right">
+          <a href="[@s.url action='${centerSession}/projectList'][@s.param name="programID" value=programID /][@s.param name="projectID" value=projectID /][@s.param name="edit" value=true /][/@s.url]">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the proejct list
+          </a>
+        </div>
         <h3 class="headTitle"> Project Partners </h3>
         <div class="parntersBlock">
           <div class="partnersList" listname="partners">

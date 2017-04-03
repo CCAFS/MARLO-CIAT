@@ -38,6 +38,13 @@
         [#--  --include "/WEB-INF/views/projects/messages-projects.ftl" / --]
       
         [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
+        
+          [#-- Back --]
+        <div class="pull-right">
+          <a href="[@s.url action='${centerSession}/projectList'][@s.param name="programID" value=programID /][@s.param name="projectID" value=projectID /][@s.param name="edit" value=true /][/@s.url]">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the proejct list
+          </a>
+        </div>
           
           <h3 class="headTitle">[@s.text name="projectDescription.title" /]</h3>  
           <div id="projectDescription" class="borderBox">
