@@ -67,7 +67,7 @@
           <input type="hidden" name="outcome.monitorings[${outcome_index}].id" value="${(outcome.id)!}" />
           [#if outcome_index==0]
           <div class="col-md-2">
-            [@customForm.input name="outcome.baseline" i18nkey="Initial Baseline" required=true editable=true /]
+            [@customForm.input name="outcome.baseline" className="initialBaseLine" i18nkey="Initial Baseline" required=true editable=true /]
           </div>
           <div class="clearfix"></div>
           [/#if]
