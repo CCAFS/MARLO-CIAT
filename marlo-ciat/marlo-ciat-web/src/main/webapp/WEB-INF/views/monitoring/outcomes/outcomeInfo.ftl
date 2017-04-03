@@ -171,9 +171,10 @@
         [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" className="milestone-targetYear" required=false editable=false /]
       </div>
       <div class="col-md-3 col-md-offset-3">
+      [#if !(milestone.researchMilestone.targetUnit.id==-1)]
         [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value" className="achieved"  required=false editable=editable /]
+      [/#if]
       </div>
-      
       <div class="col-md-3 note center" style="display:${((milestone.researchMilestone.active)!true)?string("none","block")};">
       <span>This milestone was removed from impactPathway</span>
       </div>
