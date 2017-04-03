@@ -4,7 +4,7 @@
 [#assign pageLibs = ["select2"] /]
 [#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/impactPathway/output.js", "${baseUrl}/js/global/fieldsValidation.js"] /]
 [#assign customCSS = ["${baseUrl}/css/impactPathway/outputList.css"] /]
-[#assign currentSection = "monitoring" /]
+[#assign currentSection = "projects" /]
 [#assign currentStage = "projectPartners" /]
 
 [#assign breadCrumb = [

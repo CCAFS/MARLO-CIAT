@@ -3,7 +3,7 @@
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${projectID}" /]
 [#assign pageLibs = ["select2"] /]
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/monitoring/projects/projectDescription.js"] /]
-[#assign currentSection = "monitoring" /]
+[#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
 [#assign editable = true /]
 

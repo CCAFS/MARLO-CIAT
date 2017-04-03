@@ -4,7 +4,7 @@
 [#assign pageLibs = ["datatables.net", "datatables.net-bs"] /]
 [#assign customJS = ["${baseUrl}/js/monitoring/projects/projectsList.js" ] /]
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css"] /]
-[#assign currentSection = "monitoring" /]
+[#assign currentSection = "projects" /]
 [#assign currentStage = (filterBy)!"all" /]
 
 

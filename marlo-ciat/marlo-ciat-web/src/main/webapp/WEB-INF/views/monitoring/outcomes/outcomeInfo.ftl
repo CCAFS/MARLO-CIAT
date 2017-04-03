@@ -4,7 +4,7 @@
 [#assign pageLibs = ["select2","jsUri"] /]
 [#assign customJS = ["${baseUrl}/js/monitoring/outcomes/outcomeInfo.js" ] /]
 [#assign customCSS = [""] /]
-[#assign currentSection = "monitoring" /]
+[#assign currentSection = "outcomes" /]
 
 
 [#assign breadCrumb = [

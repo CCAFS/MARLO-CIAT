@@ -21,10 +21,17 @@
           <p>[@s.text name="dashboard.decisionTree.defineImpact" /]</p>
         </a>
       </div>
-      <div id="startMonitoring" class="option">
+      
+      <div id="startMonitoring" class="option ${action.canAccessSuperAdmin()?string('','disabled')}">
+  [#if action.canAccessSuperAdmin()]
       <a href="[@s.url action="monitoring/${centerSession}/projectList"][@s.param name="edit" value="true"/][/@s.url]">
-        <p>[@s.text name="dashboard.decisionTree.startMonitoring" /]</p></div>
+        <p>[@s.text name="dashboard.decisionTree.startMonitoring" /]</p>
       </a>  
+  [#else]
+      <p>[@s.text name="dashboard.decisionTree.startMonitoring" /]</p>
+  [/#if]        
+      </div>
+    
       <div id="finalDes" class="option disabled" title="This link is disabled"><p>[@s.text name="dashboard.decisionTree.finishDes" /]</p></div>
       <div class="clearfix"></div>
     </div>

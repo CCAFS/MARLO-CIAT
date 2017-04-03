@@ -165,7 +165,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean canAccessSuperAdmin() {
-    return this.securityContext.hasAllPermissions(Permission.FULL_PRIVILEGES);
+    boolean t = this.securityContext.hasAllPermissions(Permission.FULL_PRIVILEGES);
+    return t;
   }
 
   public boolean canAcessImpactPathway() {

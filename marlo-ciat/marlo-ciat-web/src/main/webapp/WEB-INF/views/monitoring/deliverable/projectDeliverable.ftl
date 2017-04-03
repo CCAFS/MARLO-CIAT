@@ -4,7 +4,7 @@
 [#assign pageLibs = ["select2","jsUri"] /]
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/monitoring/deliverable/projectDeliverable.js"] /]
 [#assign customCSS = ["${baseUrl}/css/deliverable/projectDeliverable.css"] /]
-[#assign currentSection = "monitoring" /]
+[#assign currentSection = "projects" /]
 [#assign currentStage = "deliverables" /]
 [#assign editable = true /]
 
