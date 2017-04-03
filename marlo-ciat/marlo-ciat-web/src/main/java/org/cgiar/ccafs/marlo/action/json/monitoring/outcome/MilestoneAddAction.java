@@ -125,21 +125,23 @@ public class MilestoneAddAction extends BaseAction {
     for (MonitoringOutcome monitoringOutcome : monitoringOutcomes) {
 
       Map<String, Object> monitoringData = new HashMap<>();
-      monitoringData.put("index", i);
+      if (milestone.getTargetYear() >= monitoringOutcome.getYear()) {
+        monitoringData.put("index", i);
 
-      MonitoringMilestone monitoringMilestone = new MonitoringMilestone();
-      monitoringMilestone.setActive(true);
-      monitoringMilestone.setActiveSince(new Date());
-      monitoringMilestone.setCreatedBy(this.getCurrentUser());
-      monitoringMilestone.setModifiedBy(this.getCurrentUser());
-      monitoringMilestone.setResearchMilestone(milestone);
-      monitoringMilestone.setMonitoringOutcome(monitoringOutcome);
-      monitoringMilestone.setModificationJustification("Added in Monitoring " + this.getYear());
+        MonitoringMilestone monitoringMilestone = new MonitoringMilestone();
+        monitoringMilestone.setActive(true);
+        monitoringMilestone.setActiveSince(new Date());
+        monitoringMilestone.setCreatedBy(this.getCurrentUser());
+        monitoringMilestone.setModifiedBy(this.getCurrentUser());
+        monitoringMilestone.setResearchMilestone(milestone);
+        monitoringMilestone.setMonitoringOutcome(monitoringOutcome);
+        monitoringMilestone.setModificationJustification("Added in Monitoring " + this.getYear());
 
-      long monitoringMilestoneID = monitoringMilestoneService.saveMonitoringMilestone(monitoringMilestone);
-      monitoringData.put("Elementid", monitoringMilestoneID);
+        long monitoringMilestoneID = monitoringMilestoneService.saveMonitoringMilestone(monitoringMilestone);
+        monitoringData.put("Elementid", monitoringMilestoneID);
 
-      monitoringDatas.add(monitoringData);
+        monitoringDatas.add(monitoringData);
+      }
       i++;
     }
 
