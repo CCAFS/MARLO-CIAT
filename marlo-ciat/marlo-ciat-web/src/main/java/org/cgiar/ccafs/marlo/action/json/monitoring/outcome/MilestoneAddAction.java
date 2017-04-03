@@ -137,7 +137,7 @@ public class MilestoneAddAction extends BaseAction {
       monitoringMilestone.setModificationJustification("Added in Monitoring " + this.getYear());
 
       long monitoringMilestoneID = monitoringMilestoneService.saveMonitoringMilestone(monitoringMilestone);
-      monitoringData.put("id", monitoringMilestoneID);
+      monitoringData.put("Elementid", monitoringMilestoneID);
 
       monitoringDatas.add(monitoringData);
       i++;
