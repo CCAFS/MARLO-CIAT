@@ -146,6 +146,7 @@
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
 [#macro milestoneMacro milestone name index isTemplate=false]
+  [#local editable = ((editable) && (milestone.researchMilestone.active))!true /]
   [#assign milestoneCustomName = "${name}[${index}]" /]
   <div id="milestone-${isTemplate?string('template', index)}" class="milestone borderBox" style="display:${isTemplate?string('none','block')}">
     <div class="leftHead green sm">
@@ -166,13 +167,17 @@
     </div>
     <div class="row form-group target-block">      
       [#-- Target Unit --]
-      <div class="col-md-3">
-        [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value"  required=false editable=editable /]
-      </div>
-      
-      <div class="col-md-3 col-md-offset-3">
+      <div class="col-md-3 ">
         [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" className="milestone-targetYear" required=false editable=false /]
       </div>
+      <div class="col-md-3 col-md-offset-3">
+        [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value" className="achieved"  required=false editable=editable /]
+      </div>
+      
+      <div class="col-md-3 note center" style="display:${((milestone.researchMilestone.active)!true)?string("none","block")};">
+      <span>This milestone was removed from impactPathway</span>
+      </div>
+      
       
       
     </div>

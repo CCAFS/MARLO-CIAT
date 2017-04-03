@@ -71,7 +71,7 @@ $(document).ready(function() {
             $dialogContent.find('.loading').show();
           },
           success: function(response) {
-            console.log(response);
+            console.log(data);
             var $list = $(".milestoneList");
             $list.each(function(i,e) {
               var $item = $("#milestone-template").clone(true).removeAttr("id");
@@ -80,6 +80,9 @@ $(document).ready(function() {
               $item.find(".milestone-targetYear").parent().find("p").text(response.newMilestone[0].targetYear);
               $item.find(".mileStoneId").val(response.newMilestone[0].id);
               $item.find(".elementId").val(response.newMilestone[i + 1].Elementid);
+              if(data.targetUnit == "-1") {
+                $item.find(".achieved").parent().parent().remove();
+              }
               $(e).append($item);
               $($item).show("slow");
             });
