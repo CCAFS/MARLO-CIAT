@@ -42,7 +42,7 @@
           [#-- Back --]
         <div class="pull-right">
           <a href="[@s.url action='${centerSession}/projectList'][@s.param name="programID" value=programID /][@s.param name="projectID" value=projectID /][@s.param name="edit" value=true /][/@s.url]">
-            <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the proejct list
+            <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the project list
           </a>
         </div>
           
