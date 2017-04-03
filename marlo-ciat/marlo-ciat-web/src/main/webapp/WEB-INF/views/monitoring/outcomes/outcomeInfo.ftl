@@ -150,10 +150,10 @@
   <div id="milestone-${isTemplate?string('template', index)}" class="milestone borderBox" style="display:${isTemplate?string('none','block')}">
     <div class="leftHead green sm">
       <span class="index">${index+1}</span>
-      <span class="elementId">[@s.text name="outcome.milestone.index.title"/]</span>
+      <span >[@s.text name="outcome.milestone.index.title"/]</span>
     </div>
     [#-- element id --]
-     <input type="hidden" name="${milestoneCustomName}.id" value="${(milestone.id)!}" />
+     <input type="hidden" class="elementId" name="${milestoneCustomName}.id" value="${(milestone.id)!}" />
      <input type="hidden" class="mileStoneId" name="${milestoneCustomName}.researchMilestone.id" value="${(milestone.researchMilestone.id)!}"/>
     [#-- Remove Button --]
     [#if editable=!editable]

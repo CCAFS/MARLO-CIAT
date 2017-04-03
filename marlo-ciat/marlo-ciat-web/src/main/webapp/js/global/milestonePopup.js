@@ -52,8 +52,8 @@ $(document).ready(function() {
       targetUnit = $(".tagetUnitPopup").find("option:selected").val();
       targetValue = $(".targetValuePopup").val();
     }
-    if(statement.trim() == "" || targetValue.trim() == "") {
-      console.log("faltan campos");
+    if(statement.trim() == "") {
+      $(".statementPopup").addClass("fieldError");
       return false;
     } else {
       var data = {
@@ -71,6 +71,7 @@ $(document).ready(function() {
             $dialogContent.find('.loading').show();
           },
           success: function(response) {
+            console.log(response);
             var $list = $(".milestoneList");
             $list.each(function(i,e) {
               var $item = $("#milestone-template").clone(true).removeAttr("id");
@@ -78,6 +79,7 @@ $(document).ready(function() {
               $item.find(".milestone-targetYear").val(response.newMilestone[0].targetYear);
               $item.find(".milestone-targetYear").parent().find("p").text(response.newMilestone[0].targetYear);
               $item.find(".mileStoneId").val(response.newMilestone[0].id);
+              $item.find(".elementId").val(response.newMilestone[i + 1].Elementid);
               $(e).append($item);
               $($item).show("slow");
             });
