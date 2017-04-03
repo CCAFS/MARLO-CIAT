@@ -30,8 +30,14 @@
   <article class="row" id="mainInformation">
     <div class="col-md-12">
       [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
-      
+
       [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
+      [#-- Back --]
+            <div class="pull-right">
+              <a href="[@s.url action='${centerSession}/monitoringOutcomesList'][@s.param name="outcomeID" value=outcome.id /][/@s.url]">
+                <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the deliverables list
+              </a>
+            </div>  
       
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
