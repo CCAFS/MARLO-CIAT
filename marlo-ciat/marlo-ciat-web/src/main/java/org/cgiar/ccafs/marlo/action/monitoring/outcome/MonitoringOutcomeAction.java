@@ -164,8 +164,10 @@ public class MonitoringOutcomeAction extends BaseAction {
       long monitoringOutcomeID = monitoringOutcomeService.saveMonitoringOutcome(monitoringOutcome);
       monitoringOutcome = monitoringOutcomeService.getMonitoringOutcomeById(monitoringOutcomeID);
 
-      List<ResearchMilestone> milestones = new ArrayList<>(
-        outcome.getResearchMilestones().stream().filter(rm -> rm.isActive()).collect(Collectors.toList()));
+      List<ResearchMilestone> milestones = new ArrayList<>(outcome.getResearchMilestones().stream()
+        .filter(rm -> rm.isActive() && rm.getTargetYear() >= calendarStart.get(Calendar.YEAR))
+        .collect(Collectors.toList()));
+      Collections.sort(milestones, (mi1, mi2) -> mi1.getId().compareTo(mi2.getId()));
 
       for (ResearchMilestone researchMilestone : milestones) {
 

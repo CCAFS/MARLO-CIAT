@@ -472,6 +472,29 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return null;
   }
 
+  /**
+   * This method calculates all the years between the start date and the end date.
+   * 
+   * @return a List of numbers representing all the years, or an empty list if nothing found.
+   */
+  public List<Integer> getOutcomeYears(int outcomeYear) {
+    List<Integer> allYears = new ArrayList<>();
+
+    Calendar calendarStart = Calendar.getInstance();
+    calendarStart.set(Calendar.YEAR, 2017);
+    Calendar calendarEnd = Calendar.getInstance();
+    calendarEnd.set(Calendar.YEAR, outcomeYear);
+
+    while (calendarStart.get(Calendar.YEAR) <= calendarEnd.get(Calendar.YEAR)) {
+      // Adding the year to the list.
+      allYears.add(calendarStart.get(Calendar.YEAR));
+      // Adding a year (365 days) to the start date.
+      calendarStart.add(Calendar.YEAR, 1);
+    }
+
+    return allYears;
+  }
+
 
   /**
    * This method gets the specific section status from the sectionStatuses array for a Deliverable.
@@ -588,6 +611,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return securityContext.hasPermission(this.getBasePermission() + ":" + fieldName);
     }
   }
+
 
   public boolean hasPersmissionSubmit() {
     boolean permissions = this.hasPermission("submit");

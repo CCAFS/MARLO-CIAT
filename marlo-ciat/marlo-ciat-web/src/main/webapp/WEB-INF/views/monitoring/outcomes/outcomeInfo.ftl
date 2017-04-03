@@ -177,7 +177,7 @@
         [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" className="milestone-targetYear" required=false editable=false /]
       </div>
       <div class="col-md-3 col-md-offset-3">
-      [#if !(milestone.researchMilestone.targetUnit.id==-1)]
+      [#if (milestone.researchMilestone??)&&!(milestone.researchMilestone.targetUnit.id==-1)]
         [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value" className="achieved"  required=false editable=editable /]
       [/#if]
       </div>
