@@ -11,7 +11,7 @@
   <div class="container">
     <div class="col-md-6">
       <h3>[@s.text name="login.marloTitle" /]</h3>
-      <p>[@s.text name="login.marloDescription" /]  </p>
+      <!--<p>[@s.text name="login.marloDescription" /]  </p> -->
     </div>
     <div class="col-md-offset-1 col-md-5">
       [#-- Login Form --]
