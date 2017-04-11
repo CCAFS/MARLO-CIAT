@@ -49,11 +49,12 @@ $(document).ready(
             }
           });
 
-      $("#outcomes").on(
+      $("#outcomeSelect").on(
           "change",
           function() {
             var programID = $("#programSelected").html();
             var option = $(this).find("option:selected");
+            console.log("holi");
             if(option.val() != "-1") {
               var url =
                   baseURL + "/impactPathway/" + centerSession + "/outputsList.do?programID=" + programID + "&edit="

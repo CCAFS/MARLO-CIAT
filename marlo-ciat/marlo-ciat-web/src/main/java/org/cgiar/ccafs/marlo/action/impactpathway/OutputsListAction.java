@@ -25,6 +25,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
@@ -32,6 +33,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
+import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -59,6 +61,7 @@ public class OutputsListAction extends BaseAction {
   private IResearchOutcomeService outcomeService;
   private IUserService userService;
   private IResearchOutputService outputService;
+  private ISectionStatusService sectionStatusService;
 
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
@@ -81,7 +84,8 @@ public class OutputsListAction extends BaseAction {
   @Inject
   public OutputsListAction(APConfig config, ICenterService centerService, IProgramService programService,
     IResearchAreaService researchAreaService, IResearchTopicService researchTopicService,
-    IResearchOutcomeService outcomeService, IUserService userService, IResearchOutputService outputService) {
+    IResearchOutcomeService outcomeService, IUserService userService, IResearchOutputService outputService,
+    ISectionStatusService sectionStatusService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -90,6 +94,7 @@ public class OutputsListAction extends BaseAction {
     this.outcomeService = outcomeService;
     this.userService = userService;
     this.outputService = outputService;
+    this.sectionStatusService = sectionStatusService;
   }
 
   @Override
@@ -125,6 +130,13 @@ public class OutputsListAction extends BaseAction {
       output
         .setModificationJustification(this.getJustification() == null ? "Outcome deleted" : this.getJustification());
       output.setModifiedBy(this.getCurrentUser());
+
+      SectionStatus status =
+        sectionStatusService.getSectionStatusByOutput(programID, output.getId(), "outputsList", this.getYear());
+
+      if (status != null) {
+        sectionStatusService.deleteSectionStatus(status.getId());
+      }
 
       outputService.saveResearchOutput(output);
 

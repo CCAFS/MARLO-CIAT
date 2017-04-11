@@ -24,12 +24,14 @@ import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
+import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -66,6 +68,7 @@ public class OutcomesListAction extends BaseAction {
   private ResearchArea selectedResearchArea;
   private ResearchTopic selectedResearchTopic;
   private IUserService userService;
+  private ISectionStatusService sectionStatusService;
 
   private long topicID;
   private long programID;
@@ -76,7 +79,7 @@ public class OutcomesListAction extends BaseAction {
   @Inject
   public OutcomesListAction(APConfig config, ICenterService centerService, IProgramService programService,
     IResearchAreaService researchAreaService, IUserService userService, IResearchTopicService researchTopicService,
-    IResearchOutcomeService outcomeService) {
+    IResearchOutcomeService outcomeService, ISectionStatusService sectionStatusService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -84,6 +87,7 @@ public class OutcomesListAction extends BaseAction {
     this.userService = userService;
     this.researchTopicService = researchTopicService;
     this.outcomeService = outcomeService;
+    this.sectionStatusService = sectionStatusService;
   }
 
   @Override
@@ -123,6 +127,14 @@ public class OutcomesListAction extends BaseAction {
       outcome.setModifiedBy(this.getCurrentUser());
 
       outcomeService.saveResearchOutcome(outcome);
+
+      SectionStatus status =
+        sectionStatusService.getSectionStatusByOutcome(programID, outcome.getId(), "outcomesList", this.getYear());
+
+      if (status != null) {
+        sectionStatusService.deleteSectionStatus(status.getId());
+      }
+
 
       outcomeService.deleteResearchOutcome(outcome.getId());
       this.addActionMessage("message:" + this.getText("deleting.success"));

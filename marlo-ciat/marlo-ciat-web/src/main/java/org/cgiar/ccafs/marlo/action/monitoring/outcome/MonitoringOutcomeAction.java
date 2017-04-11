@@ -303,13 +303,18 @@ public class MonitoringOutcomeAction extends BaseAction {
           monitoringOutcome.setMilestones(new ArrayList<>(monitoringOutcome.getMonitoringMilestones().stream()
             .filter(mm -> mm.isActive()).collect(Collectors.toList())));
 
-          Collections.sort(monitoringOutcome.getMilestones(), (mil1, mil2) -> mil1.getId().compareTo(mil2.getId()));
+          Collections.sort(monitoringOutcome.getMilestones(), (mil1, mil2) -> mil1.getResearchMilestone()
+            .getTargetYear().compareTo(mil2.getResearchMilestone().getTargetYear()));
 
         }
       }
 
       Collections.sort(outcome.getMonitorings(),
         (mon1, mon2) -> (new Integer(mon1.getYear())).compareTo(new Integer(mon2.getYear())));
+      for (MonitoringOutcome monitoringOutcome : outcome.getMonitorings()) {
+        Collections.sort(monitoringOutcome.getMilestones(), (mil1, mil2) -> mil1.getResearchMilestone().getTargetYear()
+          .compareTo(mil2.getResearchMilestone().getTargetYear()));
+      }
 
 
     }

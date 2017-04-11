@@ -1,5 +1,4 @@
 [#ftl]
-${action.canAccessSuperAdmin()?c}
 [#assign mainMenu= [
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'login',                                              'visible': !logged, 'active': true },
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'dashboard',                      'icon': 'home',     'visible': logged, 'active': true },

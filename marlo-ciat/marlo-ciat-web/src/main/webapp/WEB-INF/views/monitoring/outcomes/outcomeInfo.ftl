@@ -171,6 +171,18 @@
     <div class="form-group" style="margin-top: 15px;">
       [@customForm.textArea name="${milestoneCustomName}.researchMilestone.title" i18nkey="outcome.milestone.index.statement" required=true className="milestone-statement limitWords-50" editable=false /]
     </div>
+    
+    <div class="row form-group target-block">   
+      <div class="col-md-3 ">
+        [@customForm.input name="${milestoneCustomName}.researchMilestone.targetUnit.name" i18nkey="Target Unit" className="milestone-targetYear" required=false editable=false /]
+      </div> 
+      <div class="col-md-3 col-md-offset-3">
+      [#if (milestone.researchMilestone??)&&!(milestone.researchMilestone.targetUnit.id==-1)]
+        [@customForm.input name="${milestoneCustomName}.researchMilestone.value" i18nkey="Expected Value" className="milestone-targetYear" required=false editable=false /]
+      [/#if]
+      </div>
+    </div>
+    
     <div class="row form-group target-block">      
       [#-- Target Unit --]
       <div class="col-md-3 ">

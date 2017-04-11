@@ -63,7 +63,7 @@
           [#-- Outcome List --]
           <div class="simpleBox col-md-12">
             <label for="">Select Outcome:<span class="red">*</span></label>
-            <select name="outcomes" id="outcomes">
+            <select name="outcomes" id="outcomeSelect">
               <option value="-1" >Select an option</option>
                 [#list outcomes as outcome]
                   <option value="${outcome.id}"[#if (selectedResearchOutcome.id)?has_content && (selectedResearchOutcome.id== outcome.id)] selected="selected"[/#if]] >${outcome.description}</option>
