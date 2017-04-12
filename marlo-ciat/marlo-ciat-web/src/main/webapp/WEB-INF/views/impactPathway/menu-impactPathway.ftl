@@ -119,7 +119,7 @@ error
   <ul class="dropdown-menu">
     <li><a id="programGraph" href="#">Show graph by program</a></li>
     <li><a id="areaGraph" href="#">Show graph by area</a></li>
-    <li><a id="fullGraph" href="#">Show full graph</a></li>
+    [#-- <li><a id="fullGraph" href="#">Show full graph</a></li> --]
   </ul>
 </div>
   

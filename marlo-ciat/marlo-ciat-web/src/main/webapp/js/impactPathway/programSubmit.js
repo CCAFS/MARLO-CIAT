@@ -80,6 +80,7 @@ function cancel() {
 
 function submitButtonEvent(e) {
   e.preventDefault();
+  console.log("holi");
   var message = 'Are you sure you want to submit the program now?';
   message += 'Once submitted, you will no longer have editing rights.';
   noty({
