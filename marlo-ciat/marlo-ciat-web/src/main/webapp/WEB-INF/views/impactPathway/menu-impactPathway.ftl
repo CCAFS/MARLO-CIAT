@@ -75,9 +75,10 @@ error
 [/#if]
 
 
+
 [#-- Mini-graph --]
 <div id="graphicWrapper">
-<p class="text-center"><b>Impact Pathway Graph</b></p>
+<p class="text-center title">Impact Pathway Graph</p>
   <div id="mini-graphic">
     <div id="overlay" >
       <button class="btn btn-primary btn-xs"><strong>Show graph</strong></button>
@@ -86,6 +87,11 @@ error
   <div class="clearfix"></div>
 </div>
 
+<br />
+<p class="title">Download Impact Pathway</p>
+<a class="col-md-12" href="${baseUrl}/summaries/impactPathwaySubmissions.do?programID=${programID}" target="__BLANK" style="text-align:center;">
+  <img src="${baseUrl}/images/global/download-summary.png" width="40" height="50" title="[@s.text name="project.downloadPDf" /]" />
+</a>
 [#-- PopUp Graph --]
 <div id="impactGraphic-content"  style="display:none;" >
   
