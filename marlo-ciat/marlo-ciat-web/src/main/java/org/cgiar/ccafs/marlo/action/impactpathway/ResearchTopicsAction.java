@@ -377,6 +377,7 @@ public class ResearchTopicsAction extends BaseAction {
           newResearchTopic.setResearchTopic(researchTopic.getResearchTopic().trim());
           newResearchTopic.setColor("#ecf0f1");
           newResearchTopic.setResearchProgram(selectedProgram);
+          newResearchTopic.setShortName(researchTopic.getShortName().trim());
 
           researchTopicService.saveResearchTopic(newResearchTopic);
         } else {
@@ -387,6 +388,12 @@ public class ResearchTopicsAction extends BaseAction {
           if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic().trim())) {
             hasChanges = true;
             researchTopicPrew.setResearchTopic(researchTopic.getResearchTopic().trim());
+          }
+
+          if (researchTopicPrew.getShortName() == null
+            || !researchTopicPrew.getShortName().equals(researchTopic.getShortName().trim())) {
+            hasChanges = true;
+            researchTopicPrew.setShortName(researchTopic.getShortName().trim());
           }
 
           if (hasChanges) {

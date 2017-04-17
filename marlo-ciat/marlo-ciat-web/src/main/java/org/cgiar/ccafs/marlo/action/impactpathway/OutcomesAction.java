@@ -349,6 +349,7 @@ public class OutcomesAction extends BaseAction {
       TargetUnit targetUnit = targetUnitService.getTargetUnitById(outcome.getTargetUnit().getId());
 
       outcomeDb.setDescription(outcome.getDescription());
+      outcomeDb.setShortName(outcome.getShortName());
       outcomeDb.setTargetYear(outcome.getTargetYear());
 
       outcomeDb.setTargetUnit(targetUnit);

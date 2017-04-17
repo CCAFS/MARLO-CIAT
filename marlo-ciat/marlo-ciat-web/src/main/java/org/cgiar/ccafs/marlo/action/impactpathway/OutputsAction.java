@@ -350,6 +350,8 @@ public class OutputsAction extends BaseAction {
 
       outputDb.setTitle(output.getTitle());
 
+      outputDb.setShortName(output.getShortName());
+
       long outputSaveId = outputService.saveResearchOutput(outputDb);
 
       ResearchOutput outputSave = outputService.getResearchOutputById(outputSaveId);

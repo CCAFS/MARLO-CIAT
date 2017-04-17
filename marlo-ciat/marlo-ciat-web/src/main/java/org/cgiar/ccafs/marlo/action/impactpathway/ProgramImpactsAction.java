@@ -500,7 +500,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setDescription(researchImpact.getDescription().trim());
           researchImpactNew.setResearchProgram(programDb);
           researchImpactNew.setColor(selectedProgram.getImpactColor());
-          // researchImpactNew.setTargetYear(researchImpact.getTargetYear());
+          researchImpactNew.setShortName(researchImpact.getShortName().trim());
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
           long impactId = impactService.saveResearchImpact(researchImpactNew);
@@ -534,17 +534,11 @@ public class ProgramImpactsAction extends BaseAction {
             researchImpactRew.setDescription(researchImpact.getDescription().trim());
           }
 
-          // if (researchImpact.getTargetYear() != null) {
-          // if (researchImpactRew.getTargetYear() != null) {
-          // if (!researchImpactRew.getTargetYear().equals(researchImpact.getTargetYear())) {
-          // hasChanges = true;
-          // researchImpactRew.setTargetYear(researchImpact.getTargetYear());
-          // }
-          // } else {
-          // hasChanges = true;
-          // researchImpactRew.setTargetYear(researchImpact.getTargetYear());
-          // }
-          // }
+          if (researchImpactRew.getShortName() == null
+            || !researchImpactRew.getShortName().equals(researchImpact.getShortName().trim())) {
+            hasChanges = true;
+            researchImpactRew.setShortName(researchImpact.getShortName().trim());
+          }
 
           if (hasChanges) {
             researchImpactRew.setModifiedBy(this.getCurrentUser());

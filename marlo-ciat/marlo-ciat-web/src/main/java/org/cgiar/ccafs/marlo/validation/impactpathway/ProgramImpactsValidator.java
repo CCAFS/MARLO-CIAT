@@ -134,22 +134,26 @@ public class ProgramImpactsValidator extends BaseValidator {
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
 
-    if (!this.isValidString(researchImpact.getDescription())
-      && this.wordCount(researchImpact.getDescription()) <= 150) {
+    if (researchImpact.getDescription() != null) {
+      if (!this.isValidString(researchImpact.getDescription())
+        && this.wordCount(researchImpact.getDescription()) <= 150) {
+        this.addMessage(baseAction.getText("programImpact.action.description.required", params));
+        baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("programImpact.action.description.required", params));
       baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (!this.isValidString(researchImpact.getShortName()) && this.wordCount(researchImpact.getShortName()) <= 15) {
+    if (researchImpact.getShortName() != null) {
+      if (!this.isValidString(researchImpact.getShortName()) && this.wordCount(researchImpact.getShortName()) <= 15) {
+        this.addMessage(baseAction.getText("programImpact.action.shortName.required", params));
+        baseAction.getInvalidFields().put("input-impacts[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("programImpact.action.shortName.required", params));
       baseAction.getInvalidFields().put("input-impacts[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
     }
-
-    // if (researchImpact.getTargetYear() == -1) {
-    // this.addMessage(baseAction.getText("programImpact.action.year.required", params));
-    // baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].targetYear",
-    // InvalidFieldsMessages.EMPTYFIELD);
-    // }
 
     if (researchImpact.getObjectiveValue() != null) {
       if (researchImpact.getObjectiveValue().length() < 1) {
