@@ -88,10 +88,12 @@ error
 </div>
 
 <br />
+<div class="col-md-12">
 <p class="title">Download Impact Pathway</p>
 <a class="col-md-12" href="${baseUrl}/summaries/impactPathwaySubmissions.do?programID=${programID}" target="__BLANK" style="text-align:center;">
-  <img src="${baseUrl}/images/global/download-summary.png" width="40" height="50" title="[@s.text name="project.downloadPDf" /]" />
+  <img src="${baseUrl}/images/global/download-summary.png" width="40" height="50" title="Download" />
 </a>
+</div>
 [#-- PopUp Graph --]
 <div id="impactGraphic-content"  style="display:none;" >
   
