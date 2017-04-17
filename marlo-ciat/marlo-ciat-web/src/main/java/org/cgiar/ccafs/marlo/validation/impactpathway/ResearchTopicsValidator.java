@@ -97,6 +97,11 @@ public class ResearchTopicsValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-topics[" + i + "].researchTopic", InvalidFieldsMessages.EMPTYFIELD);
     }
 
+    if (!this.isValidString(researchTopic.getShortName()) && this.wordCount(researchTopic.getShortName()) <= 15) {
+      this.addMessage(baseAction.getText("researchTopic.action.shortName.required", params));
+      baseAction.getInvalidFields().put("input-topics[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
   }
 
 }

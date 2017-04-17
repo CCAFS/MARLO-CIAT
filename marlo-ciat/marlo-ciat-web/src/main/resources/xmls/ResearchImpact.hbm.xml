@@ -30,6 +30,9 @@
     <property name="color" type="string">
       <column name="color" length="8" />
     </property>
+    <property name="shortName" type="string">
+      <column name="short_name" length="15" />
+    </property>
 		  <property name="description" type="string">
       <column name="description" length="65535" not-null="true" />
     </property>

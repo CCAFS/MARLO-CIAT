@@ -46,16 +46,15 @@ public class ResearchTopic implements Serializable, IAuditLog {
   @Expose
   private String researchTopic;
 
+
   /**
    * The research program related to this research topic or flagship project.
    */
   @Expose
   private ResearchProgram researchProgram;
 
-
   @Expose
   private boolean active;
-
 
   @Expose
   private Date activeSince;
@@ -75,6 +74,10 @@ public class ResearchTopic implements Serializable, IAuditLog {
 
   @Expose
   private String color;
+
+
+  @Expose
+  private String shortName;
 
 
   private Set<ResearchOutcome> researchOutcomes = new HashSet<>(0);
@@ -98,7 +101,6 @@ public class ResearchTopic implements Serializable, IAuditLog {
     this.researchProgram = researchProgram;
   }
 
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -121,6 +123,7 @@ public class ResearchTopic implements Serializable, IAuditLog {
     return true;
   }
 
+
   public Date getActiveSince() {
     return activeSince;
   }
@@ -129,7 +132,6 @@ public class ResearchTopic implements Serializable, IAuditLog {
   public String getColor() {
     return color;
   }
-
 
   public User getCreatedBy() {
     return createdBy;
@@ -152,9 +154,11 @@ public class ResearchTopic implements Serializable, IAuditLog {
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   @Override
   public User getModifiedBy() {
@@ -172,12 +176,15 @@ public class ResearchTopic implements Serializable, IAuditLog {
     return researchProgram;
   }
 
-
   /**
    * @return the researchTopic
    */
   public String getResearchTopic() {
     return researchTopic;
+  }
+
+  public String getShortName() {
+    return shortName;
   }
 
 
@@ -200,6 +207,7 @@ public class ResearchTopic implements Serializable, IAuditLog {
     this.active = active;
   }
 
+
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
@@ -207,7 +215,6 @@ public class ResearchTopic implements Serializable, IAuditLog {
   public void setColor(String color) {
     this.color = color;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -244,11 +251,16 @@ public class ResearchTopic implements Serializable, IAuditLog {
     this.researchProgram = researchProgram;
   }
 
+
   /**
    * @param researchTopic the researchTopic to set
    */
   public void setResearchTopic(String researchTopic) {
     this.researchTopic = researchTopic;
+  }
+
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
   }
 
 

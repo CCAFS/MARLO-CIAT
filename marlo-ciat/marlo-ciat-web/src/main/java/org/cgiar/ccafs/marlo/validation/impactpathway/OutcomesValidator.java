@@ -149,6 +149,16 @@ public class OutcomesValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-outcome.description", InvalidFieldsMessages.EMPTYFIELD);
     }
 
+    if (outcome.getShortName() != null) {
+      if (!this.isValidString(outcome.getShortName()) && this.wordCount(outcome.getShortName()) <= 15) {
+        this.addMessage(baseAction.getText("outcome.action.statement.required"));
+        baseAction.getInvalidFields().put("input-outcome.shortName", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
+      this.addMessage(baseAction.getText("outcome.action.statement.required"));
+      baseAction.getInvalidFields().put("input-outcome.shortName", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
     if (outcome.getTargetYear() != null) {
       if (outcome.getTargetYear() == -1) {
         this.addMessage(baseAction.getText("outcome.action.targetYear.required"));

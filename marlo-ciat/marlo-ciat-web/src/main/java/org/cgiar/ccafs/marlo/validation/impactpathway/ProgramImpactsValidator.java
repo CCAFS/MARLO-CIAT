@@ -140,6 +140,11 @@ public class ProgramImpactsValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
     }
 
+    if (!this.isValidString(researchImpact.getShortName()) && this.wordCount(researchImpact.getShortName()) <= 15) {
+      this.addMessage(baseAction.getText("programImpact.action.shortName.required", params));
+      baseAction.getInvalidFields().put("input-impacts[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
     // if (researchImpact.getTargetYear() == -1) {
     // this.addMessage(baseAction.getText("programImpact.action.year.required", params));
     // baseAction.getInvalidFields().put("input-researchImpacts[" + i + "].targetYear",

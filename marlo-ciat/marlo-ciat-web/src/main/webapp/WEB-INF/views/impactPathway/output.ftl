@@ -56,6 +56,11 @@
           [#-- Output Name --]
           <div class="form-group">
             [@customForm.textArea name="${outputCustomName}.title"  i18nkey="output.name" required=true className="output-name limitWords-100" editable=editable /]
+            
+            <div class="row">
+              <div class="col-sm-7">[@customForm.input name="${outputCustomName}.shortName" i18nkey="output.shortName" className="limitWords-15" required=true editable=editable /]</div>       
+            </div> 
+            
           </div> 
           
           [#-- Research topic --]

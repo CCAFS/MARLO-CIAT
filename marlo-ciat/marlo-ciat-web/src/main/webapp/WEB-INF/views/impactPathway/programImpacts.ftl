@@ -108,6 +108,11 @@
         [/#if].
         --]  
       </div>
+              
+      <div class="row">
+        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="programImpact.shortName" className="limitWords-15" required=true editable=editable /]</div>       
+      </div>
+            
     </div>
     
     [#-- Startegic Objectives --]

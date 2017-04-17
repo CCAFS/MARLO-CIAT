@@ -49,13 +49,13 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   @Expose
   private Integer targetYear;
 
-
   @Expose
   private BigDecimal value;
 
 
   @Expose
   private ResearchImpact researchImpact;
+
 
   @Expose
   private boolean active;
@@ -89,12 +89,18 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private Integer baseline;
 
 
+  @Expose
+  private String shortName;
+
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
 
   private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
+
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
+
   private Set<MonitoringOutcome> monitoringOutcomes = new HashSet<MonitoringOutcome>(0);
+
   private List<ResearchMilestone> milestones;
   private List<MonitoringOutcome> monitorings;
 
@@ -136,7 +142,6 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return createdBy;
   }
 
-
   /**
    * @return the description
    */
@@ -151,6 +156,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   public Long getId() {
     return id;
   }
+
 
   @Override
   public String getLogDeatil() {
@@ -206,6 +212,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return sectionStatuses;
   }
 
+  public String getShortName() {
+    return shortName;
+  }
+
   public TargetUnit getTargetUnit() {
     return targetUnit;
   }
@@ -248,10 +258,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.baseline = baseline;
   }
 
-
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
+
 
   /**
    * @param description the description to set
@@ -270,7 +280,6 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   public void setImpactPathway(boolean impactPathway) {
     this.impactPathway = impactPathway;
   }
-
 
   public void setMilestones(List<ResearchMilestone> milestones) {
     this.milestones = milestones;
@@ -309,10 +318,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.researchMilestones = researchMilestones;
   }
 
+
   public void setResearchOutputs(Set<ResearchOutput> researchOutputs) {
     this.researchOutputs = researchOutputs;
   }
-
 
   /**
    * @param researchTopic the researchTopic to set
@@ -324,6 +333,11 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
     this.sectionStatuses = sectionStatuses;
+  }
+
+
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
   }
 
   public void setTargetUnit(TargetUnit targetUnit) {

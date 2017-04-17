@@ -106,6 +106,16 @@ public class OutputsValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-output.title", InvalidFieldsMessages.EMPTYFIELD);
     }
 
+    if (output.getShortName() != null) {
+      if (!this.isValidString(output.getShortName()) && this.wordCount(output.getShortName()) <= 15) {
+        this.addMessage(baseAction.getText("output.shortName"));
+        baseAction.getInvalidFields().put("input-output.shortName", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
+      this.addMessage(baseAction.getText("output.shortName"));
+      baseAction.getInvalidFields().put("input-output.shortName", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
 
     if (output.getNextUsers() != null) {
       if (output.getNextUsers().size() == 0) {
