@@ -136,7 +136,8 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
       // Subreport Description
       this.fillSubreport((SubReport) hm.get("program_impact"), "program_impact");
-      this.fillSubreport((SubReport) hm.get("research_topics"), "research_topics");
+      // Hiden section
+      // this.fillSubreport((SubReport) hm.get("research_topics"), "research_topics");
       this.fillSubreport((SubReport) hm.get("outcomes"), "outcomes");
       this.fillSubreport((SubReport) hm.get("outputs"), "outputs");
 
@@ -167,9 +168,9 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       case "program_impact":
         model = this.getProgramImpactTableModel();
         break;
-      case "research_topics":
-        model = this.getResearchTopicsTableModel();
-        break;
+      // case "research_topics":
+      // model = this.getResearchTopicsTableModel();
+      // break;
       case "outcomes":
         model = this.getOutcomesTableModel();
         break;
@@ -311,12 +312,9 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
     // Get title composed by center-area-program
     if (researchProgram.getResearchArea() != null) {
-      if (researchProgram.getResearchArea().getResearchCenter() != null) {
-        title += researchProgram.getResearchArea().getResearchCenter().getAcronym().toUpperCase() + " - ";
-      }
-      title += researchProgram.getResearchArea().getAcronym().toUpperCase() + " - ";
+      title += researchProgram.getResearchArea().getName() + " - ";
       if (researchProgram.getComposedName() != null) {
-        title += researchProgram.getComposedName();
+        title += researchProgram.getName();
       }
     }
 
