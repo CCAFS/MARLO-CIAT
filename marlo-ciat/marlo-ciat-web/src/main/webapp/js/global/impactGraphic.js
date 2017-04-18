@@ -642,16 +642,17 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
           move.P = currentX;
           move.I = move.P;
           move.OC = move.P;
-        }
-        if(nodes[i + 1] && nodes[i + 1].data.type == "I") {
+          console.log(move.I);
+        }else if(nodes[i + 1] && nodes[i + 1].data.type == "I") {
           move.I=currentX;
-        } else {
-          move.I = move.I + (nodeWidth + nodeMargin);
+        } else{
+          move.I=currentX+ (nodeWidth + nodeMargin);
         }
         nodes[i].position = {
             x: move.I,
             y: 200
         };
+        
         // PROGRAM IMPACT-----------------
       } else if(nodes[i].data.type == "I") {
         if(nodes[i + 1] && nodes[i + 1].data.type == "P") {
@@ -715,12 +716,14 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
         } else {
           currentX = move.I;
         }
-        if(nodes[i + 1] && nodes[i + 1].data.type == "P" || nodes[i + 1].data.type == "I") {
+        if(typeof(nodes[i + 1])!="undefined"){
+        if(nodes[i + 1].data.type == "P" || nodes[i + 1].data.type == "I") {
           if(move.OC > move.I) {
             currentX = move.OC;
           } else {
             currentX = move.I;
           }
+        }
         }
 
         // console.log(move.KO);
@@ -731,10 +734,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
 
         // OUTPUT-----------------
       } else if(nodes[i].data.type == "OP") {
-        if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T") {
+        if(nodes[i + 1] && nodes[i + 1].data.type == "OC" || nodes[i + 1].data.type == "T" ) {
           currentX = move.OC + (nodeWidth + nodeMargin + 20);
           move.OP = 330;
-        } else if(nodes[i + 1] && nodes[i + 1].data.type == "P" || nodes[i + 1].data.type == "I") {
+        } else if(nodes[i + 1] && nodes[i + 1].data.type == "P" || nodes[i + 1].data.type == "I" || nodes[i + 1].data.type == "A") {
           move.OP = 330;
           if(move.OC > move.I) {
             currentX = move.OC;
