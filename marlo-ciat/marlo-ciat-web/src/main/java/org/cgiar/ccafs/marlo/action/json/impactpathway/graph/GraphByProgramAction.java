@@ -125,8 +125,8 @@ public class GraphByProgramAction extends BaseAction {
       HashMap<String, Object> dataImpactDetail = new HashMap<>();
       dataImpactDetail.put("id", "I" + impact.getId());
       dataImpactDetail.put("parent", "P" + impact.getResearchProgram().getId());
-      dataImpactDetail.put("label", "Impact " + impact.getId());
-      dataImpactDetail.put("title", "Impact " + impact.getId());
+      dataImpactDetail.put("label", impact.getShortName() != null ? impact.getShortName() : "Impact " + impact.getId());
+      dataImpactDetail.put("title", impact.getShortName() != null ? impact.getShortName() : "Impact " + impact.getId());
       dataImpactDetail.put("description", impact.getDescription());
       dataImpactDetail.put("color", impact.getColor());
       dataImpactDetail.put("type", "I");
@@ -158,8 +158,10 @@ public class GraphByProgramAction extends BaseAction {
       HashMap<String, Object> dataTopicDetail = new HashMap<>();
       dataTopicDetail.put("id", "T" + topic.getId());
       dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
-      dataTopicDetail.put("label", "Research Topic " + topic.getId());
-      dataTopicDetail.put("title", "Research Topic " + topic.getId());
+      dataTopicDetail.put("label",
+        topic.getShortName() != null ? topic.getShortName() : "Research Topic " + topic.getId());
+      dataTopicDetail.put("title",
+        topic.getShortName() != null ? topic.getShortName() : "Research Topic " + topic.getId());
       dataTopicDetail.put("description", topic.getResearchTopic());
       dataTopicDetail.put("color", topic.getColor());
       dataTopicDetail.put("type", "T");
@@ -176,8 +178,10 @@ public class GraphByProgramAction extends BaseAction {
         HashMap<String, Object> dataOutcomeDetail = new HashMap<>();
         dataOutcomeDetail.put("id", "OC" + outcome.getId());
         dataOutcomeDetail.put("parent", "T" + outcome.getResearchTopic().getId());
-        dataOutcomeDetail.put("label", "Outcome " + outcome.getId());
-        dataOutcomeDetail.put("title", "Outcome " + outcome.getId());
+        dataOutcomeDetail.put("label",
+          outcome.getShortName() != null ? outcome.getShortName() : "Outcome " + outcome.getId());
+        dataOutcomeDetail.put("title",
+          outcome.getShortName() != null ? outcome.getShortName() : "Outcome " + outcome.getId());
         dataOutcomeDetail.put("description", outcome.getDescription());
         dataOutcomeDetail.put("color", outcome.getResearchImpact().getColor());
         dataOutcomeDetail.put("type", "OC");
@@ -204,8 +208,10 @@ public class GraphByProgramAction extends BaseAction {
           HashMap<String, Object> dataOutputDetail = new HashMap<>();
           dataOutputDetail.put("id", "OP" + output.getId());
           dataOutputDetail.put("parent", "T" + output.getResearchOutcome().getResearchTopic().getId());
-          dataOutputDetail.put("label", "Output " + output.getId());
-          dataOutputDetail.put("title", "Output " + output.getId());
+          dataOutputDetail.put("label",
+            output.getShortName() != null ? output.getShortName() : "Output " + output.getId());
+          dataOutputDetail.put("title",
+            output.getShortName() != null ? output.getShortName() : "Output " + output.getId());
           dataOutputDetail.put("description", output.getTitle());
           dataOutputDetail.put("color", output.getResearchOutcome().getResearchImpact().getColor());
           dataOutputDetail.put("type", "OP");

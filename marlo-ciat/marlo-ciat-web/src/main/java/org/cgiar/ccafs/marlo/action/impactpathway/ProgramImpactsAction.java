@@ -499,7 +499,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setCreatedBy(this.getCurrentUser());
           researchImpactNew.setDescription(researchImpact.getDescription().trim());
           researchImpactNew.setResearchProgram(programDb);
-          researchImpactNew.setColor(selectedProgram.getImpactColor());
+          researchImpactNew.setColor(null);
           researchImpactNew.setShortName(researchImpact.getShortName().trim());
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
