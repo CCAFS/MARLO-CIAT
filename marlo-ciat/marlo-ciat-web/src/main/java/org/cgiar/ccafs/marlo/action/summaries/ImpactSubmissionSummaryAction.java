@@ -22,7 +22,6 @@ import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
@@ -81,6 +80,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
   // Params
   private ResearchProgram researchProgram;
   private ResearchCycle researchCycle;
+  private long startTime;
 
   @Inject
   public ImpactSubmissionSummaryAction(APConfig config, IProgramService programService,
@@ -92,10 +92,6 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
   @Override
   public String execute() throws Exception {
-
-    // Calculate time to generate report
-    long startTime = System.currentTimeMillis();
-    System.out.println("Inicia conteo en: " + (startTime - System.currentTimeMillis()));
 
 
     ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -145,16 +141,14 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       bytesPDF = os.toByteArray();
       os.close();
     } catch (Exception e) {
-      long stopTime = System.currentTimeMillis();
-      long elapsedTime = stopTime - startTime;
-      System.out.println("Tiempo de ejecución: Error time " + elapsedTime);
-      LOG.error("Generating PDF" + e.getMessage());
+      LOG.error("Error generating PDF " + e.getMessage());
       throw e;
     }
     // Calculate time of generation
     long stopTime = System.currentTimeMillis();
-    long elapsedTime = stopTime - startTime;
-    System.out.println("Tiempo de ejecución: " + elapsedTime);
+    stopTime = stopTime - startTime;
+    LOG.info("Downloaded successfully: " + this.getFileName() + ". User: "
+      + this.getCurrentUser().getComposedCompleteName() + ". Time to generate: " + stopTime + "ms.");
     return SUCCESS;
 
   }
@@ -307,8 +301,8 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     TypedTableModel model = new TypedTableModel(new String[] {"title", "current_date", "impact_submission", "imageUrl"},
       new Class[] {String.class, String.class, String.class, String.class});
     String title = "";
-    String current_date = "";
-    String impact_submission = "";
+    String currentDate = "";
+    String impactSubmission = "";
 
     // Get title composed by center-area-program
     if (researchProgram.getResearchArea() != null) {
@@ -321,7 +315,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     // Get datetime
     ZonedDateTime timezone = ZonedDateTime.now();
     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-d 'at' HH:mm ");
-    current_date = timezone.format(format) + this.getTimeZone();
+    currentDate = timezone.format(format) + this.getTimeZone();
 
     // Get submission
     researchCycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.IMPACT_PATHWAY.getId());
@@ -342,85 +336,104 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       Submission fisrtSubmission = submissions.get(0);
       String submissionDate = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm").format(fisrtSubmission.getDateTime());
 
-      impact_submission = "Submitted on " + submissionDate + " (" + fisrtSubmission.getResearchCycle().getName()
+      impactSubmission = "Submitted on " + submissionDate + " (" + fisrtSubmission.getResearchCycle().getName()
         + " cycle " + fisrtSubmission.getYear() + ")";
     } else {
-      impact_submission =
-        "Submission for " + researchCycle.getName() + " cycle " + this.getYear() + ": &lt;pending&gt;";
+      impactSubmission = "Submission for " + researchCycle.getName() + " cycle " + this.getYear() + ": &lt;pending&gt;";
     }
 
     // Get CIAT imgage URL from repo
-    String imageUrl = null;
+    String imageUrl = this.getBaseUrl() + "/images/global/centers/CIAT.png";
 
-    imageUrl = this.getBaseUrl() + "/images/global/centers/CIAT.png";
-
-    model.addRow(new Object[] {title, current_date, impact_submission, imageUrl});
+    model.addRow(new Object[] {title, currentDate, impactSubmission, imageUrl});
     return model;
   }
 
   private TypedTableModel getOutcomesTableModel() {
     // Initialization of Model
     TypedTableModel model = new TypedTableModel(
-      new String[] {"id", "statement", "research_topic", "program_impact", "target_unit", "target_value",
-        "target_year"},
-      new Class[] {long.class, String.class, String.class, String.class, String.class, String.class, String.class});
+      new String[] {"shortName", "statement", "research_topic", "program_impact", "target_unit", "target_value",
+        "target_year", "showResearchTopic"},
+      new Class[] {String.class, String.class, String.class, String.class, String.class, String.class, String.class,
+        Boolean.class});
 
 
     // Get research topics and then outcomes
     for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream()
       .filter(rt -> rt.isActive() && rt.getResearchOutcomes().size() > 0).collect(Collectors.toList())) {
-
+      String researchTopicTitle = "";
+      Boolean showResearchTopic;
+      int countOutcome = 0;
       for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
-        long id = 0;
-        String statement = "";
-        String research_topic = "";
-        String program_impact = "";
-        String target_unit = "";
-        String target_value = "";
-        String target_year = "";
+        if (countOutcome == 0) {
+          if (researchTopic.getResearchTopic() != null) {
+            researchTopicTitle = researchTopic.getResearchTopic();
+          }
+          if (researchTopicTitle.isEmpty()) {
+            researchTopicTitle = "&lt;Not Defined&gt;";
+          }
+          showResearchTopic = true;
+        } else {
+          showResearchTopic = false;
+        }
 
-        id = researchOutcome.getId();
-        statement = researchOutcome.getDescription();
+
+        String shortName = "";
+        String statement = "";
+
+        String programImpact = "";
+        String targetUnit = "";
+        String targetValue = "";
+        String targetYear = "";
+
+        if (researchOutcome.getShortName() != null) {
+          shortName = researchOutcome.getShortName();
+        }
+        if (shortName.isEmpty()) {
+          shortName = "&lt;Not Defined&gt;";
+        }
+
+        if (researchOutcome.getDescription() != null) {
+          statement = researchOutcome.getDescription();
+        }
         if (statement.isEmpty()) {
           statement = "&lt;Not Defined&gt;";
         }
-        research_topic = researchTopic.getResearchTopic();
-        if (research_topic.isEmpty()) {
-          research_topic = "&lt;Not Defined&gt;";
-        }
+
         if (researchOutcome.getResearchImpact() != null) {
-          program_impact = researchOutcome.getResearchImpact().getDescription();
+          programImpact = researchOutcome.getResearchImpact().getDescription();
         }
-        if (program_impact.isEmpty()) {
-          program_impact = "&lt;Not Defined&gt;";
+        if (programImpact.isEmpty()) {
+          programImpact = "&lt;Not Defined&gt;";
         }
         if (researchOutcome.getTargetUnit() != null) {
-          target_unit = researchOutcome.getTargetUnit().getName();
+          targetUnit = researchOutcome.getTargetUnit().getName();
         }
-        if (target_unit.isEmpty()) {
-          target_unit = "&lt;Not Defined&gt;";
+        if (targetUnit.isEmpty()) {
+          targetUnit = "&lt;Not Defined&gt;";
         }
 
-        if (target_unit.equals("Not Applicable")) {
-          target_value = "Not Applicable";
+        if (targetUnit.equals("Not Applicable")) {
+          targetValue = "Not Applicable";
         } else {
           if (researchOutcome.getValue() != null) {
-            target_value = researchOutcome.getValue().toString();
+            targetValue = researchOutcome.getValue().toString();
           }
         }
 
-        if (target_value == null || target_value.isEmpty()) {
-          target_value = "&lt;Not Defined&gt;";
+        if (targetValue == null || targetValue.isEmpty()) {
+          targetValue = "&lt;Not Defined&gt;";
         }
         if (researchOutcome.getTargetYear() != null) {
-          target_year = researchOutcome.getTargetYear().toString();
+          targetYear = researchOutcome.getTargetYear().toString();
         }
-        if (target_year.isEmpty()) {
-          target_year = "&lt;Not Defined&gt;";
+        if (targetYear.isEmpty()) {
+          targetYear = "&lt;Not Defined&gt;";
         }
-        model
-          .addRow(new Object[] {id, statement, research_topic, program_impact, target_unit, target_value, target_year});
+        countOutcome++;
+        model.addRow(new Object[] {shortName, statement, researchTopicTitle, programImpact, targetUnit, targetValue,
+          targetYear, showResearchTopic});
       }
 
     }
@@ -432,22 +445,40 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
   private TypedTableModel getOutputsTableModel() {
     // Initialization of Model
     TypedTableModel model =
-      new TypedTableModel(new String[] {"id", "title", "research_topic", "outcome", "contact_persons"},
-        new Class[] {long.class, String.class, String.class, String.class, String.class});
+      new TypedTableModel(new String[] {"shortName", "title", "research_topic", "outcome", "showResearchTopic"},
+        new Class[] {String.class, String.class, String.class, String.class, Boolean.class});
 
     for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
       .collect(Collectors.toList())) {
+      String researchTopicTitle = "";
+      Boolean showResearchTopic;
+      int countOutcome = 0;
       for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
         for (ResearchOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
           .collect(Collectors.toList())) {
-          long id = 0;
-          String title = "";
-          String research_topic = "";
-          String outcome = "";
-          String contact_persons = "";
+          if (countOutcome == 0) {
+            if (researchTopic.getResearchTopic() != null) {
+              researchTopicTitle = researchTopic.getResearchTopic();
+            }
+            if (researchTopicTitle.isEmpty()) {
+              researchTopicTitle = "&lt;Not Defined&gt;";
+            }
+            showResearchTopic = true;
+          } else {
+            showResearchTopic = false;
+          }
 
-          id = researchOutput.getId();
+          String shortName = "";
+          String title = "";
+          String outcome = "";
+
+          if (researchOutput.getShortName() != null) {
+            shortName = researchOutput.getShortName();
+          }
+          if (shortName.isEmpty()) {
+            shortName = "&lt;Not Defined&gt;";
+          }
           if (researchOutput.getTitle() != null) {
             title = researchOutput.getTitle();
           }
@@ -455,12 +486,6 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
             title = "&lt;Not Defined&gt;";
           }
 
-          if (researchTopic.getResearchTopic() != null) {
-            research_topic = researchTopic.getResearchTopic();
-          }
-          if (research_topic.isEmpty()) {
-            research_topic = "&lt;Not Defined&gt;";
-          }
 
           if (researchOutcome.getDescription() != null) {
             outcome = researchOutcome.getDescription();
@@ -468,19 +493,9 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
           if (outcome.isEmpty()) {
             outcome = "&lt;Not Defined&gt;";
           }
+          countOutcome++;
 
-          for (ResearchLeader researchLeader : researchProgram.getResearchLeaders().stream().filter(rl -> rl.isActive())
-            .collect(Collectors.toList())) {
-            if (researchLeader.getUser() != null) {
-              contact_persons += researchLeader.getUser().getComposedName() + "<br>";
-            }
-          }
-
-          if (contact_persons.isEmpty()) {
-            contact_persons = "&lt;Not Defined&gt;";
-          }
-
-          model.addRow(new Object[] {id, title, research_topic, outcome, contact_persons});
+          model.addRow(new Object[] {shortName, title, researchTopicTitle, outcome, showResearchTopic});
         }
       }
     }
@@ -497,13 +512,13 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
   private TypedTableModel getProgramImpactTableModel() {
     // Initialization of Model
     TypedTableModel model =
-      new TypedTableModel(new String[] {"title", "objectives", "program_id", "research_impact_id"},
-        new Class[] {String.class, String.class, Long.class, Long.class});
+      new TypedTableModel(new String[] {"title", "objectives", "program_id", "research_impact_id", "shortName"},
+        new Class[] {String.class, String.class, Long.class, Long.class, String.class});
     for (ResearchImpact researchImpact : researchProgram.getResearchImpacts().stream().filter(rp -> rp.isActive())
       .collect(Collectors.toList())) {
       String title = "";
       String objectives = "";
-      long program_id = 0;
+      long programId = 0;
       if (researchImpact.getDescription() == null || researchImpact.getDescription().isEmpty()) {
         title = "&lt;Not Defined&gt;";
       } else {
@@ -523,10 +538,18 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
         objectives = null;
       }
       if (researchProgram != null) {
-        program_id = researchProgram.getId();
+        programId = researchProgram.getId();
       }
-      model.addRow(new Object[] {title, objectives, program_id, researchImpact.getId()});
 
+      String shortName = "";
+      if (researchImpact.getShortName() == null || researchImpact.getShortName().isEmpty()) {
+        shortName = "&lt;Not Defined&gt;";
+      } else {
+        shortName = researchImpact.getShortName();
+      }
+
+
+      model.addRow(new Object[] {title, objectives, programId, researchImpact.getId(), shortName});
     }
     return model;
   }
@@ -557,8 +580,13 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
       researchProgram = programService.getProgramById(programID);
     } catch (Exception e) {
-      LOG.error(e.getMessage());
+      LOG.error("Failed to get " + APConstants.CENTER_PROGRAM_ID
+        + " parameter. Parameter will be set as -1. Exception: " + e.getMessage());
     }
+    // Calculate time to generate report
+    startTime = System.currentTimeMillis();
+    LOG.info(
+      "Start report download: " + this.getFileName() + ". User: " + this.getCurrentUser().getComposedCompleteName());
   }
 
   public void setBytesPDF(byte[] bytesPDF) {
