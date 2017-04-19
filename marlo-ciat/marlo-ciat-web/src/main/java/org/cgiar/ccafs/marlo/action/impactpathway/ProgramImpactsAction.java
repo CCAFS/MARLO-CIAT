@@ -634,8 +634,14 @@ public class ProgramImpactsAction extends BaseAction {
       List<ResearchImpactBeneficiary> beneficiariesPrew = researchImpactSave.getResearchImpactBeneficiaries().stream()
         .filter(rb -> rb.isActive()).collect(Collectors.toList());
 
-      for (ResearchImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
-        if (!researchImpact.getBeneficiaries().contains(impactBeneficiary)) {
+      if (researchImpact.getBeneficiaries() != null) {
+        for (ResearchImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
+          if (!researchImpact.getBeneficiaries().contains(impactBeneficiary)) {
+            impactBeneficiaryService.deleteResearchImpactBeneficiary(impactBeneficiary.getId());
+          }
+        }
+      } else {
+        for (ResearchImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
           impactBeneficiaryService.deleteResearchImpactBeneficiary(impactBeneficiary.getId());
         }
       }
