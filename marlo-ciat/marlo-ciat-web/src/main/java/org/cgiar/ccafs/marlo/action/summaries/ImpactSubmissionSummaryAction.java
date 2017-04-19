@@ -304,8 +304,8 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
    */
   private TypedTableModel getMasterTableModel() {
     // Initialization of Model
-    TypedTableModel model = new TypedTableModel(new String[] {"title", "current_date", "impact_submission"},
-      new Class[] {String.class, String.class, String.class});
+    TypedTableModel model = new TypedTableModel(new String[] {"title", "current_date", "impact_submission", "imageUrl"},
+      new Class[] {String.class, String.class, String.class, String.class});
     String title = "";
     String current_date = "";
     String impact_submission = "";
@@ -349,7 +349,12 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
         "Submission for " + researchCycle.getName() + " cycle " + this.getYear() + ": &lt;pending&gt;";
     }
 
-    model.addRow(new Object[] {title, current_date, impact_submission});
+    // Get CIAT imgage URL from repo
+    String imageUrl = null;
+
+    imageUrl = this.getBaseUrl() + "/images/global/centers/CIAT.png";
+
+    model.addRow(new Object[] {title, current_date, impact_submission, imageUrl});
     return model;
   }
 
