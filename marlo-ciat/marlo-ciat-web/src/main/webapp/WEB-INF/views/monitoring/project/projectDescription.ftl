@@ -2,7 +2,7 @@
 [#assign title = "Project Description" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${projectID}" /]
 [#assign pageLibs = ["select2"] /]
-[#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js","${baseUrl}/js/monitoring/projects/projectDescription.js"] /]
+[#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/global/autoSave.js", "${baseUrl}/js/monitoring/projects/projectDescription.js"] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
 [#assign editable = true /]

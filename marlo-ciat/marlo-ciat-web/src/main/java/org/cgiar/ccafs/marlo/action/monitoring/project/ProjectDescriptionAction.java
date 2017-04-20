@@ -40,13 +40,22 @@ import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
 import org.cgiar.ccafs.marlo.validation.monitoring.project.ProjectDescriptionValidator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -100,8 +109,40 @@ public class ProjectDescriptionAction extends BaseAction {
     this.projectCrosscutingThemeService = projectCrosscutingThemeService;
   }
 
+  @Override
+  public String cancel() {
+
+    Path path = this.getAutoSaveFilePath();
+
+    if (path.toFile().exists()) {
+
+      boolean fileDeleted = path.toFile().delete();
+    }
+
+    this.setDraft(false);
+    Collection<String> messages = this.getActionMessages();
+    if (!messages.isEmpty()) {
+      String validationMessage = messages.iterator().next();
+      this.setActionMessages(null);
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    } else {
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    }
+    messages = this.getActionMessages();
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
+  }
+
+  private Path getAutoSaveFilePath() {
+    String composedClassName = project.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
   public List<FundingSourceType> getFundingSourceTypes() {
@@ -203,16 +244,31 @@ public class ProjectDescriptionAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-      ProjectCrosscutingTheme crosscutingTheme =
-        projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
+      Path path = this.getAutoSaveFilePath();
 
-      project.setProjectCrosscutingTheme(crosscutingTheme);
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+        BufferedReader reader = null;
+        reader = new BufferedReader(new FileReader(path.toFile()));
+        Gson gson = new GsonBuilder().create();
+        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-      project.setOutputs(
-        new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList())));
+        project = (Project) autoSaveReader.readFromJson(jReader);
+      } else {
 
-      project.setFundingSources(new ArrayList<>(
-        project.getProjectFundingSources().stream().filter(fs -> fs.isActive()).collect(Collectors.toList())));
+        ProjectCrosscutingTheme crosscutingTheme =
+          projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
+
+        project.setProjectCrosscutingTheme(crosscutingTheme);
+
+        project.setOutputs(new ArrayList<>(
+          project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList())));
+
+        project.setFundingSources(new ArrayList<>(
+          project.getProjectFundingSources().stream().filter(fs -> fs.isActive()).collect(Collectors.toList())));
+
+
+      }
 
       fundingSourceTypes = new ArrayList<>(
         fundingSourceService.findAll().stream().filter(fst -> fst.isActive()).collect(Collectors.toList()));

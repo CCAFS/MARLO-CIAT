@@ -101,7 +101,7 @@
       </div>  
       
       <div class="row">
-        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="researchTopic.shortName" className="limitWords-15" required=true editable=editable /]</div>       
+        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="researchTopic.shortName" className="limitChar-30" required=true editable=editable /]</div>       
       </div>    
     </div>
   </div>  

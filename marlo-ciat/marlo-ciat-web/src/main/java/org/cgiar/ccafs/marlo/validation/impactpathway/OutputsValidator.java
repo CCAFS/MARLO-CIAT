@@ -97,7 +97,7 @@ public class OutputsValidator extends BaseValidator {
   public void validateOutput(BaseAction baseAction, ResearchOutput output) {
 
     if (output.getTitle() != null) {
-      if (!this.isValidString(output.getTitle()) && this.wordCount(output.getTitle()) <= 100) {
+      if (!this.isValidString(output.getTitle()) && this.wordCount(output.getTitle()) >= 100) {
         this.addMessage(baseAction.getText("output.action.title.required"));
         baseAction.getInvalidFields().put("input-output.title", InvalidFieldsMessages.EMPTYFIELD);
       }
@@ -107,7 +107,7 @@ public class OutputsValidator extends BaseValidator {
     }
 
     if (output.getShortName() != null) {
-      if (!this.isValidString(output.getShortName()) && this.wordCount(output.getShortName()) <= 15) {
+      if (!this.isValidString(output.getShortName()) && output.getShortName().length() >= 30) {
         this.addMessage(baseAction.getText("output.shortName"));
         baseAction.getInvalidFields().put("input-output.shortName", InvalidFieldsMessages.EMPTYFIELD);
       }

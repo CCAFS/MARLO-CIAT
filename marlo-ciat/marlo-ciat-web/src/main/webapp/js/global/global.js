@@ -366,6 +366,22 @@ function setWordCounterToInputs(cssName) {
   });
 }
 
+setCharCounterToInputs('limitChar');
+/* Set character counter to inputs list where cssName could be limitChar */
+function setCharCounterToInputs(cssName) {
+  // Attribute contains certain value somewhere -> [class*="limitChar"]
+  var check = cssName + "-";
+  $('input[type=text][class*="' + cssName + '"], textarea[class*="' + cssName + '"]').each(function(i,input) {
+    var className = $(input).attr('class') || '';
+    var cls = $.map(className.split(' '), function(val,i) {
+      if(val.indexOf(check) > -1) {
+        return val.slice(check.length, val.length);
+      }
+    });
+    applyCharCounter($(input), (cls.join(' ')) || 100);
+  });
+}
+
 /** secondaryMenu * */
 
 $('.selectedProgram, selectedProject').on('click', function() {

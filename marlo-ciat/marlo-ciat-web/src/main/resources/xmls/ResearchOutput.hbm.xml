@@ -34,7 +34,7 @@
 			<column name="date_added" length="19" not-null="true" />
 		</property>
 		<property name="shortName" type="string">
-      <column name="short_name" length="15" />
+      <column name="short_name" />
     </property>
 		<many-to-one name="researchOutcome"
 			class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome" fetch="select">

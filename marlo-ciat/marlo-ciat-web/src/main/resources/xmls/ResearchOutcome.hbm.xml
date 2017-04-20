@@ -52,7 +52,7 @@
       <column name="is_impact_pathway"/>
     </property>
     <property name="shortName" type="string">
-      <column name="short_name" length="15" />
+      <column name="short_name"/>
     </property>
     <property name="baseline" type="java.lang.Integer">
       <column name="baseline"/>

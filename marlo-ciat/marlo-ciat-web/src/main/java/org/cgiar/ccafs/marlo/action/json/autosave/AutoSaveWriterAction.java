@@ -17,6 +17,7 @@ package org.cgiar.ccafs.marlo.action.json.autosave;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
@@ -128,6 +129,9 @@ public class AutoSaveWriterAction extends BaseAction {
       }
       if (nameClass.equals(ResearchOutput.class.getName())) {
         jSon = jSon.replaceAll("output\\.", "");
+      }
+      if (nameClass.equals(Project.class.getName())) {
+        jSon = jSon.replaceAll("project\\.", "");
       }
 
       try {
