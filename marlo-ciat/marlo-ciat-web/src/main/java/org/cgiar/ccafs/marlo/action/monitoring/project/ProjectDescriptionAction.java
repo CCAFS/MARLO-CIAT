@@ -254,6 +254,23 @@ public class ProjectDescriptionAction extends BaseAction {
         AutoSaveReader autoSaveReader = new AutoSaveReader();
 
         project = (Project) autoSaveReader.readFromJson(jReader);
+
+        if (project.getProjectLeader() != null) {
+          if (project.getProjectLeader().getId() != null || project.getProjectLeader().getId() != -1) {
+            User user = userService.getUser(project.getProjectLeader().getId());
+            project.setProjectLeader(user);
+          }
+        }
+
+        if (project.getOutputs() != null) {
+          List<ProjectOutput> outputs = new ArrayList<>();
+          for (ProjectOutput output : project.getOutputs()) {
+            ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getResearchOutput().getId());
+            outputs.add(projectOutput);
+          }
+
+          project.setOutputs(new ArrayList<>(outputs));
+        }
       } else {
 
         ProjectCrosscutingTheme crosscutingTheme =
@@ -339,6 +356,12 @@ public class ProjectDescriptionAction extends BaseAction {
       this.saveFundingSources(projectDB);
       this.saveOutputs(projectDB);
 
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists()) {
+        path.toFile().delete();
+      }
+
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
@@ -361,7 +384,7 @@ public class ProjectDescriptionAction extends BaseAction {
     ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
     ProjectCrosscutingTheme crosscutingThemeSave =
-      projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getProjectCrosscutingTheme().getId());
+      projectCrosscutingThemeService.getProjectCrosscutingThemeById(projectDB.getProjectCrosscutingTheme().getId());
 
     crosscutingThemeSave
       .setClimateChange(crosscutingTheme.getClimateChange() != null ? crosscutingTheme.getClimateChange() : false);
