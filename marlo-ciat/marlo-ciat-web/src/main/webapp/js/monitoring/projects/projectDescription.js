@@ -148,9 +148,9 @@ function checkOutputItems(block) {
   }
 }
 
-function checkOutputsToRemove(){
-  $(".outputList").find(".outputs").each(function(i,e){
-    var option=$(".outputSelect").find("option[value='"+$(e).find(".outputId").val()+"']");
+function checkOutputsToRemove() {
+  $(".outputList").find(".outputs").each(function(i,e) {
+    var option = $(".outputSelect").find("option[value='" + $(e).find(".outputId").val() + "']");
     option.remove();
   });
 }

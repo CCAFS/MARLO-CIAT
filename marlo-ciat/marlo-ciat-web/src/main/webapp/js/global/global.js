@@ -1,5 +1,5 @@
 $(document).ready(init);
-
+var forceChange;
 function init() {
   $('.scrollup').click(function() {
     $("html, body").animate({
