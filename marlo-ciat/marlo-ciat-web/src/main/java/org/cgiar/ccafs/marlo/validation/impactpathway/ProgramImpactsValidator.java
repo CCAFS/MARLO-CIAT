@@ -136,7 +136,7 @@ public class ProgramImpactsValidator extends BaseValidator {
 
     if (researchImpact.getDescription() != null) {
       if (!this.isValidString(researchImpact.getDescription())
-        && this.wordCount(researchImpact.getDescription()) >= 150) {
+        && this.wordCount(researchImpact.getDescription()) <= 150) {
         this.addMessage(baseAction.getText("programImpact.action.description.required", params));
         baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
       }

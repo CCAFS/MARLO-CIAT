@@ -83,7 +83,7 @@ public class OutcomesValidator extends BaseValidator {
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
 
-    if (!this.isValidString(milestone.getTitle()) && this.wordCount(milestone.getTitle()) >= 50) {
+    if (!this.isValidString(milestone.getTitle()) && this.wordCount(milestone.getTitle()) <= 50) {
       this.addMessage(baseAction.getText("outcome.milestone.action.statement.required"));
       baseAction.getInvalidFields().put("input-outcome.milestones[" + i + "].title", InvalidFieldsMessages.EMPTYFIELD);
     }

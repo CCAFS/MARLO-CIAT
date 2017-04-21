@@ -97,7 +97,7 @@ public class OutputsValidator extends BaseValidator {
   public void validateOutput(BaseAction baseAction, ResearchOutput output) {
 
     if (output.getTitle() != null) {
-      if (!this.isValidString(output.getTitle()) && this.wordCount(output.getTitle()) >= 100) {
+      if (!this.isValidString(output.getTitle()) && this.wordCount(output.getTitle()) <= 100) {
         this.addMessage(baseAction.getText("output.action.title.required"));
         baseAction.getInvalidFields().put("input-output.title", InvalidFieldsMessages.EMPTYFIELD);
       }
