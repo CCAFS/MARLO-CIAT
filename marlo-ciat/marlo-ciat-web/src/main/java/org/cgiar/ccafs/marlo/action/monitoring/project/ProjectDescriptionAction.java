@@ -254,6 +254,7 @@ public class ProjectDescriptionAction extends BaseAction {
         AutoSaveReader autoSaveReader = new AutoSaveReader();
 
         project = (Project) autoSaveReader.readFromJson(jReader);
+        Project projectDB = projectService.getProjectById(project.getId());
 
         if (project.getProjectLeader() != null) {
           if (project.getProjectLeader().getId() != null || project.getProjectLeader().getId() != -1) {
@@ -265,14 +266,30 @@ public class ProjectDescriptionAction extends BaseAction {
         if (project.getOutputs() != null) {
           List<ProjectOutput> outputs = new ArrayList<>();
           for (ProjectOutput output : project.getOutputs()) {
-            ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getResearchOutput().getId());
-            outputs.add(projectOutput);
+
+            if (output.getId() != null) {
+              ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
+              outputs.add(projectOutput);
+
+
+            } else {
+              ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+              ProjectOutput projectOutput = new ProjectOutput();
+              projectOutput.setResearchOutput(researchOutput);
+              projectOutput.setProject(projectDB);
+              outputs.add(projectOutput);
+            }
+
+
           }
 
           project.setOutputs(new ArrayList<>(outputs));
         }
-      } else {
 
+        reader.close();
+        this.setDraft(true);
+      } else {
+        this.setDraft(false);
         ProjectCrosscutingTheme crosscutingTheme =
           projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
 
