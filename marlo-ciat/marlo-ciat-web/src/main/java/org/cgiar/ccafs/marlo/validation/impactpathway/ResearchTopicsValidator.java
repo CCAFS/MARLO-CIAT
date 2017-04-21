@@ -103,7 +103,7 @@ public class ResearchTopicsValidator extends BaseValidator {
     }
 
     if (researchTopic.getShortName() != null) {
-      if (!this.isValidString(researchTopic.getShortName()) && researchTopic.getShortName().length() >= 30) {
+      if (!this.isValidString(researchTopic.getShortName()) && researchTopic.getShortName().length() <= 30) {
         this.addMessage(baseAction.getText("researchTopic.action.shortName.required", params));
         baseAction.getInvalidFields().put("input-topics[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
       }

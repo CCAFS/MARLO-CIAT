@@ -150,7 +150,7 @@ public class OutcomesValidator extends BaseValidator {
     }
 
     if (outcome.getShortName() != null) {
-      if (!this.isValidString(outcome.getShortName()) && outcome.getShortName().length() >= 30) {
+      if (!this.isValidString(outcome.getShortName()) && outcome.getShortName().length() <= 30) {
         this.addMessage(baseAction.getText("outcome.action.statement.required"));
         baseAction.getInvalidFields().put("input-outcome.shortName", InvalidFieldsMessages.EMPTYFIELD);
       }

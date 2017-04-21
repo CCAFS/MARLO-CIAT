@@ -146,7 +146,7 @@ public class ProgramImpactsValidator extends BaseValidator {
     }
 
     if (researchImpact.getShortName() != null) {
-      if (!this.isValidString(researchImpact.getShortName()) && researchImpact.getShortName().length() >= 30) {
+      if (!this.isValidString(researchImpact.getShortName()) && researchImpact.getShortName().length() <= 30) {
         this.addMessage(baseAction.getText("programImpact.action.shortName.required", params));
         baseAction.getInvalidFields().put("input-impacts[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
       }
