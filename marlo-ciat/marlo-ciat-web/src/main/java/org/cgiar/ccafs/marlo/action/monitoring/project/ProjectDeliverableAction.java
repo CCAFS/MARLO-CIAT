@@ -31,13 +31,22 @@ import org.cgiar.ccafs.marlo.data.service.IDeliverableTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
 import org.cgiar.ccafs.marlo.validation.monitoring.project.DeliverableValidator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,8 +93,40 @@ public class ProjectDeliverableAction extends BaseAction {
     this.validator = validator;
   }
 
+  @Override
+  public String cancel() {
+
+    Path path = this.getAutoSaveFilePath();
+
+    if (path.toFile().exists()) {
+
+      boolean fileDeleted = path.toFile().delete();
+    }
+
+    this.setDraft(false);
+    Collection<String> messages = this.getActionMessages();
+    if (!messages.isEmpty()) {
+      String validationMessage = messages.iterator().next();
+      this.setActionMessages(null);
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    } else {
+      this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
+    }
+    messages = this.getActionMessages();
+
+    return SUCCESS;
+  }
+
   public long getAreaID() {
     return areaID;
+  }
+
+  private Path getAutoSaveFilePath() {
+    String composedClassName = project.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = deliverable.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
   public Deliverable getDeliverable() {
@@ -104,6 +145,7 @@ public class ProjectDeliverableAction extends BaseAction {
     return loggedCenter;
   }
 
+
   public long getProgramID() {
     return programID;
   }
@@ -117,6 +159,7 @@ public class ProjectDeliverableAction extends BaseAction {
     return projectID;
   }
 
+
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
@@ -126,11 +169,9 @@ public class ProjectDeliverableAction extends BaseAction {
     return researchPrograms;
   }
 
-
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
-
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
@@ -167,8 +208,26 @@ public class ProjectDeliverableAction extends BaseAction {
       deliverableTypes = new ArrayList<>(
         deliverableTypeService.findAll().stream().filter(dt -> dt.isActive()).collect(Collectors.toList()));
 
-      deliverable.setDocuments(new ArrayList<>(
-        deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+        BufferedReader reader = null;
+        reader = new BufferedReader(new FileReader(path.toFile()));
+        Gson gson = new GsonBuilder().create();
+        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        AutoSaveReader autoSaveReader = new AutoSaveReader();
+
+        deliverable = (Deliverable) autoSaveReader.readFromJson(jReader);
+
+        reader.close();
+        this.setDraft(true);
+
+      } else {
+        this.setDraft(false);
+        deliverable.setDocuments(new ArrayList<>(
+          deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
+      }
+
 
     }
 
@@ -210,6 +269,12 @@ public class ProjectDeliverableAction extends BaseAction {
       deliverableDB = deliverableService.getDeliverableById(deliverableSaveID);
 
       this.saveDocuments(deliverableDB);
+
+      Path path = this.getAutoSaveFilePath();
+
+      if (path.toFile().exists()) {
+        path.toFile().delete();
+      }
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
