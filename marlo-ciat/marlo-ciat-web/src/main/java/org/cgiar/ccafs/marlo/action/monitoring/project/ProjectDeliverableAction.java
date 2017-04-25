@@ -24,6 +24,7 @@ import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableDocumentService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
@@ -60,14 +61,18 @@ public class ProjectDeliverableAction extends BaseAction {
 
 
   private IDeliverableService deliverableService;
+
   private IDeliverableTypeService deliverableTypeService;
+
+
   private IDeliverableDocumentService deliverableDocumentService;
   private ICenterService centerService;
   private IProjectService projectService;
+  private IAuditLogService auditLogService;
   private DeliverableValidator validator;
-
   private long deliverableID;
   private long projectID;
+
   private long programID;
   private long areaID;
   private Project project;
@@ -78,12 +83,13 @@ public class ProjectDeliverableAction extends BaseAction {
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
   private List<DeliverableType> deliverableTypes;
+  private String transaction;
 
   @Inject
   public ProjectDeliverableAction(APConfig config, ICenterService centerService,
     IDeliverableTypeService deliverableTypeService, IDeliverableService deliverableService,
     IProjectService projectService, IDeliverableDocumentService deliverableDocumentService,
-    DeliverableValidator validator) {
+    DeliverableValidator validator, IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.deliverableTypeService = deliverableTypeService;
@@ -91,6 +97,7 @@ public class ProjectDeliverableAction extends BaseAction {
     this.projectService = projectService;
     this.deliverableDocumentService = deliverableDocumentService;
     this.validator = validator;
+    this.auditLogService = auditLogService;
   }
 
   @Override
@@ -145,7 +152,6 @@ public class ProjectDeliverableAction extends BaseAction {
     return loggedCenter;
   }
 
-
   public long getProgramID() {
     return programID;
   }
@@ -159,7 +165,6 @@ public class ProjectDeliverableAction extends BaseAction {
     return projectID;
   }
 
-
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
@@ -169,12 +174,18 @@ public class ProjectDeliverableAction extends BaseAction {
     return researchPrograms;
   }
 
+
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
 
+
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
+  }
+
+  public String getTransaction() {
+    return transaction;
   }
 
   @Override
@@ -192,10 +203,26 @@ public class ProjectDeliverableAction extends BaseAction {
       projectID = -1;
     }
 
-    deliverable = deliverableService.getDeliverableById(deliverableID);
+    if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+      transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+      Deliverable history = (Deliverable) auditLogService.getHistory(transaction);
+
+      if (history != null) {
+        deliverable = history;
+      } else {
+        this.transaction = null;
+        this.setTransaction("-1");
+      }
+
+    } else {
+      deliverable = deliverableService.getDeliverableById(deliverableID);
+    }
+
 
     if (deliverable != null) {
-      projectID = deliverable.getProject().getId();
+      Deliverable deliverableDB = deliverableService.getDeliverableById(deliverable.getId());
+      projectID = deliverableDB.getProject().getId();
       project = projectService.getProjectById(projectID);
 
       selectedProgram = project.getResearchProgram();
@@ -210,7 +237,7 @@ public class ProjectDeliverableAction extends BaseAction {
 
       Path path = this.getAutoSaveFilePath();
 
-      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
         Gson gson = new GsonBuilder().create();
@@ -269,6 +296,13 @@ public class ProjectDeliverableAction extends BaseAction {
       deliverableDB = deliverableService.getDeliverableById(deliverableSaveID);
 
       this.saveDocuments(deliverableDB);
+
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.DELIVERABLE_DOCUMENT_RELATION);
+      deliverable = deliverableService.getDeliverableById(deliverableID);
+      deliverable.setActiveSince(new Date());
+      deliverable.setModifiedBy(this.getCurrentUser());
+      deliverableService.saveDeliverable(deliverable, this.getActionName(), relationsName);
 
       Path path = this.getAutoSaveFilePath();
 
@@ -359,10 +393,10 @@ public class ProjectDeliverableAction extends BaseAction {
     this.deliverableID = deliverableID;
   }
 
-
   public void setDeliverableTypes(List<DeliverableType> deliverableTypes) {
     this.deliverableTypes = deliverableTypes;
   }
+
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
@@ -394,6 +428,10 @@ public class ProjectDeliverableAction extends BaseAction {
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
   }
 
   @Override

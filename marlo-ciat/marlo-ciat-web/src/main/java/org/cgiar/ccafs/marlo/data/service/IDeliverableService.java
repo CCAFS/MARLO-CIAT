@@ -80,5 +80,15 @@ public interface IDeliverableService {
    */
   public long saveDeliverable(Deliverable deliverable);
 
+  /**
+   * This method saves the information of the given deliverable
+   * 
+   * @param deliverable - is the deliverable object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the deliverable was
+   *         updated
+   *         or -1 is some error occurred.
+   */
+  public long saveDeliverable(Deliverable deliverable, String actionName, List<String> relationsName);
+
 
 }

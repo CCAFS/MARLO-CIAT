@@ -82,5 +82,15 @@ public class DeliverableDAO implements IDeliverableDAO {
     return deliverable.getId();
   }
 
+  @Override
+  public long save(Deliverable deliverable, String actionName, List<String> relationsName) {
+    if (deliverable.getId() == null) {
+      dao.save(deliverable, actionName, relationsName);
+    } else {
+      dao.update(deliverable, actionName, relationsName);
+    }
+    return deliverable.getId();
+  }
+
 
 }

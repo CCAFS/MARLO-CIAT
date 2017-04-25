@@ -77,5 +77,10 @@ public class DeliverableService implements IDeliverableService {
     return deliverableDAO.save(deliverable);
   }
 
+  @Override
+  public long saveDeliverable(Deliverable deliverable, String actionName, List<String> relationsName) {
+    return deliverableDAO.save(deliverable, actionName, relationsName);
+  }
+
 
 }
