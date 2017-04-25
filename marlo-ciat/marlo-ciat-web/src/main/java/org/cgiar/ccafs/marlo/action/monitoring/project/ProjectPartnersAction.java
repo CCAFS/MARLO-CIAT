@@ -25,6 +25,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
 import org.cgiar.ccafs.marlo.data.service.IProjectPartnerPersonService;
@@ -64,12 +65,15 @@ public class ProjectPartnersAction extends BaseAction {
 
   private static final String INTERNAL = "Internal";
 
-
   private static final String EXTERNAL = "External";
+
+
   // Services - Managers
   private ICenterService centerService;
-  private IProjectService projectService;
 
+
+  private IProjectService projectService;
+  private IAuditLogService auditLogService;
   private IProjectPartnerService partnerService;
   private IProjectPartnerPersonService partnerPersonService;
   private IInstitutionService institutionService;
@@ -90,6 +94,7 @@ public class ProjectPartnersAction extends BaseAction {
   private long programID;
   private long areaID;
   private long projectID;
+  private String transaction;
 
   // Validator
   private ProjectPartnerValidator validator;
@@ -97,7 +102,8 @@ public class ProjectPartnersAction extends BaseAction {
   @Inject
   public ProjectPartnersAction(APConfig config, ICenterService centerService, IProjectService projectService,
     IProjectPartnerService partnerService, IProjectPartnerPersonService partnerPersonService,
-    IInstitutionService institutionService, IUserService userService, ProjectPartnerValidator validator) {
+    IInstitutionService institutionService, IUserService userService, ProjectPartnerValidator validator,
+    IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -106,6 +112,7 @@ public class ProjectPartnersAction extends BaseAction {
     this.institutionService = institutionService;
     this.userService = userService;
     this.validator = validator;
+    this.auditLogService = auditLogService;
   }
 
   @Override
@@ -132,7 +139,6 @@ public class ProjectPartnersAction extends BaseAction {
     return SUCCESS;
   }
 
-
   public long getAreaID() {
     return areaID;
   }
@@ -145,10 +151,10 @@ public class ProjectPartnersAction extends BaseAction {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
+
   public List<Institution> getInstitutions() {
     return institutions;
   }
-
 
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
@@ -157,6 +163,7 @@ public class ProjectPartnersAction extends BaseAction {
   public HashMap<Boolean, String> getPartnerModes() {
     return partnerModes;
   }
+
 
   public long getProgramID() {
     return programID;
@@ -190,6 +197,10 @@ public class ProjectPartnersAction extends BaseAction {
     return selectedResearchArea;
   }
 
+  public String getTransaction() {
+    return transaction;
+  }
+
   @Override
   public void prepare() throws Exception {
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
@@ -204,7 +215,21 @@ public class ProjectPartnersAction extends BaseAction {
       projectID = -1;
     }
 
-    project = projectService.getProjectById(projectID);
+    if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+      transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+      Project history = (Project) auditLogService.getHistory(transaction);
+
+      if (history != null) {
+        project = history;
+      } else {
+        this.transaction = null;
+        this.setTransaction("-1");
+      }
+
+    } else {
+      project = projectService.getProjectById(projectID);
+    }
 
     partnerModes = new HashMap<Boolean, String>();
     partnerModes.put(true, INTERNAL);
@@ -212,7 +237,8 @@ public class ProjectPartnersAction extends BaseAction {
 
     if (project != null) {
 
-      selectedProgram = project.getResearchProgram();
+      Project ProjectDB = projectService.getProjectById(projectID);
+      selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
@@ -225,7 +251,7 @@ public class ProjectPartnersAction extends BaseAction {
 
       Path path = this.getAutoSaveFilePath();
 
-      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
         Gson gson = new GsonBuilder().create();
@@ -293,6 +319,13 @@ public class ProjectPartnersAction extends BaseAction {
 
       this.savePartners(projectDB);
 
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.PROJECT_PARTNERS_RELATION);
+      project = projectService.getProjectById(projectID);
+      project.setActiveSince(new Date());
+      project.setModifiedBy(this.getCurrentUser());
+      projectService.saveProject(project, this.getActionName(), relationsName);
+
       Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
@@ -319,7 +352,6 @@ public class ProjectPartnersAction extends BaseAction {
       return NOT_AUTHORIZED;
     }
   }
-
 
   public void savePartners(Project projectSave) {
 
@@ -436,6 +468,7 @@ public class ProjectPartnersAction extends BaseAction {
 
   }
 
+
   public void setAreaID(long areaID) {
     this.areaID = areaID;
   }
@@ -480,9 +513,13 @@ public class ProjectPartnersAction extends BaseAction {
     this.selectedProgram = selectedProgram;
   }
 
-
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
   }
 
   @Override
