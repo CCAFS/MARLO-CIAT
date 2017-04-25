@@ -2,7 +2,7 @@
 [#assign title = "MiLE outcome information" /]
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
 [#assign pageLibs = ["select2","jsUri"] /]
-[#assign customJS = ["${baseUrl}/js/monitoring/outcomes/outcomeInfo.js" ] /]
+[#assign customJS = ["${baseUrl}/js/monitoring/outcomes/outcomeInfo.js","${baseUrl}/js/global/autoSave.js" ] /]
 [#assign customCSS = [""] /]
 [#assign currentSection = "outcomes" /]
 

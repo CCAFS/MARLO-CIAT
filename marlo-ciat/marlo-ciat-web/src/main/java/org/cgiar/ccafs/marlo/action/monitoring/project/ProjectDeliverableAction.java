@@ -122,7 +122,7 @@ public class ProjectDeliverableAction extends BaseAction {
   }
 
   private Path getAutoSaveFilePath() {
-    String composedClassName = project.getClass().getSimpleName();
+    String composedClassName = deliverable.getClass().getSimpleName();
     String actionFile = this.getActionName().replace("/", "_");
     String autoSaveFile = deliverable.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
