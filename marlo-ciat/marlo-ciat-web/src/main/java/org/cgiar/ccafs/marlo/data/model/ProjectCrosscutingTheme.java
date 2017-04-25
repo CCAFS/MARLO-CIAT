@@ -24,7 +24,7 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
   @Expose
   private User modifiedBy;
 
-  @Expose
+
   private Project project;
 
   @Expose

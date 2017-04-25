@@ -77,5 +77,10 @@ public class ProjectService implements IProjectService {
     return projectDAO.save(project);
   }
 
+  @Override
+  public long saveProject(Project project, String actionName, List<String> relationsName) {
+    return projectDAO.save(project, actionName, relationsName);
+  }
+
 
 }

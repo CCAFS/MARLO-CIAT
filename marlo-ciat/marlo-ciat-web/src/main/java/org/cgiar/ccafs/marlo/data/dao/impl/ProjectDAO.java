@@ -82,5 +82,15 @@ public class ProjectDAO implements IProjectDAO {
     return project.getId();
   }
 
+  @Override
+  public long save(Project project, String actionName, List<String> relationsName) {
+    if (project.getId() == null) {
+      dao.save(project, actionName, relationsName);
+    } else {
+      dao.update(project, actionName, relationsName);
+    }
+    return project.getId();
+  }
+
 
 }

@@ -30,6 +30,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
@@ -69,15 +70,18 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private ICenterService centerService;
+
   private IProjectService projectService;
+
+
   private IUserService userService;
   private IResearchOutputService outputService;
   private IFundingSourceTypeService fundingSourceService;
   private IProjectOutputService projectOutputService;
   private IProjectFundingSourceService projectFundingSourceService;
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
+  private IAuditLogService auditLogService;
   private ProjectDescriptionValidator validator;
-
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
   private ResearchCenter loggedCenter;
@@ -90,13 +94,14 @@ public class ProjectDescriptionAction extends BaseAction {
   private long projectID;
   private Project project;
   private String principalInvestigator;
+  private String transaction;
 
   @Inject
   public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProjectService projectService,
     IUserService userService, IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
     IResearchOutputService outputService, IProjectOutputService projectOutputService,
     IProjectFundingSourceService projectFundingSourceService,
-    IProjectCrosscutingThemeService projectCrosscutingThemeService) {
+    IProjectCrosscutingThemeService projectCrosscutingThemeService, IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -107,6 +112,7 @@ public class ProjectDescriptionAction extends BaseAction {
     this.projectFundingSourceService = projectFundingSourceService;
     this.projectOutputService = projectOutputService;
     this.projectCrosscutingThemeService = projectCrosscutingThemeService;
+    this.auditLogService = auditLogService;
   }
 
   @Override
@@ -171,7 +177,6 @@ public class ProjectDescriptionAction extends BaseAction {
     return programID;
   }
 
-
   public void getProgramOutputs() {
 
     outputs = new ArrayList<>();
@@ -192,10 +197,10 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
-
   public Project getProject() {
     return project;
   }
+
 
   public long getProjectID() {
     return projectID;
@@ -206,17 +211,22 @@ public class ProjectDescriptionAction extends BaseAction {
     return researchAreas;
   }
 
-
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
+
 
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
 
+
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
+  }
+
+  public String getTransaction() {
+    return transaction;
   }
 
   @Override
@@ -233,11 +243,27 @@ public class ProjectDescriptionAction extends BaseAction {
       projectID = -1;
     }
 
-    project = projectService.getProjectById(projectID);
+    if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+      transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+      Project history = (Project) auditLogService.getHistory(transaction);
+
+      if (history != null) {
+        project = history;
+      } else {
+        this.transaction = null;
+        this.setTransaction("-1");
+      }
+
+    } else {
+      project = projectService.getProjectById(projectID);
+    }
+
 
     if (project != null) {
 
-      selectedProgram = project.getResearchProgram();
+      Project ProjectDB = projectService.getProjectById(projectID);
+      selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
       areaID = selectedResearchArea.getId();
@@ -246,7 +272,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
       Path path = this.getAutoSaveFilePath();
 
-      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
         Gson gson = new GsonBuilder().create();
@@ -290,9 +316,13 @@ public class ProjectDescriptionAction extends BaseAction {
         this.setDraft(true);
       } else {
         this.setDraft(false);
-        ProjectCrosscutingTheme crosscutingTheme =
-          projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
 
+        ProjectCrosscutingTheme crosscutingTheme;
+        if (this.isEditable()) {
+          crosscutingTheme = projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
+        } else {
+          crosscutingTheme = project.getProjectCrosscutingTheme();
+        }
         project.setProjectCrosscutingTheme(crosscutingTheme);
 
         project.setOutputs(new ArrayList<>(
@@ -372,6 +402,14 @@ public class ProjectDescriptionAction extends BaseAction {
 
       this.saveFundingSources(projectDB);
       this.saveOutputs(projectDB);
+
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.PROJECT_FUNDING_SOURCE_RELATION);
+      relationsName.add(APConstants.PROJECT_OUTPUT_RELATION);
+      project = projectService.getProjectById(projectID);
+      project.setActiveSince(new Date());
+      project.setModifiedBy(this.getCurrentUser());
+      projectService.saveProject(project, this.getActionName(), relationsName);
 
       Path path = this.getAutoSaveFilePath();
 
@@ -558,10 +596,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.project = project;
   }
 
-
   public void setProjectID(long projectID) {
     this.projectID = projectID;
   }
+
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
@@ -571,13 +609,17 @@ public class ProjectDescriptionAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
-
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
+
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
   }
 
   @Override

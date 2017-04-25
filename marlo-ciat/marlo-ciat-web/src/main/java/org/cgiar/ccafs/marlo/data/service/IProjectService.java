@@ -80,5 +80,15 @@ public interface IProjectService {
    */
   public long saveProject(Project project);
 
+  /**
+   * This method saves the information of the given project
+   * 
+   * @param project - is the project object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the project was
+   *         updated
+   *         or -1 is some error occurred.
+   */
+  public long saveProject(Project project, String actionName, List<String> relationsName);
+
 
 }

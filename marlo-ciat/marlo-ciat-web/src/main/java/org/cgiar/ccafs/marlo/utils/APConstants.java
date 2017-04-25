@@ -108,4 +108,16 @@ public final class APConstants {
   public static final String RESEARCH_OUTPUT_PARTNER_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutput.researchOutputPartners)";
 
+  public static final String PROJECT_FUNDING_SOURCE_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectFundingSources)";
+
+  public static final String PROJECT_OUTPUT_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectOutputs)";
+
+  public static final String PROJECT_PARTNERS_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectPartners)";
+
+  public static final String DELIVERABLE_DOCUMENT_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Deliverable.deliverableDocuments)";
+
 }

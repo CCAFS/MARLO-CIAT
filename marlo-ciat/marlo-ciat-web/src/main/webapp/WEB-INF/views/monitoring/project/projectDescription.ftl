@@ -5,7 +5,6 @@
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/monitoring/projects/projectDescription.js","${baseUrl}/js/global/autoSave.js"] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
-[#assign editable = true /]
 
 [#assign breadCrumb = [
   {"label":"projectsList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/projectList"},
