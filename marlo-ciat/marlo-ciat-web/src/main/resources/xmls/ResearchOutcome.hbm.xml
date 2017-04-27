@@ -54,7 +54,7 @@
     <property name="shortName" type="string">
       <column name="short_name"/>
     </property>
-    <property name="baseline" type="java.lang.Integer">
+    <property name="baseline" type="java.math.BigDecimal">
       <column name="baseline"/>
     </property>
 		<set name="researchMilestones" table="research_milestones"

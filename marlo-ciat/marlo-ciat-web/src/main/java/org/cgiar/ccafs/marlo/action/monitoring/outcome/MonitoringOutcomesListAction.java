@@ -224,7 +224,11 @@ public class MonitoringOutcomesListAction extends BaseAction {
           .filter(rt -> rt.isActive() && rt.getResearchTopic().trim().length() > 0).collect(Collectors.toList()));
         try {
           topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
-          selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
+          if (topicID == -1) {
+
+          } else {
+            selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
+          }
         } catch (Exception e) {
           if (!researchTopics.isEmpty()) {
             selectedResearchTopic = researchTopics.get(0);
@@ -289,5 +293,6 @@ public class MonitoringOutcomesListAction extends BaseAction {
   public void setTopicID(long topicID) {
     this.topicID = topicID;
   }
+
 
 }

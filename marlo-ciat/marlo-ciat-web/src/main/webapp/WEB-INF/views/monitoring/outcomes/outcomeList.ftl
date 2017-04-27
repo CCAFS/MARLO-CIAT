@@ -34,7 +34,7 @@
       <div class="simpleBox col-md-12">
         <label for="">Research Topic:<span class="red">*</span></label>
         <select name="researchTopics" id="researchTopics">
-          <option value="-1" >Select an option</option>
+          <option value="-1" >View All</option>
           
             [#list researchTopics as researchTopic]
               <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>

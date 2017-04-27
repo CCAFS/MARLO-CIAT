@@ -6,7 +6,7 @@
 [#assign customCSS = ["${baseUrl}/css/deliverable/projectDeliverable.css"] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "deliverables" /]
-[#assign editable = true /]
+
 
 [#assign breadCrumb = [
   {"label":"projectsList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/projectList"},

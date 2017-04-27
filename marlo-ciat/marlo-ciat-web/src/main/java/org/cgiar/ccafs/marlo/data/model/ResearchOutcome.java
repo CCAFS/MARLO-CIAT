@@ -56,13 +56,13 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   @Expose
   private ResearchImpact researchImpact;
 
-
   @Expose
   private boolean active;
 
 
   @Expose
   private Date activeSince;
+
 
   @Expose
   private ResearchTopic researchTopic;
@@ -86,7 +86,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   private boolean impactPathway;
 
   @Expose
-  private Integer baseline;
+  private BigDecimal baseline;
 
 
   @Expose
@@ -94,14 +94,16 @@ public class ResearchOutcome implements Serializable, IAuditLog {
 
   private Set<ResearchMilestone> researchMilestones = new HashSet<ResearchMilestone>(0);
 
-  private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
+  private Set<ResearchOutput> researchOutputs = new HashSet<ResearchOutput>(0);
 
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
   private Set<MonitoringOutcome> monitoringOutcomes = new HashSet<MonitoringOutcome>(0);
 
+
   private List<ResearchMilestone> milestones;
+
   private List<MonitoringOutcome> monitorings;
 
   public ResearchOutcome() {
@@ -134,13 +136,14 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return activeSince;
   }
 
-  public Integer getBaseline() {
+  public BigDecimal getBaseline() {
     return baseline;
   }
 
   public User getCreatedBy() {
     return createdBy;
   }
+
 
   /**
    * @return the description
@@ -157,13 +160,13 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return id;
   }
 
-
   @Override
   public String getLogDeatil() {
     StringBuilder sb = new StringBuilder();
     sb.append("Id : ").append(this.getId());
     return sb.toString();
   }
+
 
   public List<ResearchMilestone> getMilestones() {
     return milestones;
@@ -254,9 +257,10 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
-  public void setBaseline(Integer baseline) {
+  public void setBaseline(BigDecimal baseline) {
     this.baseline = baseline;
   }
+
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;

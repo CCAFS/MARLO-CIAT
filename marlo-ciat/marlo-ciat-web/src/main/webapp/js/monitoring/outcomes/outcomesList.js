@@ -37,11 +37,11 @@ $(document).ready(
           function() {
             var programID = $("#programSelected").html();
             var option = $(this).find("option:selected");
-            if(option.val() != "-1") {
-              var url =
-                  baseURL + "/monitoring/" + centerSession + "/monitoringOutcomesList.do?programID=" + programID
-                      + "&edit=" + editable + "&topicID=" + option.val();
-              window.location = url;
-            }
+
+            var url =
+                baseURL + "/monitoring/" + centerSession + "/monitoringOutcomesList.do?programID=" + programID
+                    + "&edit=" + editable + "&topicID=" + option.val();
+            window.location = url;
+
           });
     });

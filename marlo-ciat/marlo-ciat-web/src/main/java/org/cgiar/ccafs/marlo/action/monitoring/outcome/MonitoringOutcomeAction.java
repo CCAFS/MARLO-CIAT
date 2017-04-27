@@ -426,16 +426,18 @@ public class MonitoringOutcomeAction extends BaseAction {
 
           List<MonitoringMilestone> monitoringMilestones = monitoringOutcome.getMilestones();
 
-          for (MonitoringMilestone monitoringMilestone : monitoringMilestones) {
+          if (monitoringMilestones != null) {
+            for (MonitoringMilestone monitoringMilestone : monitoringMilestones) {
 
-            MonitoringMilestone monitoringMilestoneDB =
-              monitoringMilestoneService.getMonitoringMilestoneById(monitoringMilestone.getId());
+              MonitoringMilestone monitoringMilestoneDB =
+                monitoringMilestoneService.getMonitoringMilestoneById(monitoringMilestone.getId());
 
-            monitoringMilestoneDB.setAchievedValue(monitoringMilestone.getAchievedValue());
-            monitoringMilestoneDB.setNarrative(monitoringMilestone.getNarrative());
+              monitoringMilestoneDB.setAchievedValue(monitoringMilestone.getAchievedValue());
+              monitoringMilestoneDB.setNarrative(monitoringMilestone.getNarrative());
 
-            monitoringMilestoneService.saveMonitoringMilestone(monitoringMilestoneDB);
+              monitoringMilestoneService.saveMonitoringMilestone(monitoringMilestoneDB);
 
+            }
           }
 
 
