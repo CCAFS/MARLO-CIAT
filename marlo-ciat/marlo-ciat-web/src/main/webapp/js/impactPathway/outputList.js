@@ -41,12 +41,12 @@ $(document).ready(
           function() {
             var programID = $("#programSelected").html();
             var option = $(this).find("option:selected");
-            if(option.val() != "-1") {
-              var url =
-                  baseURL + "/impactPathway/" + centerSession + "/outputsList.do?programID=" + programID + "&edit="
-                      + editable + "&topicID=" + option.val();
-              window.location = url;
-            }
+
+            var url =
+                baseURL + "/impactPathway/" + centerSession + "/outputsList.do?programID=" + programID + "&edit="
+                    + editable + "&topicID=" + option.val();
+            window.location = url;
+
           });
 
       $("#outcomeSelect").on(

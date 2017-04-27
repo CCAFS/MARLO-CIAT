@@ -119,6 +119,7 @@ public class OutputsListAction extends BaseAction {
 
   public List<ResearchOutput> allProgramOutput() {
 
+    outcomes = new ArrayList<>();
     List<ResearchOutput> ouList = new ArrayList<>();
 
     List<ResearchTopic> researchTopics = new ArrayList<>(
@@ -129,6 +130,7 @@ public class OutputsListAction extends BaseAction {
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
       for (ResearchOutcome researchOutcome : researchOutcomes) {
+        outcomes.add(researchOutcome);
         List<ResearchOutput> researchOutputs = new ArrayList<>(
           researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 

@@ -52,7 +52,7 @@
           <div class="simpleBox col-md-12">
             <label for="">Research Topic:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
-              <option value="-1" >Select an option</option>
+              <option value="-1" >View All</option>
                 [#list researchTopics as researchTopic]
                   <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
                 [/#list]
@@ -60,6 +60,7 @@
           </div>
           
         [#if outcomes?has_content]
+          [#if selectedResearchTopic?has_content]
           [#-- Outcome List --]
           <div class="simpleBox col-md-12">
             <label for="">Select Outcome:<span class="red">*</span></label>
@@ -69,7 +70,8 @@
                   <option value="${outcome.id}"[#if (selectedResearchOutcome.id)?has_content && (selectedResearchOutcome.id== outcome.id)] selected="selected"[/#if]] >${outcome.description}</option>
                 [/#list]
             </select>
-          </div>  
+          </div>
+          [/#if]  
           [@s.form action=actionName enctype="multipart/form-data" ]
           [#-- Output Table --]
           [#if outputs?has_content]
@@ -84,22 +86,28 @@
           [#-- Add Outcome button --]
           [#if canEdit]
             [#if outputs?has_content]
+            [#if selectedResearchTopic?has_content] 
               <div class="text-right">
                 <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutput'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="outcomeID"]${selectedResearchOutcome.id}[/@s.param][/@s.url]">
                   <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutput" /]
                 </a></div>
               </div>
+            [/#if]  
             [#else]
+            [#if selectedResearchTopic?has_content] 
               <div class="text-center">
                 <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutput'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="outcomeID"]${selectedResearchOutcome.id}[/@s.param][/@s.url]">
                   <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutput" /]
                 </a></div>
               </div>
             [/#if]
+            [/#if]
           [/#if]
           [/@s.form]
         [#else]
-         <p class="text-center">Before completing this section, please add at least one Outcome by <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=selectedResearchTopic.id /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
+          [#if selectedResearchTopic?has_content] 
+            <p class="text-center">Before completing this section, please add at least one Outcome by <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=selectedResearchTopic.id /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
+          [/#if]
         [/#if]
         [#else]
          <p class="text-center">Before completing this section, please add at least one Research Topic by <a href="[@s.url action='${centerSession}/researchTopics'][@s.param name="programID" value=programID /][@s.param name="edit" value="true"/][/@s.url]">clicking here</a></p> 
