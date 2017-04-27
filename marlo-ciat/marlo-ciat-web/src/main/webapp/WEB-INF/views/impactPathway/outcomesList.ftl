@@ -52,7 +52,7 @@
         <div class="simpleBox col-md-12">
             <label for="">Research Topic:<span class="red">*</span></label>
             <select name="researchTopics" id="researchTopics">
-              <option value="-1" >Select an option</option>
+              <option value="-1" >View All</option>
               
                 [#list researchTopics as researchTopic]
                   <option value="${researchTopic.id}"[#if (selectedResearchTopic.id)?has_content && (selectedResearchTopic.id== researchTopic.id)] selected="selected"[/#if]] >${researchTopic.researchTopic}</option>
@@ -77,17 +77,29 @@
           [#-- Add Outcome button --]
           [#if canEdit]            
             [#if outcomes?has_content]
+              [#if selectedResearchTopic?has_content] 
               <div class="text-right">
               <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="topicID"]${selectedResearchTopic.id}[/@s.param][/@s.url]">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
               </a></div>
               </div>
+              [#else]
+              <div class="text-right">
+                In order to add a new outcome, please select a specific "Research Topic" from the drop-down list above.
+              </div>
+              [/#if]
             [#else]
+              [#if selectedResearchTopic?has_content] 
               <div class="text-center">
               <div class="addOutcome button-blue"><a  href="[@s.url namespace="/${currentSection}" action='${(centerSession)!}/addNewOutcome'] [@s.param name="programID"]${selectedProgram.id}[/@s.param] [@s.param name="topicID"]${selectedResearchTopic.id}[/@s.param][/@s.url]">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addOutcome" /]
               </a></div>
               </div>
+              [#else]
+              <div class="text-right">
+                In order to add a new outcome, please select a specific "Research Topic" from the drop-down list above.
+              </div>
+              [/#if]
             [/#if]
          [/#if]          
         [/@s.form]

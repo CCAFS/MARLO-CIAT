@@ -117,6 +117,31 @@ public class OutputsListAction extends BaseAction {
     }
   }
 
+  public List<ResearchOutput> allProgramOutput() {
+
+    List<ResearchOutput> ouList = new ArrayList<>();
+
+    List<ResearchTopic> researchTopics = new ArrayList<>(
+      selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+
+    for (ResearchTopic researchTopic : researchTopics) {
+      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+        researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+      for (ResearchOutcome researchOutcome : researchOutcomes) {
+        List<ResearchOutput> researchOutputs = new ArrayList<>(
+          researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+        for (ResearchOutput researchOutput : researchOutputs) {
+          ouList.add(researchOutput);
+        }
+      }
+    }
+
+    return ouList;
+
+  }
+
   @Override
   public String delete() {
     Map<String, Object> parameters = this.getParameters();
@@ -176,6 +201,7 @@ public class OutputsListAction extends BaseAction {
     return outputs;
   }
 
+
   public long getProgramID() {
     return programID;
   }
@@ -204,7 +230,6 @@ public class OutputsListAction extends BaseAction {
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
-
 
   public ResearchOutcome getSelectedResearchOutcome() {
     return selectedResearchOutcome;
@@ -310,19 +335,26 @@ public class OutputsListAction extends BaseAction {
         researchTopics = new ArrayList<>(selectedProgram.getResearchTopics().stream()
           .filter(rt -> rt.isActive() && rt.getResearchTopic().trim().length() > 0).collect(Collectors.toList()));
         try {
-          topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
-          selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
-          if (selectedResearchTopic != null) {
-            if (selectedResearchTopic.getResearchOutcomes() != null) {
-              outcomes = selectedResearchTopic.getResearchOutcomes().stream()
-                .filter(ro -> ro.isActive() && ro.getDescription() != null && ro.getTargetYear() != -1)
-                .collect(Collectors.toList());
 
-              if (!outcomes.isEmpty()) {
-                selectedResearchOutcome = outcomes.get(0);
+          topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
+
+          if (topicID == -1) {
+            outputs = this.allProgramOutput();
+          } else {
+            selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
+            if (selectedResearchTopic != null) {
+              if (selectedResearchTopic.getResearchOutcomes() != null) {
+                outcomes = selectedResearchTopic.getResearchOutcomes().stream()
+                  .filter(ro -> ro.isActive() && ro.getDescription() != null && ro.getTargetYear() != -1)
+                  .collect(Collectors.toList());
+                if (!outcomes.isEmpty()) {
+                  selectedResearchOutcome = outcomes.get(0);
+                }
               }
             }
           }
+
+
         } catch (Exception e) {
 
           try {
@@ -333,6 +365,7 @@ public class OutputsListAction extends BaseAction {
               .filter(ro -> ro.isActive() && ro.getDescription() != null && ro.getTargetYear() != -1)
               .collect(Collectors.toList());
           } catch (Exception ex) {
+
             if (!researchTopics.isEmpty()) {
               selectedResearchTopic = researchTopics.get(0);
             }
@@ -428,6 +461,5 @@ public class OutputsListAction extends BaseAction {
   public void setTopicID(long topicID) {
     this.topicID = topicID;
   }
-
 
 }

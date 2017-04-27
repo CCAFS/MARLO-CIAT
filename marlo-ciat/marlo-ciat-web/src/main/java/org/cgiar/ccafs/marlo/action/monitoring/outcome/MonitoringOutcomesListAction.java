@@ -81,6 +81,27 @@ public class MonitoringOutcomesListAction extends BaseAction {
     this.researchTopicService = researchTopicService;
   }
 
+  public List<ResearchOutcome> allProgramOutcomes() {
+
+    List<ResearchOutcome> ouList = new ArrayList<>();
+
+    List<ResearchTopic> researchTopics = new ArrayList<>(
+      selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+
+    for (ResearchTopic researchTopic : researchTopics) {
+      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+        researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+      for (ResearchOutcome researchOutcome : researchOutcomes) {
+        ouList.add(researchOutcome);
+      }
+    }
+
+    return ouList;
+
+  }
+
+
   public long getAreaID() {
     return areaID;
   }
@@ -99,7 +120,6 @@ public class MonitoringOutcomesListAction extends BaseAction {
   public List<ResearchOutcome> getOutcomes() {
     return outcomes;
   }
-
 
   public long getProgramID() {
     return programID;
@@ -225,14 +245,12 @@ public class MonitoringOutcomesListAction extends BaseAction {
         try {
           topicID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.RESEARCH_TOPIC_ID)));
           if (topicID == -1) {
-
+            outcomes = this.allProgramOutcomes();
           } else {
             selectedResearchTopic = researchTopicService.getResearchTopicById(topicID);
           }
         } catch (Exception e) {
-          if (!researchTopics.isEmpty()) {
-            selectedResearchTopic = researchTopics.get(0);
-          }
+          outcomes = this.allProgramOutcomes();
         }
         if (selectedResearchTopic != null) {
           if (selectedResearchTopic.getResearchOutcomes() != null) {
@@ -293,6 +311,5 @@ public class MonitoringOutcomesListAction extends BaseAction {
   public void setTopicID(long topicID) {
     this.topicID = topicID;
   }
-
 
 }
