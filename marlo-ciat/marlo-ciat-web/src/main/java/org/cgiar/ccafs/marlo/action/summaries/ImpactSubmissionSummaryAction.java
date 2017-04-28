@@ -15,7 +15,6 @@
 package org.cgiar.ccafs.marlo.action.summaries;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.action.json.global.ManageUsersAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
@@ -68,7 +67,7 @@ import org.slf4j.LoggerFactory;
 public class ImpactSubmissionSummaryAction extends BaseAction implements Summary {
 
   private static final long serialVersionUID = -624982650510682813L;
-  private static Logger LOG = LoggerFactory.getLogger(ManageUsersAction.class);
+  private static Logger LOG = LoggerFactory.getLogger(ImpactSubmissionSummaryAction.class);
 
   // Streams
   InputStream inputStream;

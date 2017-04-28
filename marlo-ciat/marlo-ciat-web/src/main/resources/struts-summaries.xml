@@ -14,5 +14,14 @@
       </result>
     </action>
     
+    <action name="projectSummary"
+      class="org.cgiar.ccafs.marlo.action.summaries.ProjectSummaryAction">
+      <result name="success" type="stream">
+        <param name="inputName">inputStream</param>
+        <param name="contentType">${contentType}</param>
+        <param name="contentDisposition">filename="${fileName}"</param>
+      </result>
+    </action>
+    
 	</package>
 </struts>
