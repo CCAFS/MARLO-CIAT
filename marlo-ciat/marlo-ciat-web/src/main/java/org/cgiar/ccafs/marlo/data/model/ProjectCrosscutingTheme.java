@@ -27,14 +27,21 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
 
   private Project project;
 
+
   @Expose
   private User createdBy;
+
 
   @Expose
   private Boolean climateChange;
 
+
   @Expose
-  private Boolean genderYouth;
+  private Boolean gender;
+
+
+  @Expose
+  private Boolean youth;
 
   @Expose
   private Boolean policiesInstitutions;
@@ -65,15 +72,15 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     this.active = active;
   }
 
-
   public ProjectCrosscutingTheme(User createdBy, Project project, User modifiedBy, Boolean climateChange,
-    Boolean genderYouth, Boolean policiesInstitutions, Boolean capacityDevelopment, Boolean bigData, boolean active,
-    Date activeSince, String modificationJustification) {
+    Boolean gender, Boolean youth, Boolean policiesInstitutions, Boolean capacityDevelopment, Boolean bigData,
+    boolean active, Date activeSince, String modificationJustification) {
     this.modifiedBy = modifiedBy;
     this.project = project;
     this.createdBy = createdBy;
     this.climateChange = climateChange;
-    this.genderYouth = genderYouth;
+    this.gender = gender;
+    this.youth = youth;
     this.policiesInstitutions = policiesInstitutions;
     this.capacityDevelopment = capacityDevelopment;
     this.bigData = bigData;
@@ -82,16 +89,13 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     this.modificationJustification = modificationJustification;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
 
-
   public Boolean getBigData() {
     return bigData;
   }
-
 
   public Boolean getCapacityDevelopment() {
     return capacityDevelopment;
@@ -108,8 +112,8 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
   }
 
 
-  public Boolean getGenderYouth() {
-    return genderYouth;
+  public Boolean getGender() {
+    return gender;
   }
 
 
@@ -142,12 +146,19 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     return na;
   }
 
+
   public Boolean getPoliciesInstitutions() {
     return policiesInstitutions;
   }
 
+
   public Project getProject() {
     return project;
+  }
+
+
+  public Boolean getYouth() {
+    return youth;
   }
 
   @Override
@@ -179,8 +190,8 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     this.createdBy = createdBy;
   }
 
-  public void setGenderYouth(Boolean genderYouth) {
-    this.genderYouth = genderYouth;
+  public void setGender(Boolean gender) {
+    this.gender = gender;
   }
 
   public void setId(Long id) {
@@ -195,18 +206,22 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     this.modifiedBy = modifiedBy;
   }
 
-
   public void setNa(Boolean na) {
     this.na = na;
   }
+
 
   public void setPoliciesInstitutions(Boolean policiesInstitutions) {
     this.policiesInstitutions = policiesInstitutions;
   }
 
-
   public void setProject(Project project) {
     this.project = project;
+  }
+
+
+  public void setYouth(Boolean youth) {
+    this.youth = youth;
   }
 
 

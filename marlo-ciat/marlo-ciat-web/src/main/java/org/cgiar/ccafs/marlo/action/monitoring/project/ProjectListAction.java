@@ -113,7 +113,8 @@ public class ProjectListAction extends BaseAction {
     projectCrosscutingTheme.setModificationJustification("");
 
     projectCrosscutingTheme.setClimateChange(false);
-    projectCrosscutingTheme.setGenderYouth(false);
+    projectCrosscutingTheme.setGender(false);
+    projectCrosscutingTheme.setYouth(false);
     projectCrosscutingTheme.setPoliciesInstitutions(false);
     projectCrosscutingTheme.setCapacityDevelopment(false);
     projectCrosscutingTheme.setBigData(false);

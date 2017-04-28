@@ -20,8 +20,11 @@
         <property name="climateChange" type="java.lang.Boolean">
             <column name="climate_change" />
         </property>
-        <property name="genderYouth" type="java.lang.Boolean">
-            <column name="gender_youth" />
+        <property name="gender" type="java.lang.Boolean">
+            <column name="gender" />
+        </property>
+        <property name="youth" type="java.lang.Boolean">
+            <column name="youth" />
         </property>
         <property name="policiesInstitutions" type="java.lang.Boolean">
             <column name="policies_institutions" />

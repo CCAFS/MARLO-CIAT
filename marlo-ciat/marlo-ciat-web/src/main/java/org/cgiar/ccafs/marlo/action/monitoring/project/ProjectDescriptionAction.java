@@ -356,7 +356,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
       if (project.getProjectCrosscutingTheme() != null) {
         project.getProjectCrosscutingTheme().setPoliciesInstitutions(null);
-        project.getProjectCrosscutingTheme().setGenderYouth(null);
+        project.getProjectCrosscutingTheme().setGender(null);
+        project.getProjectCrosscutingTheme().setYouth(null);
         project.getProjectCrosscutingTheme().setClimateChange(null);
         project.getProjectCrosscutingTheme().setCapacityDevelopment(null);
         project.getProjectCrosscutingTheme().setNa(null);
@@ -443,8 +444,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
     crosscutingThemeSave
       .setClimateChange(crosscutingTheme.getClimateChange() != null ? crosscutingTheme.getClimateChange() : false);
-    crosscutingThemeSave
-      .setGenderYouth(crosscutingTheme.getGenderYouth() != null ? crosscutingTheme.getGenderYouth() : false);
+    crosscutingThemeSave.setGender(crosscutingTheme.getGender() != null ? crosscutingTheme.getGender() : false);
+    crosscutingThemeSave.setYouth(crosscutingTheme.getYouth() != null ? crosscutingTheme.getYouth() : false);
     crosscutingThemeSave.setPoliciesInstitutions(
       crosscutingTheme.getPoliciesInstitutions() != null ? crosscutingTheme.getPoliciesInstitutions() : false);
     crosscutingThemeSave.setCapacityDevelopment(
