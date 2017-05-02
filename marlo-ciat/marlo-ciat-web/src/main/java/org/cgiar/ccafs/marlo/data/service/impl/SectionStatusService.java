@@ -64,6 +64,20 @@ public class SectionStatusService implements ISectionStatusService {
   }
 
   @Override
+  public List<String> distinctSectionStatusProject(long projectID) {
+    List<String> status = new ArrayList<String>();
+
+    List<Map<String, Object>> data = sectionStatusDAO.distinctSectionStatusProject(projectID);
+    if (data != null) {
+      for (Map<String, Object> map : data) {
+        status.add(map.get("section_name").toString());
+      }
+    }
+
+    return status;
+  }
+
+  @Override
   public boolean existSectionStatus(long sectionStatusID) {
 
     return sectionStatusDAO.existSectionStatus(sectionStatusID);

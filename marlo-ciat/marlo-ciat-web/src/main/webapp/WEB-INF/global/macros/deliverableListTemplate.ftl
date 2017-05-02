@@ -9,6 +9,7 @@
         <th id="deliverablesType" >[@s.text name="deliverableList.deliverablesType" /]</th>
         <th id="deliverablesStartDate">[@s.text name="deliverableList.deliverablesStartDate" /]</th>
         <th id="deliverablesEndDate">[@s.text name="deliverableList.deliverablesEndDate" /]</th>
+        <th id="deliverablesRF">[@s.text name="deliverableList.missingFields" /]</th>
         <!-- <th id="deliverableDelete">[@s.text name="deliverableList.deliverablesRemove" /]</th>  -->
       </tr>
     </thead>
@@ -45,6 +46,19 @@
           [#-- end date --]
           <td>
            [#if deliverable.endDate?has_content]${(deliverable.endDate)!""}[#else][@s.text name="deliverableList.none" /][/#if]
+          </td>
+          
+          [#-- Deliverable required fields --]
+          <td class="text-center">
+            [#if action.getDeliverableStatus(deliverable.id)??]
+              [#if !((action.getDeliverableStatus(deliverable.id)).missingFields)?has_content]
+                <span class="icon-20 icon-check" title="Complete"></span>
+              [#else]
+                <span class="icon-20 icon-uncheck" title=""></span> 
+              [/#if]
+            [#else]
+                <span class="icon-20 icon-uncheck" title=""></span>
+            [/#if]
           </td>
           
           [#-- Delete Deliverable

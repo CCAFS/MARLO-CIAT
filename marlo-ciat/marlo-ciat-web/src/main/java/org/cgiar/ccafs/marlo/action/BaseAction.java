@@ -17,8 +17,10 @@ package org.cgiar.ccafs.marlo.action;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
+import org.cgiar.ccafs.marlo.data.model.Deliverable;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
+import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
@@ -37,6 +39,8 @@ import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
+import org.cgiar.ccafs.marlo.data.service.impl.DeliverableService;
+import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -107,6 +111,10 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   private IResearchCycleService cycleService;
   @Inject
   private IProgramService programService;
+  @Inject
+  private ProjectService projectService;
+  @Inject
+  private DeliverableService deliverableService;
   @Inject
   private ISectionStatusService sectionStatusService;
 
@@ -410,6 +418,31 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return u;
   }
 
+  /**
+   * This method gets the specific section status from the sectionStatuses array for a Deliverable.
+   * 
+   * @param deliverableID is the deliverable ID to be identified.
+   * @param section is the name of some section.
+   * @return a SectionStatus object with the information requested.
+   */
+  public SectionStatus getDeliverableStatus(long deliverableID) {
+
+    Deliverable deliverable = deliverableService.getDeliverableById(deliverableID);
+    List<SectionStatus> sectionStatuses;
+
+    if (deliverable.getSectionStatuses() != null) {
+      sectionStatuses = new ArrayList<>(deliverable.getSectionStatuses().stream()
+        .filter(c -> c.getYear() == this.getYear()).collect(Collectors.toList()));
+    } else {
+      return null;
+    }
+
+    if (!sectionStatuses.isEmpty()) {
+      return sectionStatuses.get(0);
+    }
+    return null;
+  }
+
   public HashMap<String, String> getInvalidFields() {
     return invalidFields;
   }
@@ -449,7 +482,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   /**
-   * This method gets the specific section status from the sectionStatuses array for a Deliverable.
+   * This method gets the specific section status from the sectionStatuses array for a Outcome.
    * 
    * @param deliverableID is the deliverable ID to be identified.
    * @param section is the name of some section.
@@ -471,6 +504,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     }
     return null;
   }
+
 
   /**
    * This method calculates all the years between the start date and the end date.
@@ -495,9 +529,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return allYears;
   }
 
-
   /**
-   * This method gets the specific section status from the sectionStatuses array for a Deliverable.
+   * This method gets the specific section status from the sectionStatuses array for a Output.
    * 
    * @param deliverableID is the deliverable ID to be identified.
    * @param section is the name of some section.
@@ -677,6 +710,36 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return true;
   }
 
+  public boolean isCompleteProject(long projectID) {
+
+    if (sectionStatusService.findAll() == null) {
+      return false;
+    }
+
+    Project project = projectService.getProjectById(projectID);
+
+    List<String> statuses = secctionStatusService.distinctSectionStatusProject(projectID);
+
+    if (statuses.size() != 3) {
+      return false;
+    }
+
+    List<SectionStatus> sectionStatuses = new ArrayList<>(project.getSectionStatuses().stream()
+      .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
+
+    if (sectionStatuses != null && sectionStatuses.size() > 0) {
+      for (SectionStatus sectionStatus : sectionStatuses) {
+        if (sectionStatus.getMissingFields().length() > 0) {
+          return false;
+        }
+      }
+    } else {
+      return false;
+    }
+
+    return true;
+  }
+
   public boolean isEditable() {
     return isEditable;
   }
@@ -720,6 +783,26 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         return true;
       }
     }
+    return false;
+  }
+
+  public boolean isSubmitProject(long projectID) {
+
+    Project project = projectService.getProjectById(projectID);
+    if (project != null) {
+
+      ResearchCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.MONITORING.getId());
+
+      List<Submission> submissions = new ArrayList<>(project.getSubmissions().stream()
+        .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
+        .collect(Collectors.toList()));
+
+      if (submissions != null && submissions.size() > 0) {
+        this.setSubmission(submissions.get(0));
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -829,6 +912,30 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return SUCCESS;
   }
 
+  public boolean validateDeliverable(Project project) {
+    if (project != null) {
+      List<Deliverable> deliverables =
+        new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
+
+      if (deliverables != null && !deliverables.isEmpty()) {
+        for (Deliverable deliverable : deliverables) {
+          SectionStatus sectionStatus = this.getDeliverableStatus(deliverable.getId());
+          if (sectionStatus == null) {
+            return false;
+          } else {
+            if (sectionStatus.getMissingFields().length() != 0) {
+              return false;
+            }
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   public boolean validateImpact(ResearchProgram program, String sectionName) {
 
     SectionStatus sectionStatus =
@@ -921,6 +1028,20 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
     return true;
 
+  }
+
+  public boolean validateProject(Project project, String sectionName) {
+    SectionStatus sectionStatus = secctionStatusService.getSectionStatusByProject(project.getResearchProgram().getId(),
+      project.getId(), sectionName, this.getYear());
+
+    if (sectionStatus == null) {
+      return false;
+    }
+    if (sectionStatus.getMissingFields().length() != 0) {
+      return false;
+    }
+
+    return true;
   }
 
   public boolean validateTopic(ResearchProgram program, String sectionName) {

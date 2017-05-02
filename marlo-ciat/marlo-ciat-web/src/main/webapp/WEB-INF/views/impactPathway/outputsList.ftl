@@ -64,8 +64,7 @@
           [#-- Outcome List --]
           <div class="simpleBox col-md-12">
             <label for="">Select Outcome:<span class="red">*</span></label>
-            <select name="outcomes" id="outcomeSelect">
-              <option value="-1" >Select an option</option>
+            <select name="outcomes" id="outcomeSelect">              
                 [#list outcomes as outcome]
                   <option value="${outcome.id}"[#if (selectedResearchOutcome.id)?has_content && (selectedResearchOutcome.id== outcome.id)] selected="selected"[/#if]] >${outcome.description}</option>
                 [/#list]
@@ -77,10 +76,17 @@
           [#if outputs?has_content]
           <div style="">[@outputsList.outputsList outputs=outputs canValidate=true canEdit=canEdit namespace="/impactPathway" defaultAction="${(centerSession)!}/outputs"/]</div>
           [#else]
+            [#if selectedResearchTopic?has_content]
             <div class="clearfix"></div>
             <div class="notOutcome">
             There are NO OUTPUTS added to "<b>${selectedResearchOutcome.description}</b>" as of yet. [#if canEdit] If you want to add a new outcome, please click on the button below: [/#if]
             </div>
+            [#else]
+            <div class="clearfix"></div>
+            <div class="notOutcome">
+            There are NO OUTPUTS added to "<b>${selectedProgram.name}</b>" as of yet.
+            </div>
+            [/#if]
           [/#if]
           <br>
           [#-- Add Outcome button --]

@@ -43,13 +43,13 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private ProjectStatus projectStatus;
 
+
   @Expose
   private String name;
 
 
   @Expose
   private String shortName;
-
 
   @Expose
   private Date startDate;
@@ -78,40 +78,35 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private ResearchProgram researchProgram;
 
-
   @Expose
   private ProjectCrosscutingTheme projectCrosscutingTheme;
 
-
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
-
 
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
 
-
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
-
 
   private Set<Deliverable> deliverables = new HashSet<Deliverable>(0);
 
+  private Set<Submission> submissions = new HashSet<Submission>(0);
 
   private List<ProjectOutput> outputs;
-
 
   private List<ProjectFundingSource> fundingSources;
 
   private Set<ProjectPartner> projectPartners = new HashSet<ProjectPartner>(0);
 
-
   private List<ProjectPartner> partners;
-
 
   public Project() {
   }
 
+
   public Project(boolean active) {
     this.active = active;
   }
+
 
   public Project(User modifiedBy, User contactPerson, User projectLeader, User createdBy, ProjectStatus projectStatus,
     String name, String shortName, Date startDate, Date endDate, boolean active, Date activeSince,
@@ -234,11 +229,9 @@ public class Project implements java.io.Serializable, IAuditLog {
     return projectPartners;
   }
 
-
   public ProjectStatus getProjectStatus() {
     return projectStatus;
   }
-
 
   public ResearchProgram getResearchProgram() {
     return researchProgram;
@@ -257,6 +250,11 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public Date getStartDate() {
     return startDate;
+  }
+
+
+  public Set<Submission> getSubmissions() {
+    return submissions;
   }
 
 
@@ -309,6 +307,7 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.endDate = endDate;
   }
 
+
   public void setFundingSources(List<ProjectFundingSource> fundingSources) {
     this.fundingSources = fundingSources;
   }
@@ -325,10 +324,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
-
   public void setName(String name) {
     this.name = name;
   }
+
 
   public void setOutputs(List<ProjectOutput> outputs) {
     this.outputs = outputs;
@@ -366,18 +365,22 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.researchProgram = researchProgram;
   }
 
-
   public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
     this.sectionStatuses = sectionStatuses;
   }
+
 
   public void setShortName(String shortName) {
     this.shortName = shortName;
   }
 
-
   public void setStartDate(Date startDate) {
     this.startDate = startDate;
+  }
+
+
+  public void setSubmissions(Set<Submission> submissions) {
+    this.submissions = submissions;
   }
 
 

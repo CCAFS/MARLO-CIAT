@@ -46,6 +46,12 @@ public class SectionStatusDAO implements ISectionStatusDAO {
   }
 
   @Override
+  public List<Map<String, Object>> distinctSectionStatusProject(long projectID) {
+    String query = "select DISTINCT section_name from section_statuses where project_id=" + projectID;
+    return dao.findCustomQuery(query);
+  }
+
+  @Override
   public boolean existSectionStatus(long sectionStatusID) {
     SectionStatus sectionStatus = this.find(sectionStatusID);
     if (sectionStatus == null) {

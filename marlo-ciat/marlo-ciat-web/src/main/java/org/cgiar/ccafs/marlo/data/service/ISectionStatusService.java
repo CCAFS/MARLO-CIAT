@@ -45,6 +45,14 @@ public interface ISectionStatusService {
    */
   public List<String> distinctSectionStatus(long programID);
 
+  /**
+   * This method gets a list of sectionStatus to verify if the project have all the sections
+   * 
+   * @param projectID - the project id
+   * @return List of SectionStatuss or null if the user is invalid or not have roles.
+   */
+  public List<String> distinctSectionStatusProject(long projectID);
+
 
   /**
    * This method validate if the sectionStatus identify with the given id exists in the system.

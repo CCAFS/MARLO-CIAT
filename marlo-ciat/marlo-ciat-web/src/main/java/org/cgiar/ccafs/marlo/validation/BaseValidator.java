@@ -144,7 +144,6 @@ public class BaseValidator {
 
       status = new SectionStatus();
       status.setSectionName(sectionName);
-      status.setResearchProgram(program);
       status.setProject(project);
       status.setYear(year);
     }

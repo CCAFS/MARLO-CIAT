@@ -9,11 +9,11 @@ import java.util.Date;
  */
 public class Submission implements java.io.Serializable {
 
+
   private static final long serialVersionUID = 7498387276775729842L;
 
 
   private Long id;
-
 
   private User user;
 
@@ -24,8 +24,10 @@ public class Submission implements java.io.Serializable {
   private ResearchProgram researchProgram;
 
 
-  private Date dateTime;
+  private Project project;
 
+
+  private Date dateTime;
 
   private String modificationJustification;
 
@@ -69,9 +71,15 @@ public class Submission implements java.io.Serializable {
   }
 
 
+  public Project getProject() {
+    return project;
+  }
+
+
   public ResearchCycle getResearchCycle() {
     return researchCycle;
   }
+
 
   public ResearchProgram getResearchProgram() {
     return researchProgram;
@@ -95,6 +103,10 @@ public class Submission implements java.io.Serializable {
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
+  }
+
+  public void setProject(Project project) {
+    this.project = project;
   }
 
   public void setResearchCycle(ResearchCycle researchCycle) {
