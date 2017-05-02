@@ -32,15 +32,15 @@ import org.cgiar.ccafs.marlo.data.model.SectionStatus;
 import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
 import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
-import org.cgiar.ccafs.marlo.data.service.impl.DeliverableService;
-import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -112,9 +112,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   @Inject
   private IProgramService programService;
   @Inject
-  private ProjectService projectService;
+  private IProjectService projectService;
   @Inject
-  private DeliverableService deliverableService;
+  private IDeliverableService deliverableService;
   @Inject
   private ISectionStatusService sectionStatusService;
 

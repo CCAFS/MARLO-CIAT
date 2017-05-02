@@ -133,7 +133,15 @@
       </result>
     </action>
     
-    
+    <action name="{center}/submitProject"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.ProjectSubmissionAction">
+      <result name="input">/WEB-INF/views/monitoring/project/projectDescription.ftl
+      </result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/projectDescription</param>
+        <param name="programID">${projectID}</param>
+      </result>
+    </action>
 
 	</package>
 </struts>

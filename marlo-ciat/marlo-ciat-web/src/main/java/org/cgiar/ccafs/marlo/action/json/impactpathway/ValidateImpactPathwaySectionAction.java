@@ -22,7 +22,6 @@ import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutputPartner;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.SectionStatus;
@@ -30,7 +29,6 @@ import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutcomesValidator;
-import org.cgiar.ccafs.marlo.validation.impactpathway.OutputPartnersValidator;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutputsValidator;
 import org.cgiar.ccafs.marlo.validation.impactpathway.ProgramImpactsValidator;
 import org.cgiar.ccafs.marlo.validation.impactpathway.ResearchTopicsValidator;
@@ -70,21 +68,18 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   // Validator
   private OutcomesValidator outcomeValidator;
   private OutputsValidator outputValidator;
-  private OutputPartnersValidator outputPartnerValidator;
   private ProgramImpactsValidator impactValidator;
   private ResearchTopicsValidator topicValidator;
 
   @Inject
   public ValidateImpactPathwaySectionAction(APConfig config, IProgramService programServcie,
     ISectionStatusService sectionStatusService, OutcomesValidator outcomeValidator, OutputsValidator outputValidator,
-    OutputPartnersValidator outputPartnerValidator, ProgramImpactsValidator impactValidator,
-    ResearchTopicsValidator topicValidator) {
+    ProgramImpactsValidator impactValidator, ResearchTopicsValidator topicValidator) {
     super(config);
     this.programServcie = programServcie;
     this.sectionStatusService = sectionStatusService;
     this.outcomeValidator = outcomeValidator;
     this.outputValidator = outputValidator;
-    this.outputPartnerValidator = outputPartnerValidator;
     this.impactValidator = impactValidator;
     this.topicValidator = topicValidator;
   }
@@ -338,45 +333,6 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
       }
     }
 
-  }
-
-  // TODO Possible Delete
-  public void validateOutputPartner() {
-    ResearchProgram program = programServcie.getProgramById(programID);
-
-    if (program != null) {
-      List<ResearchTopic> topics =
-        new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-      if (topics != null) {
-        for (ResearchTopic researchTopic : topics) {
-          List<ResearchOutcome> outcomes = new ArrayList<>(
-            researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-          for (ResearchOutcome researchOutcome : outcomes) {
-            researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
-              .filter(rm -> rm.isActive()).collect(Collectors.toList())));
-
-            List<ResearchOutput> outputs = new ArrayList<>(
-              researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-
-            for (ResearchOutput researchOutput : outputs) {
-
-              researchOutput.setPartners(new ArrayList<>(researchOutput.getResearchOutputPartners().stream()
-                .filter(op -> op.isActive()).collect(Collectors.toList())));
-
-              if (researchOutput.getPartners() != null || !researchOutput.getPartners().isEmpty()) {
-                for (ResearchOutputPartner partner : researchOutput.getPartners()) {
-                  partner.setUsers(new ArrayList<>(partner.getResearchOutputPartnerPersons().stream()
-                    .filter(opp -> opp.isActive()).collect(Collectors.toList())));
-                }
-              }
-              outputPartnerValidator.validate(this, researchOutput, program, false);
-            }
-
-          }
-        }
-      }
-    }
   }
 
   public void validateTopic() {

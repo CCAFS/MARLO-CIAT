@@ -304,6 +304,11 @@ public class ProjectPartnersAction extends BaseAction {
 
 
       if (this.isHttpPost()) {
+
+        if (project.getPartners() != null) {
+          project.getPartners().clear();
+        }
+
         if (institutions != null) {
           institutions.clear();
         }
