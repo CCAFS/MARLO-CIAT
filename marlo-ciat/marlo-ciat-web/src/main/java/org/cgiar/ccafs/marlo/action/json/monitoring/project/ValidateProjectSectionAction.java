@@ -51,27 +51,30 @@ public class ValidateProjectSectionAction extends BaseAction {
 
   private static final long serialVersionUID = -4757402842700251641L;
 
+
   // Logger
   private static final Logger LOG = LoggerFactory.getLogger(ValidateProjectSectionAction.class);
 
   // Managers
   private IProjectService projectService;
-  private IProjectCrosscutingThemeService projectCrosscutingThemeService;
-  private ISectionStatusService sectionStatusService;
 
+  private IProjectCrosscutingThemeService projectCrosscutingThemeService;
+
+  private ISectionStatusService sectionStatusService;
   // Parameters
   private boolean existProject;
   private boolean validSection;
+
   private String sectionName;
   private long projectID;
   private Map<String, Object> section;
-
   // Model
   private SectionStatus sectionStatus;
-
   // Validator
   private ProjectDescriptionValidator descriptionValidator;
+
   private ProjectPartnerValidator partnerValidator;
+
   private DeliverableValidator deliverableValidator;
 
   @Inject
@@ -160,6 +163,10 @@ public class ValidateProjectSectionAction extends BaseAction {
     return section;
   }
 
+  public String getSectionName() {
+    return sectionName;
+  }
+
   @Override
   public void prepare() throws Exception {
     Map<String, Object> parameters = this.getParameters();
@@ -170,7 +177,7 @@ public class ValidateProjectSectionAction extends BaseAction {
       projectID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.PROJECT_ID))[0]));
     } catch (Exception e) {
       LOG.error("There was an exception trying to parse the crp program id = {} ",
-        StringUtils.trim(((String[]) parameters.get(APConstants.CENTER_PROGRAM_ID))[0]));
+        StringUtils.trim(((String[]) parameters.get(APConstants.PROJECT_ID))[0]));
     }
 
     existProject = projectService.existProject(projectID);
@@ -190,6 +197,10 @@ public class ValidateProjectSectionAction extends BaseAction {
 
   public void setSection(Map<String, Object> section) {
     this.section = section;
+  }
+
+  public void setSectionName(String sectionName) {
+    this.sectionName = sectionName;
   }
 
   public void validateDeliverables() {

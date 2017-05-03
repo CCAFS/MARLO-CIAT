@@ -11,7 +11,7 @@
   {"label":"outcomesList", "nameSpace":"/monitoring", "action":"${(centerSession)!}/monitoringOutcomesList"}
 ]/]
 
-[#assign editable = true /]
+
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
@@ -73,7 +73,7 @@
           <input type="hidden" name="outcome.monitorings[${outcome_index}].id" value="${(outcome.id)!}" />
           [#if outcome_index==0]
           <div class="col-md-2">
-            [@customForm.input name="outcome.baseline" className="initialBaseLine" i18nkey="Initial Baseline" required=true editable=true /]
+            [@customForm.input name="outcome.baseline" className="initialBaseLine" i18nkey="Initial Baseline" required=true editable=editable /]
           </div>
           <div class="clearfix"></div>
           [/#if]
@@ -93,12 +93,14 @@
               <p class="message text-center">[@s.text name="outcome.milestones.emptyMessage"/]</p>
             [/#if]
             </div>
+            [#if editable]
             <div class="note left">
             If you want to report on milestones that were not previously defined in the Impact Pathway, please click on the button below:
             </div>
             <div class="text-center">
               <div class="button-green addMilestone"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a milestone" /]</div>
             </div>
+            [/#if]
           </div>
             [#-- Milestone narrative --]
             <div class="col-md-12 form-group">
@@ -120,10 +122,13 @@
               [#else]
                 <p class="message text-center">[@s.text name="There are not Evicences associated to this outcome as of yet"/]</p>
               [/#if]
+              
               </div>
+              [#if editable]
               <div class="text-center">
                 <div class="button-green addEvidence"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a evidence" /]</div>
               </div>
+              [/#if]
             </div>
           
           </div>

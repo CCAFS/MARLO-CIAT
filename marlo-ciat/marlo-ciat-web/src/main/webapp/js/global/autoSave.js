@@ -123,6 +123,12 @@ function validateThisSection() {
     validateService = "/validateImpactPathway.do";
   }
 
+  // Validate monitoring
+  if(isMonitoringSection()) {
+    sectionData.projectID = $('input[name="projectID"]').val();
+    validateService = "/validateProject.do";
+  }
+
   $.ajax({
       url: baseURL + validateService,
       data: sectionData,

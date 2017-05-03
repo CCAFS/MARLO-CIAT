@@ -110,7 +110,7 @@ public class BaseValidator {
     int year = Calendar.getInstance().get(Calendar.YEAR);
 
     SectionStatus status =
-      sectionStatusService.getSectionStatusByProject(deliverable.getId(), project.getId(), sectionName, year);
+      sectionStatusService.getSectionStatusByDeliverable(deliverable.getId(), project.getId(), sectionName, year);
     if (status == null) {
 
       status = new SectionStatus();

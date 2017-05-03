@@ -135,8 +135,8 @@ public class SectionStatusDAO implements ISectionStatusDAO {
 
   @Override
   public SectionStatus getSectionStatusByProject(long programId, long projectId, String sectionName, int year) {
-    String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName
-      + "' and research_program_id=" + programId + " and project_id=" + projectId + " and year=" + year;
+    String query = "from " + SectionStatus.class.getName() + " where section_name='" + sectionName + "' and project_id="
+      + projectId + " and year=" + year;
     List<SectionStatus> list = dao.findAll(query);
     if (list.size() > 0) {
       return list.get(0);

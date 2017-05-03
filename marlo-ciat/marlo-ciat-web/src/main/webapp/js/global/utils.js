@@ -255,6 +255,11 @@ function isImpactPathwaySection() {
   return url.includes("/impactPathway/");
 }
 
+function isMonitoringSection() {
+  var url = window.location.href;
+  return url.includes("/monitoring/");
+}
+
 /**
  * Search from url that has GET parameters
  */

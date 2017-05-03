@@ -41,4 +41,7 @@ public class Permission {
   public static final String PROJECT_DEIVERABLE_BASE_PERMISSION =
     "center:{0}:area:{1}:program:{2}:project:{3}:deliverable:{4}";
 
+  public static final String PROJECT_SUBMISSION_PERMISSION =
+    "center:{0}:area:{1}:program:{2}:project:{3}:submitProject";
+
 }

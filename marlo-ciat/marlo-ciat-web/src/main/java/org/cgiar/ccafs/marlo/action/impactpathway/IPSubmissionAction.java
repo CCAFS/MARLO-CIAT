@@ -28,7 +28,6 @@ import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.ISubmissionService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -60,7 +59,6 @@ public class IPSubmissionAction extends BaseAction {
   private static Logger LOG = LoggerFactory.getLogger(IPSubmissionAction.class);
   private ISubmissionService submissionService;
   private IProgramService programService;
-  private ISectionStatusService sectionStatusService;
   private IResearchCycleService cycleService;
   private ICenterService centerService;
 
@@ -77,12 +75,10 @@ public class IPSubmissionAction extends BaseAction {
 
   @Inject
   public IPSubmissionAction(APConfig config, ISubmissionService submissionService, IProgramService programService,
-    ISectionStatusService sectionStatusService, IResearchCycleService cycleService, ICenterService centerService,
-    SendMail sendMail) {
+    IResearchCycleService cycleService, ICenterService centerService, SendMail sendMail) {
     super(config);
     this.programService = programService;
     this.submissionService = submissionService;
-    this.sectionStatusService = sectionStatusService;
     this.cycleService = cycleService;
     this.centerService = centerService;
     this.sendMail = sendMail;

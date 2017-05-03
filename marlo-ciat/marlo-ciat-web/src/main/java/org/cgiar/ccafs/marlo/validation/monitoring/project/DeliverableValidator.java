@@ -19,23 +19,53 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.Deliverable;
 import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
+import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+
+import com.google.inject.Inject;
 
 /**
  * @author Hermes Jiménez - CIAT/CCAFS
  */
 public class DeliverableValidator extends BaseValidator {
 
+  private ICenterService centerService;
+
+  @Inject
+  public DeliverableValidator(ICenterService centerService) {
+    this.centerService = centerService;
+  }
+
+  private Path getAutoSaveFilePath(Deliverable deliverable, long centerID) {
+    ResearchCenter center = centerService.getCrpById(centerID);
+    String composedClassName = deliverable.getClass().getSimpleName();
+    String actionFile = ProjectSectionsEnum.DELIVERABLES.getStatus().replace("/", "_");
+    String autoSaveFile =
+      deliverable.getId() + "_" + composedClassName + "_" + center.getAcronym() + "_" + actionFile + ".json";
+
+    return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
+  }
+
   public void validate(BaseAction baseAction, Deliverable deliverable, Project project, ResearchProgram selectedProgram,
     boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
 
-    // TODO Autosave Draft validator.
+    if (!saving) {
+      Path path = this.getAutoSaveFilePath(deliverable, baseAction.getCrpID());
+
+      if (path.toFile().exists()) {
+        this.addMissingField("programImpact.action.draft");
+      }
+    }
 
     if (!baseAction.getFieldErrors().isEmpty()) {
       baseAction.addActionError(baseAction.getText("saving.fields.required"));
@@ -50,7 +80,12 @@ public class DeliverableValidator extends BaseValidator {
 
   public void validateDeliverable(BaseAction baseAction, Deliverable deliverable) {
 
-    if (!this.isValidString(deliverable.getName()) && this.wordCount(deliverable.getName()) <= 50) {
+    if (deliverable.getName() != null) {
+      if (!this.isValidString(deliverable.getName()) && this.wordCount(deliverable.getName()) <= 50) {
+        this.addMessage(baseAction.getText("deliverable.action.deliverablesName"));
+        baseAction.getInvalidFields().put("input-deliverable.name", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("deliverable.action.deliverablesName"));
       baseAction.getInvalidFields().put("input-deliverable.name", InvalidFieldsMessages.EMPTYFIELD);
     }
@@ -64,7 +99,12 @@ public class DeliverableValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-deliverable.endDate", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (deliverable.getDeliverableType().getId() == null || deliverable.getDeliverableType().getId() == -1) {
+    if (deliverable.getDeliverableType() != null) {
+      if (deliverable.getDeliverableType().getId() == null || deliverable.getDeliverableType().getId() == -1) {
+        this.addMessage(baseAction.getText("deliverable.action.deliverablesType"));
+        baseAction.getInvalidFields().put("input-deliverable.deliverableType", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
       this.addMessage(baseAction.getText("deliverable.action.deliverablesType"));
       baseAction.getInvalidFields().put("input-deliverable.deliverableType", InvalidFieldsMessages.EMPTYFIELD);
     }

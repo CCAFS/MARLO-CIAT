@@ -76,7 +76,10 @@ public class MonitoringOutcomeAction extends BaseAction {
 
 
   private ICenterService centerService;
+
   private IResearchOutcomeService outcomeService;
+
+
   private IAuditLogService auditLogService;
   private ITargetUnitService targetUnitService;
   private IResearchTopicService researchTopicService;
@@ -90,9 +93,9 @@ public class MonitoringOutcomeAction extends BaseAction {
   private List<ResearchArea> researchAreas;
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
-
   private ResearchProgram selectedProgram;
   private ResearchOutcome outcome;
+
   private List<ResearchTopic> researchTopics;
   private ResearchTopic selectedResearchTopic;
   private List<ResearchImpact> researchImpacts;
@@ -102,6 +105,7 @@ public class MonitoringOutcomeAction extends BaseAction {
   private long areaID;
   private long topicID;
   private long outcomeID;
+  private String transaction;
 
   @Inject
   public MonitoringOutcomeAction(APConfig config, ICenterService centerService, IResearchOutcomeService outcomeService,
@@ -243,19 +247,19 @@ public class MonitoringOutcomeAction extends BaseAction {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-
   public ResearchCenter getLoggedCenter() {
     return loggedCenter;
   }
-
 
   public ResearchOutcome getOutcome() {
     return outcome;
   }
 
+
   public long getOutcomeID() {
     return outcomeID;
   }
+
 
   public long getProgramID() {
     return programID;
@@ -265,7 +269,6 @@ public class MonitoringOutcomeAction extends BaseAction {
     return researchAreas;
   }
 
-
   public List<ResearchImpact> getResearchImpacts() {
     return researchImpacts;
   }
@@ -274,15 +277,14 @@ public class MonitoringOutcomeAction extends BaseAction {
     return researchPrograms;
   }
 
+
   public List<ResearchTopic> getResearchTopics() {
     return researchTopics;
   }
 
-
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
-
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
@@ -303,6 +305,12 @@ public class MonitoringOutcomeAction extends BaseAction {
     return topicID;
   }
 
+
+  public String getTransaction() {
+    return transaction;
+  }
+
+
   @Override
   public void prepare() throws Exception {
     areaID = -1;
@@ -318,7 +326,22 @@ public class MonitoringOutcomeAction extends BaseAction {
       e.printStackTrace();
     }
 
-    outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
+
+      transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
+      ResearchOutcome history = (ResearchOutcome) auditLogService.getHistory(transaction);
+
+      if (history != null) {
+        outcome = history;
+      } else {
+        this.transaction = null;
+        this.setTransaction("-1");
+      }
+
+    } else {
+      outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    }
+
 
     researchAreas = new ArrayList<>(
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
@@ -332,7 +355,7 @@ public class MonitoringOutcomeAction extends BaseAction {
 
       Path path = this.getAutoSaveFilePath();
 
-      if (path.toFile().exists() && this.getCurrentUser().isAutoSave()) {
+      if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
         Gson gson = new GsonBuilder().create();
@@ -450,6 +473,13 @@ public class MonitoringOutcomeAction extends BaseAction {
         }
       }
 
+      List<String> relationsName = new ArrayList<>();
+      relationsName.add(APConstants.OUTCOME_MONITORING_RELATION);
+      outcome = outcomeService.getResearchOutcomeById(outcomeID);
+      outcome.setActiveSince(new Date());
+      outcome.setModifiedBy(this.getCurrentUser());
+      outcomeService.saveResearchOutcome(outcome, this.getActionName(), relationsName);
+
       Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
@@ -533,7 +563,6 @@ public class MonitoringOutcomeAction extends BaseAction {
     this.areaID = areaID;
   }
 
-
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
@@ -542,6 +571,7 @@ public class MonitoringOutcomeAction extends BaseAction {
   public void setOutcome(ResearchOutcome outcome) {
     this.outcome = outcome;
   }
+
 
   public void setOutcomeID(long outcomeID) {
     this.outcomeID = outcomeID;
@@ -585,6 +615,10 @@ public class MonitoringOutcomeAction extends BaseAction {
 
   public void setTopicID(long topicID) {
     this.topicID = topicID;
+  }
+
+  public void setTransaction(String transaction) {
+    this.transaction = transaction;
   }
 
   /**

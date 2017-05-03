@@ -36,11 +36,6 @@
             <div class="col-md-4" >
               [#if editable]
                 [@customForm.select name="targetYearPopup"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYearPopup milestoneYear" header=false  disabled=!editable/]
-              [#else]
-                <div class="select">
-                  <label for=""> [@s.text name="outcome.milestone.index.inputTargetYear" /]:  </label>
-                  <div class="selectList"><p> [#if milestone.targetYear?has_content][#if milestone.targetYear == -1] Not Selected [#else]${(milestone.targetYear)!'none'}[/#if][#else]Not Selected[/#if]  </p></div> 
-                </div>
               [/#if]
             </div>
           </div>

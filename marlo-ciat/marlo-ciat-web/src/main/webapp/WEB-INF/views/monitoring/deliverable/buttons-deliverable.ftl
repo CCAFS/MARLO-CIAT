@@ -1,6 +1,7 @@
 [#ftl]
 [#-- Project identifier --]
 <input name="deliverableID" type="hidden" value="${(deliverable.id)!"-1"}" />
+<input name="projectID" type="hidden" value="${(deliverable.project.id)!"-1"}" />
 <input type="hidden"  name="className" value="${(deliverable.class.name)!}"/>
 <input type="hidden"  name="id" value="${(deliverable.id)!}"/>
 <input type="hidden"  name="modifiedBy.id" value="${(currentUser.id)!}"/>

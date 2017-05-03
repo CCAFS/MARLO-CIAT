@@ -21,6 +21,7 @@ import org.cgiar.ccafs.marlo.data.model.Deliverable;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
 import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
@@ -592,6 +593,26 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return true;
   }
 
+  public boolean getSectionStatusProject(String section, long projectID) {
+
+    Project project = projectService.getProjectById(projectID);
+
+    if (ProjectSectionsEnum.getValue(section) == null) {
+      return false;
+    }
+
+    switch (ProjectSectionsEnum.getValue(section)) {
+      case DESCRIPTION:
+        return this.validateProject(project, section);
+      case PARTNERS:
+        return this.validateProject(project, section);
+      case DELIVERABLES:
+        return this.validateDeliverable(project);
+    }
+
+    return true;
+  }
+
   public BaseSecurityContext getSecurityContext() {
     return securityContext;
   }
@@ -656,6 +677,16 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     String permission =
       this.generatePermission(Permission.RESEARCH_PROGRAM_SUBMISSION_PERMISSION, this.getCurrentCenter().getAcronym(),
         String.valueOf(program.getResearchArea().getId()), String.valueOf(programID));
+    boolean permissions = this.securityContext.hasPermission(permission);
+    return permissions;
+  }
+
+  public boolean hasPersmissionSubmitProject(long projectID) {
+    Project project = projectService.getProjectById(projectID);
+    ResearchProgram program = project.getResearchProgram();;
+    String permission =
+      this.generatePermission(Permission.PROJECT_SUBMISSION_PERMISSION, this.getCurrentCenter().getAcronym(),
+        String.valueOf(program.getResearchArea().getId()), String.valueOf(program.getId()), String.valueOf(projectID));
     boolean permissions = this.securityContext.hasPermission(permission);
     return permissions;
   }
