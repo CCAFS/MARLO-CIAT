@@ -79,7 +79,7 @@
         <th id="idsM">[@s.text name="programImpact.outcomeList.idTable" /]</th>
         <th id="outcomeTitlesM" >[@s.text name="programImpact.outcomeList.statement" /]</th>
         <th id="outcomeTargetYearM">[@s.text name="programImpact.outcomeList.targetYear" /]</th>
-        <th id="statusM">[@s.text name="outcomeList.status" /]</th>
+        <!-- <th id="statusM">[@s.text name="outcomeList.status" /]</th> -->
       </tr>
     </thead>
     <tbody>
@@ -109,6 +109,7 @@
           ${(outcome.targetYear)!'none'}
           [/#if]
           [#-- outcome status --]
+          <!--
           <td class="text-center">
           [#if outcome.status?has_content ]
           ${(outcome.status)!'none'}
@@ -117,6 +118,7 @@
           [/#if]
             
           </td>
+          -->
         </tr>  
       [/#list]
       [/#if]

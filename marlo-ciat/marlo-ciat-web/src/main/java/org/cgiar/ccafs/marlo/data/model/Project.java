@@ -4,6 +4,7 @@ package org.cgiar.ccafs.marlo.data.model;
 
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -172,6 +173,16 @@ public class Project implements java.io.Serializable, IAuditLog {
     return endDate;
   }
 
+  public String getEndDateFormat() {
+    String pattern = "yyyy-MM-dd";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    String date = "";
+    if (this.startDate != null) {
+      date = simpleDateFormat.format(this.startDate);
+    }
+    return date;
+  }
+
   public List<ProjectFundingSource> getFundingSources() {
     return fundingSources;
   }
@@ -233,6 +244,7 @@ public class Project implements java.io.Serializable, IAuditLog {
     return projectStatus;
   }
 
+
   public ResearchProgram getResearchProgram() {
     return researchProgram;
   }
@@ -245,6 +257,16 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public String getShortName() {
     return shortName;
+  }
+
+  public String getStarDateFormat() {
+    String pattern = "yyyy-MM-dd";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    String date = "";
+    if (this.startDate != null) {
+      date = simpleDateFormat.format(this.startDate);
+    }
+    return date;
   }
 
 
@@ -307,7 +329,6 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.endDate = endDate;
   }
 
-
   public void setFundingSources(List<ProjectFundingSource> fundingSources) {
     this.fundingSources = fundingSources;
   }
@@ -324,10 +345,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
+
   public void setName(String name) {
     this.name = name;
   }
-
 
   public void setOutputs(List<ProjectOutput> outputs) {
     this.outputs = outputs;
@@ -365,19 +386,19 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.researchProgram = researchProgram;
   }
 
+
   public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
     this.sectionStatuses = sectionStatuses;
   }
-
 
   public void setShortName(String shortName) {
     this.shortName = shortName;
   }
 
+
   public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
-
 
   public void setSubmissions(Set<Submission> submissions) {
     this.submissions = submissions;

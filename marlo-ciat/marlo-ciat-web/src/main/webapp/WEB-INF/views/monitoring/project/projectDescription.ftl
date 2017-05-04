@@ -170,6 +170,10 @@
     <div class="col-md-4">
       [@customForm.input name="${fundingSourceCustomName}.ocsCode" i18nkey="OCS code" type="text" disabled=!editable required=false editable=editable /]
     </div>
+    <div class="col-md-2">
+      <br />
+      [#if editable]<div id="fillMetadata" class="checkButtonDisable" style="display:block;">[@s.text name="projectDescription.sync" /]</div>[/#if]
+    </div>
     <div class="col-md-12">
       [@customForm.input name="${fundingSourceCustomName}.title" i18nkey="Title" type="text" disabled=!editable required=false editable=editable /]
     </div>

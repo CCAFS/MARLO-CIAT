@@ -50,11 +50,11 @@
           </td>
           [#-- start date --]
           <td>
-           [#if project.startDate?has_content]${(project.startDate)!""}[#else][@s.text name="projectsList.none" /][/#if]
+           [#if project.startDate?has_content]${(project.starDateFormat)!""}[#else][@s.text name="projectsList.none" /][/#if]
           </td>
           [#-- end date --]
           <td>
-           [#if project.endDate?has_content]${(project.endDate)!""}[#else][@s.text name="projectsList.none" /][/#if]
+           [#if project.endDate?has_content]${(project.endDateFormat)!""}[#else][@s.text name="projectsList.none" /][/#if]
           </td>
         </tr>  
       [/#list]

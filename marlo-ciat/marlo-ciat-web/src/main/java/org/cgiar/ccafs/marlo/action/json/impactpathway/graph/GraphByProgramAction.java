@@ -126,9 +126,9 @@ public class GraphByProgramAction extends BaseAction {
       dataImpactDetail.put("id", "I" + impact.getId());
       dataImpactDetail.put("parent", "P" + impact.getResearchProgram().getId());
       dataImpactDetail.put("label",
-        this.isShortName(impact.getShortName()) ? impact.getShortName() : "Impact " + impact.getId());
-      dataImpactDetail.put("title",
-        this.isShortName(impact.getShortName()) ? impact.getShortName() : "Impact " + impact.getId());
+        this.isShortName(impact.getShortName()) ? impact.getShortName() : "Research Impact " + impact.getId());
+      dataImpactDetail.put("title", this.isShortName(impact.getShortName())
+        ? "Research Impact - " + impact.getShortName() : "Research Impact " + impact.getId());
       dataImpactDetail.put("description", impact.getDescription());
       dataImpactDetail.put("color", impact.getColor());
       dataImpactDetail.put("type", "I");
@@ -162,8 +162,8 @@ public class GraphByProgramAction extends BaseAction {
       dataTopicDetail.put("parent", "P" + topic.getResearchProgram().getId());
       dataTopicDetail.put("label",
         this.isShortName(topic.getShortName()) ? topic.getShortName() : "Research Topic " + topic.getId());
-      dataTopicDetail.put("title",
-        this.isShortName(topic.getShortName()) ? topic.getShortName() : "Research Topic " + topic.getId());
+      dataTopicDetail.put("title", this.isShortName(topic.getShortName()) ? "Research Topic - " + topic.getShortName()
+        : "Research Topic " + topic.getId());
       dataTopicDetail.put("description", topic.getResearchTopic());
       dataTopicDetail.put("color", topic.getColor());
       dataTopicDetail.put("type", "T");
@@ -182,8 +182,8 @@ public class GraphByProgramAction extends BaseAction {
         dataOutcomeDetail.put("parent", "T" + outcome.getResearchTopic().getId());
         dataOutcomeDetail.put("label",
           this.isShortName(outcome.getShortName()) ? outcome.getShortName() : "Outcome " + outcome.getId());
-        dataOutcomeDetail.put("title",
-          this.isShortName(outcome.getShortName()) ? outcome.getShortName() : "Outcome " + outcome.getId());
+        dataOutcomeDetail.put("title", this.isShortName(outcome.getShortName()) ? "Outcome - " + outcome.getShortName()
+          : "Outcome " + outcome.getId());
         dataOutcomeDetail.put("description", outcome.getDescription());
         dataOutcomeDetail.put("color", outcome.getResearchImpact().getColor());
         dataOutcomeDetail.put("type", "OC");
@@ -213,7 +213,7 @@ public class GraphByProgramAction extends BaseAction {
           dataOutputDetail.put("label",
             this.isShortName(output.getShortName()) ? output.getShortName() : "Output " + output.getId());
           dataOutputDetail.put("title",
-            this.isShortName(output.getShortName()) ? output.getShortName() : "Output " + output.getId());
+            this.isShortName(output.getShortName()) ? "Output - " + output.getShortName() : "Output " + output.getId());
           dataOutputDetail.put("description", output.getTitle());
           dataOutputDetail.put("color", output.getResearchOutcome().getResearchImpact().getColor());
           dataOutputDetail.put("type", "OP");
