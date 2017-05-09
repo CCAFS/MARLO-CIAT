@@ -63,8 +63,16 @@ public class BeneficiaryListAction extends BaseAction {
     BeneficiaryType beneficiaryType = beneficiaryTypeService.getBeneficiaryTypeById(beneficiaryTypeID);
 
     if (beneficiaryType != null) {
-      for (Beneficiary b : beneficiaryType.getBeneficiaries().stream().filter(b -> b.isActive())
-        .collect(Collectors.toList())) {
+
+      Beneficiary nonSpec = beneficiaryType.getBeneficiaries().stream()
+        .filter(b -> b.isActive() && b.getName().equals("Non Specific")).collect(Collectors.toList()).get(0);
+      beneficiary = new HashMap<>();
+      beneficiary.put("id", nonSpec.getId());
+      beneficiary.put("name", nonSpec.getName());
+      beneficiaries.add(beneficiary);
+
+      for (Beneficiary b : beneficiaryType.getBeneficiaries().stream()
+        .filter(b -> b.isActive() && !b.getName().equals("Non Specific")).collect(Collectors.toList())) {
 
         beneficiary = new HashMap<>();
         beneficiary.put("id", b.getId());

@@ -3,7 +3,7 @@ var currentSubIdo, saveObj, MAX_YEAR, MIN_YEAR;
 
 function init() {
 
-  MIN_YEAR = 2017;
+  MIN_YEAR = 2014;
   MAX_YEAR = 2050;
 
   /* Declaring Events */

@@ -44,11 +44,11 @@
         <br />
         
         [#-- Back --]
-        <small class="pull-right">
+        <h5 class="pull-right">
           <a href="[@s.url action='${centerSession}/outcomesList'][@s.param name="programID" value=programID /][@s.param name="topicID" value=topicID /][@s.param name="edit" value=true /][/@s.url]">
             <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outcomes list
           </a>
-        </small>
+        </h5>
         
         <div class="clearfix"></div>
         

@@ -41,7 +41,6 @@ function attachEvents() {
         dataType: "json",
         data: data
     }).done(function(m) {
-      $select.addOption("-1", "Select an option");
       for(var i = 0; i < m.beneficiaries.length; i++) {
         // Add beneficiary option
         $select.addOption(m.beneficiaries[i].id, m.beneficiaries[i].name);

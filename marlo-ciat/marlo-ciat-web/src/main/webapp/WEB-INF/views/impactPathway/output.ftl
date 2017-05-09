@@ -36,19 +36,23 @@
         [#-- Section Messages --]
         [#include "/WEB-INF/views/impactPathway/messages-impactPathway-output.ftl" /]
         
+         
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
+        
+        
         [#-- Back --]
-        <small class="pull-right">
+        <h5 class="pull-right">
           <a href="[@s.url action='${centerSession}/outputsList'][@s.param name="programID" value=programID /][@s.param name="outcomeID" value=outcomeID /][@s.param name="edit" value=true /][/@s.url]">
             <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outputs list
           </a>
-        </small>
-        
-        <div class="clearfix"></div>
+        </h5>
         
         [@s.form action=actionName enctype="multipart/form-data" ]
+        
+        
+        
         <h3 class="headTitle"> Output General Information </h3>
         <div class="borderBox">
           <!--h5 class="sectionSubTitle"> Output description</h5-->
