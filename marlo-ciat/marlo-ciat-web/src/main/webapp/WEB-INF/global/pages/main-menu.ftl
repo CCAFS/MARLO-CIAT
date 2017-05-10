@@ -4,7 +4,8 @@
   { 'slug': 'home',           'name': 'menu.home',          'namespace': '/',               'action': 'dashboard',                      'icon': 'home',     'visible': logged, 'active': true },
   { 'slug': 'impactPathway',  'name': 'menu.impactPathway', 'namespace': '/impactPathway',  'action': '${(centerSession)!}/programimpacts',                          'visible': logged, 'active': true },
   { 'slug': 'projects', 'name': 'menu.monitoring.projects',      'namespace': '/monitoring',       'action': '${(centerSession)!}/projectList',    'visible': (logged && action.canAccessSuperAdmin()), 'active': true },
-  { 'slug': 'outcomes', 'name': 'menu.monitoring.outcomes',      'namespace': '/monitoring',       'action': '${(centerSession)!}/monitoringOutcomesList',    'visible': (logged && action.canAccessSuperAdmin()), 'active':action.canAccessSuperAdmin() }]
+  { 'slug': 'outcomes', 'name': 'menu.monitoring.outcomes',      'namespace': '/monitoring',       'action': '${(centerSession)!}/monitoringOutcomesList',    'visible': (logged && action.canAccessSuperAdmin()), 'active':action.canAccessSuperAdmin() },
+   { 'slug': 'outcomes', 'name': 'menu.capdev',      'namespace': '/capdev',       'action': '${(centerSession)!}/capdev',    'visible': (logged && action.canAccessSuperAdmin()), 'active':action.canAccessSuperAdmin() }]
   /]
 
 [#macro mainMenuList]
