@@ -604,6 +604,85 @@ public class ProjectDescriptionAction extends BaseAction {
 
   }
 
+  public void saveLocations(Project projectDB) {
+
+    if (project.getProjectRegions() != null) {
+
+      List<ProjectLocation> regions = new ArrayList<>(projectDB.getProjectLocations().stream()
+        .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
+        .collect(Collectors.toList()));
+
+      if (regions != null && regions.size() > 0) {
+        for (ProjectLocation projectLocation : regions) {
+          if (!project.getProjectRegions().contains(projectLocation)) {
+            projectLocationService.deleteProjectLocation(projectLocation.getId());
+          }
+        }
+      }
+
+
+      for (ProjectLocation projectLocation : project.getProjectRegions()) {
+
+
+        if (projectLocation.getId() == null || projectLocation.getId() == -1) {
+
+          ProjectLocation projectLocationSave = new ProjectLocation();
+          projectLocationSave.setActive(true);
+          projectLocationSave.setActiveSince(new Date());
+          projectLocationSave.setCreatedBy(this.getCurrentUser());
+          projectLocationSave.setModifiedBy(this.getCurrentUser());
+          projectLocationSave.setModificationJustification("");
+          projectLocationSave.setProject(projectDB);
+
+          LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
+          projectLocationSave.setLocElement(element);
+
+          projectLocationService.saveProjectLocation(projectLocationSave);
+        }
+      }
+
+
+    }
+
+    if (project.getProjectCountries() != null) {
+
+      List<ProjectLocation> countries = new ArrayList<>(projectDB.getProjectLocations().stream()
+        .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
+        .collect(Collectors.toList()));
+
+      if (countries != null && countries.size() > 0) {
+        for (ProjectLocation projectLocation : countries) {
+          if (!project.getProjectCountries().contains(projectLocation)) {
+            projectLocationService.deleteProjectLocation(projectLocation.getId());
+          }
+        }
+      }
+
+      for (ProjectLocation projectLocation : project.getProjectCountries()) {
+
+
+        if (projectLocation.getId() == null || projectLocation.getId() == -1) {
+
+          ProjectLocation projectLocationSave = new ProjectLocation();
+          projectLocationSave.setActive(true);
+          projectLocationSave.setActiveSince(new Date());
+          projectLocationSave.setCreatedBy(this.getCurrentUser());
+          projectLocationSave.setModifiedBy(this.getCurrentUser());
+          projectLocationSave.setModificationJustification("");
+          projectLocationSave.setProject(projectDB);
+
+          LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
+          projectLocationSave.setLocElement(element);
+
+          projectLocationService.saveProjectLocation(projectLocationSave);
+        }
+      }
+
+
+    }
+
+  }
+
   public void saveOutputs(Project projectDB) {
 
     if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
@@ -682,10 +761,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.region = region;
   }
 
+
   public void setRegionLists(List<LocElement> regionLists) {
     this.regionLists = regionLists;
   }
-
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
@@ -695,10 +774,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
+
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
-
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
@@ -714,6 +793,5 @@ public class ProjectDescriptionAction extends BaseAction {
       validator.validate(this, project, selectedProgram, true);
     }
   }
-
 
 }

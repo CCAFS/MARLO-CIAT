@@ -15,8 +15,10 @@ public class ProjectLocation implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = 1286006751155139286L;
 
+
   @Expose
   private Long id;
+
 
   @Expose
   private LocElement locElement;
@@ -39,10 +41,8 @@ public class ProjectLocation implements java.io.Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
   public ProjectLocation() {
   }
-
 
   public ProjectLocation(boolean active, Date activeSince) {
     this.active = active;
@@ -59,6 +59,29 @@ public class ProjectLocation implements java.io.Serializable, IAuditLog {
     this.active = active;
     this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
+  }
+
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    ProjectLocation other = (ProjectLocation) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -90,6 +113,7 @@ public class ProjectLocation implements java.io.Serializable, IAuditLog {
     return sb.toString();
   }
 
+
   public String getModificationJustification() {
     return modificationJustification;
   }
@@ -101,6 +125,14 @@ public class ProjectLocation implements java.io.Serializable, IAuditLog {
 
   public Project getProject() {
     return project;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override
