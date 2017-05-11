@@ -18,9 +18,11 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
+import org.cgiar.ccafs.marlo.data.model.LocElement;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
+import org.cgiar.ccafs.marlo.data.model.ProjectLocation;
 import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
@@ -33,8 +35,10 @@ import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
+import org.cgiar.ccafs.marlo.data.service.ILocElementService;
 import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
+import org.cgiar.ccafs.marlo.data.service.IProjectLocationService;
 import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
@@ -50,6 +54,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,11 +80,25 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private IUserService userService;
+
+
   private IResearchOutputService outputService;
+
+
   private IFundingSourceTypeService fundingSourceService;
+
   private IProjectOutputService projectOutputService;
+
+
+  private IProjectLocationService projectLocationService;
+
+  private ILocElementService locElementService;
+
   private IProjectFundingSourceService projectFundingSourceService;
+
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
+
+
   private IAuditLogService auditLogService;
   private ProjectDescriptionValidator validator;
   private ResearchArea selectedResearchArea;
@@ -89,6 +108,9 @@ public class ProjectDescriptionAction extends BaseAction {
   private List<ResearchProgram> researchPrograms;
   private List<FundingSourceType> fundingSourceTypes;
   private List<ResearchOutput> outputs;
+  private List<LocElement> regionLists;
+  private List<LocElement> countryLists;
+  private boolean region;
   private long programID;
   private long areaID;
   private long projectID;
@@ -101,7 +123,8 @@ public class ProjectDescriptionAction extends BaseAction {
     IUserService userService, IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
     IResearchOutputService outputService, IProjectOutputService projectOutputService,
     IProjectFundingSourceService projectFundingSourceService,
-    IProjectCrosscutingThemeService projectCrosscutingThemeService, IAuditLogService auditLogService) {
+    IProjectCrosscutingThemeService projectCrosscutingThemeService, IProjectLocationService projectLocationService,
+    ILocElementService locElementService, IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -112,6 +135,8 @@ public class ProjectDescriptionAction extends BaseAction {
     this.projectFundingSourceService = projectFundingSourceService;
     this.projectOutputService = projectOutputService;
     this.projectCrosscutingThemeService = projectCrosscutingThemeService;
+    this.projectLocationService = projectLocationService;
+    this.locElementService = locElementService;
     this.auditLogService = auditLogService;
   }
 
@@ -149,6 +174,10 @@ public class ProjectDescriptionAction extends BaseAction {
     String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
+  }
+
+  public List<LocElement> getCountryLists() {
+    return countryLists;
   }
 
   public List<FundingSourceType> getFundingSourceTypes() {
@@ -201,11 +230,13 @@ public class ProjectDescriptionAction extends BaseAction {
     return project;
   }
 
-
   public long getProjectID() {
     return projectID;
   }
 
+  public List<LocElement> getRegionLists() {
+    return regionLists;
+  }
 
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
@@ -214,7 +245,6 @@ public class ProjectDescriptionAction extends BaseAction {
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
-
 
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
@@ -225,9 +255,15 @@ public class ProjectDescriptionAction extends BaseAction {
     return selectedResearchArea;
   }
 
+
   public String getTransaction() {
     return transaction;
   }
+
+  public boolean isRegion() {
+    return region;
+  }
+
 
   @Override
   public void prepare() throws Exception {
@@ -236,6 +272,18 @@ public class ProjectDescriptionAction extends BaseAction {
 
     researchAreas = new ArrayList<>(
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
+
+    // Regions List
+    regionLists = new ArrayList<>(locElementService.findAll().stream()
+      .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 1)
+      .collect(Collectors.toList()));
+    Collections.sort(regionLists, (r1, r2) -> r1.getName().compareTo(r2.getName()));
+
+    // Country List
+    countryLists = new ArrayList<>(locElementService.findAll().stream()
+      .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 2)
+      .collect(Collectors.toList()));
+    Collections.sort(countryLists, (c1, c2) -> c1.getName().compareTo(c2.getName()));
 
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
@@ -334,6 +382,28 @@ public class ProjectDescriptionAction extends BaseAction {
           project.getProjectFundingSources().stream().filter(fs -> fs.isActive()).collect(Collectors.toList())));
 
 
+        if (project.getProjectLocations() != null) {
+
+          List<ProjectLocation> countries = new ArrayList<>(project.getProjectLocations().stream()
+            .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
+            .collect(Collectors.toList()));
+
+          project.setProjectCountries(new ArrayList<>(countries));
+
+          List<ProjectLocation> regions = new ArrayList<>(project.getProjectLocations().stream()
+            .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
+            .collect(Collectors.toList()));
+
+
+          if (regions.size() > 0) {
+            region = true;
+          }
+
+          project.setProjectRegions(regions);
+
+        }
+
+
       }
 
       fundingSourceTypes = new ArrayList<>(
@@ -377,6 +447,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   }
+
 
   @Override
   public String save() {
@@ -575,6 +646,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.areaID = areaID;
   }
 
+  public void setCountryLists(List<LocElement> countryLists) {
+    this.countryLists = countryLists;
+  }
+
   public void setFundingSourceTypes(List<FundingSourceType> fundingSourceTypes) {
     this.fundingSourceTypes = fundingSourceTypes;
   }
@@ -601,6 +676,14 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void setProjectID(long projectID) {
     this.projectID = projectID;
+  }
+
+  public void setRegion(boolean region) {
+    this.region = region;
+  }
+
+  public void setRegionLists(List<LocElement> regionLists) {
+    this.regionLists = regionLists;
   }
 
 
