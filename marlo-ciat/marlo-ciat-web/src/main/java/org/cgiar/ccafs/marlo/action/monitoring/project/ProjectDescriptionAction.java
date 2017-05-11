@@ -272,7 +272,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
     researchAreas = new ArrayList<>(
       loggedCenter.getResearchAreas().stream().filter(ra -> ra.isActive()).collect(Collectors.toList()));
-
+    region = false;
     // Regions List
     regionLists = new ArrayList<>(locElementService.findAll().stream()
       .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 1)
@@ -365,8 +365,18 @@ public class ProjectDescriptionAction extends BaseAction {
         if (project.getProjectCountries() != null) {
           for (ProjectLocation projectLocation : project.getProjectCountries()) {
             if (projectLocation != null) {
-              // TODO
+              projectLocation.setLocElement(
+                locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2()));
+            }
+          }
+        }
 
+        if (project.getProjectRegions() != null) {
+          for (ProjectLocation projectLocation : project.getProjectRegions()) {
+            region = true;
+            if (projectLocation != null) {
+              projectLocation
+                .setLocElement(locElementService.getLocElementById(projectLocation.getLocElement().getId()));
             }
           }
         }

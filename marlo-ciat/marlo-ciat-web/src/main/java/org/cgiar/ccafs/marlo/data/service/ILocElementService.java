@@ -53,7 +53,6 @@ public interface ILocElementService {
    */
   public List<LocElement> findAll();
 
-
   /**
    * This method gets a locElement object by a given locElement identifier.
    * 
@@ -61,6 +60,14 @@ public interface ILocElementService {
    * @return a LocElement object.
    */
   public LocElement getLocElementById(long locElementID);
+
+  /**
+   * This method gets a locElement object by a given iso code identfier.
+   * 
+   * @param ISOCode is the iso code identifier.
+   * @return a LocElement object.
+   */
+  public LocElement getLocElementByISOCode(String ISOCode);
 
   /**
    * This method gets a list of locElements belongs of the user

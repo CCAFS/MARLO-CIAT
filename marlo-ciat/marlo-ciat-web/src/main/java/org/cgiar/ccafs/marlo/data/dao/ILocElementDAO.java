@@ -57,6 +57,14 @@ public interface ILocElementDAO {
    */
   public List<LocElement> findAll();
 
+  /**
+   * This method gets a locElement object by a given locElement IsoCode.
+   * 
+   * @param ISOCode of the LocElement.
+   * @return a LocElement object.
+   */
+  public LocElement findISOCode(String ISOcode);
+
 
   /**
    * This method gets a list of locElements belongs of the user
