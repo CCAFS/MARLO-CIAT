@@ -1,7 +1,7 @@
 [#ftl]
 [#assign title = "Project Description" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${projectID}" /]
-[#assign pageLibs = ["select2"] /]
+[#assign pageLibs = ["select2","flat-flags"] /]
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/monitoring/projects/projectDescription.js","${baseUrl}/js/global/autoSave.js"] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
@@ -98,6 +98,103 @@
               </div>
             </div>
             <div class="clearfix"></div>
+            
+            [#-- LOCATION INFORMATION --]
+            <h4 class="headTitle col-md-12">Location information</h4> 
+            <div class="col-md-12 informationWrapper simpleBox">
+            [#-- GLOBAL DIMENSION --]
+            [#if editable]
+              <div class="form-group row ">
+                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.global"  editable=editable inverse=false  cssClass="" /] </div>
+              </div>
+              <hr />
+              <div class="form-group row">
+                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
+              </div>
+              [#else]
+              <div class="form-group row ">
+                <div class="col-md-12">
+              [#if fundingSource.global]
+                <label for="">[@s.text name="projectDescription.globalDimensionYes" /]</label>
+              [#else]
+                <label for="">[@s.text name="projectDescription.globalDimensionNo" /]</label>
+              [/#if]
+                </div>
+              </div>
+              <hr />
+              <div class="form-group row ">
+              <div class="col-md-12">
+                [#if region]
+                  <label for="">[@s.text name="projectDescription.regionallDimensionYes" /]</label>
+                [#else]
+                  <label for="">[@s.text name="projectDescription.regionallDimensionNo" /]</label>
+                [/#if]
+              </div>
+              </div>
+              [/#if]
+              [#-- REGIONAL SELECT --]
+              <div class="regionsBox form-group row" style="display:${region?string('block','none')}">
+                <div class="panel tertiary col-md-12">
+                 <div class="panel-head">
+                   <label for=""> [@customForm.text name="projectDescription.selectRegions" readText=!editable /]:[@customForm.req required=editable /]</label>
+                   <br />
+                   <small style="color: #337ab7;">(Standart regions are defined by United Nations)</small>
+                 </div>
+                 
+                  <div id="regionList" class="panel-body" listname="fundingSource.fundingRegions"> 
+                    <ul class="list">
+                    [#if project.projectRegions?has_content]
+                      [#list project.projectRegions as region]
+                          <li id="" class="region clearfix col-md-3">
+                          [#if editable ]
+                            <div class="removeRegion removeIcon" title="Remove region"></div>
+                          [/#if]
+                            <input class="id" type="hidden" name="project.projectRegions[${region_index}].id" value="${region.id}" />
+                            <input class="rId" type="hidden" name="project.projectRegions[${region_index}].locElement.id" value="${(region.locElement.id)!}" />
+                            <span class="name">${(region.locElement.name)!}</span>
+                            <div class="clearfix"></div>
+                          </li>
+                      [/#list]
+                      [#else]
+                      <p class="emptyText"> [@s.text name="No regions added yet." /]</p> 
+                    [/#if]
+                    </ul>
+                    [#if editable ]
+                      [@customForm.select name="" label=""  showTitle=false  i18nkey="" listName="regionLists" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="regionSelect" editable=editable /]
+                    [/#if] 
+                  </div>
+                </div>
+              </div>
+              
+              [#-- SELECT COUNTRIES --]
+              <div class="form-group row">
+                <div class="panel tertiary col-md-12">
+                 <div class="panel-head"><label for=""> [@customForm.text name="projectDescription.listCountries" readText=!editable /]:</label></div>
+                  <div id="countryList" class="panel-body" listname="fundingSource.fundingCountry"> 
+                    <ul class="list">
+                    [#if project.projectCountries?has_content]
+                      [#list project.projectCountries as country]
+                          <li id="" class="country clearfix col-md-3">
+                          [#if editable ]
+                            <div class="removeCountry removeIcon" title="Remove country"></div>
+                          [/#if]
+                            <input class="id" type="hidden" name="project.projectCountries[${country_index}].id" value="${(country.id)!-1}" />
+                            <input class="cId" type="hidden" name="project.projectCountries[${country_index}].locElement.isoAlpha2" value="${(country.locElement.isoAlpha2)!}" />
+                            <span class="name"><span> <i class="flag-sm flag-sm-${(country.locElement.isoAlpha2)!}"></i> ${(country.locElement.name)!} </span></span>
+                            <div class="clearfix"></div>
+                          </li>
+                      [/#list]
+                      [#else]
+                      <p class="emptyText"> [@s.text name="No countries added yet." /]</p> 
+                    [/#if]
+                    </ul>
+                    [#if editable ]
+                      [@customForm.select name="" label=""  showTitle=false  i18nkey="" listName="countryLists" keyFieldName="isoAlpha2"  displayFieldName="name"  multiple=false required=true  className="countriesSelect" editable=editable /]
+                    [/#if] 
+                  </div>
+                </div>
+              </div>
+            </div>
               [#-- Select the cross-cutting dimension(s) to this project? --]
               <div class="form-group col-md-12">
                 <label for="">[@customForm.text name="projectDescription.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
@@ -158,6 +255,28 @@
 [@fundingSourceMacro element={} name="project.fundingSources"  index=-1 isTemplate=true /]
 [@outputMacro element={} name="project.outputs"  index=-1 isTemplate=true /]
 [@usersForm.searchUsers/]
+
+[#-- Region element template --]
+<ul style="display:none">
+  <li id="regionTemplate" class="region clearfix col-md-3">
+      <div class="removeRegion removeIcon" title="Remove region"></div>
+      <input class="id" type="hidden" name="project.projectRegions[-1].id" value="" />
+      <input class="rId" type="hidden" name="project.projectRegions[-1].locElement.id" value="" />
+      <span class="name"></span>
+      <div class="clearfix"></div>
+    </li>
+</ul>
+
+[#-- Country element template --]
+<ul style="display:none">
+  <li id="countryTemplate" class="country clearfix col-md-3">
+      <div class="removeCountry removeIcon" title="Remove country"></div>
+      <input class="id" type="hidden" name="project.projectCountries[-1].id" value="" />
+      <input class="cId" type="hidden" name="project.projectCountries[-1].locElement.isoAlpha2" value="" />
+      <span class="name"></span>
+      <div class="clearfix"></div>
+    </li>
+</ul>
   
 [#include "/WEB-INF/global/pages/footer.ftl"]
 

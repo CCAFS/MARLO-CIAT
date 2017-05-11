@@ -40,6 +40,7 @@
 	  <ul class="hidden-md hidden-lg">
 	   <li> <span class="glyphicon glyphicon-menu-hamburger"></span> Menu
 	     <ul class="subMenu">
+	     <li style="background-color:red; width:100px;">text holi asdad</li>
 	       [@mainMenuList /]
 	     </ul>
 	   </li>

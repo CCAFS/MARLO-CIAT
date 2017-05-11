@@ -13,12 +13,68 @@ function init() {
       "endDate": "#project\\.endDate"
   });
 
+  /** Check region option * */
+  $("#regionList").find(".region").each(function(i,e) {
+    var option = $(".regionSelect").find("option[value='" + $(e).find("input.rId").val() + "']");
+    option.prop('disabled', true);
+    // option.hide();
+  });
+
   // Events
   $(".addFundingSource").on("click", addFundingSource);
   $(".removeFundingSource").on("click", removeFundingSource);
 
   $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
+
+// Country item
+  $(".countriesSelect").on("change", function() {
+    var option = $(this).find("option:selected");
+    if(option.val() != "-1") {
+      addCountry(option);
+    }
+    // Remove option from select
+    option.remove();
+    $(this).trigger("change.select2");
+  });
+  $(".removeCountry").on("click", removeCountry);
+
+// REGION item
+  $(".regionSelect").on("change", function() {
+    var option = $(this).find("option:selected");
+    if(option.val() != "-1") {
+      addRegion(option);
+      option.prop('disabled', true);
+      $('.regionSelect').select2();
+    }
+  });
+  $(".removeRegion").on("click", removeRegion);
+
+  /* Select2 multiple for country and region select */
+  $('.countriesSelect').select2({
+      placeholder: "Select a country(ies)...",
+      templateResult: formatState,
+      templateSelection: formatState,
+      width: '100%'
+  });
+
+  $(".button-label").on("click", function() {
+    var valueSelected = $(this).hasClass('yes-button-label');
+    var $input = $(this).parent().find('input');
+    $input.val(valueSelected);
+    $(this).parent().find("label").removeClass("radio-checked");
+    $(this).addClass("radio-checked");
+  });
+
+// Is this deliverable Open Access
+  $(".isRegional .button-label").on("click", function() {
+    var valueSelected = $(this).hasClass('yes-button-label');
+    if(!valueSelected) {
+      $(".regionsBox").hide("slow");
+    } else {
+      $(".regionsBox").show("slow");
+    }
+  });
 
   $('.blockTitle').on('click', function() {
     if($(this).hasClass('closed')) {
@@ -37,6 +93,160 @@ function init() {
 }
 
 /** FUNCTIONS Funding Sources * */
+
+/** COUNTRIES SELECT FUNCTIONS * */
+// Add a new country element
+function addCountry(option) {
+  var canAdd = true;
+  console.log(option.val());
+  if(option.val() == "-1") {
+    canAdd = false;
+  }
+
+  var $list = $(option).parents(".select").parents("#countryList").find(".list");
+  var $item = $("#countryTemplate").clone(true).removeAttr("id");
+  var v = $(option).text().length > 12 ? $(option).text().substr(0, 12) + ' ... ' : $(option).text();
+
+// Check if is already selected
+  $list.find('.country').each(function(i,e) {
+    if($(e).find('input.cId').val() == option.val()) {
+      canAdd = false;
+      return;
+    }
+  });
+  if(!canAdd) {
+    return;
+  }
+
+// Set country parameters
+  $item.find(".name").attr("title", $(option).text());
+  var $state = $('<span> <i class="flag-sm flag-sm-' + option.val() + '"></i>  ' + v + '</span>');
+  $item.find(".name").html($state);
+  $item.find(".cId").val(option.val());
+  $item.find(".id").val(-1);
+  $list.append($item);
+  $item.show('slow');
+  updateCountryList($list);
+  checkCountryList($list);
+
+// Reset select
+  $(option).val("-1");
+  $(option).trigger('change.select2');
+
+}
+
+function removeCountry() {
+  var $list = $(this).parents('.list');
+  var $item = $(this).parents('.country');
+  var value = $item.find(".cId").val();
+  var name = $item.find(".name").attr("title");
+
+  var $select = $(".countriesSelect");
+  $item.hide(300, function() {
+    $item.remove();
+    checkCountryList($list);
+    updateCountryList($list);
+  });
+// Add country option again
+  $select.addOption(value, name);
+  $select.trigger("change.select2");
+}
+
+function updateCountryList($list) {
+
+  $($list).find('.country').each(function(i,e) {
+    // Set country indexes
+    $(e).setNameIndexes(1, i);
+  });
+}
+
+function checkCountryList(block) {
+  var items = $(block).find('.country').length;
+  if(items == 0) {
+    $(block).parent().find('p.emptyText').fadeIn();
+  } else {
+    $(block).parent().find('p.emptyText').fadeOut();
+  }
+}
+
+/** REGIONS SELECT FUNCTIONS * */
+// Add a new region element
+function addRegion(option) {
+  var canAdd = true;
+  if(option.val() == "-1") {
+    canAdd = false;
+  }
+  var optionValue = option.val().split("-")[0];
+  var optionScope = option.val().split("-")[1];
+
+  var $list = $(option).parents("#regionList").find(".list");
+  var $item = $("#regionTemplate").clone(true).removeAttr("id");
+  var v = $(option).text().length > 10 ? $(option).text().substr(0, 10) + ' ... ' : $(option).text();
+
+// Check if is already selected
+  $list.find('.region').each(function(i,e) {
+    if($(e).find('input.rId').val() == optionValue) {
+      canAdd = false;
+      return;
+    }
+  });
+  if(!canAdd) {
+    return;
+  }
+
+// Set region parameters
+  $item.find(".name").attr("title", $(option).text());
+  $item.find(".name").html($(option).text());
+  $item.find(".rId").val(optionValue);
+  $item.find(".id").val(-1);
+  $list.append($item);
+  $item.show('slow');
+  updateRegionList($list);
+  checkRegionList($list);
+
+// Reset select
+// $(option).val("-1");
+// $(option).trigger('change.select2');
+
+}
+
+function removeRegion() {
+  var $list = $(this).parents('.list');
+  var $item = $(this).parents('.region');
+  var value = $item.find(".rId").val();
+  var name = $item.find(".name").attr("title");
+
+  var $select = $(".regionSelect");
+  $item.hide(300, function() {
+    $item.remove();
+    checkRegionList($list);
+    updateRegionList($list);
+  });
+  var option = $select.find("option[value='" + value + "']");
+  console.log(option);
+  option.prop('disabled', false);
+  $('.regionSelect').select2();
+// Add region option again
+// $select.addOption(value, name);
+// $select.trigger("change.select2");
+}
+
+function updateRegionList($list) {
+
+  $($list).find('.region').each(function(i,e) {
+// Set regions indexes
+    $(e).setNameIndexes(1, i);
+  });
+}
+
+function checkRegionList(block) {
+  var items = $(block).find('.region').length;
+  if(items == 0) {
+    $(block).parent().find('p.emptyText').fadeIn();
+  } else {
+    $(block).parent().find('p.emptyText').fadeOut();
+  }
+}
 
 // Add a new funding source element
 function addFundingSource() {
@@ -207,3 +417,17 @@ function date(start,end) {
     return date;
   }
 }
+
+function formatState(state) {
+  if(!state.id) {
+    return state.text;
+  }
+  var $state = "";
+  if(state.element.value != "-1") {
+    $state =
+        $('<span> <i class="flag-sm flag-sm-' + state.element.value.toUpperCase() + '"></i>  ' + state.text + '</span>');
+  } else {
+    $state = $('<span>' + state.text + '</span>');
+  }
+  return $state;
+};
