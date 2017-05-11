@@ -362,6 +362,15 @@ public class ProjectDescriptionAction extends BaseAction {
           project.setOutputs(new ArrayList<>(outputs));
         }
 
+        if (project.getProjectCountries() != null) {
+          for (ProjectLocation projectLocation : project.getProjectCountries()) {
+            if (projectLocation != null) {
+              // TODO
+
+            }
+          }
+        }
+
         reader.close();
         this.setDraft(true);
       } else {
@@ -476,10 +485,12 @@ public class ProjectDescriptionAction extends BaseAction {
 
       this.saveFundingSources(projectDB);
       this.saveOutputs(projectDB);
+      this.saveLocations(projectDB);
 
       List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.PROJECT_FUNDING_SOURCE_RELATION);
       relationsName.add(APConstants.PROJECT_OUTPUT_RELATION);
+      relationsName.add(APConstants.PROJECT_LOCATION_RELATION);
       project = projectService.getProjectById(projectID);
       project.setActiveSince(new Date());
       project.setModifiedBy(this.getCurrentUser());
