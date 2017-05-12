@@ -480,6 +480,8 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setStartDate(project.getStartDate());
       projectDB.setEndDate(project.getEndDate());
 
+      projectDB.setGlobal(project.isGlobal());
+
       if (project.getProjectLeader().getId() != null) {
         User projectLeader = userService.getUser(project.getProjectLeader().getId());
         projectDB.setProjectLeader(projectLeader);
@@ -692,7 +694,7 @@ public class ProjectDescriptionAction extends BaseAction {
           projectLocationSave.setModificationJustification("");
           projectLocationSave.setProject(projectDB);
 
-          LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
+          LocElement element = locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2());
           projectLocationSave.setLocElement(element);
 
           projectLocationService.saveProjectLocation(projectLocationSave);
