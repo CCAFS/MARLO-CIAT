@@ -115,7 +115,7 @@
               [#else]
               <div class="form-group row ">
                 <div class="col-md-12">
-              [#if fundingSource.global]
+              [#if project.global]
                 <label for="">[@s.text name="projectDescription.globalDimensionYes" /]</label>
               [#else]
                 <label for="">[@s.text name="projectDescription.globalDimensionNo" /]</label>
