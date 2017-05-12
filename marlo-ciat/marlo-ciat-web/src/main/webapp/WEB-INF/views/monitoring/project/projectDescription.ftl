@@ -16,6 +16,7 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#-- Search users Interface --]
 [#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
+[#import "/WEB-INF/global/macros/utils.ftl" as utilities /]
 
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
@@ -151,7 +152,7 @@
                           [/#if]
                             <input class="id" type="hidden" name="project.projectRegions[${region_index}].id" value="${region.id}" />
                             <input class="rId" type="hidden" name="project.projectRegions[${region_index}].locElement.id" value="${(region.locElement.id)!}" />
-                            <span class="name">${(region.locElement.name)!}</span>
+                            <span class="name">[@utilities.wordCutter string=(region.locElement.name)! maxPos=20 /]</span>
                             <div class="clearfix"></div>
                           </li>
                       [/#list]
@@ -180,7 +181,7 @@
                           [/#if]
                             <input class="id" type="hidden" name="project.projectCountries[${country_index}].id" value="${(country.id)!-1}" />
                             <input class="cId" type="hidden" name="project.projectCountries[${country_index}].locElement.isoAlpha2" value="${(country.locElement.isoAlpha2)!}" />
-                            <span class="name"><span> <i class="flag-sm flag-sm-${(country.locElement.isoAlpha2)!}"></i> ${(country.locElement.name)!} </span></span>
+                            <span class="name"><span> <i class="flag-sm flag-sm-${(country.locElement.isoAlpha2)!}"></i> [@utilities.wordCutter string=(country.locElement.name)! maxPos=20 /]</span></span>
                             <div class="clearfix"></div>
                           </li>
                       [/#list]

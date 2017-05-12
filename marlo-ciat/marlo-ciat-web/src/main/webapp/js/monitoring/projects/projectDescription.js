@@ -181,7 +181,7 @@ function addRegion(option) {
 
   var $list = $(option).parents("#regionList").find(".list");
   var $item = $("#regionTemplate").clone(true).removeAttr("id");
-  var v = $(option).text().length > 10 ? $(option).text().substr(0, 10) + ' ... ' : $(option).text();
+  var v = $(option).text().length > 16 ? $(option).text().substr(0, 16) + ' ... ' : $(option).text();
 
 // Check if is already selected
   $list.find('.region').each(function(i,e) {
@@ -196,7 +196,7 @@ function addRegion(option) {
 
 // Set region parameters
   $item.find(".name").attr("title", $(option).text());
-  $item.find(".name").html($(option).text());
+  $item.find(".name").html(v);
   $item.find(".rId").val(optionValue);
   $item.find(".id").val(-1);
   $list.append($item);
