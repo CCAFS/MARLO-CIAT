@@ -462,6 +462,15 @@ public class ProjectDescriptionAction extends BaseAction {
       if (project.getOutputs() != null) {
         project.getOutputs().clear();
       }
+
+      if (project.getProjectRegions() != null) {
+        project.getProjectRegions().clear();
+      }
+
+      if (project.getProjectCountries() != null) {
+        project.getProjectCountries().clear();
+      }
+
     }
 
 
@@ -630,19 +639,22 @@ public class ProjectDescriptionAction extends BaseAction {
   public void saveLocations(Project projectDB) {
 
     if (project.getProjectRegions() != null) {
-
       List<ProjectLocation> regions = new ArrayList<>(projectDB.getProjectLocations().stream()
         .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
         .collect(Collectors.toList()));
-
       if (regions != null && regions.size() > 0) {
-        for (ProjectLocation projectLocation : regions) {
-          if (!project.getProjectRegions().contains(projectLocation)) {
+        if (!region) {
+          for (ProjectLocation projectLocation : regions) {
             projectLocationService.deleteProjectLocation(projectLocation.getId());
+          }
+        } else {
+          for (ProjectLocation projectLocation : regions) {
+            if (!project.getProjectRegions().contains(projectLocation)) {
+              projectLocationService.deleteProjectLocation(projectLocation.getId());
+            }
           }
         }
       }
-
 
       for (ProjectLocation projectLocation : project.getProjectRegions()) {
 
@@ -667,7 +679,9 @@ public class ProjectDescriptionAction extends BaseAction {
 
     }
 
-    if (project.getProjectCountries() != null) {
+    if (project.getProjectCountries() != null)
+
+    {
 
       List<ProjectLocation> countries = new ArrayList<>(projectDB.getProjectLocations().stream()
         .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
