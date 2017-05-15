@@ -35,6 +35,9 @@
       <div class="col-md-9">
         [#-- Section Messages --]
         [#--  --include "/WEB-INF/views/projects/messages-projects.ftl" / --]
+        [#-- Projects data information --]
+        [#include "/WEB-INF/views/monitoring/project/dataInfo-projects.ftl" /]
+        <br />
       
         [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
           

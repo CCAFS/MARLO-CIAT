@@ -27,6 +27,9 @@
       </div>
       <div class="col-md-9">
         [#-- Section Messages --]
+        [#-- Projects data information --]
+        [#include "/WEB-INF/views/monitoring/project/dataInfo-projects.ftl" /]
+        <br />
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
