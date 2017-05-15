@@ -102,7 +102,7 @@
     <input class="id" type="hidden" name="${documentCustomName}.id" value="${(element.id)!-1}" />
     <div class="col-md-12">
     [#if editable]<div class="removeDocument removeIcon" title="Remove document"></div>[/#if] 
-      [@customForm.input name="${documentCustomName}.link" i18nkey="Link" type="text" className="link" disabled=!editable required=false editable=editable /]
+      [@customForm.input name="${documentCustomName}.link" i18nkey="Link" type="text" className="link" disabled=!editable required=true editable=editable /]
     </div>
   </div>
 [/#macro]
