@@ -453,6 +453,7 @@ public class ProjectDescriptionAction extends BaseAction {
         project.getProjectCrosscutingTheme().setCapacityDevelopment(null);
         project.getProjectCrosscutingTheme().setNa(null);
         project.getProjectCrosscutingTheme().setBigData(null);
+        project.getProjectCrosscutingTheme().setImpactAssessment(null);
       }
 
       if (project.getFundingSources() != null) {
@@ -556,6 +557,8 @@ public class ProjectDescriptionAction extends BaseAction {
     crosscutingThemeSave.setCapacityDevelopment(
       crosscutingTheme.getCapacityDevelopment() != null ? crosscutingTheme.getCapacityDevelopment() : false);
     crosscutingThemeSave.setBigData(crosscutingTheme.getBigData() != null ? crosscutingTheme.getBigData() : false);
+    crosscutingThemeSave.setImpactAssessment(
+      crosscutingTheme.getImpactAssessment() != null ? crosscutingTheme.getImpactAssessment() : false);
     crosscutingThemeSave.setNa(crosscutingTheme.getNa() != null ? crosscutingTheme.getNa() : false);
 
     crosscutingThemeSave.setProject(projectDB);
