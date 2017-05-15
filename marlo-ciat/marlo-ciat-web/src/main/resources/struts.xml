@@ -159,6 +159,5 @@
 	<include file="struts-monitoring.xml" />
 	<include file="struts-json.xml" />
 	<include file="struts-summaries.xml" />
-	<include file="struts-capDev.xml" />
 
 </struts>
