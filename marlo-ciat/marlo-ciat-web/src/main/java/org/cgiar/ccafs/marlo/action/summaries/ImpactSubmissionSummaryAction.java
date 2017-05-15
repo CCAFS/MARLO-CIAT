@@ -444,8 +444,8 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
   private TypedTableModel getOutputsTableModel() {
     // Initialization of Model
     TypedTableModel model =
-      new TypedTableModel(new String[] {"shortName", "title", "research_topic", "outcome", "showResearchTopic"},
-        new Class[] {String.class, String.class, String.class, String.class, Boolean.class});
+      new TypedTableModel(new String[] {"shortName", "title", "research_topic", "outcome", "showResearchTopic", "id"},
+        new Class[] {String.class, String.class, String.class, String.class, Boolean.class, Long.class});
 
     for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
       .collect(Collectors.toList())) {
@@ -456,6 +456,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
         .collect(Collectors.toList())) {
         for (ResearchOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
           .collect(Collectors.toList())) {
+          Long id = researchOutput.getId();
           if (countOutcome == 0) {
             if (researchTopic.getResearchTopic() != null) {
               researchTopicTitle = researchTopic.getResearchTopic();
@@ -494,7 +495,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
           }
           countOutcome++;
 
-          model.addRow(new Object[] {shortName, title, researchTopicTitle, outcome, showResearchTopic});
+          model.addRow(new Object[] {shortName, title, researchTopicTitle, outcome, showResearchTopic, id});
         }
       }
     }
