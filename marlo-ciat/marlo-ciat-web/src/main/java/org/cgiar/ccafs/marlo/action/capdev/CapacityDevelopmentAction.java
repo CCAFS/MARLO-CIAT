@@ -20,6 +20,7 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -31,23 +32,26 @@ public class CapacityDevelopmentAction extends BaseAction {
    */
   private static final long serialVersionUID = 1L;
 
-  private String test;
+  private CapacityDevelopment capdev;
+
   private List<CapacityDevelopment> capDevs = new ArrayList<CapacityDevelopment>();
-  private List<String> lista = new ArrayList<>();
 
   @Inject
   public CapacityDevelopmentAction(APConfig config) {
     super(config);
-    capDevs.add(new CapacityDevelopment(1, "capDev1", "thesis"));
-    capDevs.add(new CapacityDevelopment(2, "capDev2", "Publication"));
-    capDevs.add(new CapacityDevelopment(3, "capDev3", "Report"));
 
   }
 
 
   @Override
-  public String execute() throws Exception {
+  public String add() {
+
     return SUCCESS;
+  }
+
+
+  public CapacityDevelopment getCapdev() {
+    return capdev;
   }
 
 
@@ -56,33 +60,43 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
-  public List<String> getLista() {
-    return lista;
-  }
-
-
-  public String getTest() {
-    return test;
-  }
-
-
   public String list() {
     return SUCCESS;
   }
 
 
+  @Override
+  public void prepare() throws Exception {
+    final Date initiation = new Date();
+    final Date termination = new Date();
+
+
+    capDevs
+      .add(new CapacityDevelopment(1, "Health, biodiversity and natural resource use in the western amazon lowlands",
+        "thesis", initiation, termination, ""));
+    capDevs.add(new CapacityDevelopment(2, "Caracterización morfológica y citogenética de las pasifloras andinas",
+      "Publication", initiation, termination, ""));
+    capDevs.add(new CapacityDevelopment(3, "Mathematical modeling relevant to the whitefly ipm project", "Report",
+      initiation, termination, "Simone"));
+    capDevs.add(new CapacityDevelopment(4, "Mathematical modeling relevant to the whitefly ipm project", "Report",
+      initiation, termination, "Simone"));
+  }
+
+
+  @Override
+  public String save() {
+    System.out.println("este es el title:" + capdev.getTitle());
+    return super.save();
+  }
+
+
+  public void setCapdev(CapacityDevelopment capdev) {
+    this.capdev = capdev;
+  }
+
+
   public void setCapDevs(List<CapacityDevelopment> capDevs) {
     this.capDevs = capDevs;
-  }
-
-
-  public void setLista(List<String> lista) {
-    this.lista = lista;
-  }
-
-
-  public void setTest(String test) {
-    this.test = test;
   }
 
 
