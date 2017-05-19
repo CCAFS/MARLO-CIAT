@@ -96,7 +96,7 @@
     <div class="form-group"> 
       
       <div class="row">
-        <div class="col-sm-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="limitWords-150" required=true editable=editable /]</div>
+        <div class="col-sm-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="limitWords-50" required=true editable=editable /]</div>
         [#--] 
         [#if editable]
           [@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]
@@ -110,7 +110,7 @@
       </div>
               
       <div class="row">
-        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="programImpact.shortName" className="limitChar-30" required=true editable=editable /]</div>       
+        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="programImpact.shortName" className="limitChar-30" required=false editable=editable /]</div>       
       </div>
             
     </div>

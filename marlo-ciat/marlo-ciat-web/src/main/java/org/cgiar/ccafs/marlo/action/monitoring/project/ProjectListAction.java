@@ -293,7 +293,8 @@ public class ProjectListAction extends BaseAction {
 
       }
 
-      projects = new ArrayList<>(selectedProgram.getProjects());
+      projects =
+        new ArrayList<>(selectedProgram.getProjects().stream().filter(p -> p.isActive()).collect(Collectors.toList()));
 
       String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
       this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));

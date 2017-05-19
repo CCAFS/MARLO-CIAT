@@ -352,9 +352,9 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     // Initialization of Model
     TypedTableModel model = new TypedTableModel(
       new String[] {"shortName", "statement", "research_topic", "program_impact", "target_unit", "target_value",
-        "target_year", "showResearchTopic"},
+        "target_year", "showResearchTopic", "id"},
       new Class[] {String.class, String.class, String.class, String.class, String.class, String.class, String.class,
-        Boolean.class});
+        Boolean.class, Long.class});
 
 
     // Get research topics and then outcomes
@@ -385,6 +385,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
         String targetUnit = "";
         String targetValue = "";
         String targetYear = "";
+        Long id = researchOutcome.getId();
 
         if (researchOutcome.getShortName() != null) {
           shortName = researchOutcome.getShortName();
@@ -430,9 +431,10 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
         if (targetYear.isEmpty()) {
           targetYear = "&lt;Not Defined&gt;";
         }
+
         countOutcome++;
         model.addRow(new Object[] {shortName, statement, researchTopicTitle, programImpact, targetUnit, targetValue,
-          targetYear, showResearchTopic});
+          targetYear, showResearchTopic, id});
       }
 
     }

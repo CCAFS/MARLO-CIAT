@@ -71,7 +71,7 @@
                 [@customForm.input name="deliverable.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
               </div>
           </div>
-          <label>[@s.text name="Supporting document(s)" /]</label>
+          <label for="">Supporting document(s):<span class="red">*</span></label>
           <div class="borderBox documentList" listname="deliverable.documents">
             [#if deliverable.documents?has_content]
               [#list deliverable.documents as document]

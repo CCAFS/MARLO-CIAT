@@ -241,6 +241,20 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         }
       }
 
+      // Verify Project Model
+      if (clazz == Project.class) {
+        Project project = projectService.getProjectById(id);
+
+        List<Deliverable> deliverables =
+          new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
+
+        if (deliverables != null) {
+          if (!deliverables.isEmpty()) {
+            return false;
+          }
+        }
+      }
+
       return true;
     } catch (Exception e) {
       return false;
