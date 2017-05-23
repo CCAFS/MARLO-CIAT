@@ -234,7 +234,7 @@
               </div>
           </div> 
            
-          [#-- Section Buttons & hidden inputs--]
+          [#-- Outputs --]
           <div class="fullPartBlock">      
             <div class="output panel tertiary" listname="project.outputs">
               <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 

@@ -35,6 +35,7 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   @Expose
   private ProjectStatus projectStatus;
 
+
   @Expose
   private Project project;
 
@@ -58,7 +59,6 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   @Expose
   private boolean active;
 
-
   @Expose
   private Date activeSince;
 
@@ -71,11 +71,19 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
   private String modificationJustification;
 
 
+  @Expose
+  private DeliverableCrosscutingTheme deliverableCrosscutingTheme;
+
+  private Set<DeliverableOutput> deliverableOutputs = new HashSet<DeliverableOutput>(0);
+
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
   private Set<DeliverableDocument> deliverableDocuments = new HashSet<DeliverableDocument>(0);
 
   private List<DeliverableDocument> documents;
+
+  private List<DeliverableOutput> outputs;
+
 
   public Deliverable() {
   }
@@ -84,6 +92,7 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.project = project;
     this.active = active;
   }
+
 
   public Deliverable(User modifiedBy, User createdBy, ProjectStatus projectStatus, Project project,
     DeliverableType deliverableType, String name, Date startDate, Date endDate, boolean active, Date activeSince,
@@ -135,8 +144,16 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return dateCreated;
   }
 
+  public DeliverableCrosscutingTheme getDeliverableCrosscutingTheme() {
+    return deliverableCrosscutingTheme;
+  }
+
   public Set<DeliverableDocument> getDeliverableDocuments() {
     return deliverableDocuments;
+  }
+
+  public Set<DeliverableOutput> getDeliverableOutputs() {
+    return deliverableOutputs;
   }
 
   public DeliverableType getDeliverableType() {
@@ -167,17 +184,18 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     return modificationJustification;
   }
 
-
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
 
-
   public String getName() {
     return name;
   }
 
+  public List<DeliverableOutput> getOutputs() {
+    return outputs;
+  }
 
   public Project getProject() {
     return project;
@@ -223,16 +241,27 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
+
 
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
+
+  public void setDeliverableCrosscutingTheme(DeliverableCrosscutingTheme deliverableCrosscutingTheme) {
+    this.deliverableCrosscutingTheme = deliverableCrosscutingTheme;
+  }
+
   public void setDeliverableDocuments(Set<DeliverableDocument> deliverableDocuments) {
     this.deliverableDocuments = deliverableDocuments;
+  }
+
+  public void setDeliverableOutputs(Set<DeliverableOutput> deliverableOutputs) {
+    this.deliverableOutputs = deliverableOutputs;
   }
 
   public void setDeliverableType(DeliverableType deliverableType) {
@@ -251,10 +280,10 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
     this.id = id;
   }
 
-
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
+
 
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
@@ -262,6 +291,10 @@ public class Deliverable implements java.io.Serializable, IAuditLog {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public void setOutputs(List<DeliverableOutput> outputs) {
+    this.outputs = outputs;
   }
 
   public void setProject(Project project) {
