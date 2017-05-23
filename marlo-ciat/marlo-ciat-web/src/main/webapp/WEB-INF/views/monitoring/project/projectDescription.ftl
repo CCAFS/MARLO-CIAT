@@ -1,7 +1,7 @@
 [#ftl]
 [#assign title = "Project Description" /]
 [#assign currentSectionString = "project-${actionName?replace('/','-')}-${projectID}" /]
-[#assign pageLibs = ["select2"] /]
+[#assign pageLibs = ["select2","flat-flags"] /]
 [#assign customJS = ["${baseUrl}/js/global/fieldsValidation.js","${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/monitoring/projects/projectDescription.js","${baseUrl}/js/global/autoSave.js"] /]
 [#assign currentSection = "projects" /]
 [#assign currentStage = "description" /]
@@ -16,6 +16,7 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#-- Search users Interface --]
 [#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
+[#import "/WEB-INF/global/macros/utils.ftl" as utilities /]
 
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
@@ -35,6 +36,9 @@
       <div class="col-md-9">
         [#-- Section Messages --]
         [#--  --include "/WEB-INF/views/projects/messages-projects.ftl" / --]
+        [#-- Projects data information --]
+        [#include "/WEB-INF/views/monitoring/project/dataInfo-projects.ftl" /]
+        <br />
       
         [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
         
@@ -98,6 +102,103 @@
               </div>
             </div>
             <div class="clearfix"></div>
+            
+            [#-- LOCATION INFORMATION --]
+            <h4 class="headTitle col-md-12">Location information</h4> 
+            <div class="col-md-12 informationWrapper simpleBox">
+            [#-- GLOBAL DIMENSION --]
+            [#if editable]
+              <div class="form-group row ">
+                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.global"  editable=editable inverse=false  cssClass="" /] </div>
+              </div>
+              <hr />
+              <div class="form-group row">
+                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
+              </div>
+              [#else]
+              <div class="form-group row ">
+                <div class="col-md-12">
+              [#if project.global]
+                <label for="">[@s.text name="projectDescription.globalDimensionYes" /]</label>
+              [#else]
+                <label for="">[@s.text name="projectDescription.globalDimensionNo" /]</label>
+              [/#if]
+                </div>
+              </div>
+              <hr />
+              <div class="form-group row ">
+              <div class="col-md-12">
+                [#if region]
+                  <label for="">[@s.text name="projectDescription.regionallDimensionYes" /]</label>
+                [#else]
+                  <label for="">[@s.text name="projectDescription.regionallDimensionNo" /]</label>
+                [/#if]
+              </div>
+              </div>
+              [/#if]
+              [#-- REGIONAL SELECT --]
+              <div class="regionsBox form-group row" style="display:${region?string('block','none')}">
+                <div class="panel tertiary col-md-12">
+                 <div class="panel-head">
+                   <label for=""> [@customForm.text name="projectDescription.selectRegions" readText=!editable /]:[@customForm.req required=editable /]</label>
+                   <br />
+                   <small style="color: #337ab7;">(Standart regions are defined by United Nations)</small>
+                 </div>
+                 
+                  <div id="regionList" class="panel-body" listname="fundingSource.fundingRegions"> 
+                    <ul class="list">
+                    [#if project.projectRegions?has_content]
+                      [#list project.projectRegions as region]
+                          <li id="" class="region clearfix col-md-3">
+                          [#if editable ]
+                            <div class="removeRegion removeIcon" title="Remove region"></div>
+                          [/#if]
+                            <input class="id" type="hidden" name="project.projectRegions[${region_index}].id" value="${region.id}" />
+                            <input class="rId" type="hidden" name="project.projectRegions[${region_index}].locElement.id" value="${(region.locElement.id)!}" />
+                            <span class="name">[@utilities.wordCutter string=(region.locElement.name)! maxPos=20 /]</span>
+                            <div class="clearfix"></div>
+                          </li>
+                      [/#list]
+                      [#else]
+                      <p class="emptyText"> [@s.text name="No regions added yet." /]</p> 
+                    [/#if]
+                    </ul>
+                    [#if editable ]
+                      [@customForm.select name="" label=""  showTitle=false  i18nkey="" listName="regionLists" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="regionSelect" editable=editable /]
+                    [/#if] 
+                  </div>
+                </div>
+              </div>
+              
+              [#-- SELECT COUNTRIES --]
+              <div class="form-group row">
+                <div class="panel tertiary col-md-12">
+                 <div class="panel-head"><label for=""> [@customForm.text name="projectDescription.listCountries" readText=!editable /]:</label></div>
+                  <div id="countryList" class="panel-body" listname="fundingSource.fundingCountry"> 
+                    <ul class="list">
+                    [#if project.projectCountries?has_content]
+                      [#list project.projectCountries as country]
+                          <li id="" class="country clearfix col-md-3">
+                          [#if editable ]
+                            <div class="removeCountry removeIcon" title="Remove country"></div>
+                          [/#if]
+                            <input class="id" type="hidden" name="project.projectCountries[${country_index}].id" value="${(country.id)!-1}" />
+                            <input class="cId" type="hidden" name="project.projectCountries[${country_index}].locElement.isoAlpha2" value="${(country.locElement.isoAlpha2)!}" />
+                            <span class="name"><span> <i class="flag-sm flag-sm-${(country.locElement.isoAlpha2)!}"></i> [@utilities.wordCutter string=(country.locElement.name)! maxPos=20 /]</span></span>
+                            <div class="clearfix"></div>
+                          </li>
+                      [/#list]
+                      [#else]
+                      <p class="emptyText"> [@s.text name="No countries added yet." /]</p> 
+                    [/#if]
+                    </ul>
+                    [#if editable ]
+                      [@customForm.select name="" label=""  showTitle=false  i18nkey="" listName="countryLists" keyFieldName="isoAlpha2"  displayFieldName="name"  multiple=false required=true  className="countriesSelect" editable=editable /]
+                    [/#if] 
+                  </div>
+                </div>
+              </div>
+            </div>
               [#-- Select the cross-cutting dimension(s) to this project? --]
               <div class="form-group col-md-12">
                 <label for="">[@customForm.text name="projectDescription.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
@@ -108,16 +209,24 @@
                       <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.gender"    id="gender"    value="true" [#if (project.projectCrosscutingTheme.gender)!false ]checked="checked"[/#if] > Gender</label>
                       <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.youth"    id="youth"    value="true" [#if (project.projectCrosscutingTheme.youth)!false ]checked="checked"[/#if] > Youth</label>
                       <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" [#if (project.projectCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" [#if (project.projectCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
                     [#else]
                       [#if (project.projectCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.genderYouth)!false ]<p class="checked"> Gender and Youth</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.gender)!false ]<p class="checked"> Gender</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.youth)!false ]<p class="checked"> Youth</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]                      
+                    [/#if]
+                  </div>
+                  <div class="col-md-12">
+                    [#if editable]
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" [#if (project.projectCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (project.projectCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > Impact Assessment</label>
+                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" [#if (project.projectCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
+                    [#else]
                       [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
                       [#if (project.projectCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.impactAssessment)!false ]<p class="checked"> Impact Assessment</p>[/#if]
+                      [#if (project.projectCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]                     
                     [/#if]
                   </div>
                 </div>
@@ -125,7 +234,7 @@
               </div>
           </div> 
            
-          [#-- Section Buttons & hidden inputs--]
+          [#-- Outputs --]
           <div class="fullPartBlock">      
             <div class="output panel tertiary" listname="project.outputs">
               <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
@@ -158,6 +267,28 @@
 [@fundingSourceMacro element={} name="project.fundingSources"  index=-1 isTemplate=true /]
 [@outputMacro element={} name="project.outputs"  index=-1 isTemplate=true /]
 [@usersForm.searchUsers/]
+
+[#-- Region element template --]
+<ul style="display:none">
+  <li id="regionTemplate" class="region clearfix col-md-3">
+      <div class="removeRegion removeIcon" title="Remove region"></div>
+      <input class="id" type="hidden" name="project.projectRegions[-1].id" value="" />
+      <input class="rId" type="hidden" name="project.projectRegions[-1].locElement.id" value="" />
+      <span class="name"></span>
+      <div class="clearfix"></div>
+    </li>
+</ul>
+
+[#-- Country element template --]
+<ul style="display:none">
+  <li id="countryTemplate" class="country clearfix col-md-3">
+      <div class="removeCountry removeIcon" title="Remove country"></div>
+      <input class="id" type="hidden" name="project.projectCountries[-1].id" value="" />
+      <input class="cId" type="hidden" name="project.projectCountries[-1].locElement.isoAlpha2" value="" />
+      <span class="name"></span>
+      <div class="clearfix"></div>
+    </li>
+</ul>
   
 [#include "/WEB-INF/global/pages/footer.ftl"]
 

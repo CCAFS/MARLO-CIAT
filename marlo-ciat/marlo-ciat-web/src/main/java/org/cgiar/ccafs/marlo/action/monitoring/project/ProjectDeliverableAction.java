@@ -18,18 +18,25 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.DeliverableCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
+import org.cgiar.ccafs.marlo.data.model.DeliverableOutput;
 import org.cgiar.ccafs.marlo.data.model.DeliverableType;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.IDeliverableCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableDocumentService;
+import org.cgiar.ccafs.marlo.data.service.IDeliverableOutputService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
 import org.cgiar.ccafs.marlo.data.service.IDeliverableTypeService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
@@ -65,6 +72,11 @@ public class ProjectDeliverableAction extends BaseAction {
   private IDeliverableTypeService deliverableTypeService;
 
 
+  private IDeliverableCrosscutingThemeService deliverableCrosscutingService;
+
+  private IDeliverableOutputService deliverableOutputService;
+
+  private IResearchOutputService outputService;
   private IDeliverableDocumentService deliverableDocumentService;
   private ICenterService centerService;
   private IProjectService projectService;
@@ -72,9 +84,9 @@ public class ProjectDeliverableAction extends BaseAction {
   private DeliverableValidator validator;
   private long deliverableID;
   private long projectID;
-
   private long programID;
   private long areaID;
+
   private Project project;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
@@ -83,13 +95,16 @@ public class ProjectDeliverableAction extends BaseAction {
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
   private List<DeliverableType> deliverableTypes;
+  private List<ResearchOutput> outputs;
   private String transaction;
 
   @Inject
   public ProjectDeliverableAction(APConfig config, ICenterService centerService,
     IDeliverableTypeService deliverableTypeService, IDeliverableService deliverableService,
     IProjectService projectService, IDeliverableDocumentService deliverableDocumentService,
-    DeliverableValidator validator, IAuditLogService auditLogService) {
+    DeliverableValidator validator, IDeliverableCrosscutingThemeService deliverableCrosscutingService,
+    IDeliverableOutputService deliverableOutputService, IResearchOutputService outputService,
+    IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
     this.deliverableTypeService = deliverableTypeService;
@@ -98,6 +113,9 @@ public class ProjectDeliverableAction extends BaseAction {
     this.deliverableDocumentService = deliverableDocumentService;
     this.validator = validator;
     this.auditLogService = auditLogService;
+    this.deliverableCrosscutingService = deliverableCrosscutingService;
+    this.deliverableOutputService = deliverableOutputService;
+    this.outputService = outputService;
   }
 
   @Override
@@ -152,8 +170,24 @@ public class ProjectDeliverableAction extends BaseAction {
     return loggedCenter;
   }
 
+  public List<ResearchOutput> getOutputs() {
+    return outputs;
+  }
+
   public long getProgramID() {
     return programID;
+  }
+
+  public void getProgramOutputs() {
+
+    outputs = new ArrayList<>();
+
+    List<ProjectOutput> projectOutputs =
+      new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
+
+    for (ProjectOutput projectOutput : projectOutputs) {
+      outputs.add(projectOutput.getResearchOutput());
+    }
   }
 
   public Project getProject() {
@@ -246,11 +280,45 @@ public class ProjectDeliverableAction extends BaseAction {
 
         deliverable = (Deliverable) autoSaveReader.readFromJson(jReader);
 
+        if (deliverable.getOutputs() != null) {
+          List<DeliverableOutput> outputs = new ArrayList<>();
+          for (DeliverableOutput output : deliverable.getOutputs()) {
+
+            if (output.getId() != null) {
+              DeliverableOutput deliverableOutput = deliverableOutputService.getDeliverableOutputById(output.getId());
+              outputs.add(deliverableOutput);
+
+
+            } else {
+              ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+              DeliverableOutput deliverableOutput = new DeliverableOutput();
+              deliverableOutput.setResearchOutput(researchOutput);
+              deliverableOutput.setDeliverable(deliverableDB);
+              outputs.add(deliverableOutput);
+            }
+
+
+          }
+
+          deliverable.setOutputs(new ArrayList<>(outputs));
+        }
+
         reader.close();
         this.setDraft(true);
 
       } else {
         this.setDraft(false);
+
+        DeliverableCrosscutingTheme deliverableCrosscutingTheme;
+        if (this.isEditable()) {
+          deliverableCrosscutingTheme =
+            deliverableCrosscutingService.getDeliverableCrosscutingThemeById(deliverable.getId());
+        } else {
+          deliverableCrosscutingTheme = deliverable.getDeliverableCrosscutingTheme();
+        }
+
+        deliverable.setDeliverableCrosscutingTheme(deliverableCrosscutingTheme);
+
         deliverable.setDocuments(new ArrayList<>(
           deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
       }
@@ -258,17 +326,35 @@ public class ProjectDeliverableAction extends BaseAction {
 
     }
 
+    this.getProgramOutputs();
+
     String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "",
       projectID + "", deliverableID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DEIVERABLE_BASE_PERMISSION, params));
 
     if (this.isHttpPost()) {
+
+      if (outputs != null) {
+        outputs.clear();
+      }
+
       if (deliverableTypes != null) {
         deliverableTypes.clear();
       }
 
       if (deliverable.getDocuments() != null) {
         deliverable.getDocuments().clear();
+      }
+
+      if (deliverable.getDeliverableCrosscutingTheme() != null) {
+        deliverable.getDeliverableCrosscutingTheme().setPoliciesInstitutions(null);
+        deliverable.getDeliverableCrosscutingTheme().setGender(null);
+        deliverable.getDeliverableCrosscutingTheme().setYouth(null);
+        deliverable.getDeliverableCrosscutingTheme().setClimateChange(null);
+        deliverable.getDeliverableCrosscutingTheme().setCapacityDevelopment(null);
+        deliverable.getDeliverableCrosscutingTheme().setNa(null);
+        deliverable.getDeliverableCrosscutingTheme().setBigData(null);
+        deliverable.getDeliverableCrosscutingTheme().setImpactAssessment(null);
       }
     }
 
@@ -294,6 +380,10 @@ public class ProjectDeliverableAction extends BaseAction {
       long deliverableSaveID = deliverableService.saveDeliverable(deliverableDB);
 
       deliverableDB = deliverableService.getDeliverableById(deliverableSaveID);
+
+      if (deliverable.getDeliverableCrosscutingTheme() != null) {
+        this.saveCrossCuting(deliverableDB);
+      }
 
       this.saveDocuments(deliverableDB);
 
@@ -324,6 +414,32 @@ public class ProjectDeliverableAction extends BaseAction {
     } else {
       return NOT_AUTHORIZED;
     }
+  }
+
+  public void saveCrossCuting(Deliverable deliverableDB) {
+    DeliverableCrosscutingTheme crosscutingTheme = deliverable.getDeliverableCrosscutingTheme();
+
+    DeliverableCrosscutingTheme crosscutingThemeSave = deliverableCrosscutingService
+      .getDeliverableCrosscutingThemeById(deliverableDB.getDeliverableCrosscutingTheme().getId());
+
+    crosscutingThemeSave
+      .setClimateChange(crosscutingTheme.getClimateChange() != null ? crosscutingTheme.getClimateChange() : false);
+    crosscutingThemeSave.setGender(crosscutingTheme.getGender() != null ? crosscutingTheme.getGender() : false);
+    crosscutingThemeSave.setYouth(crosscutingTheme.getYouth() != null ? crosscutingTheme.getYouth() : false);
+    crosscutingThemeSave.setPoliciesInstitutions(
+      crosscutingTheme.getPoliciesInstitutions() != null ? crosscutingTheme.getPoliciesInstitutions() : false);
+    crosscutingThemeSave.setCapacityDevelopment(
+      crosscutingTheme.getCapacityDevelopment() != null ? crosscutingTheme.getCapacityDevelopment() : false);
+    crosscutingThemeSave.setBigData(crosscutingTheme.getBigData() != null ? crosscutingTheme.getBigData() : false);
+    crosscutingThemeSave.setImpactAssessment(
+      crosscutingTheme.getImpactAssessment() != null ? crosscutingTheme.getImpactAssessment() : false);
+    crosscutingThemeSave.setNa(crosscutingTheme.getNa() != null ? crosscutingTheme.getNa() : false);
+
+    crosscutingThemeSave.setDeliverable(deliverableDB);
+
+    deliverableCrosscutingService.saveDeliverableCrosscutingTheme(crosscutingThemeSave);
+
+
   }
 
   public void saveDocuments(Deliverable deliverableDB) {
@@ -393,13 +509,17 @@ public class ProjectDeliverableAction extends BaseAction {
     this.deliverableID = deliverableID;
   }
 
+
   public void setDeliverableTypes(List<DeliverableType> deliverableTypes) {
     this.deliverableTypes = deliverableTypes;
   }
 
-
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
+  }
+
+  public void setOutputs(List<ResearchOutput> outputs) {
+    this.outputs = outputs;
   }
 
   public void setProgramID(long programID) {
@@ -440,6 +560,5 @@ public class ProjectDeliverableAction extends BaseAction {
       validator.validate(this, deliverable, project, selectedProgram, true);
     }
   }
-
 
 }

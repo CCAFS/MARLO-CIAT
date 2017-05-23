@@ -82,6 +82,9 @@
 		<mapping resource="xmls/MonitorignOutcomeEvidences.hbm.xml" />	
 		<mapping resource="xmls/ProjectPartnerPersons.hbm.xml" />
 		<mapping resource="xmls/ProjectPartners.hbm.xml" />	
+		<mapping resource="xmls/ProjectLocations.hbm.xml" />
+		<mapping resource="xmls/DeliverableCrosscutingThemes.hbm.xml" />
+		<mapping resource="xmls/DeliverableOutputs.hbm.xml" />		
 	</session-factory>
 
 </hibernate-configuration>

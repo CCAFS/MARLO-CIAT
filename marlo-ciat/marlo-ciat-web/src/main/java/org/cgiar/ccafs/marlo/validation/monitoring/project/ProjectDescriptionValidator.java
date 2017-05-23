@@ -93,16 +93,17 @@ public class ProjectDescriptionValidator extends BaseValidator {
     if (!this.isValidString(fundingSource.getDonor()) && this.wordCount(fundingSource.getDonor()) <= 100) {
       this.addMessage(
         baseAction.getText("projectDescription.action.fundingSources.fundingSourceType.donor", String.valueOf(i + 1)));
-      baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].fundingSourceType.donor",
+      baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].donor",
         InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (!this.isValidString(fundingSource.getTitle()) && this.wordCount(fundingSource.getTitle()) <= 100) {
-      this.addMessage(
-        baseAction.getText("projectDescription.action.fundingSources.fundingSourceType.title", String.valueOf(i + 1)));
-      baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].fundingSourceType.title",
-        InvalidFieldsMessages.EMPTYFIELD);
-    }
+    // * Title is not required */
+    // if (!this.isValidString(fundingSource.getTitle()) && this.wordCount(fundingSource.getTitle()) <= 100) {
+    // this.addMessage(
+    // baseAction.getText("projectDescription.action.fundingSources.fundingSourceType.title", String.valueOf(i + 1)));
+    // baseAction.getInvalidFields().put("input-project.fundingSources[" + i + "].title",
+    // InvalidFieldsMessages.EMPTYFIELD);
+    // }
 
     if (!this.isValidString(fundingSource.getOcsCode()) && this.wordCount(fundingSource.getOcsCode()) <= 20) {
       this.addMessage(

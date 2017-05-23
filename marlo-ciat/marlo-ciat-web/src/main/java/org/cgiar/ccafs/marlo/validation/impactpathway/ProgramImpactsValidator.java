@@ -136,23 +136,13 @@ public class ProgramImpactsValidator extends BaseValidator {
 
     if (researchImpact.getDescription() != null) {
       if (!this.isValidString(researchImpact.getDescription())
-        && this.wordCount(researchImpact.getDescription()) <= 150) {
+        && this.wordCount(researchImpact.getDescription()) <= 50) {
         this.addMessage(baseAction.getText("programImpact.action.description.required", params));
         baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
       }
     } else {
       this.addMessage(baseAction.getText("programImpact.action.description.required", params));
       baseAction.getInvalidFields().put("input-impacts[" + i + "].description", InvalidFieldsMessages.EMPTYFIELD);
-    }
-
-    if (researchImpact.getShortName() != null) {
-      if (!this.isValidString(researchImpact.getShortName()) && researchImpact.getShortName().length() <= 30) {
-        this.addMessage(baseAction.getText("programImpact.action.shortName.required", params));
-        baseAction.getInvalidFields().put("input-impacts[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
-      }
-    } else {
-      this.addMessage(baseAction.getText("programImpact.action.shortName.required", params));
-      baseAction.getInvalidFields().put("input-impacts[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
     }
 
     if (researchImpact.getObjectiveValue() != null) {

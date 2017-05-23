@@ -97,11 +97,11 @@
     [#-- Research Topic Name --]
     <div class="form-group"> 
       <div class="row">
-        <div class="col-sm-12">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput" required=true editable=editable /]</div>
+        <div class="col-sm-12">[@customForm.input name="${customName}.researchTopic" type="text"  i18nkey="researchTopic.name" className="researchTopicInput limitWords-10" required=true editable=editable /]</div>
       </div>  
       
       <div class="row">
-        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="researchTopic.shortName" className="limitChar-30" required=true editable=editable /]</div>       
+        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="researchTopic.shortName" className="limitChar-30" required=false editable=editable /]</div>       
       </div>    
     </div>
   </div>  

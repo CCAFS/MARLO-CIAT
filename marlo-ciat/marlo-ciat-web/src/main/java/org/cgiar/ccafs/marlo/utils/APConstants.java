@@ -66,6 +66,7 @@ public final class APConstants {
   public static final String NEXT_USER_ID = "nextUserID";
   public static final String PROJECT_ID = "projectID";
   public static final String DELIVERABLE_ID = "deliverableID";
+  public static final String DELIVERABLE_TYPE_ID = "deliverableTypeId";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";
@@ -116,6 +117,9 @@ public final class APConstants {
 
   public static final String PROJECT_OUTPUT_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectOutputs)";
+
+  public static final String PROJECT_LOCATION_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectLocations)";
 
   public static final String PROJECT_PARTNERS_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectPartners)";

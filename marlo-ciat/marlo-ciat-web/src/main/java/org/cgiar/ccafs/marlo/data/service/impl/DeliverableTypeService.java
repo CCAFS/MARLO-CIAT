@@ -72,6 +72,11 @@ public class DeliverableTypeService implements IDeliverableTypeService {
   }
 
   @Override
+  public List<DeliverableType> getSubDeliverableType(Long deliverableId) {
+    return deliverableTypeDAO.getSubDeliverableType(deliverableId);
+  }
+
+  @Override
   public long saveDeliverableType(DeliverableType deliverableType) {
 
     return deliverableTypeDAO.save(deliverableType);
