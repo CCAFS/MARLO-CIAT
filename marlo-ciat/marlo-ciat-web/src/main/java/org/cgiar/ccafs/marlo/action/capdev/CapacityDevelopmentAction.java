@@ -20,7 +20,6 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -35,6 +34,12 @@ public class CapacityDevelopmentAction extends BaseAction {
   private CapacityDevelopment capdev;
 
   private List<CapacityDevelopment> capDevs = new ArrayList<CapacityDevelopment>();
+  private List<String> objectives = new ArrayList<String>();
+  private String objectiveBody;
+
+  private List<String> capDevApproaches = new ArrayList<String>();
+  private String approach;
+  private int capDevID;
 
   @Inject
   public CapacityDevelopmentAction(APConfig config) {
@@ -50,13 +55,38 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
+  public String getApproach() {
+    return approach;
+  }
+
+
   public CapacityDevelopment getCapdev() {
     return capdev;
   }
 
 
+  public List<String> getCapDevApproaches() {
+    return capDevApproaches;
+  }
+
+
+  public int getCapDevID() {
+    return capDevID;
+  }
+
+
   public List<CapacityDevelopment> getCapDevs() {
     return capDevs;
+  }
+
+
+  public String getObjectiveBody() {
+    return objectiveBody;
+  }
+
+
+  public List<String> getObjectives() {
+    return objectives;
   }
 
 
@@ -67,19 +97,16 @@ public class CapacityDevelopmentAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    final Date initiation = new Date();
-    final Date termination = new Date();
 
 
-    capDevs
-      .add(new CapacityDevelopment(1, "Health, biodiversity and natural resource use in the western amazon lowlands",
-        "thesis", initiation, termination, ""));
+    capDevs.add(new CapacityDevelopment(1,
+      "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis"));
     capDevs.add(new CapacityDevelopment(2, "Caracterización morfológica y citogenética de las pasifloras andinas",
-      "Publication", initiation, termination, ""));
-    capDevs.add(new CapacityDevelopment(3, "Mathematical modeling relevant to the whitefly ipm project", "Report",
-      initiation, termination, "Simone"));
-    capDevs.add(new CapacityDevelopment(4, "Mathematical modeling relevant to the whitefly ipm project", "Report",
-      initiation, termination, "Simone"));
+      "Publication"));
+    capDevs.add(new CapacityDevelopment(3, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
+    capDevs.add(new CapacityDevelopment(4, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
+
+
   }
 
 
@@ -90,13 +117,38 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
+  public void setApproach(String approach) {
+    this.approach = approach;
+  }
+
+
   public void setCapdev(CapacityDevelopment capdev) {
     this.capdev = capdev;
   }
 
 
+  public void setCapDevApproaches(List<String> capDevApproaches) {
+    this.capDevApproaches = capDevApproaches;
+  }
+
+
+  public void setCapDevID(int capDevID) {
+    this.capDevID = capDevID;
+  }
+
+
   public void setCapDevs(List<CapacityDevelopment> capDevs) {
     this.capDevs = capDevs;
+  }
+
+
+  public void setObjectiveBody(String objectiveBody) {
+    this.objectiveBody = objectiveBody;
+  }
+
+
+  public void setObjectives(List<String> objectives) {
+    this.objectives = objectives;
   }
 
 

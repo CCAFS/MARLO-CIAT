@@ -34,22 +34,24 @@ public class CapacityDevelopment {
   private String directedBy;
 
 
-  /* minimal constructor */
+  /* Default constructor */
+  public CapacityDevelopment() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
 
-  public CapacityDevelopment(int id, String title, String type, Date initiationDate, Date terminationDate,
-    String contactPerson) {
+
+  /* minimal constructor */
+  public CapacityDevelopment(int id, String title, String type ) {
     super();
     this.id = id;
     this.title = title;
     this.type = type;
-    this.initiationDate = initiationDate;
-    this.terminationDate = terminationDate;
-    this.contactPerson = contactPerson;
+    
   }
 
 
   /* full constructor */
-
   public CapacityDevelopment(int id, String title, String type, Date initiationDate, Date terminationDate,
     String contactPerson, String country, String region, String researchArea, String researchProgram_theme,
     String project, String crp, String directedBy) {

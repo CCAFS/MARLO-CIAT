@@ -76,7 +76,7 @@
 
 .approachesListContainer{
 		margin:1%;
-		border-left: 1px solid #ccc;
+		border-left: 3px solid #ccc;
 		border-bottom: 1px solid #ccc;
 }
 
@@ -92,12 +92,10 @@
 	width: 98%;
 }
 
-.objectivesBox{
-	border-style: solid;
-    border-width: 1px;
-    border-color: #ccc;
-    width: 94%;
-    margin-left: 3%;
+.outComesContainer{
+    margin:1%;
+	border-left: 3px solid #ccc;
+	border-bottom: 1px solid #ccc;
 
 }
 
@@ -128,4 +126,61 @@
 	border-radius: 50%;
 	background-color: #cccccc;
 	width: 1px;
+}
+
+.attachTitle{
+	width: 94%;
+	margin-left:3%;
+	border-bottom: 1px solid #ccc;
+	font-family: Sans-serif;
+	font-weight: 600;
+}
+
+.attachmentContainer{
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #ccc;
+	width: 94%;
+	min-height: 100px;
+	margin-left:3%;
+}
+
+
+.deliverablesTitle{
+	width: 94%;
+	margin-left:3%;
+	border-bottom: 1px solid #ccc;
+	font-family: Sans-serif;
+	font-weight: 600;
+}
+
+.deliverablesContainer{
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #ccc;
+	width: 94%;
+	min-height: 100px;
+	margin-left:3%;
+}
+
+
+.newDeliverableForm{
+	border-style: solid;
+	border-width: 1px;
+	border-color: #ccc;
+}
+
+.supporDocumentsContainer{
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #ccc;
+	
+}
+
+.supportdocumentsList{
+	margin: 1%;
+}
+
+.newDeliverableField{
+		margin: 1%;
 }

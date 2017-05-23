@@ -10,15 +10,45 @@
 			method="list">
 			<result type="freemarker" name="success">/WEB-INF/views/capDev/trainings.ftl
 			</result>
-
 		</action>
 
 		<action name="{center}/addCapdev"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentAction"
 			method="add">
-			<result name="success" type="freemarker">/WEB-INF/views/capDev/newCapdev.ftl
+			<result name="input">/WEB-INF/views/capDev/trainings.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/detailCapdev</param>
+				<param name="projectID">${projectID}</param>
+
 			</result>
 		</action>
+
+		<action name="{center}/detailCapdev"
+			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDescripcionAction">
+			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/detailCapdev</param>
+				<param name="capDevID">${capDevID}</param>
+				<param name="edit">true</param>
+			</result>
+		</action>
+
+
+		<action name="{center}/addDeliverable"
+			class="org.cgiar.ccafs.marlo.action.capdev.CapDevDeliverablesAction">
+			<result name="input">/WEB-INF/views/capDev/newDeliverable.ftl
+			</result>
+			<result type="freemarker" name="success">/WEB-INF/views/capDev/newDeliverable.ftl
+			</result>
+		</action>
+
+
+		
+
+
+
 
 	</package>
 

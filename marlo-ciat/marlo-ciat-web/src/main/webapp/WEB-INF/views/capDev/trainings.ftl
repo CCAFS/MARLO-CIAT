@@ -48,7 +48,7 @@
 						<div class="col-md-1 paintedDot">&nbsp</div>
 						<div class="col-md-5">Has the item</div>
 						<div class="col-md-1 notPaintedDot">&nbsp</div>
-						<div class="col-md-5">Does not has de item</div>
+						<div class="col-md-5">Does not has the item</div>
 					</div>
 					
 				</div>
@@ -81,7 +81,7 @@
 				  [#list capDevs as i]
 					  <tr>
 					    <td>${i.id}</td>
-					    <td>${i.title}</td> 
+					    <td><a  href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']${i.id?c}[/@s.param][/@s.url]">${i.title}</a></td> 
 					    <td>${i.type}</td>
 					    <td>--</td>
 					    <td>--</td>
@@ -107,11 +107,11 @@
 			<div class="col-md-12">
 				
 				<div class="buttons">
-        	<div class="buttons-content">        
-          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev'/]">[@s.text name="Add capacity development" /]</a>
-        	<div class="clearfix"></div>
-        	</div>
-    	</div>
+		        	<div class="buttons-content">        
+			          	<a class="addButton" href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']-1[/@s.param][/@s.url]">[@s.text name="Add capacity development" /]</a>
+			        	<div class="clearfix"></div>
+		        	</div>
+    			</div>
 			</div>
 		</div>
 	 </div>

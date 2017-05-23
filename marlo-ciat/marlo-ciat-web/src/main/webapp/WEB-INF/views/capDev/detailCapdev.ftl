@@ -1,11 +1,13 @@
 [#ftl]
+
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css"] /]
 [#assign customCSS = ["${baseUrl}/css/capDev/capacityDevelopment.css"] /]
 [#assign customJS = ["${baseUrl}/js/capDev/capacityDevelopment.js"] /]
 
-
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
+
+
 
 <script src="${baseUrl}/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="${baseUrl}/js/capDev/capacityDevelopment.js"></script>
@@ -18,7 +20,7 @@
 	
 	
 	
-	[@s.form action="add" method="POST" enctype="multipart/form-data" cssClass=""]
+	[@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
 	
 	<div class="col-md-9 ">
 	
@@ -40,10 +42,10 @@
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 "> 
-				[@customForm.select name="capdev.title"listName="" i18nkey="capdev.form.type"  placeholder="select option..." required=true /]
+				[@customForm.select name="capdev.type" listName="types" i18nkey="capdev.form.type"  placeholder="select option..." required=true /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="capdev.title" i18nkey="capdev.form.contactPerson" type="text"   required=true  /]
+				[@customForm.input name="" i18nkey="capdev.form.contactPerson" type="text"   required=true  /]
 			</div>
 			</div>
 		</div>
@@ -51,10 +53,10 @@
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 ">
-				[@customForm.input name="capdev.title" i18nkey="capdev.form.startDate" type="text"   required=true  /]
+				[@customForm.input name="" i18nkey="capdev.form.startDate" type="text"   /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="capdev.title" i18nkey="capdev.form.endDate" type="text"   required=true  /]
+				[@customForm.input name="" i18nkey="capdev.form.endDate" type="text"   /]
 			</div>
 			</div>
 		</div>
@@ -65,7 +67,7 @@
 				[@customForm.select name="" listName="" i18nkey="capdev.form.country" placeholder="select option..."  /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="capdev.title" i18nkey="capdev.form.region" type="text"     /]
+				[@customForm.input name="" i18nkey="capdev.form.region" type="text"     /]
 			</div>
 			</div>
 		</div>
@@ -93,7 +95,7 @@
 				[@customForm.select name="" listName="" i18nkey="capdev.form.crp" placeholder="select option..."  /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="capdev.title" i18nkey="capdev.form.dictated" type="text"     /]
+				[@customForm.input name="" i18nkey="capdev.form.dictated" type="text"     /]
 			</div>
 			</div>
 		</div>
@@ -113,34 +115,29 @@
                  <p class="text-center inf" style="display:${(capDevApproaches?has_content)?string('none','block')}">[@s.text name="capdev.notDisciplines" /]</p>
 			</div>
 			<div class="col-md-12 newCapdevField">
-				[@customForm.select name="" listName="approaches" i18nkey="capdev.form.selectApproach" className="target" multiple=false placeholder="select option..."  /]
+				[@customForm.select name="" listName="approaches" i18nkey="capdev.form.selectApproach" className="disciplines" multiple=false placeholder="select option..."  /]
 			</div>
 		</div>
-		<!-- Objectives-->
+		<!-- OutComes-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField objectivesTitle">
 				[@s.text name="capdev.form.objectives"][/@s.text]
 			</div>
 		</div>
 		
-		<div class="row objectivesContainer">
-			<div class="col-md-12 newCapdevField objectivesList">
+		<div class="row outComesContainer">
+			<div class="col-md-12 newCapdevField outComesList">
 				
-				[#if objectives?has_content]
-                    [#list objectives as objective]
-                      [@objectiveMacro objective objective_index /]  
+				[#if capDevOutcomes?has_content]
+                    [#list capDevOutcomes as outcome]
+                      [@outComeMacro outcome /]  
                     [/#list]
                  [/#if]
 
-                 <p class="text-center inf" style="display:${(objectives?has_content)?string('none','block')}">[@s.text name="capdev.notObjectives" /]</p>
+                 <p class="text-center inf" style="display:${(capDevOutcomes?has_content)?string('none','block')}">[@s.text name="capdev.notObjectives" /]</p>
 			</div>
-			<div class="col-md-12 newCapdevField addObjectiveButton">
-				<div class="pull-right">
-					<div class="button-green addObjective">
-						<span class="glyphicon glyphicon-plus-sign"></span>
-						[@s.text name="Add an objective" /]
-					</div>
-				</div>
+			<div class="col-md-12 newCapdevField">
+				[@customForm.select name="" listName="outcomes" i18nkey="capdev.form.selectOutcome" className="outComes" multiple=false placeholder="select option..."  /]
 			</div>
 		</div>
 		<!-- participants-->
@@ -165,7 +162,62 @@
 			</div>
 		</div>
 
-		
+		<!-- Deliverables -->
+		<div class="row">
+			<div class="col-md-12 newCapdevField deliverablesTitle">
+				Deliverables
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 newCapdevField deliverablesContainer">
+				[#if deliverables?has_content]
+					[#list deliverables as deliverable]
+
+					[/#list]
+				[/#if]
+
+				<p class="text-center inf" style="display:${(deliverables?has_content)?string('none','block')}">[@s.text name="capdev.notDeliverables" /]</p>
+
+			</div>
+			<div class="col-md-12 newCapdevField">
+				<div class="pull-right">
+					<div class="buttons-content">        
+			          	<a class="addButton" href="[@s.url action='${centerSession}/addDeliverable' ][/@s.url]">[@s.text name="Add deliverable" /]</a>
+			        	<div class="clearfix"></div>
+		        	</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Attachment-->
+		<div class="row">
+			<div class="col-md-12 newCapdevField attachTitle">
+				[@s.text name="Attach Files" /]
+			</div>
+			
+		</div>
+		<div class="row">
+			<div class="col-md-12 newCapdevField attachmentContainer">
+
+			</div>
+
+		</div>
+
+			<div class="col-md-12">
+				<div class="col-md-6">
+					<div class="pull-right">
+						[@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="Save" /] [/@s.submit]
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="pull-left">
+						[@s.submit type="button"  name="cancel" cssClass="button-cancel"]<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> [@s.text name="Cancel" /] [/@s.submit]
+					</div>
+				</div>
+				
+			</div>
 		
 		</div>
 
@@ -179,6 +231,7 @@
 
 [@objectiveMacro element={} index=0 isTemplate=true /] 
 [@disciplineMacro element="" isTemplate=true/]
+[@outComeMacro element="" isTemplate=true/]
 
 [#include "/WEB-INF/global/pages/footer.ftl"]
 
@@ -200,6 +253,16 @@
 [#macro disciplineMacro element isTemplate=false]
 	<div id="approach-${isTemplate?string('template',(element)!)}" class="approach  borderBox col-md-4 " style="display:${isTemplate?string('none','block')}" >
 		<div class="removeDiscipline removeIcon" title="Remove approach"></div>
+		<div class="col-md-4">
+			 [@s.text name="element" /]
+		</div>
+	</div>
+[/#macro]
+
+
+[#macro outComeMacro element isTemplate=false]
+	<div id="outcome-${isTemplate?string('template',(element)!)}" class="outcome  borderBox col-md-4 " style="display:${isTemplate?string('none','block')}" >
+		<div class="removeOutCome removeIcon" title="Remove outcome"></div>
 		<div class="col-md-4">
 			 [@s.text name="element" /]
 		</div>

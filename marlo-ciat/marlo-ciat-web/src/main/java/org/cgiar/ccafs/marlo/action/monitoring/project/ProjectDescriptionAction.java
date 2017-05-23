@@ -69,19 +69,19 @@ public class ProjectDescriptionAction extends BaseAction {
   private static final long serialVersionUID = 3034101967516313023L;
 
 
-  private ICenterService centerService;
+  private final ICenterService centerService;
 
-  private IProjectService projectService;
+  private final IProjectService projectService;
 
 
-  private IUserService userService;
-  private IResearchOutputService outputService;
-  private IFundingSourceTypeService fundingSourceService;
-  private IProjectOutputService projectOutputService;
-  private IProjectFundingSourceService projectFundingSourceService;
-  private IProjectCrosscutingThemeService projectCrosscutingThemeService;
-  private IAuditLogService auditLogService;
-  private ProjectDescriptionValidator validator;
+  private final IUserService userService;
+  private final IResearchOutputService outputService;
+  private final IFundingSourceTypeService fundingSourceService;
+  private final IProjectOutputService projectOutputService;
+  private final IProjectFundingSourceService projectFundingSourceService;
+  private final IProjectCrosscutingThemeService projectCrosscutingThemeService;
+  private final IAuditLogService auditLogService;
+  private final ProjectDescriptionValidator validator;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
   private ResearchCenter loggedCenter;
@@ -118,17 +118,17 @@ public class ProjectDescriptionAction extends BaseAction {
   @Override
   public String cancel() {
 
-    Path path = this.getAutoSaveFilePath();
+    final Path path = this.getAutoSaveFilePath();
 
     if (path.toFile().exists()) {
 
-      boolean fileDeleted = path.toFile().delete();
+      final boolean fileDeleted = path.toFile().delete();
     }
 
     this.setDraft(false);
     Collection<String> messages = this.getActionMessages();
     if (!messages.isEmpty()) {
-      String validationMessage = messages.iterator().next();
+      final String validationMessage = messages.iterator().next();
       this.setActionMessages(null);
       this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
     } else {
@@ -144,9 +144,9 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   private Path getAutoSaveFilePath() {
-    String composedClassName = project.getClass().getSimpleName();
-    String actionFile = this.getActionName().replace("/", "_");
-    String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+    final String composedClassName = project.getClass().getSimpleName();
+    final String actionFile = this.getActionName().replace("/", "_");
+    final String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
@@ -164,7 +164,7 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   private String getPI() {
-    List<ResearchLeader> leaders = new ArrayList<>(
+    final List<ResearchLeader> leaders = new ArrayList<>(
       selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
     return leaders.get(0).getUser().getComposedCompleteName();
   }
@@ -181,16 +181,16 @@ public class ProjectDescriptionAction extends BaseAction {
 
     outputs = new ArrayList<>();
 
-    List<ResearchTopic> researchTopics = new ArrayList<>(
+    final List<ResearchTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
     principalInvestigator = this.getPI();
-    for (ResearchTopic researchTopic : researchTopics) {
-      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+    for (final ResearchTopic researchTopic : researchTopics) {
+      final List<ResearchOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      for (ResearchOutcome researchOutcome : researchOutcomes) {
-        List<ResearchOutput> researchOutputs = new ArrayList<>(
+      for (final ResearchOutcome researchOutcome : researchOutcomes) {
+        final List<ResearchOutput> researchOutputs = new ArrayList<>(
           researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-        for (ResearchOutput researchOutput : researchOutputs) {
+        for (final ResearchOutput researchOutput : researchOutputs) {
           outputs.add(researchOutput);
         }
       }
@@ -239,14 +239,14 @@ public class ProjectDescriptionAction extends BaseAction {
 
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
-    } catch (Exception e) {
+    } catch (final Exception e) {
       projectID = -1;
     }
 
     if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
       transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-      Project history = (Project) auditLogService.getHistory(transaction);
+      final Project history = (Project) auditLogService.getHistory(transaction);
 
       if (history != null) {
         project = history;
@@ -262,7 +262,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
     if (project != null) {
 
-      Project ProjectDB = projectService.getProjectById(projectID);
+      final Project ProjectDB = projectService.getProjectById(projectID);
       selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
@@ -270,39 +270,40 @@ public class ProjectDescriptionAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-      Path path = this.getAutoSaveFilePath();
+      final Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
-        Gson gson = new GsonBuilder().create();
-        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
-        AutoSaveReader autoSaveReader = new AutoSaveReader();
+        final Gson gson = new GsonBuilder().create();
+        final JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        final AutoSaveReader autoSaveReader = new AutoSaveReader();
 
         project = (Project) autoSaveReader.readFromJson(jReader);
-        Project projectDB = projectService.getProjectById(project.getId());
+        final Project projectDB = projectService.getProjectById(project.getId());
 
         if (project.getProjectLeader() != null) {
           if (project.getProjectLeader().getId() != null) {
-            if (project.getProjectLeader().getId() != null || project.getProjectLeader().getId() != -1) {
-              User user = userService.getUser(project.getProjectLeader().getId());
+            if ((project.getProjectLeader().getId() != null) || (project.getProjectLeader().getId() != -1)) {
+              final User user = userService.getUser(project.getProjectLeader().getId());
               project.setProjectLeader(user);
             }
           }
         }
 
         if (project.getOutputs() != null) {
-          List<ProjectOutput> outputs = new ArrayList<>();
-          for (ProjectOutput output : project.getOutputs()) {
+          final List<ProjectOutput> outputs = new ArrayList<>();
+          for (final ProjectOutput output : project.getOutputs()) {
 
             if (output.getId() != null) {
-              ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
+              final ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
               outputs.add(projectOutput);
 
 
             } else {
-              ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
-              ProjectOutput projectOutput = new ProjectOutput();
+              final ResearchOutput researchOutput =
+                outputService.getResearchOutputById(output.getResearchOutput().getId());
+              final ProjectOutput projectOutput = new ProjectOutput();
               projectOutput.setResearchOutput(researchOutput);
               projectOutput.setProject(projectDB);
               outputs.add(projectOutput);
@@ -343,7 +344,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
     }
 
-    String params[] =
+    final String params[] =
       {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DESCRIPTION_BASE_PERMISSION, params));
 
@@ -391,11 +392,11 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setEndDate(project.getEndDate());
 
       if (project.getProjectLeader().getId() != null) {
-        User projectLeader = userService.getUser(project.getProjectLeader().getId());
+        final User projectLeader = userService.getUser(project.getProjectLeader().getId());
         projectDB.setProjectLeader(projectLeader);
       }
 
-      long projectSaveID = projectService.saveProject(projectDB);
+      final long projectSaveID = projectService.saveProject(projectDB);
 
       projectDB = projectService.getProjectById(projectSaveID);
 
@@ -406,7 +407,7 @@ public class ProjectDescriptionAction extends BaseAction {
       this.saveFundingSources(projectDB);
       this.saveOutputs(projectDB);
 
-      List<String> relationsName = new ArrayList<>();
+      final List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.PROJECT_FUNDING_SOURCE_RELATION);
       relationsName.add(APConstants.PROJECT_OUTPUT_RELATION);
       project = projectService.getProjectById(projectID);
@@ -414,7 +415,7 @@ public class ProjectDescriptionAction extends BaseAction {
       project.setModifiedBy(this.getCurrentUser());
       projectService.saveProject(project, this.getActionName(), relationsName);
 
-      Path path = this.getAutoSaveFilePath();
+      final Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
         path.toFile().delete();
@@ -423,8 +424,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
-        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
-        for (String key : keys) {
+        final List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (final String key : keys) {
           this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
         }
       } else {
@@ -439,9 +440,9 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   public void saveCrossCuting(Project projectDB) {
-    ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
+    final ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
-    ProjectCrosscutingTheme crosscutingThemeSave =
+    final ProjectCrosscutingTheme crosscutingThemeSave =
       projectCrosscutingThemeService.getProjectCrosscutingThemeById(projectDB.getProjectCrosscutingTheme().getId());
 
     crosscutingThemeSave
@@ -464,11 +465,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void saveFundingSources(Project projectDB) {
 
-    if (projectDB.getProjectFundingSources() != null && projectDB.getProjectFundingSources().size() > 0) {
-      List<ProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
+    if ((projectDB.getProjectFundingSources() != null) && (projectDB.getProjectFundingSources().size() > 0)) {
+      final List<ProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
         projectDB.getProjectFundingSources().stream().filter(pfs -> pfs.isActive()).collect(Collectors.toList()));
 
-      for (ProjectFundingSource projectFundingSource : fundingSourcesPrew) {
+      for (final ProjectFundingSource projectFundingSource : fundingSourcesPrew) {
         if (!project.getFundingSources().contains(projectFundingSource)) {
           projectFundingSourceService.deleteProjectFundingSource(projectFundingSource.getId());
         }
@@ -477,14 +478,14 @@ public class ProjectDescriptionAction extends BaseAction {
 
     if (project.getFundingSources() != null) {
 
-      for (ProjectFundingSource projectFundingSource : project.getFundingSources()) {
-        if (projectFundingSource.getId() == null || projectFundingSource.getId() == -1) {
+      for (final ProjectFundingSource projectFundingSource : project.getFundingSources()) {
+        if ((projectFundingSource.getId() == null) || (projectFundingSource.getId() == -1)) {
 
-          ProjectFundingSource fundingSourceSave = new ProjectFundingSource();
+          final ProjectFundingSource fundingSourceSave = new ProjectFundingSource();
 
-          FundingSourceType fundingSourceType =
+          final FundingSourceType fundingSourceType =
             fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
-          Project project = projectService.getProjectById(projectID);
+          final Project project = projectService.getProjectById(projectID);
 
           fundingSourceSave.setProject(project);
           fundingSourceSave.setFundingSourceType(fundingSourceType);
@@ -504,12 +505,12 @@ public class ProjectDescriptionAction extends BaseAction {
 
         } else {
           boolean hasChanges = false;
-          ProjectFundingSource fundingSourcePrew =
+          final ProjectFundingSource fundingSourcePrew =
             projectFundingSourceService.getProjectFundingSourceById(projectFundingSource.getId());
 
           if (!fundingSourcePrew.getFundingSourceType().equals(projectFundingSource.getFundingSourceType())) {
             hasChanges = true;
-            FundingSourceType fundingSourceType =
+            final FundingSourceType fundingSourceType =
               fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
             fundingSourcePrew.setFundingSourceType(fundingSourceType);
           }
@@ -535,11 +536,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void saveOutputs(Project projectDB) {
 
-    if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
-      List<ProjectOutput> outputsPrew = new ArrayList<>(
+    if ((projectDB.getProjectOutputs() != null) && (projectDB.getProjectOutputs().size() > 0)) {
+      final List<ProjectOutput> outputsPrew = new ArrayList<>(
         projectDB.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
 
-      for (ProjectOutput output : outputsPrew) {
+      for (final ProjectOutput output : outputsPrew) {
         if (!project.getOutputs().contains(output)) {
           projectOutputService.deleteProjectOutput(output.getId());
         }
@@ -547,12 +548,12 @@ public class ProjectDescriptionAction extends BaseAction {
     }
 
     if (project.getOutputs() != null) {
-      for (ProjectOutput output : project.getOutputs()) {
-        if (output.getId() == null || output.getId() == -1) {
-          ProjectOutput outputSave = new ProjectOutput();
+      for (final ProjectOutput output : project.getOutputs()) {
+        if ((output.getId() == null) || (output.getId() == -1)) {
+          final ProjectOutput outputSave = new ProjectOutput();
 
-          ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
-          Project project = projectService.getProjectById(projectID);
+          final ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+          final Project project = projectService.getProjectById(projectID);
 
           outputSave.setProject(project);
           outputSave.setResearchOutput(researchOutput);
