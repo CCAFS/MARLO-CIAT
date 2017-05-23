@@ -10,6 +10,7 @@
         <th id="projectLeader">[@s.text name="projectsList.projectLeader" /]</th>
         <th id="projectStartDate">[@s.text name="projectsList.startDate" /]</th>
         <th id="projectEndDate">[@s.text name="projectsList.endDate" /]</th>
+        <th id="projectDelete">[@s.text name="projectsList.delete" /]</th>
       </tr>
     </thead>
     <tbody>
@@ -56,6 +57,16 @@
           <td>
            [#if project.endDate?has_content]${(project.endDateFormat)!""}[#else][@s.text name="projectsList.none" /][/#if]
           </td>
+          [#-- Delete project--]
+          <td class="text-center">
+            [#if canEdit && action.canBeDeleted(project.id, project.class.name)!false]
+              <a id="removeProject-${project.id}" class="removeProject" href="#" title="">
+                <img src="${baseUrl}/images/global/trash.png" title="[@s.text name="projectsList.removeProject" /]" /> 
+              </a>
+            [#else]
+              <img src="${baseUrl}/images/global/trash_disable.png" title="[@s.text name="projectsList.cannotDelete" /]" />
+            [/#if]
+          </td> 
         </tr>  
       [/#list]
     [/#if]

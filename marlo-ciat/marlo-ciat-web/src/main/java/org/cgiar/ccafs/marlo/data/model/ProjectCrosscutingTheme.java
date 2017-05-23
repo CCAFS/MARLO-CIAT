@@ -43,8 +43,10 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
   @Expose
   private Boolean youth;
 
+
   @Expose
   private Boolean policiesInstitutions;
+
 
   @Expose
   private Boolean capacityDevelopment;
@@ -60,6 +62,9 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
 
   @Expose
   private Date activeSince;
+
+  @Expose
+  private Boolean impactAssessment;
 
   @Expose
   private String modificationJustification;
@@ -101,11 +106,9 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     return capacityDevelopment;
   }
 
-
   public Boolean getClimateChange() {
     return climateChange;
   }
-
 
   public User getCreatedBy() {
     return createdBy;
@@ -120,6 +123,11 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
   @Override
   public Long getId() {
     return id;
+  }
+
+
+  public Boolean getImpactAssessment() {
+    return impactAssessment;
   }
 
 
@@ -161,6 +169,7 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
     return youth;
   }
 
+
   @Override
   public boolean isActive() {
     return active;
@@ -196,6 +205,10 @@ public class ProjectCrosscutingTheme implements java.io.Serializable, IAuditLog 
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public void setImpactAssessment(Boolean impactAssessment) {
+    this.impactAssessment = impactAssessment;
   }
 
   public void setModificationJustification(String modificationJustification) {

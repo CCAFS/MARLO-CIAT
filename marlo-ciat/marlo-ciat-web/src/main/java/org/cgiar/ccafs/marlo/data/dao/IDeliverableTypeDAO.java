@@ -57,7 +57,6 @@ public interface IDeliverableTypeDAO {
    */
   public List<DeliverableType> findAll();
 
-
   /**
    * This method gets a list of deliverableTypes belongs of the user
    * 
@@ -65,6 +64,15 @@ public interface IDeliverableTypeDAO {
    * @return List of DeliverableTypes or null if the user is invalid or not have roles.
    */
   public List<DeliverableType> getDeliverableTypesByUserId(long userId);
+
+
+  /**
+   * This method gets a list of SubdeliverableType
+   * 
+   * @param deliverableId is the deliverableType identifier.
+   * @return a list from DeliverableType (SubType) null if no exist records
+   */
+  public List<DeliverableType> getSubDeliverableType(Long deliverableId);
 
   /**
    * This method saves the information of the given deliverableType

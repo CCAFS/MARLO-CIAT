@@ -51,6 +51,9 @@
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
 		</property>
+		<property name="global" type="boolean">
+      <column name="is_global" not-null="true" />
+    </property>
 		<property name="activeSince" type="timestamp">
 			<column name="active_since" length="19" />
 		</property>
@@ -101,6 +104,13 @@
         <column name="project_id" not-null="true" />
       </key>
       <one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
+    </set>
+    <set name="projectLocations" table="submissions" inverse="true"
+      lazy="true" fetch="select">
+      <key>
+        <column name="project_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ProjectLocation" />
     </set>
 	</class>
 </hibernate-mapping>

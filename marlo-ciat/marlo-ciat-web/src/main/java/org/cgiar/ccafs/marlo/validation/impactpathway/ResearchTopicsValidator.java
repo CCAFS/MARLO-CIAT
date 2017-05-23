@@ -93,23 +93,13 @@ public class ResearchTopicsValidator extends BaseValidator {
 
     if (researchTopic.getResearchTopic() != null) {
       if (!this.isValidString(researchTopic.getResearchTopic())
-        && this.wordCount(researchTopic.getResearchTopic()) <= 150) {
+        && this.wordCount(researchTopic.getResearchTopic()) <= 10) {
         this.addMessage(baseAction.getText("researchTopic.action.description.required", params));
         baseAction.getInvalidFields().put("input-topics[" + i + "].researchTopic", InvalidFieldsMessages.EMPTYFIELD);
       }
     } else {
       this.addMessage(baseAction.getText("researchTopic.action.description.required", params));
       baseAction.getInvalidFields().put("input-topics[" + i + "].researchTopic", InvalidFieldsMessages.EMPTYFIELD);
-    }
-
-    if (researchTopic.getShortName() != null) {
-      if (!this.isValidString(researchTopic.getShortName()) && researchTopic.getShortName().length() <= 30) {
-        this.addMessage(baseAction.getText("researchTopic.action.shortName.required", params));
-        baseAction.getInvalidFields().put("input-topics[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
-      }
-    } else {
-      this.addMessage(baseAction.getText("researchTopic.action.shortName.required", params));
-      baseAction.getInvalidFields().put("input-topics[" + i + "].shortName", InvalidFieldsMessages.EMPTYFIELD);
     }
 
   }
