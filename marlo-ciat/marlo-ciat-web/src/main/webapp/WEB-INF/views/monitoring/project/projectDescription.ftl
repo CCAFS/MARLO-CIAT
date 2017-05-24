@@ -161,7 +161,7 @@
               <hr />
               <div class="form-group row ">
               <div class="col-md-12">
-                [#if region]
+                [#if project.region]
                   <label for="">[@s.text name="projectDescription.regionallDimensionYes" /]</label>
                 [#else]
                   <label for="">[@s.text name="projectDescription.regionallDimensionNo" /]</label>
@@ -206,7 +206,7 @@
               [#-- SELECT COUNTRIES --]
               <div class="form-group row">
                 <div class="panel tertiary col-md-12">
-                 <div class="panel-head"><label for=""> [@customForm.text name="projectDescription.listCountries" readText=!editable /]:</label></div>
+                 <div class="panel-head"><label for=""> [@customForm.text name="projectDescription.listCountries" readText=!editable /]:[@customForm.req required=editable/]</label></div>
                   <div id="countryList" class="panel-body" listname="project.countries"> 
                     <ul class="list">
                     [#if project.projectCountries?has_content]

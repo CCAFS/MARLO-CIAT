@@ -104,7 +104,7 @@
               [@milestoneMacro milestone=milestone name="${outcomeCustomName}.milestones" index=milestone_index /]
             [/#list]
           [#else]
-            <p class="message text-center">[@s.text name="outcome.milestones.emptyMessage"/]</p>
+            [@milestoneMacro milestone={} name="${outcomeCustomName}.milestones" index=0 /]          
           [/#if]
           </div>
           [#-- Add Milestone Button --]
