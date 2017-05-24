@@ -287,9 +287,9 @@
                   <select name="" class="outputSelect">
                     <option value="-1">Select an option...</option>
                     [#list outputs as output]
-                      <optgroup  label="${(output.outcome.name)!}">
+                      <optgroup  label="${(output.outcome.description)!}">
                         [#list output.outputs as op]
-                          <option value="${(op.id)!}">${(op.name)!}</option>
+                          <option value="${(op.id)!}">${(op.title)!}</option>
                         [/#list]
                       </optgroup>
                     [/#list]
