@@ -115,7 +115,7 @@
             </div>
             [#-- Total Amount --]
             <div class="col-md-12">
-              [@customForm.input name="project.totalAmount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
+              [@customForm.input name="project.totalAmount" className="amount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
             </div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
