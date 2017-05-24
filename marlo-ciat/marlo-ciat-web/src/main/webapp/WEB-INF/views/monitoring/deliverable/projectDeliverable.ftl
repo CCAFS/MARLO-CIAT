@@ -61,6 +61,7 @@
                 [@customForm.select name="deliverable.deliverableType.deliverableType.id" label=""  i18nkey="deliverable.type" listName="deliverableTypeParent" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect" editable=editable/]
               </div>
               <div class="col-md-6">
+                <div class="loading subtype" style="display:none"></div>
                 [@customForm.select name="deliverable.deliverableType.id" label=""  i18nkey="deliverable.subType" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="subTypeSelect" editable=editable/]
               </div>
               
