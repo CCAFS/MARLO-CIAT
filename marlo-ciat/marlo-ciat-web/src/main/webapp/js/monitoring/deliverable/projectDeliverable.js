@@ -19,6 +19,9 @@ function init() {
 
   $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
+
+  // Change deliverable type
+  $(".typeSelect").on("change", changeDeliverableType);
 }
 
 /** FUNCTIONS documents * */
@@ -201,4 +204,8 @@ function date(start,end) {
 
     return date;
   }
+}
+
+function changeDeliverableType() {
+  console.log($(this).val());
 }
