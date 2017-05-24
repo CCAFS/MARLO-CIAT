@@ -120,7 +120,8 @@
             [#-- Funding source --]
             <div class="form-group col-md-12">
               <div class="">
-                <label>[@s.text name="projectDescription.fundingSource" /]</label>
+                <h4 class="headTitle col-md-12">Funding Source(s)</h4> 
+                <div class="col-md-12 informationWrapper simpleBox">
                 <div class="borderBox fundingSourceList" listname="project.fundingSources">
                   [#if project.fundingSources?has_content]
                     [#list project.fundingSources as fundingSource]

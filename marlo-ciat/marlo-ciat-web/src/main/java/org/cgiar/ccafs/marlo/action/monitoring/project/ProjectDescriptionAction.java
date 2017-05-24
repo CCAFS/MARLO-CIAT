@@ -524,6 +524,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
       projectDB.setName(project.getName());
       projectDB.setShortName(project.getShortName());
+      projectDB.setOcsCode(project.getOcsCode());
 
       projectDB.setStartDate(project.getStartDate());
       projectDB.setEndDate(project.getEndDate());
