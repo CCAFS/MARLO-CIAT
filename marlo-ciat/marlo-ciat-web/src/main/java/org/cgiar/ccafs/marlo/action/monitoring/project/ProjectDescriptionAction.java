@@ -594,17 +594,12 @@ public class ProjectDescriptionAction extends BaseAction {
 
           fundingSourceSave.setProject(project);
           fundingSourceSave.setFundingSourceType(fundingSourceType);
-          fundingSourceSave.setDonor(projectFundingSource.getDonor());
           fundingSourceSave.setTitle(projectFundingSource.getTitle());
-          fundingSourceSave.setOcsCode(projectFundingSource.getOcsCode());
           fundingSourceSave.setActive(true);
           fundingSourceSave.setActiveSince(new Date());
           fundingSourceSave.setCreatedBy(this.getCurrentUser());
           fundingSourceSave.setModifiedBy(this.getCurrentUser());
           fundingSourceSave.setModificationJustification("");
-
-          // TODO when be to implement the OCS service
-          fundingSourceSave.setSync(false);
 
           projectFundingSourceService.saveProjectFundingSource(fundingSourceSave);
 
@@ -618,11 +613,6 @@ public class ProjectDescriptionAction extends BaseAction {
             FundingSourceType fundingSourceType =
               fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
             fundingSourcePrew.setFundingSourceType(fundingSourceType);
-          }
-
-          if (!fundingSourcePrew.getDonor().equals(projectFundingSource.getDonor())) {
-            hasChanges = true;
-            fundingSourcePrew.setDonor(projectFundingSource.getDonor());
           }
 
           if (hasChanges) {

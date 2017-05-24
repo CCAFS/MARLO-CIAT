@@ -50,29 +50,47 @@
         </div>
           
           <h3 class="headTitle">[@s.text name="projectDescription.title" /]</h3>  
-          <div id="projectDescription" class="borderBox">
+          <div id="projectDescription" class="borderBox">            
+            <div class="form-group row">  
+            [#-- OCS code --]
+            <div class="col-md-6">
+              [@customForm.input name="project.ocsCode" i18nkey="projectDescription.ocsCode" type="text" disabled=!editable  required=true editable=editable /]
+            </div> 
+            <div class="col-md-2">
+              <br />
+              [#if editable]<div id="fillMetadata" class="checkButtonDisable" style="display:block;">[@s.text name="projectDescription.sync" /]</div>[/#if]
+            </div>
+            [#-- Principal Investigator --]
+            <div class="col-md-4">
+              [@customForm.input name="principalInvestigator" i18nkey="projectDescription.pl" type="text" disabled=!editable  required=true editable=false /]
+            </div>   
+            </div>
             [#-- Project Title --]
             <div class="form-group">
               [@customForm.textArea name="project.name" i18nkey="projectDescription.name" required=true className="project-title" editable=editable && action.hasPermission("title") /]
+            </div>
+            [#-- Project Description --]
+            <div class="form-group">
+              [@customForm.textArea name="project.description" i18nkey="projectDescription.description" required=true className="project-title" editable=editable && action.hasPermission("title") /]
             </div>
             <div class="form-group row">  
             [#-- Short name --]
               <div class="col-md-6">
                 [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
-              </div>  
-              [#-- Principal Investigator --]
-              <div class="col-md-6">
-                [@customForm.input name="principalInvestigator" i18nkey="projectDescription.pl" type="text" disabled=!editable  required=true editable=false /]
-              </div>               
+              </div>                            
             </div>
             <div class="form-group row">  
               [#-- Start Date --]
-              <div class="col-md-6">
+              <div class="col-md-4">
                 [@customForm.input name="project.startDate" i18nkey="projectDescription.startDate" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               [#-- End Date --]
-              <div class="col-md-6">
+              <div class="col-md-4">
                 [@customForm.input name="project.endDate" i18nkey="projectDescription.endDate" type="text" disabled=!editable required=false editable=editable /]
+              </div>
+              [#-- Extension Date --]
+              <div class="col-md-4">
+                [@customForm.input name="project.extensionDate" i18nkey="projectDescription.extensionDate" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
             <div class="form-group row">
@@ -84,6 +102,18 @@
               [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
             </div>
             <div class="clearfix"></div>
+            [#-- Original Donor --]
+            <div class="form-group">
+              [@customForm.input name="project.originalDonor" i18nkey="projectDescription.originalDonor" type="text" required=true className="project-title" editable=editable/]
+            </div>
+            [#-- Customer Donor --]
+            <div class="form-group">
+              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=true className="project-title" editable=editable/]
+            </div>
+            [#-- Total Amount --]
+            <div class="form-group">
+              [@customForm.input name="project.totalAmount" i18nkey="projectDescription.totalAmount" type="text" required=true className="project-title" editable=editable/]
+            </div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
               <div class="">
@@ -300,11 +330,7 @@
     <input class="id" type="hidden" name="${fundingSourceCustomName}.id" value="${(element.id)!-1}" />
     <div class="col-md-4">
       [@customForm.input name="${fundingSourceCustomName}.ocsCode" i18nkey="OCS code" type="text" disabled=!editable required=false editable=editable /]
-    </div>
-    <div class="col-md-2">
-      <br />
-      [#if editable]<div id="fillMetadata" class="checkButtonDisable" style="display:block;">[@s.text name="projectDescription.sync" /]</div>[/#if]
-    </div>
+    </div>    
     <div class="col-md-12">
       [@customForm.input name="${fundingSourceCustomName}.title" i18nkey="Title" type="text" disabled=!editable required=false editable=editable /]
     </div>

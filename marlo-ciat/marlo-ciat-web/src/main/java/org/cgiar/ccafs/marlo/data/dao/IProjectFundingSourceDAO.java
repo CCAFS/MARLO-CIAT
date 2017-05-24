@@ -62,7 +62,7 @@ public interface IProjectFundingSourceDAO {
    * This method gets a list of projectFundingSources belongs of the user
    * 
    * @param userId - the user id
-   * @return List of ProjectFundingSources or null if the user is invalid or not have roles.
+   * @return List of ProjectFundingSource or null if the user is invalid or not have roles.
    */
   public List<ProjectFundingSource> getProjectFundingSourcesByUserId(long userId);
 
