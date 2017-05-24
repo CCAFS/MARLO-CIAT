@@ -129,9 +129,11 @@
                   [/#if]
                   <p class="text-center inf" style="display:${(project.fundingSources?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
                 </div>
+                [#if editable]
                 <div class="text-right">
                   <div class="button-green addFundingSource"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a funding source" /]</div>
                 </div>
+                [/#if]
               </div>
             </div>
             <div class="clearfix"></div>
