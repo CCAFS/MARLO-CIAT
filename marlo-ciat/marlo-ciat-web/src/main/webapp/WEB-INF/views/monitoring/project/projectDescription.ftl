@@ -178,7 +178,7 @@
                    <small style="color: #337ab7;">(Standart regions are defined by United Nations)</small>
                  </div>
                  
-                  <div id="regionList" class="panel-body" listname="fundingSource.fundingRegions"> 
+                  <div id="regionList" class="panel-body" listname="project.regions"> 
                     <ul class="list">
                     [#if project.projectRegions?has_content]
                       [#list project.projectRegions as region]
@@ -207,7 +207,7 @@
               <div class="form-group row">
                 <div class="panel tertiary col-md-12">
                  <div class="panel-head"><label for=""> [@customForm.text name="projectDescription.listCountries" readText=!editable /]:</label></div>
-                  <div id="countryList" class="panel-body" listname="fundingSource.fundingCountry"> 
+                  <div id="countryList" class="panel-body" listname="project.countries"> 
                     <ul class="list">
                     [#if project.projectCountries?has_content]
                       [#list project.projectCountries as country]

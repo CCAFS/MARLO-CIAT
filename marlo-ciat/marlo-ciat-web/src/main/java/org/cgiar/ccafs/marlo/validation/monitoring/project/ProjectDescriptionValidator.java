@@ -95,14 +95,60 @@ public class ProjectDescriptionValidator extends BaseValidator {
 
   public void validateProjectDescription(BaseAction baseAction, Project project) {
 
-    if (!this.isValidString(project.getName()) && this.wordCount(project.getName()) <= 150) {
+    if (!this.isValidString(project.getOcsCode()) && this.wordCount(project.getOcsCode()) <= 15) {
+      this.addMessage(baseAction.getText("projectDescription.action.ocsCode"));
+      baseAction.getInvalidFields().put("input-project.ocsCode", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (!this.isValidString(project.getName()) && this.wordCount(project.getName()) <= 50) {
       this.addMessage(baseAction.getText("projectDescription.action.title"));
       baseAction.getInvalidFields().put("input-project.name", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (!this.isValidString(project.getShortName()) && this.wordCount(project.getShortName()) <= 50) {
+    if (!this.isValidString(project.getDescription()) && this.wordCount(project.getDescription()) <= 50) {
+      this.addMessage(baseAction.getText("projectDescription.action.description"));
+      baseAction.getInvalidFields().put("input-project.description", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (!this.isValidString(project.getShortName()) && this.wordCount(project.getShortName()) <= 30) {
       this.addMessage(baseAction.getText("projectDescription.action.shortName"));
       baseAction.getInvalidFields().put("input-project.shortName", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (!this.isValidString(project.getOriginalDonor()) && this.wordCount(project.getOriginalDonor()) <= 100) {
+      this.addMessage(baseAction.getText("projectDescription.action.originalDonor"));
+      baseAction.getInvalidFields().put("input-project.originalDonor", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
+    if (project.getGlobal() != null) {
+      if (!project.getGlobal()) {
+        if (project.getProjectCountries() == null || project.getProjectCountries().isEmpty()) {
+          this.addMessage(baseAction.getText("projectDescription.action.countries"));
+          baseAction.getInvalidFields().put("list-project.countries",
+            baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Countries"}));
+        }
+      }
+    } else {
+      this.addMessage(baseAction.getText("projectDescription.action.global"));
+      baseAction.getInvalidFields().put("input-projectDescription.globalDimensionQuestion",
+        InvalidFieldsMessages.EMPTYFIELD);
+
+    }
+
+    if (project.getRegion() != null) {
+
+      if (project.getRegion()) {
+        if (project.getProjectRegions() == null || project.getProjectRegions().isEmpty()) {
+          this.addMessage(baseAction.getText("projectDescription.action.regions"));
+          baseAction.getInvalidFields().put("list-project.regions",
+            baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Regions"}));
+        }
+      }
+
+    } else {
+      this.addMessage(baseAction.getText("projectDescription.action.region"));
+      baseAction.getInvalidFields().put("input-projectDescription.regionalDimensionQuestion",
+        InvalidFieldsMessages.EMPTYFIELD);
     }
 
     if (project.getStartDate() == null) {
