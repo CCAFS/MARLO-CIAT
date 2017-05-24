@@ -8,6 +8,8 @@ function init() {
     width: "100%"
   });
 
+  $('.amount').currencyInput();
+
   datePickerConfig({
       "startDate": "#project\\.startDate",
       "endDate": "#project\\.endDate",
