@@ -18,8 +18,10 @@ public class DeliverableType implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -5820694928440158435L;
 
+
   @Expose
   private Long id;
+
 
   @Expose
   private User modifiedBy;
@@ -37,6 +39,9 @@ public class DeliverableType implements java.io.Serializable, IAuditLog {
   private Date activeSince;
 
   @Expose
+  private DeliverableType deliverableType;
+
+  @Expose
   private String modificationJustification;
 
   private Set<Deliverable> deliverables = new HashSet<Deliverable>(0);
@@ -44,12 +49,10 @@ public class DeliverableType implements java.io.Serializable, IAuditLog {
   public DeliverableType() {
   }
 
-
   public DeliverableType(String name, boolean active) {
     this.name = name;
     this.active = active;
   }
-
 
   public DeliverableType(User modifiedBy, User createdBy, String name, boolean active, Date activeSince,
     String modificationJustification, Set<Deliverable> deliverables) {
@@ -78,6 +81,11 @@ public class DeliverableType implements java.io.Serializable, IAuditLog {
   }
 
 
+  public DeliverableType getDeliverableType() {
+    return deliverableType;
+  }
+
+
   @Override
   public Long getId() {
     return id;
@@ -95,6 +103,7 @@ public class DeliverableType implements java.io.Serializable, IAuditLog {
   public String getModificationJustification() {
     return modificationJustification;
   }
+
 
   @Override
   public User getModifiedBy() {
@@ -124,6 +133,10 @@ public class DeliverableType implements java.io.Serializable, IAuditLog {
 
   public void setDeliverables(Set<Deliverable> deliverables) {
     this.deliverables = deliverables;
+  }
+
+  public void setDeliverableType(DeliverableType deliverableType) {
+    this.deliverableType = deliverableType;
   }
 
 

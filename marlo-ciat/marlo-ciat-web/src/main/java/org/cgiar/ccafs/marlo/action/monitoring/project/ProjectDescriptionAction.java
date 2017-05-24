@@ -519,8 +519,18 @@ public class ProjectDescriptionAction extends BaseAction {
 
       projectDB.setStartDate(project.getStartDate());
       projectDB.setEndDate(project.getEndDate());
+      projectDB.setExtensionDate(project.getExtensionDate());
+      projectDB.setDescription(project.getDescription());
 
       projectDB.setGlobal(project.isGlobal());
+      projectDB.setDirectDonor(project.getDirectDonor());
+      projectDB.setOriginalDonor(project.getOriginalDonor());
+      projectDB.setTotalAmount(project.getTotalAmount());
+
+      if (project.getProjectType().getId() != null) {
+        ProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());
+        projectDB.setProjectType(projectType);
+      }
 
       if (project.getProjectLeader().getId() != null) {
         User projectLeader = userService.getUser(project.getProjectLeader().getId());

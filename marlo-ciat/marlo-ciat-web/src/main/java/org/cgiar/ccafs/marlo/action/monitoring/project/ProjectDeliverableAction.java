@@ -69,6 +69,7 @@ public class ProjectDeliverableAction extends BaseAction {
 
   private IDeliverableService deliverableService;
 
+
   private IDeliverableTypeService deliverableTypeService;
 
 
@@ -76,25 +77,32 @@ public class ProjectDeliverableAction extends BaseAction {
 
   private IDeliverableOutputService deliverableOutputService;
 
+
   private IResearchOutputService outputService;
+
   private IDeliverableDocumentService deliverableDocumentService;
+
+
   private ICenterService centerService;
+
   private IProjectService projectService;
+
   private IAuditLogService auditLogService;
   private DeliverableValidator validator;
   private long deliverableID;
   private long projectID;
   private long programID;
   private long areaID;
-
   private Project project;
   private ResearchArea selectedResearchArea;
   private ResearchProgram selectedProgram;
   private ResearchCenter loggedCenter;
+
   private Deliverable deliverable;
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
-  private List<DeliverableType> deliverableTypes;
+  private List<DeliverableType> deliverableSubTypes;
+  private List<DeliverableType> deliverableTypeParent;
   private List<ResearchOutput> outputs;
   private String transaction;
 
@@ -162,8 +170,12 @@ public class ProjectDeliverableAction extends BaseAction {
     return deliverableID;
   }
 
-  public List<DeliverableType> getDeliverableTypes() {
-    return deliverableTypes;
+  public List<DeliverableType> getDeliverableSubTypes() {
+    return deliverableSubTypes;
+  }
+
+  public List<DeliverableType> getDeliverableTypeParent() {
+    return deliverableTypeParent;
   }
 
   public ResearchCenter getLoggedCenter() {
@@ -194,7 +206,6 @@ public class ProjectDeliverableAction extends BaseAction {
     return project;
   }
 
-
   public long getProjectID() {
     return projectID;
   }
@@ -208,7 +219,6 @@ public class ProjectDeliverableAction extends BaseAction {
     return researchPrograms;
   }
 
-
   public ResearchProgram getSelectedProgram() {
     return selectedProgram;
   }
@@ -218,9 +228,11 @@ public class ProjectDeliverableAction extends BaseAction {
     return selectedResearchArea;
   }
 
+
   public String getTransaction() {
     return transaction;
   }
+
 
   @Override
   public void prepare() throws Exception {
@@ -266,8 +278,6 @@ public class ProjectDeliverableAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-      deliverableTypes = new ArrayList<>(
-        deliverableTypeService.findAll().stream().filter(dt -> dt.isActive()).collect(Collectors.toList()));
 
       Path path = this.getAutoSaveFilePath();
 
@@ -322,8 +332,17 @@ public class ProjectDeliverableAction extends BaseAction {
         deliverable.setDocuments(new ArrayList<>(
           deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
       }
+    }
 
+    deliverableTypeParent = new ArrayList<>(deliverableTypeService.findAll().stream()
+      .filter(dt -> dt.isActive() && dt.getDeliverableType() == null).collect(Collectors.toList()));
 
+    if (deliverable.getDeliverableType() != null) {
+      Long deliverableTypeParentId = deliverable.getDeliverableType().getDeliverableType().getId();
+
+      deliverableSubTypes = new ArrayList<>(deliverableTypeService.findAll().stream()
+        .filter(dt -> dt.getDeliverableType() != null && dt.getDeliverableType().getId() == deliverableTypeParentId)
+        .collect(Collectors.toList()));
     }
 
     this.getProgramOutputs();
@@ -338,8 +357,12 @@ public class ProjectDeliverableAction extends BaseAction {
         outputs.clear();
       }
 
-      if (deliverableTypes != null) {
-        deliverableTypes.clear();
+      if (deliverableTypeParent != null) {
+        deliverableTypeParent.clear();
+      }
+
+      if (deliverableSubTypes != null) {
+        deliverableSubTypes.clear();
       }
 
       if (deliverable.getDocuments() != null) {
@@ -509,10 +532,14 @@ public class ProjectDeliverableAction extends BaseAction {
     this.deliverableID = deliverableID;
   }
 
-
-  public void setDeliverableTypes(List<DeliverableType> deliverableTypes) {
-    this.deliverableTypes = deliverableTypes;
+  public void setDeliverableSubTypes(List<DeliverableType> deliverableSubTypes) {
+    this.deliverableSubTypes = deliverableSubTypes;
   }
+
+  public void setDeliverableTypeParent(List<DeliverableType> deliverableTypeParent) {
+    this.deliverableTypeParent = deliverableTypeParent;
+  }
+
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
