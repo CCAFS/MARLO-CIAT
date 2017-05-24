@@ -140,10 +140,13 @@ public class ResearchOutcome implements Serializable, IAuditLog {
     return baseline;
   }
 
+  public String getComposedName() {
+    return "OC" + this.id + "- " + this.description;
+  }
+
   public User getCreatedBy() {
     return createdBy;
   }
-
 
   /**
    * @return the description
