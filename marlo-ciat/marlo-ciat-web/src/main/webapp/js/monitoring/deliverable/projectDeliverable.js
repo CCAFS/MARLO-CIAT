@@ -207,5 +207,32 @@ function date(start,end) {
 }
 
 function changeDeliverableType() {
-  console.log($(this).val());
+  var typeID = $(this).val()
+  
+  if (typeID == -1){
+    return
+  }
+  
+  $.ajax({
+      url: baseURL + '/deliverableSubType.do',
+      data: {
+        deliverableTypeId: typeID
+      },
+      beforeSend: function() {
+        $(".loading.subtype").fadeIn();
+        $("select.subTypeSelect").empty();
+        $("select.subTypeSelect").addOption(-1, "Select a sub type...");
+      },
+      success: function(data) {
+        $.each(data.deliverableSubTypes, function(i,type) {
+          $("select.subTypeSelect").addOption(type.id, type.name);
+        });
+      },
+      complete: function() {
+        $(".loading.subtype").fadeOut();
+        $("select.subTypeSelect").val("-1");
+        $("select.subTypeSelect").trigger("select2:change");
+      }
+  });
+
 }
