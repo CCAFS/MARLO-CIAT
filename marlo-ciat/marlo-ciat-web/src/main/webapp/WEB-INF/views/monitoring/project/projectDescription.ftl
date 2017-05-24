@@ -170,7 +170,7 @@
               </div>
               [/#if]
               [#-- REGIONAL SELECT --]
-              <div class="regionsBox form-group row" style="display:${region?string('block','none')}">
+              <div class="regionsBox form-group row" style="display:${project.region?string('block','none')}">
                 <div class="panel tertiary col-md-12">
                  <div class="panel-head">
                    <label for=""> [@customForm.text name="projectDescription.selectRegions" readText=!editable /]:[@customForm.req required=editable /]</label>
