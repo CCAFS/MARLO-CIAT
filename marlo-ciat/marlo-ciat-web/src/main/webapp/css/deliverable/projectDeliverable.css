@@ -1,5 +1,5 @@
 table.deliverablesList thead{
-font-weight: bold !important;	
+font-weight: bold !important; 
 }
 
 table.deliverablesList thead tr{
@@ -8,10 +8,12 @@ table.deliverablesList thead tr{
 }
 
 tbody tr{
-	    height:35px;;
+      height:35px;;
 }
 
 .removeDocument{
-	top: 23px;
-	right:17px;
+  top: 23px;
+  right:17px; 
 }
+
+label.checkbox {font-weight: normal;margin-left: 20px;}
