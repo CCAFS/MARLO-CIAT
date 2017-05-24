@@ -284,11 +284,21 @@
                 [/#if]  
                 </ul>
                 [#if editable]
-                  [@customForm.select name="" label="" disabled=!canEdit i18nkey="" listName="outputs" keyFieldName="id"  displayFieldName="title" className="outputSelect" value="" /]
+                  <select name="" class="outputSelect">
+                    <option value="-1">Select an option...</option>
+                    [#list outputs as output]
+                      <optgroup  label="${(output.outcome.name)!}">
+                        [#list output.outputs as op]
+                          <option value="${(op.id)!}">${(op.name)!}</option>
+                        [/#list]
+                      </optgroup>
+                    [/#list]
+                  </select>
                 [/#if] 
               </div>
             </div> 
           </div>          
+          
           
       </div>
       [#-- Section Buttons & hidden inputs--]
