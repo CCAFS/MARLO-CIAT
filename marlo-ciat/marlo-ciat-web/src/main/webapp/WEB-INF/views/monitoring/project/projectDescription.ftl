@@ -111,11 +111,11 @@
             </div>
             [#-- Customer Donor --]
             <div class="col-md-12">
-              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=true  editable=editable/]
+              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=false  editable=editable/]
             </div>
             [#-- Total Amount --]
             <div class="col-md-12">
-              [@customForm.input name="project.totalAmount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
+              [@customForm.input name="project.totalAmount" i18nkey="projectDescription.totalAmount" type="text" required=false  editable=editable/]
             </div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
