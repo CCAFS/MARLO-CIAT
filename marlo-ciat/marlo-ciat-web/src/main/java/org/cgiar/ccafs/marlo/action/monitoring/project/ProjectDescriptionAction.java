@@ -20,6 +20,7 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 import org.cgiar.ccafs.marlo.data.model.LocElement;
+import org.cgiar.ccafs.marlo.data.model.OutcomeOutputs;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
@@ -121,7 +122,7 @@ public class ProjectDescriptionAction extends BaseAction {
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
   private List<FundingSourceType> fundingSourceTypes;
-  private List<ResearchOutput> outputs;
+  private List<OutcomeOutputs> outputs;
   private List<LocElement> regionLists;
   private List<LocElement> countryLists;
   private List<Crp> crps;
@@ -211,10 +212,6 @@ public class ProjectDescriptionAction extends BaseAction {
     return loggedCenter;
   }
 
-  public List<ResearchOutput> getOutputs() {
-    return outputs;
-  }
-
   private String getPI() {
     List<ResearchLeader> leaders = new ArrayList<>(
       selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
@@ -240,11 +237,15 @@ public class ProjectDescriptionAction extends BaseAction {
       List<ResearchOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
       for (ResearchOutcome researchOutcome : researchOutcomes) {
+        OutcomeOutputs outcomeOutputs = new OutcomeOutputs();
+        outcomeOutputs.setOutcome(researchOutcome);
+        outcomeOutputs.setOutputs(new ArrayList<>());
         List<ResearchOutput> researchOutputs = new ArrayList<>(
           researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
         for (ResearchOutput researchOutput : researchOutputs) {
-          outputs.add(researchOutput);
+          outcomeOutputs.getOutputs().add(researchOutput);
         }
+        outputs.add(outcomeOutputs);
       }
     }
   }
@@ -819,10 +820,6 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
-  }
-
-  public void setOutputs(List<ResearchOutput> outputs) {
-    this.outputs = outputs;
   }
 
   public void setPrincipalInvestigator(String principalInvestigator) {
