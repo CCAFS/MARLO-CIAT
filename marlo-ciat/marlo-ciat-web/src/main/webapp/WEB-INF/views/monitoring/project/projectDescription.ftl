@@ -120,8 +120,7 @@
             [#-- Funding source --]
             <div class="form-group col-md-12">
               <div class="">
-                <h4 class="headTitle col-md-12">Funding Source(s)</h4> 
-                <div class="col-md-12 informationWrapper simpleBox">
+                <label>[@s.text name="projectDescription.fundingSource" /]</label>
                 <div class="borderBox fundingSourceList" listname="project.fundingSources">
                   [#if project.fundingSources?has_content]
                     [#list project.fundingSources as fundingSource]
@@ -147,7 +146,7 @@
               </div>
               <hr />
               <div class="form-group row">
-                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
+                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
               </div>
               [#else]
               <div class="form-group row ">

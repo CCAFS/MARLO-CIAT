@@ -109,10 +109,6 @@ public class ProjectDescriptionValidator extends BaseValidator {
       this.addMessage(baseAction.getText("projectDescription.action.startDate"));
       baseAction.getInvalidFields().put("input-project.startDate", InvalidFieldsMessages.EMPTYFIELD);
     }
-    if (project.getEndDate() == null) {
-      this.addMessage(baseAction.getText("projectDescription.action.endDate"));
-      baseAction.getInvalidFields().put("input-project.endDate", InvalidFieldsMessages.EMPTYFIELD);
-    }
 
     if (project.getProjectLeader() == null) {
       this.addMessage(baseAction.getText("projectDescription.action.projectLeader"));
