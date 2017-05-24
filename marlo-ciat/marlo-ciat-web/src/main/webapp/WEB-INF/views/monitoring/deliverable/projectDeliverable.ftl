@@ -62,7 +62,7 @@
               </div>
               <div class="col-md-6">
                 <div class="loading subtype" style="display:none"></div>
-                [@customForm.select name="deliverable.deliverableType.id" label=""  i18nkey="deliverable.subType" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="subTypeSelect" editable=editable/]
+                [@customForm.select name="deliverable.deliverableType.id" label=""  i18nkey="deliverable.subType" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true placeholder="Select a sub type..."  className="subTypeSelect" editable=editable/]
               </div>
               
             </div>

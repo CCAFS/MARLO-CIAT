@@ -221,7 +221,7 @@ function changeDeliverableType() {
       beforeSend: function() {
         $(".loading.subtype").fadeIn();
         $("select.subTypeSelect").empty();
-        $("select.subTypeSelect").addOption(-1, "Select a sub type...");
+        $("select.subTypeSelect").addOption("-1", "Select a sub type...");
       },
       success: function(data) {
         $.each(data.deliverableSubTypes, function(i,type) {
@@ -230,8 +230,9 @@ function changeDeliverableType() {
       },
       complete: function() {
         $(".loading.subtype").fadeOut();
-        $("select.subTypeSelect").val("-1");
-        $("select.subTypeSelect").trigger("select2:change");
+       // $("select.subTypeSelect").val("-1");
+        $("select.subTypeSelect").select2();
+        // $("select.subTypeSelect").trigger("select2.change");
       }
   });
 
