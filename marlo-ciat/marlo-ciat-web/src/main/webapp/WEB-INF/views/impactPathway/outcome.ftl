@@ -85,7 +85,7 @@
             [#-- Target Year --]            
             <div class="col-md-4">
               [#if editable]
-                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected outcomeYear" header=false editable=editable/]
+                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected outcomeYear" header=true placeholder="Select a Year..."  editable=editable/]
               [#else]
                 <div class="select">
                   <label for=""> [@s.text name="outcome.year" /]:  </label>
@@ -166,7 +166,8 @@
       [#-- Target Year --]
       <div class="col-md-4">
         [#if editable]
-          [@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear" header=false  disabled=!editable/]
+          [#-- This select is changed by the Javascript --]
+          [@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear" header=true placeholder="Select a Year..."  disabled=!editable/]
         [#else]
           <div class="select">
             <label for=""> [@s.text name="outcome.milestone.index.inputTargetYear" /]:  </label>
