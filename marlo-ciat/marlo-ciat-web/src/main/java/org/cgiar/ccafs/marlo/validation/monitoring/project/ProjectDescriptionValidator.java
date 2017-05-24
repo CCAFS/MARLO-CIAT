@@ -120,35 +120,20 @@ public class ProjectDescriptionValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-project.originalDonor", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (project.getGlobal() != null) {
-      if (!project.getGlobal()) {
-        if (project.getProjectCountries() == null || project.getProjectCountries().isEmpty()) {
-          this.addMessage(baseAction.getText("projectDescription.action.countries"));
-          baseAction.getInvalidFields().put("list-project.countries",
-            baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Countries"}));
-        }
+    if (!project.isGlobal()) {
+      if (project.getProjectCountries() == null || project.getProjectCountries().isEmpty()) {
+        this.addMessage(baseAction.getText("projectDescription.action.countries"));
+        baseAction.getInvalidFields().put("list-project.countries",
+          baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Countries"}));
       }
-    } else {
-      this.addMessage(baseAction.getText("projectDescription.action.global"));
-      baseAction.getInvalidFields().put("input-projectDescription.globalDimensionQuestion",
-        InvalidFieldsMessages.EMPTYFIELD);
-
     }
 
-    if (project.getRegion() != null) {
-
-      if (project.getRegion()) {
-        if (project.getProjectRegions() == null || project.getProjectRegions().isEmpty()) {
-          this.addMessage(baseAction.getText("projectDescription.action.regions"));
-          baseAction.getInvalidFields().put("list-project.regions",
-            baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Regions"}));
-        }
+    if (project.isRegion()) {
+      if (project.getProjectRegions() == null || project.getProjectRegions().isEmpty()) {
+        this.addMessage(baseAction.getText("projectDescription.action.regions"));
+        baseAction.getInvalidFields().put("list-project.regions",
+          baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Regions"}));
       }
-
-    } else {
-      this.addMessage(baseAction.getText("projectDescription.action.region"));
-      baseAction.getInvalidFields().put("input-projectDescription.regionalDimensionQuestion",
-        InvalidFieldsMessages.EMPTYFIELD);
     }
 
     if (project.getStartDate() == null) {

@@ -511,13 +511,6 @@ public class ProjectDescriptionAction extends BaseAction {
         project.getProjectCountries().clear();
       }
 
-      if (project.getGlobal() != null) {
-        project.setGlobal(null);
-      }
-
-      if (project.getRegion() != null) {
-        project.setRegion(null);
-      }
     }
   }
 
@@ -530,20 +523,12 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setName(project.getName());
       projectDB.setShortName(project.getShortName());
       projectDB.setOcsCode(project.getOcsCode());
-
       projectDB.setStartDate(project.getStartDate());
       projectDB.setEndDate(project.getEndDate());
       projectDB.setExtensionDate(project.getExtensionDate());
       projectDB.setDescription(project.getDescription());
-
-      if (project.getGlobal() != null) {
-        projectDB.setGlobal(project.getGlobal());
-      }
-
-      if (project.getRegion() != null) {
-        projectDB.setRegion(project.getRegion());
-      }
-
+      projectDB.setGlobal(project.isGlobal());
+      projectDB.setRegion(project.isRegion());
       projectDB.setDirectDonor(project.getDirectDonor());
       projectDB.setOriginalDonor(project.getOriginalDonor());
       projectDB.setTotalAmount(project.getTotalAmount());
