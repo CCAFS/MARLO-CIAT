@@ -53,15 +53,18 @@
           <div id="projectDescription" class="borderBox">            
             <div class="form-group row">  
             [#-- OCS code --]
-            <div class="col-md-6">
+            <div class="col-md-4">
               [@customForm.input name="project.ocsCode" i18nkey="projectDescription.ocsCode" type="text" disabled=!editable  required=true editable=editable /]
             </div> 
             <div class="col-md-2">
               <br />
               [#if editable]<div id="fillMetadata" class="checkButtonDisable" style="display:block;">[@s.text name="projectDescription.sync" /]</div>[/#if]
             </div>
+            <div class="col-md-6">
+                [@customForm.select name="project.projectType.id" label=""  i18nkey="Type" listName="projectTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
+            </div>
             [#-- Principal Investigator --]
-            <div class="col-md-4">
+            <div class="col-md-12">
               [@customForm.input name="principalInvestigator" i18nkey="projectDescription.pl" type="text" disabled=!editable  required=true editable=false /]
             </div>   
             </div>
@@ -103,16 +106,16 @@
             </div>
             <div class="clearfix"></div>
             [#-- Original Donor --]
-            <div class="form-group">
-              [@customForm.input name="project.originalDonor" i18nkey="projectDescription.originalDonor" type="text" required=true className="project-title" editable=editable/]
+            <div class="col-md-12">
+              [@customForm.input name="project.originalDonor" i18nkey="projectDescription.originalDonor" type="text" required=true  editable=editable/]
             </div>
             [#-- Customer Donor --]
-            <div class="form-group">
-              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=true className="project-title" editable=editable/]
+            <div class="col-md-12">
+              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=true  editable=editable/]
             </div>
             [#-- Total Amount --]
-            <div class="form-group">
-              [@customForm.input name="project.totalAmount" i18nkey="projectDescription.totalAmount" type="text" required=true className="project-title" editable=editable/]
+            <div class="col-md-12">
+              [@customForm.input name="project.totalAmount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
             </div>
             [#-- Funding source --]
             <div class="form-group col-md-12">
@@ -327,18 +330,15 @@
   [#assign fundingSourceCustomName = "${name}[${index}]" /]
   <div id="fundingSource-${isTemplate?string('template',(element.id)!)}" class="fundingSources  borderBox row"  style="display:${isTemplate?string('none','block')}">
     [#if editable]<div class="removeFundingSource removeIcon" title="Remove funding source"></div>[/#if] 
-    <input class="id" type="hidden" name="${fundingSourceCustomName}.id" value="${(element.id)!-1}" />
+    <input class="id" type="hidden" name="${fundingSourceCustomName}.id" value="${(element.id)!-1}" />     
     <div class="col-md-4">
-      [@customForm.input name="${fundingSourceCustomName}.ocsCode" i18nkey="OCS code" type="text" disabled=!editable required=false editable=editable /]
-    </div>    
-    <div class="col-md-12">
-      [@customForm.input name="${fundingSourceCustomName}.title" i18nkey="Title" type="text" disabled=!editable required=false editable=editable /]
+      [@customForm.select name="${fundingSourceCustomName}.crp.id" label=""  i18nkey="CRP" listName="crps" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
     </div>
     <div class="col-md-4">
       [@customForm.select name="${fundingSourceCustomName}.fundingSourceType.id" label=""  i18nkey="Funding source" listName="fundingSourceTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
     </div>
-    <div class="col-md-8">
-      [@customForm.input name="${fundingSourceCustomName}.donor" i18nkey="Donor" type="text" disabled=!editable  required=false editable=editable /]
+    <div class="col-md-12">
+      [@customForm.input name="${fundingSourceCustomName}.title" i18nkey="Project Title" type="text" disabled=!editable required=false editable=editable /]
     </div>
     <div class="clearfix"></div>
   </div>

@@ -17,6 +17,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 import org.cgiar.ccafs.marlo.data.model.LocElement;
 import org.cgiar.ccafs.marlo.data.model.Project;
@@ -24,6 +25,7 @@ import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
 import org.cgiar.ccafs.marlo.data.model.ProjectLocation;
 import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.ProjectType;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
@@ -34,6 +36,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
+import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
 import org.cgiar.ccafs.marlo.data.service.ILocElementService;
 import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
@@ -41,6 +44,7 @@ import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
 import org.cgiar.ccafs.marlo.data.service.IProjectLocationService;
 import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
+import org.cgiar.ccafs.marlo.data.service.IProjectTypeService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -81,7 +85,6 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private IUserService userService;
 
-
   private IResearchOutputService outputService;
 
 
@@ -92,7 +95,9 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private IProjectLocationService projectLocationService;
 
+
   private ILocElementService locElementService;
+
 
   private IProjectFundingSourceService projectFundingSourceService;
 
@@ -100,9 +105,18 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   private IAuditLogService auditLogService;
+
   private ProjectDescriptionValidator validator;
+
+  private ICrpService crpService;
+
+  private IProjectTypeService projectTypeService;
+
   private ResearchArea selectedResearchArea;
+
   private ResearchProgram selectedProgram;
+
+
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
@@ -110,6 +124,8 @@ public class ProjectDescriptionAction extends BaseAction {
   private List<ResearchOutput> outputs;
   private List<LocElement> regionLists;
   private List<LocElement> countryLists;
+  private List<Crp> crps;
+  private List<ProjectType> projectTypes;
   private boolean region;
   private long programID;
   private long areaID;
@@ -124,7 +140,8 @@ public class ProjectDescriptionAction extends BaseAction {
     IResearchOutputService outputService, IProjectOutputService projectOutputService,
     IProjectFundingSourceService projectFundingSourceService,
     IProjectCrosscutingThemeService projectCrosscutingThemeService, IProjectLocationService projectLocationService,
-    ILocElementService locElementService, IAuditLogService auditLogService) {
+    ILocElementService locElementService, IAuditLogService auditLogService, ICrpService crpService,
+    IProjectTypeService projectTypeService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -138,6 +155,8 @@ public class ProjectDescriptionAction extends BaseAction {
     this.projectLocationService = projectLocationService;
     this.locElementService = locElementService;
     this.auditLogService = auditLogService;
+    this.crpService = crpService;
+    this.projectTypeService = projectTypeService;
   }
 
   @Override
@@ -178,6 +197,10 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public List<LocElement> getCountryLists() {
     return countryLists;
+  }
+
+  public List<Crp> getCrps() {
+    return crps;
   }
 
   public List<FundingSourceType> getFundingSourceTypes() {
@@ -234,6 +257,10 @@ public class ProjectDescriptionAction extends BaseAction {
     return projectID;
   }
 
+  public List<ProjectType> getProjectTypes() {
+    return projectTypes;
+  }
+
   public List<LocElement> getRegionLists() {
     return regionLists;
   }
@@ -250,15 +277,14 @@ public class ProjectDescriptionAction extends BaseAction {
     return selectedProgram;
   }
 
-
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
-
   public String getTransaction() {
     return transaction;
   }
+
 
   public boolean isRegion() {
     return region;
@@ -428,6 +454,11 @@ public class ProjectDescriptionAction extends BaseAction {
       fundingSourceTypes = new ArrayList<>(
         fundingSourceService.findAll().stream().filter(fst -> fst.isActive()).collect(Collectors.toList()));
 
+      crps = new ArrayList<>(crpService.findAll().stream().filter(c -> c.isActive()).collect(Collectors.toList()));
+
+      projectTypes =
+        new ArrayList<>(projectTypeService.findAll().stream().filter(pt -> pt.isActive()).collect(Collectors.toList()));
+
       this.getProgramOutputs();
 
     }
@@ -476,7 +507,6 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   }
-
 
   @Override
   public String save() {
@@ -542,6 +572,7 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
+
   public void saveCrossCuting(Project projectDB) {
     ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
@@ -567,6 +598,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   }
+
 
   public void saveFundingSources(Project projectDB) {
 
@@ -759,6 +791,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.countryLists = countryLists;
   }
 
+  public void setCrps(List<Crp> crps) {
+    this.crps = crps;
+  }
+
   public void setFundingSourceTypes(List<FundingSourceType> fundingSourceTypes) {
     this.fundingSourceTypes = fundingSourceTypes;
   }
@@ -785,6 +821,10 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void setProjectID(long projectID) {
     this.projectID = projectID;
+  }
+
+  public void setProjectTypes(List<ProjectType> projectTypes) {
+    this.projectTypes = projectTypes;
   }
 
   public void setRegion(boolean region) {
