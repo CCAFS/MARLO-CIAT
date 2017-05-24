@@ -96,11 +96,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private IProjectLocationService projectLocationService;
 
-
   private ILocElementService locElementService;
 
 
   private IProjectFundingSourceService projectFundingSourceService;
+
 
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
 
@@ -108,6 +108,7 @@ public class ProjectDescriptionAction extends BaseAction {
   private IAuditLogService auditLogService;
 
   private ProjectDescriptionValidator validator;
+
 
   private ICrpService crpService;
 
@@ -117,9 +118,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private ResearchProgram selectedProgram;
 
-
   private ResearchCenter loggedCenter;
+
   private List<ResearchArea> researchAreas;
+
+
   private List<ResearchProgram> researchPrograms;
   private List<FundingSourceType> fundingSourceTypes;
   private List<OutcomeOutputs> outputs;
@@ -212,6 +215,10 @@ public class ProjectDescriptionAction extends BaseAction {
     return loggedCenter;
   }
 
+  public List<OutcomeOutputs> getOutputs() {
+    return outputs;
+  }
+
   private String getPI() {
     List<ResearchLeader> leaders = new ArrayList<>(
       selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
@@ -285,7 +292,6 @@ public class ProjectDescriptionAction extends BaseAction {
   public String getTransaction() {
     return transaction;
   }
-
 
   public boolean isRegion() {
     return region;
@@ -515,6 +521,7 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
+
   @Override
   public String save() {
     if (this.hasPermission("*")) {
@@ -588,7 +595,6 @@ public class ProjectDescriptionAction extends BaseAction {
       return NOT_AUTHORIZED;
     }
   }
-
 
   public void saveCrossCuting(Project projectDB) {
     ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
@@ -679,6 +685,7 @@ public class ProjectDescriptionAction extends BaseAction {
     }
 
   }
+
 
   public void saveLocations(Project projectDB) {
 
@@ -820,6 +827,10 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void setLoggedCenter(ResearchCenter loggedCenter) {
     this.loggedCenter = loggedCenter;
+  }
+
+  public void setOutputs(List<OutcomeOutputs> outputs) {
+    this.outputs = outputs;
   }
 
   public void setPrincipalInvestigator(String principalInvestigator) {
