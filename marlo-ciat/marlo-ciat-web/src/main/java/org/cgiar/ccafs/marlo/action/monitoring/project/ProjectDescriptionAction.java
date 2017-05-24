@@ -476,6 +476,14 @@ public class ProjectDescriptionAction extends BaseAction {
         fundingSourceTypes.clear();
       }
 
+      if (crps != null) {
+        crps.clear();
+      }
+
+      if (projectTypes != null) {
+        projectTypes.clear();
+      }
+
       if (project.getProjectCrosscutingTheme() != null) {
         project.getProjectCrosscutingTheme().setPoliciesInstitutions(null);
         project.getProjectCrosscutingTheme().setGender(null);
@@ -633,8 +641,10 @@ public class ProjectDescriptionAction extends BaseAction {
           FundingSourceType fundingSourceType =
             fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
           Project project = projectService.getProjectById(projectID);
+          Crp crp = crpService.getCrpById(projectFundingSource.getCrp().getId());
 
           fundingSourceSave.setProject(project);
+          fundingSourceSave.setCrp(crp);
           fundingSourceSave.setFundingSourceType(fundingSourceType);
           fundingSourceSave.setTitle(projectFundingSource.getTitle());
           fundingSourceSave.setActive(true);
