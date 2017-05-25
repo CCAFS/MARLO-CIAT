@@ -31,13 +31,32 @@
 	<div class="col-md-12 form-group newCapdevForm"> 
 
 		<!-- Title-->
-		<div class="row">
+		<div class="row newCapdevField">
 			<div class="col-md-12 "> 
-				<div class="newCapdevField"> 
+				<div class=""> 
 				[@customForm.input name="capdev.title" type="text" i18nkey="capdev.form.title"  required=true  /]
 				</div>
 			</div>
 		</div>
+
+
+		<!-- Radio Buttons-->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<div class="radio">
+					  <label><input  id="individual" type="radio"  name="optradio" class="radioButton" value="individual">Individual</label>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="radio">
+					  <label><input id="gruops" type="radio" name="optradio" class="radioButton" value="gruops">Groups</label>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
 		<!-- type-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
@@ -83,8 +102,8 @@
 			</div>
 		</div>
 		<!-- project-->
-		<div class="row">
-			<div class="col-md-12 newCapdevField">
+		<div class="row newCapdevField">
+			<div class="col-md-12 ">
 				[@customForm.select name="" listName="" i18nkey="capdev.form.project" placeholder="select option..."  /]
 			</div>
 		</div>
@@ -141,7 +160,7 @@
 			</div>
 		</div>
 		<!-- participants-->
-		<div class="row">
+		<div class="row grupsParticipantsForm">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6  participantsTitle">
 				[@s.text name="capdev.form.participants"][/@s.text]
@@ -154,12 +173,73 @@
 				</div>
 			</div>
 			</div>
+
+			<div class="row newCapdevField">
+				<div class="col-md-12 newCapdevField participantsBox">
+					[@customForm.inputFile name="" /]
+				</div>
+			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-md-12 newCapdevField participantsBox">
-				[@customForm.inputFile name="" /]
+		
+
+		<!-- induvidual participant-->
+
+		<div class="row newCapdevField individualparticipantForm" style="display:none;">
+			<div class="col-md-12">
+				<div class="col-md-6  participantsTitle">
+				[@s.text name="Participant"][/@s.text]
 			</div>
+			</div>
+			<div class="col-md-12">
+				[@customForm.input name="" i18nkey="code" type="text" required=true /]
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="First name" type="text" required=true /]
+				</div>
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Last name" type="text" required=true /]
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Gender" type="text" required=true /]
+				</div>
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="citizenship" type="text" required=true /]
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Country of residence" type="text" required=true /]
+				</div>
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Highest degree" type="text" required=true /]
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Institution" type="text" required=true /]
+				</div>
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Email" type="text" required=true /]
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Reference" type="text" required=true /]
+				</div>
+				<div class="col-md-6">
+					[@customForm.input name="" i18nkey="Fellowship" type="text"  required=true /]
+				</div>
+			</div>
+
+
+
+
+			
+
 		</div>
 
 		<!-- Deliverables -->

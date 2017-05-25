@@ -9,8 +9,8 @@ $(".addObjective").on("click", function (){
  	$item.show('slow', function() {
       	width: "100%"
     });
-  
-	
+
+
 	checkItems($list);
 	updateFundingSource();
 
@@ -40,12 +40,12 @@ $( ".disciplines" ).change(function() {
     });
 
     updateDisciplineList($list);
-    
+
 });
 
 
 
-//remove discipline 
+//remove discipline
  $(".removeDiscipline").on("click", function () {
   var $list = $(this).parents('.approachesList');
   var $item = $(this).parents('.approach');
@@ -68,7 +68,7 @@ $( ".outComes" ).change(function() {
     });
 
     updateOutComesList($list);
-    
+
 });
 
 
@@ -109,7 +109,7 @@ function updateDisciplineList(block){
     $(block).parent().find('p.inf').fadeIn();
   } else {
     $(block).parent().find('p.inf').fadeOut();
-  } 
+  }
 }
 
 
@@ -119,5 +119,20 @@ function updateOutComesList(block){
     $(block).parent().find('p.inf').fadeIn();
   } else {
     $(block).parent().find('p.inf').fadeOut();
-  } 
+  }
 }
+
+
+
+//display individual participant form
+$( ".radioButton" ).change(function() {
+ if (this.value == 'individual') {
+            $(".individualparticipantForm").show();
+            $(".grupsParticipantsForm ").hide();
+        }
+  else if (this.value == 'gruops') {
+            $(".grupsParticipantsForm ").show();
+            $(".individualparticipantForm").hide();
+        }
+
+});
