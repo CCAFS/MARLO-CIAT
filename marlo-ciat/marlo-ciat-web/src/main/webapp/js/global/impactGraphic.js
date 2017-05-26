@@ -39,6 +39,8 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
           'label': 'data(label)',
           'background-color': '#2388ae',
           'color': 'white',
+          'background-opacity': 0.2,
+          'text-opacity': 0.2,
           'text-outline-width': 1,
           'text-outline-color': '#888',
           'z-index': '5',
@@ -80,6 +82,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
   var nodesInit = cy.$('node');
   var colorFlagship;
   nodesInit.addClass('center-center');
+
   nodesInit.forEach(function(ele) {
     var label = ele.data("label");
     var short = label.length > 7 ? label.substr(0, 7) + ' ... ' : label;
@@ -143,6 +146,8 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
   });
 
+  cy.$('node').addClass('eating');
+
   if(inPopUp === true) {
     /*
      * cy.panzoom({ // options here... }); $(".cy-panzoom").css('position', 'absolute'); $(".cy-panzoom").css("right",
@@ -153,8 +158,6 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 // tap a node
   cy.on('tap', function(event) {
 
-    cy.$('node').addClass('eating');
-    cy.$('edge').removeClass('edgeStyle');
     $(".panel-body ul").empty();
     so = [];
     areas = [];
@@ -748,10 +751,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
                 y: move.OP
             };
           }/*
-           * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; }
-           * else { move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = {
-           * x: move.KO, y: 400 }; }
-           */
+             * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; }
+             * else { move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = {
+             * x: move.KO, y: 400 }; }
+             */
         }
 
         createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip, nodeWidth);
