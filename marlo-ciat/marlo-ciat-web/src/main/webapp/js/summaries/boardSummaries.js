@@ -12,7 +12,7 @@ function init() {
   attachEvents();
   $(".reportYear").attr("disabled", "true");
   updateYearSelect();
-  ajaxService();
+  // ajaxService();
 }
 
 function attachEvents() {
@@ -359,7 +359,7 @@ function reportTypes($selected) {
         termsArray.push($(e).find(".text").html());
       });
       url =
-          baseURL + "/projects/" + currentCrpSession + "/" + formOption + ".do" + "?cycle="
+          baseURL + "/projects/" + centerSession + "/" + formOption + ".do" + "?cycle="
               + $("input[name='cycle']:checked").val() + "&keys=" + termsArray.join("~/");
 
       console.log(reportYear);
@@ -415,7 +415,7 @@ function updateUrl(element) {
   if(formOption != 0) {
     console.log("create url yes");
     generateUrl =
-        baseURL + "/projects/" + currentCrpSession + "/" + formOption + ".do?" + "cycle="
+        baseURL + "/projects/" + centerSession + "/" + formOption + ".do?" + "cycle="
             + $("input[name='cycle']:checked").val();
     if(extraOptions != 0) {
       generateUrl += '&' + extraOptions;

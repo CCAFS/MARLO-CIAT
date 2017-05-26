@@ -107,20 +107,20 @@ vertical-align: middle;}
   background-position: -89px 10px;
 }
 
-#partners.summariesSection span {
-  background-position: 9px -31px;
+#monitoring.summariesSection span {
+  background-position: 9px -123px;
 }
 
-#partners.summariesSection.current span {
-  background-position: -88px -31px;
+#monitoring.summariesSection.current span {
+  background-position: -88px -123px;
 }
 
-#deliverables.summariesSection span {
-  background-position: 8px -78px;
+#impactPathway.summariesSection span {
+  background-position: 8px -220px;
 }
 
-#deliverables.summariesSection.current span {
-  background-position: -92px -78px;
+#impactPathway.summariesSection.current span {
+  background-position: -92px -220px;
 }
 
 #budget.summariesSection span {

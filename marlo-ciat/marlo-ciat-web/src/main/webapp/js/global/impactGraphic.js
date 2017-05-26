@@ -240,6 +240,7 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     }
   });
   function nodeSelected(ele) {
+    ele.addClass('eating');
     var stop;
     if(ele.isChild()) {
       var parent = ele.parent();
@@ -747,10 +748,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
                 y: move.OP
             };
           }/*
-             * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; }
-             * else { move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = {
-             * x: move.KO, y: 400 }; }
-             */
+           * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; }
+           * else { move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = {
+           * x: move.KO, y: 400 }; }
+           */
         }
 
         createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip, nodeWidth);
