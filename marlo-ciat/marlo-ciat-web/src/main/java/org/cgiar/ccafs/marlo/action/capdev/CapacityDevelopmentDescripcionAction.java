@@ -18,12 +18,17 @@ package org.cgiar.ccafs.marlo.action.capdev;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
+import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
+import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 
 public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
@@ -36,12 +41,13 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private List<String> outcomes = new ArrayList<>();
   private List<String> types = new ArrayList<>();
   private List<String> deliverables = new ArrayList<>();
-  private final CapacityDevelopmentAction capDevAction = new CapacityDevelopmentAction(config);
+  private final ICapacityDevelopmentService capdevService;
 
 
   @Inject
-  public CapacityDevelopmentDescripcionAction(APConfig config) {
+  public CapacityDevelopmentDescripcionAction(APConfig config, ICapacityDevelopmentService capdevService) {
     super(config);
+    this.capdevService = capdevService;
   }
 
 
@@ -110,8 +116,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     }
 
     if (capDevID > -1) {
-      capdev = new CapacityDevelopment(1,
-        "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis");
+      /*
+       * capdev = new CapacityDevelopment(1,
+       * "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis");
+       */
     } else {
       capdev = new CapacityDevelopment();
     }
@@ -123,13 +131,17 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   @Override
   public String save() {
 
-    capdev.setId(8);
-    this.getRequest().setAttribute("capDevID", capdev.getId());
-
     System.out.println("este es el titulo -->" + capdev.getTitle());
-    System.out.println("este es el tipo -->" + capdev.getType());
+    System.out.println("este es el tipo -->" + capdev.getCapdevType());
 
-    capDevAction.getCapDevs().add(capdev);
+    final Session session = SecurityUtils.getSubject().getSession();
+
+    final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
+    System.out.println("User actual -->" + currentUser);
+    capdev.setCategory(1);
+    capdev.setActive(true);
+    capdev.setUsersByCreatedBy(currentUser);
+    capdevService.saveCapacityDevelopment(capdev);
 
     return SUCCESS;
   }

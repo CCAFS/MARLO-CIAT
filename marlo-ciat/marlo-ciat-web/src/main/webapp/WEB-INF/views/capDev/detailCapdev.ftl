@@ -41,7 +41,10 @@
 
 
 		<!-- Radio Buttons-->
-		<div class="row">
+		<div class="row newCapdevField"> 
+			<div class="col-md-12 newCapdevField">
+				[@s.text name="Category"][/@s.text] 
+			</div>
 			<div class="col-md-12">
 				<div class="col-md-3">
 					<div class="radio">
@@ -61,7 +64,7 @@
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 "> 
-				[@customForm.select name="capdev.type" listName="types" i18nkey="capdev.form.type"  placeholder="select option..." required=true /]
+				[@customForm.select name="capdev.capdevType" listName="types" i18nkey="capdev.form.type"  placeholder="select option..." required=true /]
 			</div>
 			<div class="col-md-6 ">
 				[@customForm.input name="" i18nkey="capdev.form.contactPerson" type="text"   required=true  /]
@@ -114,10 +117,35 @@
 				[@customForm.select name="" listName="" i18nkey="capdev.form.crp" placeholder="select option..."  /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="" i18nkey="capdev.form.dictated" type="text"     /]
+				[@customForm.input name="" i18nkey="capdev.form.dictated" type="text"  /]
 			</div>
 			</div>
 		</div>
+
+		<!-- Targeted public-->
+		<div class="row">
+			<div class="col-md-12 newCapdevField approachesListTitle">
+				[@s.text name="Targeted Public"][/@s.text] 
+			</div>
+
+		</div>
+
+		<div class="row borderContainer">
+
+			<div class="col-md-12 newCapdevField ">
+				[#if targeted_public?has_content]
+                    [#list targeted_public as approach]
+                       
+                    [/#list]
+                 [/#if]
+                 <p class="text-center inf" style="display:${(targeted_public?has_content)?string('none','block')}">[@s.text name="capdev.notDisciplines" /]</p>
+			</div>
+			<div class="col-md-12 newCapdevField ">
+				[@customForm.select name="" listName="" i18nkey="Select a targeted public" className="disciplines" multiple=false placeholder="select option..."  /]
+			</div>
+
+		</div>
+
 		<!-- Disciplines-->
 		<div class="row ">
 			<div class="col-md-12 newCapdevField approachesListTitle">
@@ -137,6 +165,8 @@
 				[@customForm.select name="" listName="approaches" i18nkey="capdev.form.selectApproach" className="disciplines" multiple=false placeholder="select option..."  /]
 			</div>
 		</div>
+
+
 		<!-- OutComes-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField objectivesTitle">
@@ -159,6 +189,8 @@
 				[@customForm.select name="" listName="outcomes" i18nkey="capdev.form.selectOutcome" className="outComes" multiple=false placeholder="select option..."  /]
 			</div>
 		</div>
+
+
 		<!-- participants-->
 		<div class="row grupsParticipantsForm">
 			<div class="col-md-12 newCapdevField">
@@ -245,7 +277,7 @@
 		<!-- Deliverables -->
 		<div class="row">
 			<div class="col-md-12 newCapdevField deliverablesTitle">
-				Deliverables
+				Supporting Documents
 			</div>
 		</div>
 		<div class="row">
@@ -270,20 +302,8 @@
 		</div>
 
 
-		<!-- Attachment-->
-		<div class="row">
-			<div class="col-md-12 newCapdevField attachTitle">
-				[@s.text name="Attach Files" /]
-			</div>
-			
-		</div>
-		<div class="row">
-			<div class="col-md-12 newCapdevField attachmentContainer">
-
-			</div>
-
-		</div>
-
+		
+		<!-- buttons -->
 			<div class="col-md-12">
 				<div class="col-md-6">
 					<div class="pull-right">

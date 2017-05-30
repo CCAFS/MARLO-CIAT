@@ -84,7 +84,8 @@
 		<mapping resource="xmls/ProjectPartners.hbm.xml" />	
 		<mapping resource="xmls/ProjectLocations.hbm.xml" />
 		<mapping resource="xmls/DeliverableCrosscutingThemes.hbm.xml" />
-		<mapping resource="xmls/DeliverableOutputs.hbm.xml" />		
+		<mapping resource="xmls/DeliverableOutputs.hbm.xml" />	
+		<mapping resource="xmls/CapacityDevelopment.hbm.xml" />	
 	</session-factory>
 
 </hibernate-configuration>

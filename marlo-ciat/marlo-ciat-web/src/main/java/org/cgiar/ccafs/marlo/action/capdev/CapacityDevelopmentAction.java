@@ -99,12 +99,14 @@ public class CapacityDevelopmentAction extends BaseAction {
   public void prepare() throws Exception {
 
 
-    capDevs.add(new CapacityDevelopment(1,
-      "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis"));
-    capDevs.add(new CapacityDevelopment(2, "Caracterización morfológica y citogenética de las pasifloras andinas",
-      "Publication"));
-    capDevs.add(new CapacityDevelopment(3, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
-    capDevs.add(new CapacityDevelopment(4, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
+    /*
+     * capDevs.add(new CapacityDevelopment(1,
+     * "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis"));
+     * capDevs.add(new CapacityDevelopment(2, "Caracterización morfológica y citogenética de las pasifloras andinas",
+     * "Publication"));
+     * capDevs.add(new CapacityDevelopment(3, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
+     * capDevs.add(new CapacityDevelopment(4, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
+     */
 
 
   }

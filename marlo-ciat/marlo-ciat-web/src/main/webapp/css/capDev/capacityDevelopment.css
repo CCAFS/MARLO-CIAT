@@ -185,3 +185,9 @@
 		margin: 1%;
 }
 
+
+.borderContainer{
+	margin:1%;
+	border-left: 3px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}

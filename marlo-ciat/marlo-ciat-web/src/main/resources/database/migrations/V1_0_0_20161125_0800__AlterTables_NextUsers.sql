@@ -1,4 +1,4 @@
-SET FOREIGN_KEY_CHECKS=0;
+.SET FOREIGN_KEY_CHECKS=0;
 ALTER TABLE `output_nextusers` ADD COLUMN `active_since` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP  AFTER `name` ,ADD COLUMN `is_active` TINYINT NULL DEFAULT NULL  AFTER `active_since` ,ADD COLUMN `created_by` BIGINT(20) NULL DEFAULT NULL  AFTER `is_active` ,ADD COLUMN `modified_by` BIGINT(20) NULL DEFAULT NULL  AFTER `created_by`, ADD COLUMN `modification_justification` TEXT NULL  AFTER `modified_by` ,  
   ADD CONSTRAINT `fk_nextusers_created_by`
   FOREIGN KEY (`created_by` )
