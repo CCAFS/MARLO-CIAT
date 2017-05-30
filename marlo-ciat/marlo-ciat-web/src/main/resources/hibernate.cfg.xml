@@ -87,6 +87,8 @@
 		<mapping resource="xmls/DeliverableOutputs.hbm.xml" />
 		<mapping resource="xmls/ProjectTypes.hbm.xml" />
 		<mapping resource="xmls/Crps.hbm.xml" />
+		<mapping resource="xmls/CenterParameters.hbm.xml" />
+		<mapping resource="xmls/CenterCustomParameters.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

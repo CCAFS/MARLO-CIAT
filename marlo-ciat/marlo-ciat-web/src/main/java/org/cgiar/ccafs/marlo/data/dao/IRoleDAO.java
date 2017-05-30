@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@
 package org.cgiar.ccafs.marlo.data.dao;
 
 import org.cgiar.ccafs.marlo.data.dao.impl.RoleDAO;
-import org.cgiar.ccafs.marlo.data.model.UserRole;
+import org.cgiar.ccafs.marlo.data.model.Role;
 
 import java.util.List;
 
@@ -27,52 +27,62 @@ import com.google.inject.ImplementedBy;
 public interface IRoleDAO {
 
   /**
-   * This method removes a specific userRole value from the database.
+   * This method removes a specific role value from the database.
    * 
-   * @param userRoleId is the userRole identifier.
-   * @return true if the userRole was successfully deleted, false otherwise.
+   * @param roleId is the role identifier.
+   * @return true if the role was successfully deleted, false otherwise.
    */
-  public boolean deleteUserRole(long userRoleId);
+  public boolean deleteRole(long roleId);
 
   /**
-   * This method validate if the userRole identify with the given id exists in the system.
+   * This method validate if the role identify with the given id exists in the system.
    * 
-   * @param userRoleID is a userRole identifier.
-   * @return true if the userRole exists, false otherwise.
+   * @param roleID is a role identifier.
+   * @return true if the role exists, false otherwise.
    */
-  public boolean existUserRole(long userRoleID);
+  public boolean existRole(long roleID);
 
   /**
-   * This method gets a userRole object by a given userRole identifier.
+   * This method gets a role object by a given role identifier.
    * 
-   * @param userRoleID is the userRole identifier.
-   * @return a UserRole object.
+   * @param roleID is the role identifier.
+   * @return a Role object.
    */
-  public UserRole find(long id);
+  public Role find(long id);
 
   /**
-   * This method gets a list of userRole that are active
+   * This method gets a list of role that are active
    * 
-   * @return a list from UserRole null if no exist records
+   * @return a list from Role null if no exist records
    */
-  public List<UserRole> findAll();
+  public List<Role> findAll();
 
 
   /**
-   * This method gets a list of userRoles belongs of the user
+   * This method gets a list of roles belongs of the user
    * 
    * @param userId - the user id
-   * @return List of UserRoles or null if the user is invalid or not have roles.
+   * @return List of Roles or null if the user is invalid or not have roles.
    */
-  public List<UserRole> getUserRolesByUserId(long userId);
+  public List<Role> getRolesByUserId(long userId);
 
   /**
-   * This method saves the information of the given userRole
+   * This method saves the information of the given role
    * 
-   * @param userRole - is the userRole object with the new information to be added/updated.
-   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the userRole was
+   * @param role - is the role object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the role was
    *         updated
    *         or -1 is some error occurred.
    */
-  public long save(UserRole userRole);
+  public long save(Role role);
+
+  /**
+   * This method saves the information of the given role
+   * 
+   * @param role - is the role object with the new information to be added/updated.
+   * @return a number greater than 0 representing the new ID assigned by the database, 0 if the role was
+   *         updated
+   *         or -1 is some error occurred.
+   */
+  public long save(Role role, String actionName, List<String> relationsName);
 }
