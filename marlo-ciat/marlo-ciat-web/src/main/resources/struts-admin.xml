@@ -24,5 +24,15 @@
       </result>
     </action>
     
+    <action name="{centerSession}/researchManagement"
+      class="org.cgiar.ccafs.marlo.action.admin.ResearchManagementAction">
+      <interceptor-ref name="homeStack" />
+      <result name="input">/WEB-INF/views/admin/researchManagement.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/researchManagement</param>
+        <param name="edit">true</param>
+      </result>
+    </action>
+    
 	</package>
 </struts>

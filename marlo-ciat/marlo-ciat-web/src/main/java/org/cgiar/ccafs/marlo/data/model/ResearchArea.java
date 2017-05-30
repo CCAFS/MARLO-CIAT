@@ -23,6 +23,7 @@ import org.cgiar.ccafs.marlo.data.IAuditLog;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
@@ -40,6 +41,7 @@ public class ResearchArea implements Serializable, IAuditLog {
 
   @Expose
   private Long id;
+
 
   @Expose
   private String name;
@@ -62,14 +64,12 @@ public class ResearchArea implements Serializable, IAuditLog {
   @Expose
   private User createdBy;
 
-
   @Expose
   private User modifiedBy;
 
 
   @Expose
   private String modificationJustification;
-
 
   @Expose
   private String color;
@@ -81,6 +81,12 @@ public class ResearchArea implements Serializable, IAuditLog {
   private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
 
 
+  private List<ResearchProgram> programs;
+
+
+  private List<ResearchLeader> leaders;
+
+
   /**
    * 
    */
@@ -89,6 +95,7 @@ public class ResearchArea implements Serializable, IAuditLog {
     // TODO Auto-generated constructor stub
   }
 
+
   /**
    * @param name
    */
@@ -96,7 +103,6 @@ public class ResearchArea implements Serializable, IAuditLog {
     super();
     this.name = name;
   }
-
 
   /**
    * @param name
@@ -110,7 +116,6 @@ public class ResearchArea implements Serializable, IAuditLog {
     this.name = name;
     this.acronym = acronym;
   }
-
 
   @Override
   public boolean equals(Object obj) {
@@ -134,6 +139,7 @@ public class ResearchArea implements Serializable, IAuditLog {
     return true;
   }
 
+
   /**
    * @return the acronym
    */
@@ -141,14 +147,15 @@ public class ResearchArea implements Serializable, IAuditLog {
     return acronym;
   }
 
-
   public Date getActiveSince() {
     return activeSince;
   }
 
+
   public String getColor() {
     return color;
   }
+
 
   public User getCreatedBy() {
     return createdBy;
@@ -157,6 +164,11 @@ public class ResearchArea implements Serializable, IAuditLog {
   @Override
   public Long getId() {
     return this.id;
+  }
+
+
+  public List<ResearchLeader> getLeaders() {
+    return leaders;
   }
 
   @Override
@@ -180,6 +192,10 @@ public class ResearchArea implements Serializable, IAuditLog {
    */
   public String getName() {
     return name;
+  }
+
+  public List<ResearchProgram> getPrograms() {
+    return programs;
   }
 
   /**
@@ -208,12 +224,10 @@ public class ResearchArea implements Serializable, IAuditLog {
     return result;
   }
 
-
   @Override
   public boolean isActive() {
     return active;
   }
-
 
   /**
    * @param acronym the acronym to set
@@ -228,11 +242,6 @@ public class ResearchArea implements Serializable, IAuditLog {
   }
 
 
-  /*
-   * (non-Javadoc)
-   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
-   */
-
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
@@ -242,6 +251,11 @@ public class ResearchArea implements Serializable, IAuditLog {
     this.color = color;
   }
 
+
+  /*
+   * (non-Javadoc)
+   * @see org.cgiar.ccafs.marlo.data.IAuditLog#getId()
+   */
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
@@ -253,6 +267,11 @@ public class ResearchArea implements Serializable, IAuditLog {
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public void setLeaders(List<ResearchLeader> leaders) {
+    this.leaders = leaders;
   }
 
 
@@ -271,6 +290,11 @@ public class ResearchArea implements Serializable, IAuditLog {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+
+  public void setPrograms(List<ResearchProgram> programs) {
+    this.programs = programs;
   }
 
 
