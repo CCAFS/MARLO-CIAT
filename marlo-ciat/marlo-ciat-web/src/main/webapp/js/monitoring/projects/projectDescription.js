@@ -8,9 +8,12 @@ function init() {
     width: "100%"
   });
 
+  $('.amount').currencyInput();
+
   datePickerConfig({
       "startDate": "#project\\.startDate",
-      "endDate": "#project\\.endDate"
+      "endDate": "#project\\.endDate",
+      "extensionDate": "#project\\.extensionDate"
   });
 
   /** Check region option * */
@@ -369,10 +372,10 @@ function checkOutputsToRemove() {
  * Attach to the date fields the datepicker plugin
  */
 function datePickerConfig(element) {
-  date($(element.startDate), $(element.endDate));
+  date($(element.startDate), $(element.endDate), $(element.extensionDate));
 }
 
-function date(start,end) {
+function date(start,end,extension) {
   var dateFormat = "yy-mm-dd";
   var from = $(start).datepicker({
       dateFormat: dateFormat,
@@ -391,6 +394,22 @@ function date(start,end) {
   });
 
   var to = $(end).datepicker({
+      dateFormat: dateFormat,
+      minDate: '2008-01-01',
+      maxDate: '2019-12-31',
+      changeMonth: true,
+      numberOfMonths: 1,
+      changeYear: true,
+      onChangeMonthYear: function(year,month,inst) {
+        var selectedDate = new Date(inst.selectedYear, inst.selectedMonth + 1, 0);
+        $(this).datepicker('setDate', selectedDate);
+        if(selectedDate != "") {
+          $(start).datepicker("option", "maxDate", selectedDate);
+        }
+      }
+  });
+
+  var to = $(extension).datepicker({
       dateFormat: dateFormat,
       minDate: '2008-01-01',
       maxDate: '2019-12-31',

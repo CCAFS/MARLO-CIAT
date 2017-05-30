@@ -182,7 +182,7 @@
         [@customForm.input name="${milestoneCustomName}.researchMilestone.targetUnit.name" i18nkey="Target Unit" className="milestone-targetYear" required=false editable=false /]
       </div> 
       <div class="col-md-3 col-md-offset-3">
-      [#if (milestone.researchMilestone??)&&!(milestone.researchMilestone.targetUnit.id==-1)]
+      [#if ((milestone.researchMilestone??) && !(milestone.researchMilestone.targetUnit.id == -1))!false]
         [@customForm.input name="${milestoneCustomName}.researchMilestone.value" i18nkey="Expected Value" className="milestone-targetYear" required=false editable=false /]
       [/#if]
       </div>
@@ -194,7 +194,7 @@
         [@customForm.input name="${milestoneCustomName}.researchMilestone.targetYear" i18nkey="Expected completion year" className="milestone-targetYear" required=false editable=false /]
       </div>
       <div class="col-md-3 col-md-offset-3">
-      [#if (milestone.researchMilestone??)&&!(milestone.researchMilestone.targetUnit.id==-1)]
+      [#if ((milestone.researchMilestone??)&&!(milestone.researchMilestone.targetUnit.id==-1))!false]
         [@customForm.input name="${milestoneCustomName}.achievedValue" i18nkey="Achieved value" className="achieved"  required=false editable=editable /]
       [/#if]
       </div>

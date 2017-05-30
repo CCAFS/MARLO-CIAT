@@ -19,6 +19,9 @@ function init() {
 
   $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
+
+  // Change deliverable type
+  $(".typeSelect").on("change", changeDeliverableType);
 }
 
 /** FUNCTIONS documents * */
@@ -201,4 +204,36 @@ function date(start,end) {
 
     return date;
   }
+}
+
+function changeDeliverableType() {
+  var typeID = $(this).val()
+  
+  if (typeID == -1){
+    return
+  }
+  
+  $.ajax({
+      url: baseURL + '/deliverableSubType.do',
+      data: {
+        deliverableTypeId: typeID
+      },
+      beforeSend: function() {
+        $(".loading.subtype").fadeIn();
+        $("select.subTypeSelect").empty();
+        $("select.subTypeSelect").addOption("-1", "Select a sub type...");
+      },
+      success: function(data) {
+        $.each(data.deliverableSubTypes, function(i,type) {
+          $("select.subTypeSelect").addOption(type.id, type.name);
+        });
+      },
+      complete: function() {
+        $(".loading.subtype").fadeOut();
+       // $("select.subTypeSelect").val("-1");
+        $("select.subTypeSelect").select2();
+        // $("select.subTypeSelect").trigger("select2.change");
+      }
+  });
+
 }

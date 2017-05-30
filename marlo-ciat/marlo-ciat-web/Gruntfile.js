@@ -17,6 +17,7 @@ module.exports = function(grunt) {
               },
               replace: {
                 js : function (filePath) {
+                  console.log(filePath);
                   return '[#if libraryName="'+getName(filePath)+'"]<script src="${baseUrl}/' + filePath + '"></script>[/#if]';  
                 },
                 css : function (filePath) {

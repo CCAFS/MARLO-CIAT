@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,11 +15,11 @@
 package org.cgiar.ccafs.marlo.data.service.impl;
 
 
-import java.util.List;
-
-import org.cgiar.ccafs.marlo.data.dao.impl.RoleDAO;
-import org.cgiar.ccafs.marlo.data.model.UserRole;
+import org.cgiar.ccafs.marlo.data.dao.IRoleDAO;
+import org.cgiar.ccafs.marlo.data.model.Role;
 import org.cgiar.ccafs.marlo.data.service.IRoleService;
+
+import java.util.List;
 
 import com.google.inject.Inject;
 
@@ -29,51 +29,57 @@ import com.google.inject.Inject;
 public class RoleService implements IRoleService {
 
 
-  private RoleDAO userRoleDAO;
+  private IRoleDAO roleDAO;
+
   // Managers
 
 
   @Inject
-  public RoleService(RoleDAO userRoleDAO) {
-    this.userRoleDAO = userRoleDAO;
+  public RoleService(IRoleDAO roleDAO) {
+    this.roleDAO = roleDAO;
 
 
   }
 
   @Override
-  public boolean deleteUserRole(long userRoleId) {
+  public boolean deleteRole(long roleId) {
 
-    return userRoleDAO.deleteUserRole(userRoleId);
+    return roleDAO.deleteRole(roleId);
   }
 
   @Override
-  public boolean existUserRole(long userRoleID) {
+  public boolean existRole(long roleID) {
 
-    return userRoleDAO.existUserRole(userRoleID);
+    return roleDAO.existRole(roleID);
   }
 
   @Override
-  public List<UserRole> findAll() {
+  public List<Role> findAll() {
 
-    return userRoleDAO.findAll();
+    return roleDAO.findAll();
 
   }
 
   @Override
-  public UserRole getUserRoleById(long userRoleID) {
+  public Role getRoleById(long roleID) {
 
-    return userRoleDAO.find(userRoleID);
+    return roleDAO.find(roleID);
   }
 
   @Override
-  public List<UserRole> getUserRolesByUserId(Long userId) {
-    return userRoleDAO.getUserRolesByUserId(userId);
+  public List<Role> getRolesByUserId(Long userId) {
+    return roleDAO.getRolesByUserId(userId);
   }
 
   @Override
-  public long saveUserRole(UserRole userRole) {
+  public long saveRole(Role role) {
 
-    return userRoleDAO.save(userRole);
+    return roleDAO.save(role);
+  }
+
+  @Override
+  public long saveRole(Role role, String actionName, List<String> relationsName) {
+    return roleDAO.save(role, actionName, relationsName);
   }
 
 

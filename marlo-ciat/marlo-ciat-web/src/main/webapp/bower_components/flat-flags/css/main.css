@@ -4,7 +4,6 @@
   width: 24px;
   height: 16px;
   line-height: 16px;
-  background-position: 100% 100%;
 }
 .flag-sm-AD {
   background-position: -24px 0;
@@ -547,6 +546,9 @@
   background-position: -264px -48px;
 }
 .flag-sm-UK {
+  background-position: -264px -64px;
+}
+.flag-sm-GB {
   background-position: -264px -64px;
 }
 .flag-sm-US {

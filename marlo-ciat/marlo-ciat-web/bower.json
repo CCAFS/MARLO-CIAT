@@ -20,7 +20,7 @@
     "jquery-ui": "^1.11.4",
     "html5shiv": "^3.7.3",
     "jReject": "^1.1.4",
-    "noty": "^2.3.8",
+    "noty": "^2.4.1",
     "select2": "^4.0.2",
     "autogrow-textarea": "*",
     "datatables": "^1.10.11",
@@ -38,7 +38,11 @@
     "datatables.net-bs": "^1.10.12",
     "jQuery-Timelinr": "https://github.com/juanbrujo/jQuery-Timelinr.git#^0.9.6",
     "cytoscape-qtip": "^2.4.0",
-    "qtip2": "https://github.com/qTip2/qTip2.git#^3.0.3"
+    "intro.js": "^2.3.0",
+    "font-awesome": "^4.7.0",
+    "blueimp-file-upload": "^9.14.1",
+    "qtip2": "^2.2.1",
+    "jquery-pretty-text-diff": "^1.0.5"
   },
   "overrides": {
     "jquery": {
@@ -83,8 +87,12 @@
     },
     "jQuery-Timelinr": {
       "main": [
-        "js/jquery.timelinr-0.9.6.js",
-        "css/style.css"
+        "js/jquery.timelinr-0.9.6.js"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css"
       ]
     }
   }

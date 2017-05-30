@@ -49,65 +49,77 @@
             </small>  
           <h3 class="headTitle">[@s.text name="Key deliverable information" /]</h3>
           <div id="projectDeliverable" class="borderBox">
-            <div class="form-group row">  
             [#-- Deliverable title --]
-              <div class="col-md-12">
+            <div class="form-group ">  
+               
                 [@customForm.input name="deliverable.name" i18nkey="Title" type="text" disabled=!editable  required=true editable=editable /]
-              </div>  
+               
             </div>
+            [#-- Deliverable Type--]
             <div class="form-group row">
-              [#-- deliverable tpye --]
-              <div class="col-md-12">
-                [@customForm.select name="deliverable.deliverableType.id"  i18nkey="Type" listName="deliverableTypes" keyFieldName="id"  displayFieldName="name" className="deliverableTypeSelect" value="deliverable.deliverableType.id" /]
-              </div>  
+              <div class="col-md-6 ">
+                [@customForm.select name="deliverable.deliverableType.deliverableType.id" label=""  i18nkey="deliverable.type" listName="deliverableTypeParent" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect" editable=editable/]
+              </div>
+              <div class="col-md-6">
+                <div class="loading subtype" style="display:none"></div>
+                [@customForm.select name="deliverable.deliverableType.id" label=""  i18nkey="deliverable.subType" listName="deliverableSubTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true placeholder="Select a sub type..."  className="subTypeSelect" editable=editable/]
+              </div>
+              
             </div>
+            [#-- Start Date & End Date --]
             <div class="form-group row">  
-              [#-- Start Date --]
               <div class="col-md-6">
                 [@customForm.input name="deliverable.startDate" i18nkey="Start date" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
-              [#-- End Date --]
               <div class="col-md-6">
                 [@customForm.input name="deliverable.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
               </div>
-              
-              
-              [#-- Select the cross-cutting dimension(s) to this project? --]
-              <div class="form-group col-md-12">
-                <label for="">[@customForm.text name="deliverable.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
-                <div class="row">
-                  <div class="col-md-12">
-                    [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > Climate Change</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.gender"    id="gender"    value="true" [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]checked="checked"[/#if] > Gender</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.youth"    id="youth"    value="true" [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]checked="checked"[/#if] > Youth</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
-                    [#else]
-                      [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
-                      [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]<p class="checked"> Gender</p>[/#if]
-                      [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]<p class="checked"> Youth</p>[/#if]
-                      [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]                      
-                    [/#if]
-                  </div>
-                  <div class="col-md-12">
-                    [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.bigData" id="bigData" value="true" [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > Impact Assessment</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.na"       id="na"       value="true" [#if (deliverable.deliverableCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
-                    [#else]
-                      [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
-                      [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
-                      [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]<p class="checked"> Impact Assessment</p>[/#if]
-                      [#if (deliverable.deliverableCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]                     
-                    [/#if]
-                  </div>
+            </div>
+            
+            [#-- Select the cross-cutting dimension(s) to this project? --]
+            <div class="form-group">  
+              <label for="">[@customForm.text name="deliverable.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
+              <div class="row">
+                <div class="col-md-3">
+                  [#if editable]
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > Climate Change</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
+                  [#else]
+                    [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
+                  [/#if]
                 </div>
-                <br />
+                <div class="col-md-3">
+                  [#if editable]
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.gender"    id="gender"    value="true" [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]checked="checked"[/#if] > Gender</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.bigData" id="bigData" value="true" [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
+                  [#else]
+                    [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]<p class="checked"> Gender</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
+                   [/#if]
+                </div>
+                <div class="col-md-3">
+                  [#if editable]
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.youth"    id="youth"    value="true" [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]checked="checked"[/#if] > Youth</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > Impact Assessment</label>
+                  [#else]
+                    [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]<p class="checked"> Youth</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]<p class="checked"> Impact Assessment</p>[/#if]
+                  [/#if]
+                </div>
+                <div class="col-md-3">
+                  [#if editable]
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.na"       id="na"       value="true" [#if (deliverable.deliverableCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
+                  [#else]
+                    [#if (deliverable.deliverableCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]                     
+                  [/#if]
+                </div> 
               </div>
-          </div>
+            </div>
           
-           [#-- Outputs --]
+            [#-- Outputs --]
               <div class="fullPartBlock">      
                 <div class="output panel tertiary" listname="deliverable.outputs">
                   <div class="panel-head"><label for="">[@customForm.text name="deliverable.outputs" readText=!editable /]</label></div> 

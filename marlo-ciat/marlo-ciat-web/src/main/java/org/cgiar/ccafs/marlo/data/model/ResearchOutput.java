@@ -125,6 +125,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
   }
 
 
+  public String getComposedName() {
+    return "O" + this.id + "- " + this.title;
+  }
+
+
   public User getCreatedBy() {
     return createdBy;
   }
@@ -136,7 +141,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public Date getDateAdded() {
     return dateAdded;
   }
-
 
   /**
    * @return the id
@@ -157,11 +161,11 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modificationJustification;
   }
 
+
   @Override
   public User getModifiedBy() {
     return modifiedBy;
   }
-
 
   public List<ResearchOutputsNextUser> getNextUsers() {
     return nextUsers;
@@ -171,13 +175,13 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return partners;
   }
 
+
   /**
    * @return the researchOutcome
    */
   public ResearchOutcome getResearchOutcome() {
     return researchOutcome;
   }
-
 
   public Set<ResearchOutputPartner> getResearchOutputPartners() {
     return researchOutputPartners;
@@ -195,10 +199,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return shortName;
   }
 
+
   public String getTitle() {
     return title;
   }
-
 
   @Override
   public int hashCode() {
@@ -207,6 +211,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
+
 
   @Override
   public boolean isActive() {
@@ -236,7 +241,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.dateAdded = dateAdded;
   }
 
-
   /**
    * @param id the id to set
    */
@@ -248,6 +252,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.modificationJustification = modificationJustification;
   }
 
+
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
@@ -257,10 +262,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.nextUsers = nextUsers;
   }
 
-
   public void setPartners(List<ResearchOutputPartner> partners) {
     this.partners = partners;
   }
+
 
   /**
    * @param researchOutcome the researchOutcome to set
@@ -268,7 +273,6 @@ public class ResearchOutput implements Serializable, IAuditLog {
   public void setResearchOutcome(ResearchOutcome researchOutcome) {
     this.researchOutcome = researchOutcome;
   }
-
 
   public void setResearchOutputPartners(Set<ResearchOutputPartner> researchOutputPartners) {
     this.researchOutputPartners = researchOutputPartners;

@@ -138,7 +138,7 @@
           [@beneficiaryMacro beneficiary=beneficiary name="${customName}.beneficiaries" index=beneficiary_index /]
         [/#list]
       [#else]
-        <p class="message text-center">[@s.text name="No beneficiaries have been added."/]</p>
+        [@beneficiaryMacro beneficiary={} name="${customName}.beneficiaries" index=0 /]
       [/#if]
      
     </div>

@@ -53,5 +53,12 @@
       </key>
       <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchObjective" />
     </set>
+    <set lazy="true" name="centerCustomParameters" table="center_custom_parameters" inverse="true"
+      fetch="select">
+      <key>
+        <column name="center_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterCustomParameter" />
+    </set>
 	</class>
 </hibernate-mapping>

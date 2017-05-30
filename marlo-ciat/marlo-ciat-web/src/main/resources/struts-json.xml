@@ -59,7 +59,7 @@
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
-
+		
 		<action name="nextUserByType"
 			class="org.cgiar.ccafs.marlo.action.json.impactpathway.NextUserListAction">
 			<result type="json">
@@ -129,6 +129,14 @@
     
     <action name="validateProject"
       class="org.cgiar.ccafs.marlo.action.json.monitoring.project.ValidateProjectSectionAction">
+      <result type="json">
+        <param name="noCache">true</param>
+        <param name="excludeNullProperties">true</param>
+      </result>
+    </action>
+    
+    <action name="deliverableSubType"
+      class="org.cgiar.ccafs.marlo.action.json.monitoring.project.DeliverableSubTypeAction">
       <result type="json">
         <param name="noCache">true</param>
         <param name="excludeNullProperties">true</param>
