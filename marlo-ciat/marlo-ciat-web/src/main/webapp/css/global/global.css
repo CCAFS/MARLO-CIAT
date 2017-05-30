@@ -6219,3 +6219,18 @@ p.title{
     line-height: 0.9em;
     margin-bottom: 4px;
 }
+
+.tagMainMenu{
+    position: absolute;
+    top: -27px;
+    left: 0;
+    width: 227%;
+    text-align: center;
+    border: 1px solid #26935f;
+    background-color: #2d9764;
+    border-radius: 10px 10px 0px 0px;
+    padding: 2px;
+    font-weight:500!important;
+    background: linear-gradient(to right, rgb(32, 144, 90), rgb(44, 150, 100), rgb(50, 153, 104));
+    z-index: 999;
+}

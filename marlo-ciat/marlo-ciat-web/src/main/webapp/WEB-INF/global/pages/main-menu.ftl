@@ -12,6 +12,9 @@
   [#list mainMenu as item]
    [#if item.visible]
     <li id="${item.slug}" class="[#if currentSection?? && currentSection == item.slug ]currentSection[/#if] ${(item.active)?string('enabled','disabled')}">
+      [#if item_index==3]
+        <span class="tagMainMenu">Monitoring Programs</span>
+      [/#if]
       <a href="[@s.url namespace=item.namespace action='${item.action}'][#if logged][@s.param name="edit" value="true"/][/#if][/@s.url]" onclick="return ${item.active?string}">
         [#if item.icon?has_content]<span class="glyphicon glyphicon-${item.icon}"></span> [/#if]
         [@s.text name=item.name ][@s.param]${(crpSession?upper_case)!'CRP'}[/@s.param] [/@s.text]
@@ -41,7 +44,6 @@
 	  <ul class="hidden-md hidden-lg">
 	   <li> <span class="glyphicon glyphicon-menu-hamburger"></span> Menu
 	     <ul class="subMenu">
-	     <li style="background-color:red; width:100px;">text holi asdad</li>
 	       [@mainMenuList /]
 	     </ul>
 	   </li>
