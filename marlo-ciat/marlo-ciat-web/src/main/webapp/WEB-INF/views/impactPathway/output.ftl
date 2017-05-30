@@ -93,7 +93,7 @@
             [@nextUserMacro nextUser=nextUser name="${outputCustomName}.nextUsers" index=nextUser_index /]
             [/#list]
             [#else]
-            <p class="message text-center">[@s.text name="No Next Users have been added."/]</p>
+            [@nextUserMacro nextUser={} name="${outputCustomName}.nextUsers" index=0 /]
           [/#if] 
         </div>
         [#if editable] 

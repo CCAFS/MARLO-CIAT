@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of Managing Agricultural Research for Learning & 
- * Outcomes Platform (MARLO). 
+ * This file is part of Managing Agricultural Research for Learning &
+ * Outcomes Platform (MARLO).
  * MARLO is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,10 +16,10 @@
 
 package org.cgiar.ccafs.marlo.data.dao.impl;
 
-import java.util.List;
-
 import org.cgiar.ccafs.marlo.data.dao.IRoleDAO;
-import org.cgiar.ccafs.marlo.data.model.UserRole;
+import org.cgiar.ccafs.marlo.data.model.Role;
+
+import java.util.List;
 
 import com.google.inject.Inject;
 
@@ -33,15 +33,15 @@ public class RoleDAO implements IRoleDAO {
   }
 
   @Override
-  public boolean deleteUserRole(long userRoleId) {
-    UserRole userRole = this.find(userRoleId);
-    return dao.delete(userRole);
+  public boolean deleteRole(long roleId) {
+    Role role = this.find(roleId);
+    return dao.delete(role);
   }
 
   @Override
-  public boolean existUserRole(long userRoleID) {
-    UserRole userRole = this.find(userRoleID);
-    if (userRole == null) {
+  public boolean existRole(long roleID) {
+    Role role = this.find(roleID);
+    if (role == null) {
       return false;
     }
     return true;
@@ -49,15 +49,15 @@ public class RoleDAO implements IRoleDAO {
   }
 
   @Override
-  public UserRole find(long id) {
-    return dao.find(UserRole.class, id);
+  public Role find(long id) {
+    return dao.find(Role.class, id);
 
   }
 
   @Override
-  public List<UserRole> findAll() {
-    String query = "from " + UserRole.class.getName();
-    List<UserRole> list = dao.findAll(query);
+  public List<Role> findAll() {
+    String query = "from " + Role.class.getName();
+    List<Role> list = dao.findAll(query);
     if (list.size() > 0) {
       return list;
     }
@@ -66,19 +66,29 @@ public class RoleDAO implements IRoleDAO {
   }
 
   @Override
-  public List<UserRole> getUserRolesByUserId(long userId) {
-    String query = "from " + UserRole.class.getName() + " where user_id=" + userId;
+  public List<Role> getRolesByUserId(long userId) {
+    String query = "from " + Role.class.getName() + " where user_id=" + userId;
     return dao.findAll(query);
   }
 
   @Override
-  public long save(UserRole userRole) {
-    if (userRole.getId() == null) {
-      dao.save(userRole);
+  public long save(Role role) {
+    if (role.getId() == null) {
+      dao.save(role);
     } else {
-      dao.update(userRole);
+      dao.update(role);
     }
-    return userRole.getId();
+    return role.getId();
+  }
+
+  @Override
+  public long save(Role role, String actionName, List<String> relationsName) {
+    if (role.getId() == null) {
+      dao.save(role, actionName, relationsName);
+    } else {
+      dao.update(role, actionName, relationsName);
+    }
+    return role.getId();
   }
 
 

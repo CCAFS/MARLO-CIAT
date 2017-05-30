@@ -18,6 +18,7 @@ package org.cgiar.ccafs.marlo.action.home;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ADLoginMessages;
+import org.cgiar.ccafs.marlo.data.model.CenterCustomParameter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
@@ -154,6 +155,14 @@ public class LoginAction extends BaseAction {
             userManager.saveLastLogin(loggedUser);
             this.getSession().put(APConstants.SESSION_USER, loggedUser);
             this.getSession().put(APConstants.SESSION_CENTER, loggedCrp);
+
+            // put the crp parameters in the session
+            for (CenterCustomParameter parameter : loggedCrp.getCenterCustomParameters()) {
+              if (parameter.isActive()) {
+                this.getSession().put(parameter.getCenterParameter().getKey(), parameter.getValue());
+              }
+            }
+
             this.getSession().put("color", this.randomColor());
           } else {
 

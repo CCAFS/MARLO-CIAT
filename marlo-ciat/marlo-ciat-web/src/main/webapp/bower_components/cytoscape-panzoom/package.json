@@ -1,8 +1,9 @@
 {
   "name": "cytoscape-panzoom",
-  "version": "2.4.0",
+  "version": "2.5.2",
   "description": "Panzoom extension for Cytoscape.js",
   "main": "cytoscape-panzoom.js",
+  "style": "cytoscape.js-panzoom.css",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,7 +30,9 @@
     "run-sequence": "^1.0.0"
   },
   "peerDependencies": {
-    "jquery": "^1.4 || ^2.0",
-    "cytoscape": "^2.0"
+    "cytoscape": "^2.0.0 || ^3.0.0"
+  },
+  "dependencies": {
+    "jquery": "^1.4 || ^2.0 || ^3.0"
   }
 }

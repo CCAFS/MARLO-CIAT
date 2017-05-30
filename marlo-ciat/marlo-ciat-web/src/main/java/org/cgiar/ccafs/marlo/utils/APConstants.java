@@ -43,6 +43,7 @@ public final class APConstants {
   public static final String CENTER_PARAMETERS = "center_parameters";
   public static final String CENTER_LANGUAGE = "center_language";
   public static final String CENTER_CUSTOM_FILE = "center_custom_file";
+  public static final String CENTER_COORD_ROLE = "center_coord_role";
 
   // Query parameter
   public static final String QUERY_PARAMETER = "q";

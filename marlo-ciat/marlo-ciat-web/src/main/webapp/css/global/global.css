@@ -10,7 +10,7 @@ table{
 }
 
 label {
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   font-weight: 600;
   line-height: 1.1em;
   vertical-align: middle;
@@ -1718,14 +1718,22 @@ a.currentReportingSection li, a.currentSection li {
 }
 
 #secondaryMenu ul p.menuTitle{
-  list-style: none;
-  margin: 0;
-  padding: 2px 0;
-  font-weight: lighter;
-  color: #ffffff;
-  background: #1a8c56;
-  text-align: center;
-  border-radius: 2px;
+  
+list-style: none;
+  
+margin: 0;
+  
+padding: 2px 0;
+  
+font-weight: lighter;
+  
+color: #ffffff;
+  
+background: #1a8c56;
+  
+text-align: center;
+  
+border-radius: 2px;
 }
 
 #secondaryMenu ul p.subText {
@@ -5173,7 +5181,6 @@ background-color: #f1f1f1;font-size: 0.9em;padding: 0 7px;border-radius: 4px;}
 
 .extraOptions {
   margin: 10px 16px;
-  width: 60.4%;
 }
 
 /* Summaries Section icons*/
@@ -6211,4 +6218,19 @@ p.title{
     font-size: 1.3em;
     line-height: 0.9em;
     margin-bottom: 4px;
+}
+
+.tagMainMenu{
+    position: absolute;
+    top: -27px;
+    left: 0;
+    width: 227%;
+    text-align: center;
+    border: 1px solid #26935f;
+    background-color: #2d9764;
+    border-radius: 10px 10px 0px 0px;
+    padding: 2px;
+    font-weight:500!important;
+    background: linear-gradient(to right, rgb(32, 144, 90), rgb(44, 150, 100), rgb(50, 153, 104));
+    z-index: 999;
 }

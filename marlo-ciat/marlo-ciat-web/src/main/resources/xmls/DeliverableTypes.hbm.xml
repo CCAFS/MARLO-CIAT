@@ -8,6 +8,9 @@
             <column name="id" />
             <generator class="identity" />
         </id>
+        <many-to-one name="deliverableType" class="org.cgiar.ccafs.marlo.data.model.DeliverableType" fetch="select">
+            <column name="parent_id" />
+        </many-to-one>
         <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="modified_by" />
         </many-to-one>

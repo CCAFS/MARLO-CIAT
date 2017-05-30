@@ -62,9 +62,10 @@ function attachEvents() {
       console.log(i);
       // Empty
       $(select).empty();
+      $(select).addOption(-1, "Select a year...")
       // New Years list
       while(startYear <= endYear) {
-        $(select).addOption(startYear, startYear)
+        $(select).addOption(startYear, startYear);
         startYear++;
       }
       // Set value
