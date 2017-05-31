@@ -46,7 +46,12 @@
               <span class="hidden forReportingCycle forCycle"></span>
               <span class="hidden fileTypes excelType">leadProjectInstitutionsSummary-leadProjectInstitutionsSummary</span>
               <div class="pull-right">
-                <a style="display:none;" target="_blank" class="generateReport addButton pull-right" style="" href="#">[@s.text name="form.buttons.generate" /]</a>
+              <!----
+                <a style="display:none;" target="_blank" class="generateReport addButton pull-right" style="" href="">[@s.text name="form.buttons.generate" /]</a>
+               -->
+               <a href="[@s.url action='impactPathwayOutcomes'][/@s.url]">
+                <span class="generateReport addButton pull-right"></span> + Generate
+               </a>
               </div>
             </div>
           </div>
