@@ -136,7 +136,7 @@ public class Clones {
      */
 
 
-    String[] model = {"User"};
+    String[] model = {"SrfCrossCuttingIssue", "SrfIdo"};
 
     for (int i = 0; i < model.length; i++) {
       generateDao(model[i]);
