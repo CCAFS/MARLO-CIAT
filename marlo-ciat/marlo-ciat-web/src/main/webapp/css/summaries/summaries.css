@@ -247,6 +247,14 @@ vertical-align: middle;}
 	    border-bottom: 3px solid #1E94B8;
 	    border-radius: 6px;
 }
+
+.directlyReport{
+	    background: url(../../images/global/add.png) no-repeat 4px #2BA6CB;
+    padding: 4px 25px 4px 28px;
+    margin: 5px 0;
+    text-decoration: none;
+    cursor: pointer;
+}
 /* INFO ANIMATION */
 
 span.info-file {
