@@ -281,7 +281,7 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     // Initialization of Model
     TypedTableModel model = new TypedTableModel(new String[] {"title", "current_date", "imageUrl"},
       new Class[] {String.class, String.class, String.class});
-    String title = "";
+    String title = "Impact Pathway Full Report";
     String currentDate = "";
 
     // Get title
