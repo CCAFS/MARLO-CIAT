@@ -162,7 +162,7 @@
 
   [#-- Type select --]
   <div class="col-md-4">
-  [@customForm.select name="${beneficiaryCustomName}.beneficiary.beneficiaryType.id" label=""  i18nkey="Type" listName="beneficiaryTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
+  [@customForm.select name="${beneficiaryCustomName}.beneficiary.beneficiaryType.id" label=""  i18nkey="Type" listName="beneficiaryTypes" keyFieldName="id"  displayFieldName="name - acronym"  multiple=false required=true  className="typeSelect form-control input-sm " editable=editable/]
   </div>   
 
   [#-- Focus select --]

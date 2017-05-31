@@ -17,9 +17,17 @@ package org.cgiar.ccafs.marlo.action.capdev;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
+import org.cgiar.ccafs.marlo.data.model.Crp;
+import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ResearchArea;
+import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
+import org.cgiar.ccafs.marlo.data.service.ICrpService;
+import org.cgiar.ccafs.marlo.data.service.IProjectService;
+import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -41,13 +49,26 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private List<String> outcomes = new ArrayList<>();
   private List<String> types = new ArrayList<>();
   private List<String> deliverables = new ArrayList<>();
+  private List<ResearchArea> researchAreas;
+  private List<ResearchProgram> researchPrograms;
+  private List<Project> projects;
+  private List<Crp> crps;
   private final ICapacityDevelopmentService capdevService;
-
+  private final IResearchAreaService researchAreaService;
+  private final IResearchProgramDAO researchProgramSercive;
+  private final IProjectService projectService;
+  private final ICrpService crpService;
 
   @Inject
-  public CapacityDevelopmentDescripcionAction(APConfig config, ICapacityDevelopmentService capdevService) {
+  public CapacityDevelopmentDescripcionAction(APConfig config, ICapacityDevelopmentService capdevService,
+    IResearchAreaService researchAreaService, IResearchProgramDAO researchProgramSercive,
+    IProjectService projectService, ICrpService crpService) {
     super(config);
     this.capdevService = capdevService;
+    this.researchAreaService = researchAreaService;
+    this.researchProgramSercive = researchProgramSercive;
+    this.projectService = projectService;
+    this.crpService = crpService;
   }
 
 
@@ -73,6 +94,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public List<Crp> getCrps() {
+    return crps;
+  }
+
+
   public List<String> getDeliverables() {
     return deliverables;
   }
@@ -80,6 +106,21 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public List<String> getOutcomes() {
     return outcomes;
+  }
+
+
+  public List<Project> getProjects() {
+    return projects;
+  }
+
+
+  public List<ResearchArea> getResearchAreas() {
+    return researchAreas;
+  }
+
+
+  public List<ResearchProgram> getResearchPrograms() {
+    return researchPrograms;
   }
 
 
@@ -109,6 +150,12 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     types.add("Publication");
     types.add("Ph Thesis");
 
+    researchAreas = researchAreaService.findAll();
+    researchPrograms = researchProgramSercive.findAll();
+    projects = projectService.findAll();
+    crps = crpService.findAll();
+    System.out.println("research progrmas -->" + researchPrograms.size());
+
     try {
       capDevID = Integer.parseInt(StringUtils.trim(this.getRequest().getParameter("capDevID")));
     } catch (final Exception e) {
@@ -116,10 +163,7 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     }
 
     if (capDevID > -1) {
-      /*
-       * capdev = new CapacityDevelopment(1,
-       * "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis");
-       */
+
     } else {
       capdev = new CapacityDevelopment();
     }
@@ -131,17 +175,21 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   @Override
   public String save() {
 
+
     System.out.println("este es el titulo -->" + capdev.getTitle());
     System.out.println("este es el tipo -->" + capdev.getCapdevType());
+
 
     final Session session = SecurityUtils.getSubject().getSession();
 
     final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
     System.out.println("User actual -->" + currentUser);
+
     capdev.setCategory(1);
     capdev.setActive(true);
     capdev.setUsersByCreatedBy(currentUser);
     capdevService.saveCapacityDevelopment(capdev);
+
 
     return SUCCESS;
   }
@@ -162,6 +210,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public void setCrps(List<Crp> crps) {
+    this.crps = crps;
+  }
+
+
   public void setDeliverables(List<String> deliverables) {
     this.deliverables = deliverables;
   }
@@ -169,6 +222,21 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setOutcomes(List<String> outcomes) {
     this.outcomes = outcomes;
+  }
+
+
+  public void setProjects(List<Project> projects) {
+    this.projects = projects;
+  }
+
+
+  public void setResearchAreas(List<ResearchArea> researchAreas) {
+    this.researchAreas = researchAreas;
+  }
+
+
+  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+    this.researchPrograms = researchPrograms;
   }
 
 

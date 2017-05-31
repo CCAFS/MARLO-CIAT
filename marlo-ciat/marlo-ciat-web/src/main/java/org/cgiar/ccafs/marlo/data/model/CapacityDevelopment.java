@@ -1,6 +1,6 @@
 package org.cgiar.ccafs.marlo.data.model;
 // default package
-// Generated May 30, 2017 2:03:25 PM by Hibernate Tools 3.4.0.CR1
+// Generated May 30, 2017 3:06:49 PM by Hibernate Tools 3.4.0.CR1
 
 
 import java.util.Date;
@@ -11,11 +11,16 @@ import java.util.Date;
 public class CapacityDevelopment implements java.io.Serializable {
 
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   private Long id;
   private Project project;
   private User usersByModifiedBy;
   private User usersByCreatedBy;
   private ResearchArea researchArea;
+  private Crp crp;
   private ResearchProgram researchProgram;
   private String title;
   private String capdevType;
@@ -28,20 +33,20 @@ public class CapacityDevelopment implements java.io.Serializable {
   private Date startDate;
   private Date endDate;
   private Integer numParticipants;
-  private Integer crp;
 
   public CapacityDevelopment() {
   }
 
 
   public CapacityDevelopment(Project project, User usersByModifiedBy, User usersByCreatedBy, ResearchArea researchArea,
-    ResearchProgram researchProgram, String title, String capdevType, int category, boolean active,
+    Crp crp, ResearchProgram researchProgram, String title, String capdevType, int category, boolean active,
     String modificationJustification, String ctFirstName, String ctLastName, String ctEmail, Date startDate,
-    Date endDate, Integer numParticipants, Integer crp) {
+    Date endDate, Integer numParticipants) {
     this.project = project;
     this.usersByModifiedBy = usersByModifiedBy;
     this.usersByCreatedBy = usersByCreatedBy;
     this.researchArea = researchArea;
+    this.crp = crp;
     this.researchProgram = researchProgram;
     this.title = title;
     this.capdevType = capdevType;
@@ -54,7 +59,6 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.startDate = startDate;
     this.endDate = endDate;
     this.numParticipants = numParticipants;
-    this.crp = crp;
   }
 
   public CapacityDevelopment(String title, String capdevType, int category, boolean active, String ctFirstName,
@@ -77,7 +81,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     return this.category;
   }
 
-  public Integer getCrp() {
+  public Crp getCrp() {
     return this.crp;
   }
 
@@ -141,8 +145,8 @@ public class CapacityDevelopment implements java.io.Serializable {
     return this.active;
   }
 
-  public void setActive(boolean isActive) {
-    this.active = isActive;
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
   public void setCapdevType(String capdevType) {
@@ -153,7 +157,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.category = category;
   }
 
-  public void setCrp(Integer crp) {
+  public void setCrp(Crp crp) {
     this.crp = crp;
   }
 
@@ -193,7 +197,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.researchArea = researchArea;
   }
 
-  public void setResearchPrograms(ResearchProgram researchProgram) {
+  public void setResearchProgram(ResearchProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
 

@@ -84,12 +84,12 @@
 		<mapping resource="xmls/ProjectPartners.hbm.xml" />
 		<mapping resource="xmls/ProjectLocations.hbm.xml" />
 		<mapping resource="xmls/DeliverableCrosscutingThemes.hbm.xml" />
-		<mapping resource="xmls/CapacityDevelopment.hbm.xml" />	
 		<mapping resource="xmls/DeliverableOutputs.hbm.xml" />
 		<mapping resource="xmls/ProjectTypes.hbm.xml" />
 		<mapping resource="xmls/Crps.hbm.xml" />
 		<mapping resource="xmls/CenterParameters.hbm.xml" />
 		<mapping resource="xmls/CenterCustomParameters.hbm.xml" />
+		<mapping resource="xmls/CapacityDevelopment.hbm.xml" />
 
 	</session-factory>
 

@@ -114,7 +114,6 @@ public class CapacityDevelopmentAction extends BaseAction {
 
   @Override
   public String save() {
-    System.out.println("este es el title:" + capdev.getTitle());
     return super.save();
   }
 

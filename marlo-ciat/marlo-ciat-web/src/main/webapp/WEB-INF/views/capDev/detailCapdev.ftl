@@ -75,10 +75,10 @@
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 ">
-				[@customForm.input name="" i18nkey="capdev.form.startDate" type="text"   /]
+				[@customForm.input name="capdev.startDate" i18nkey="capdev.form.startDate" type="text" required=true  editable=true /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="" i18nkey="capdev.form.endDate" type="text"   /]
+				[@customForm.input name="capdev.endDate" i18nkey="capdev.form.endDate" type="text"  editable=true /]
 			</div>
 			</div>
 		</div>
@@ -89,7 +89,7 @@
 				[@customForm.select name="" listName="" i18nkey="capdev.form.country" placeholder="select option..."  /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.input name="" i18nkey="capdev.form.region" type="text"     /]
+				[@customForm.select name="" listName="" i18nkey="capdev.form.region" placeholder="select option..."  /]
 			</div>
 			</div>
 		</div>
@@ -97,24 +97,24 @@
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="" i18nkey="capdev.form.researchArea" placeholder="select option..."  /]
+				[@customForm.select name="" listName="researchAreas" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.researchArea" placeholder="select option..."  /]
 			</div>
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="" i18nkey="capdev.form.researchProgram" placeholder="select option..."  /]
+				[@customForm.select name="" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="select option..."  /]
 			</div>
 			</div>
 		</div>
 		<!-- project-->
 		<div class="row newCapdevField">
 			<div class="col-md-12 ">
-				[@customForm.select name="" listName="" i18nkey="capdev.form.project" placeholder="select option..."  /]
+				[@customForm.select name="" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="select option..."  /]
 			</div>
 		</div>
-		<!-- CRP and Dictated by-->
+		<!-- CRP -->
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="" i18nkey="capdev.form.crp" placeholder="select option..."  /]
+				[@customForm.select name="" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="select option..."  /]
 			</div>
 			<div class="col-md-6 ">
 				[@customForm.input name="" i18nkey="capdev.form.dictated" type="text"  /]
