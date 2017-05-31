@@ -85,12 +85,12 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
   nodesInit.forEach(function(ele) {
     var label = ele.data("label");
-    var short = label;
+    var shortLabel = label;
     if(label.length > 7){
-      short=label.substr(0, 7) + ' ... ';
+      shortLabel=label.substr(0, 7) + ' ... ';
     }
     
-    ele.data("label", short);
+    ele.data("label", shortLabel);
     ele.css('background-color', ele.data('color'));
     if(ele.data('type') === 'F') {
       colorFlagship = ele.data('color');
