@@ -42,16 +42,31 @@ import org.slf4j.LoggerFactory;
  */
 public class OuputRequestAction extends BaseAction {
 
+
   private static final long serialVersionUID = -1648698670582263338L;
+
 
   // Logger
   private static final Logger LOG = LoggerFactory.getLogger(OuputRequestAction.class);
 
+
   private SendMail sendMail;
+
+
   private IResearchOutcomeService outcomeService;
+
+
   private IProgramService programService;
+
+
   private List<TopicOutcomes> outcomes;
+
+
   private long programID;
+
+
+  private boolean messageSent;
+
   private ResearchOutput output;
 
   @Inject
@@ -61,6 +76,22 @@ public class OuputRequestAction extends BaseAction {
     this.outcomeService = outcomeService;
     this.programService = programService;
     this.sendMail = sendMail;
+  }
+
+  public List<TopicOutcomes> getOutcomes() {
+    return outcomes;
+  }
+
+  public ResearchOutput getOutput() {
+    return output;
+  }
+
+  public long getProgramID() {
+    return programID;
+  }
+
+  public boolean isMessageSent() {
+    return messageSent;
   }
 
   @Override
@@ -130,7 +161,25 @@ public class OuputRequestAction extends BaseAction {
     this.addActionMessage("message:" + this.getText("saving.saved"));
     messages = this.getActionMessages();
 
+    messageSent = true;
+
     return SUCCESS;
+  }
+
+  public void setMessageSent(boolean messageSent) {
+    this.messageSent = messageSent;
+  }
+
+  public void setOutcomes(List<TopicOutcomes> outcomes) {
+    this.outcomes = outcomes;
+  }
+
+  public void setOutput(ResearchOutput output) {
+    this.output = output;
+  }
+
+  public void setProgramID(long programID) {
+    this.programID = programID;
   }
 
 }

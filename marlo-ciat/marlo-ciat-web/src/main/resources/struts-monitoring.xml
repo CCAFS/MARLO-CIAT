@@ -142,6 +142,16 @@
         <param name="programID">${projectID}</param>
       </result>
     </action>
+    
+    <action name="{center}/outputRequest"
+      class="org.cgiar.ccafs.marlo.action.monitoring.project.OuputRequestAction">
+      <result name="input">/WEB-INF/views/monitoring/project/outputRequest.ftl</result>
+      <result name="success" type="redirectAction">
+        <param name="actionName">${centerSession}/outputRequest</param>
+        <param name="projectID">${projectID}</param>
+        <param name="messageSent">${messageSent}</param>
+      </result>
+    </action>
 
 	</package>
 </struts>
