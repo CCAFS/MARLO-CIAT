@@ -115,6 +115,11 @@
             
     </div>
     
+    [#-- SRF Ido --]
+    <div class="form-group">
+      [@customForm.select name="${customName}.srfIdo.id"  i18nkey="programImpact.ido" listName="idos" keyFieldName="id"  displayFieldName="description" required=true  className=""  editable=editable/]
+    </div>
+    
     [#-- Startegic Objectives --]
     <div class="form-group relVal" >
       <h5>[@customForm.text name="programImpact.objectiveValue" readText=!editable /]:[@customForm.req required=editable /]</h5>

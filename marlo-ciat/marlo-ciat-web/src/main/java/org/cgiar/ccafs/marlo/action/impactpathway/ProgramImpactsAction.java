@@ -32,6 +32,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchRegion;
+import org.cgiar.ccafs.marlo.data.model.SrfIdo;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.IBeneficiaryService;
@@ -45,6 +46,7 @@ import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
 import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
 import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
 import org.cgiar.ccafs.marlo.data.service.IResearchRegionService;
+import org.cgiar.ccafs.marlo.data.service.ISrfIdoService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -82,10 +84,8 @@ public class ProgramImpactsAction extends BaseAction {
   private ICenterService centerService;
 
   private IProgramService programService;
-
-
   private IResearchRegionService regionService;
-
+  private ISrfIdoService idoService;
   private IBeneficiaryTypeService beneficiaryTypeService;
   private IResearchImpactBeneficiaryService impactBeneficiaryService;
   private IResearchAreaService researchAreaService;
@@ -97,9 +97,10 @@ public class ProgramImpactsAction extends BaseAction {
   private IBeneficiaryService beneficiaryService;
   private ResearchCenter loggedCenter;
   private List<ResearchArea> researchAreas;
-
+  private List<SrfIdo> idos;
   private List<ResearchRegion> regions;
   private List<BeneficiaryType> beneficiaryTypes;
+
   private ResearchArea selectedResearchArea;
   private List<ResearchProgram> researchPrograms;
   private List<ResearchObjective> researchObjectives;
@@ -117,7 +118,7 @@ public class ProgramImpactsAction extends BaseAction {
     IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator,
     IAuditLogService auditLogService, IResearchRegionService regionService,
     IBeneficiaryTypeService beneficiaryTypeService, IResearchImpactBeneficiaryService impactBeneficiaryService,
-    IBeneficiaryService beneficiaryService) {
+    IBeneficiaryService beneficiaryService, ISrfIdoService idoService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -132,6 +133,7 @@ public class ProgramImpactsAction extends BaseAction {
     this.beneficiaryTypeService = beneficiaryTypeService;
     this.impactBeneficiaryService = impactBeneficiaryService;
     this.beneficiaryService = beneficiaryService;
+    this.idoService = idoService;
   }
 
   @Override
@@ -177,6 +179,10 @@ public class ProgramImpactsAction extends BaseAction {
     return beneficiaryTypes;
   }
 
+  public List<SrfIdo> getIdos() {
+    return idos;
+  }
+
   public List<ResearchImpact> getImpacts() {
     return impacts;
   }
@@ -214,7 +220,6 @@ public class ProgramImpactsAction extends BaseAction {
     return researchPrograms;
   }
 
-
   /**
    * @return the selectedProgram
    */
@@ -222,13 +227,13 @@ public class ProgramImpactsAction extends BaseAction {
     return selectedProgram;
   }
 
+
   /**
    * @return the selectedResearchArea
    */
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
-
 
   public String getTransaction() {
     return transaction;
@@ -448,6 +453,8 @@ public class ProgramImpactsAction extends BaseAction {
       }
     }
 
+    idos = new ArrayList<>(idoService.findAll().stream().filter(i -> i.isActive()).collect(Collectors.toList()));
+
     String params[] = {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + ""};
     this.setBasePermission(this.getText(Permission.RESEARCH_PROGRAM_BASE_PERMISSION, params));
 
@@ -503,6 +510,9 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setShortName(researchImpact.getShortName().trim());
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
+          SrfIdo ido = idoService.getSrfIdoById(researchImpact.getSrfIdo().getId());
+          researchImpactNew.setSrfIdo(ido);
+
           long impactId = impactService.saveResearchImpact(researchImpactNew);
 
           researchImpactNew = impactService.getResearchImpactById(impactId);
@@ -528,6 +538,19 @@ public class ProgramImpactsAction extends BaseAction {
         } else {
           boolean hasChanges = false;
           ResearchImpact researchImpactRew = impactService.getResearchImpactById(researchImpact.getId());
+
+          SrfIdo ido = idoService.getSrfIdoById(researchImpact.getSrfIdo().getId());
+
+          if (ido != null) {
+            if (researchImpactRew.getSrfIdo() == null || !researchImpactRew.getSrfIdo().equals(ido)) {
+              hasChanges = true;
+              researchImpactRew.setSrfIdo(ido);
+            }
+          } else {
+            hasChanges = true;
+            researchImpactRew.setSrfIdo(null);
+          }
+
 
           if (!researchImpactRew.getDescription().equals(researchImpact.getDescription().trim())) {
             hasChanges = true;
@@ -732,6 +755,11 @@ public class ProgramImpactsAction extends BaseAction {
 
   public void setBeneficiaryTypes(List<BeneficiaryType> beneficiaryTypes) {
     this.beneficiaryTypes = beneficiaryTypes;
+  }
+
+
+  public void setIdos(List<SrfIdo> idos) {
+    this.idos = idos;
   }
 
   public void setImpacts(List<ResearchImpact> impacts) {

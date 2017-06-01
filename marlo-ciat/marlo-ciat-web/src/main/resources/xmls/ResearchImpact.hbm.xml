@@ -19,6 +19,10 @@
       fetch="select">
       <column name="created_by" not-null="false" />
     </many-to-one>
+    <many-to-one name="srfIdo" class="org.cgiar.ccafs.marlo.data.model.SrfIdo"
+      fetch="select">
+      <column name="ido_id"/>
+    </many-to-one>
     <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
       fetch="select">
       <column name="modified_by" not-null="false" />

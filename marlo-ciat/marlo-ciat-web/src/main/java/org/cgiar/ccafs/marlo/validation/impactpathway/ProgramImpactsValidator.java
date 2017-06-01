@@ -134,6 +134,16 @@ public class ProgramImpactsValidator extends BaseValidator {
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
 
+    if (researchImpact.getSrfIdo() != null) {
+      if (researchImpact.getSrfIdo().getId() == -1) {
+        this.addMessage(baseAction.getText("programImpact.action.ido.required", params));
+        baseAction.getInvalidFields().put("input-impacts[" + i + "].srfIdo.id", InvalidFieldsMessages.EMPTYFIELD);
+      }
+    } else {
+      this.addMessage(baseAction.getText("programImpact.action.ido.required", params));
+      baseAction.getInvalidFields().put("input-impacts[" + i + "].srfIdo.id", InvalidFieldsMessages.EMPTYFIELD);
+    }
+
     if (researchImpact.getDescription() != null) {
       if (!this.isValidString(researchImpact.getDescription())
         && this.wordCount(researchImpact.getDescription()) <= 50) {
