@@ -126,7 +126,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
 
 
   public String getComposedName() {
-    return "O" + this.id + "- " + this.title;
+    return "O" + this.id + "- " + this.title != null ? this.title : "title not defined";
   }
 
 
