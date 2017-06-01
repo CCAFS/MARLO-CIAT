@@ -18,18 +18,14 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -48,27 +44,12 @@ public class OuputRequestAction extends BaseAction {
   // Logger
   private static final Logger LOG = LoggerFactory.getLogger(OuputRequestAction.class);
 
-
   private SendMail sendMail;
-
-
   private IResearchOutcomeService outcomeService;
-
   private IProgramService programService;
-
-
   private List<TopicOutcomes> outcomes;
-
-
-  private long programID;
-
-
   private boolean messageSent;
-
-
   private Long outcomeID;
-
-
   private String outputName;
 
 
@@ -105,12 +86,6 @@ public class OuputRequestAction extends BaseAction {
   @Override
   public void prepare() throws Exception {
 
-    if (this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID) != null) {
-      programID = Integer.parseInt(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
-      LOG.info("The user {} load the output request section related to the program {}.",
-        this.getCurrentUser().getEmail(), programID);
-    }
-
     if (this.getRequest().getParameter(APConstants.OUTCOME_ID) != null) {
       outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
       LOG.info("The user {} load the output request section related to the program {}.",
@@ -121,27 +96,6 @@ public class OuputRequestAction extends BaseAction {
       outputName = StringUtils.trim(this.getRequest().getParameter(APConstants.OUTPUT_NAME));
       LOG.info("The user {} load the output request section related to the program {}.",
         this.getCurrentUser().getEmail(), programID);
-    }
-
-    ResearchProgram program = programService.getProgramById(programID);
-
-    outcomes = new ArrayList<>();
-
-    List<ResearchTopic> researchTopics =
-      new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
-
-
-    for (ResearchTopic researchTopic : researchTopics) {
-      TopicOutcomes outcome = new TopicOutcomes();
-      outcome.setTopic(researchTopic);
-      outcome.setOutcomes(new ArrayList<>());
-      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
-        researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      for (ResearchOutcome researchOutcome : researchOutcomes) {
-        outcome.getOutcomes().add(researchOutcome);
-      }
-
-      outcomes.add(outcome);
     }
 
 
