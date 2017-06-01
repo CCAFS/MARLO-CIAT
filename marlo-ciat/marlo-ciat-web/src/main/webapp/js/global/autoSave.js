@@ -10,7 +10,7 @@ $(document).ready(function() {
 
   /* Event triggers */
   $(document).on('updateComponent', changeDetected);
-  $(':input').on('keyup change', changeDetected);
+  $('form:first :input').on('keyup change', changeDetected);
 
   if($('#generalMessages ul.messages li').exists()) {
     // Validate section
@@ -25,7 +25,7 @@ function autoSave() {
       method: 'POST',
       url: baseURL + '/autosaveWriter.do',
       data: {
-        autoSave: JSON.stringify($('form').serializeObject())
+        autoSave: JSON.stringify($('form:first').serializeObject())
       },
       beforeSend: function(xhr,opts) {
         if(autoSaveActive) {

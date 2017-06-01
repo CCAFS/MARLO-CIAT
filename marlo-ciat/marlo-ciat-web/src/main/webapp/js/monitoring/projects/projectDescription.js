@@ -45,7 +45,12 @@ function init() {
   });
   $('#requestModal button.requestButton').on('click', function() {
     var $modal = $(this).parents('.modal');
-
+    var outcomeID = $modal.find('select#outcomeID').val();
+    
+    if(outcomeID == -1){
+      return
+    }
+    
     $.ajax({
         url: baseURL + '/outputRequest.do',
         data: $('#requestModal form').serialize(),
@@ -54,7 +59,7 @@ function init() {
         },
         success: function(data) {
           console.log(data);
-          if(data.sucess.result == "1") {
+          if(data.messageSent) {
             // Hide Form & button
             $modal.find('form, .requestButton').hide();
             $modal.find('.messageBlock').show();

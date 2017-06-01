@@ -327,7 +327,8 @@
             [@customForm.textArea name="outputName" i18nkey="Output Statement" required=true /]
           </div>
           <div class="form-group">
-            <select name="outcomeID" class="">
+            <label for="outcomeID" >Outcome:<span class="red">*</span></label>
+            <select id="outcomeID" name="outcomeID" class="">
               <option value="-1">Select an outcome...</option>
               [#list topicOutcomes as topicOutcome]
                 <optgroup  label="${(topicOutcome.topic.researchTopic)!'No Research topic'}">
@@ -336,7 +337,7 @@
               [/#list]
             </select>
           </div>
-          <input type="hidden" name="programID " value="${(programID )!}"/> 
+          <input type="hidden" name="programID" value="${(programID )!}"/> 
         </form>
         
         <div class="messageBlock" style="display:none">
