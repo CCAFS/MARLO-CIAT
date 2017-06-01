@@ -75,9 +75,6 @@ public class OuputRequestAction extends BaseAction {
     return outputName;
   }
 
-  public long getProgramID() {
-    return programID;
-  }
 
   public boolean isMessageSent() {
     return messageSent;
@@ -89,13 +86,13 @@ public class OuputRequestAction extends BaseAction {
     if (this.getRequest().getParameter(APConstants.OUTCOME_ID) != null) {
       outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
       LOG.info("The user {} load the output request section related to the program {}.",
-        this.getCurrentUser().getEmail(), programID);
+        this.getCurrentUser().getEmail(), outcomeID);
     }
 
     if (this.getRequest().getParameter(APConstants.OUTPUT_NAME) != null) {
       outputName = StringUtils.trim(this.getRequest().getParameter(APConstants.OUTPUT_NAME));
       LOG.info("The user {} load the output request section related to the program {}.",
-        this.getCurrentUser().getEmail(), programID);
+        this.getCurrentUser().getEmail(), outputName);
     }
 
 
@@ -157,8 +154,5 @@ public class OuputRequestAction extends BaseAction {
     this.outputName = outputName;
   }
 
-  public void setProgramID(long programID) {
-    this.programID = programID;
-  }
 
 }
