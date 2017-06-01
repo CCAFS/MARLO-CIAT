@@ -24,6 +24,10 @@ function attachEvents() {
     validateAllData();
   });
 
+  $(".allPrograms").on("change", function() {
+    updateUrl($(this).parents(".summariesFiles.selected"));
+  });
+
   $("input[name='cycle']").on(
       "change",
       function() {
@@ -231,81 +235,7 @@ function selectSummariesSection(e) {
 }
 
 function generateReport(e) {
-  var $select = $(".reportYear ");
-  $select.empty();
-  $select.attr("disabled", true);
-  e.preventDefault();
-  $("#optionsPopUp").find("#planning").removeAttr("disabled");
-  $("#optionsPopUp").find("#reporting").removeAttr("disabled");
-  var $selected = $('.selected');
-// Check cycle summary
-  if($($selected).find(".forCycle").hasClass("forPlanningCycle")
-      && $($selected).find(".forCycle").hasClass("forReportingCycle")) {
-    // Planning and Reporing
-    $select.append("<option value='" + $(".planningYear").text() + "' selected>" + $(".planningYear").text()
-        + "</option>");
-    $("#optionsPopUp").find("#planning").attr("checked", true).trigger("click");
-    $("#optionsPopUp").find("#reporting").removeAttr("checked");
-    $("#optionsPopUp").find("#reporting").removeAttr("disabled");
-  } else if($($selected).find(".forCycle").hasClass("forPlanningCycle")) {
-    // Planning
-    $select.append("<option value='" + $(".planningYear").text() + "' selected>" + $(".planningYear").text()
-        + "</option>");
-    $("#optionsPopUp").find("#planning").attr("checked", true).trigger("click");
-    $("#optionsPopUp").find("#reporting").removeAttr("checked");
-    $("#optionsPopUp").find("#reporting").attr("disabled", true);
-  } else if($($selected).find(".forCycle").hasClass("forReportingCycle")) {
-    // Reporting
-    $select.append("<option value='" + $(".reportingYear").text() + "' selected>" + $(".reportingYear").text()
-        + "</option>");
-    $("#optionsPopUp").find("#reporting").attr("checked", true).trigger("click");
-    $("#optionsPopUp").find("#planning").removeAttr("checked");
-    $("#optionsPopUp").find("#planning").attr("disabled", true);
-  }
-  if($selected.find("#generateProject").exists()) {
-    $("#optionsPopUp").find(".projectSelectWrapper").show();
-    validateFileType($selected);
-    openDialog();
-  } else {
-    validateFileType($selected);
-    openDialog();
-  }
 
-  if($selected.find(".specificYears").exists()) {
-    $select.empty();
-    $select.attr("disabled", false);
-    $.each($selected.find(".specificYears").text().split("-"), function(i,e) {
-      $select.addOption(e, e);
-    });
-    $select.val($("span.reportingYear").text()).trigger("change");
-  }
-  validateAllData();
-}
-
-function validateAllData() {
-  if($(".selected").find("#projectID").exists()) {
-    if($("#projectID").val() == "-1") {
-      $("#optionsPopUp").find(".blockButton").remove();
-      $(".okButton").prepend('<span class="blockButton"></span>');
-      $(".okButton a").css("opacity", "0.4");
-      return true;
-    }
-  }
-  console.log("validate");
-  var count = 0;
-  console.log($("input[name='cycle']:checked").val());
-  if($("input[name='cycle']:checked").val() != undefined) {
-    count++;
-  }
-  console.log(count);
-  if($("#optionsPopUp").find(".choose").exists()) {
-    count++;
-  }
-  console.log(count);
-  if(count >= 2) {
-    $("#optionsPopUp").find(".blockButton").remove();
-    $(".okButton a").css("opacity", "1");
-  }
 }
 
 function validateFileType($selected) {
@@ -327,62 +257,10 @@ function validateFileType($selected) {
   }
 }
 
-function openDialog() {
-  $("#optionsPopUp").dialog({
-      resizable: false,
-      width: 500,
-      modal: true,
-      dialogClass: 'dialog-searchUsers',
-      show: {
-          effect: "blind",
-          duration: 500
-      },
-      hide: {
-          effect: "fadeOut",
-          duration: 500
-      },
-      open: function(event,ui) {
-      }
-  });
-}
-
 function reportTypes($selected) {
 // FULL REPORT
-  if($selected.find(".extraOptions").find("#projectID").exists()) {
+  if($selected.find(".extraOptions").find("#programID").exists()) {
     updateUrl($selected);
-  } else if($selected.find(".extraOptions").find(".wordContent").exists()) {
-    // TERMS
-    var url = "";
-    var $formOptions = $($selected).find('input[name=formOptions]');
-    var formOption = $formOptions.val() || 0;
-    if($(".wordContent").find(".terms").length > 0) {
-      console.log("here");
-      $(".wordContent").find(".terms").each(function(i,e) {
-        termsArray.push($(e).find(".text").html());
-      });
-      url =
-          baseURL + "/projects/" + centerSession + "/" + formOption + ".do" + "?cycle="
-              + $("input[name='cycle']:checked").val() + "&keys=" + termsArray.join("~/");
-
-      console.log(reportYear);
-
-      if($("input[name='cycle']:checked").val() == "Planning") {
-        reportYear = $(".planningYear").text();
-      } else {
-        reportYear = $(".reportingYear").text();
-      }
-
-      url += '&year=' + reportYear;
-      var replace = url.replace(/ /g, "%20");
-      setUrl(replace);
-    } else {
-      updateUrl($selected);
-    }
-    termsArray = [];
-    $("#gender").prop('checked', true);
-    $("#gender").removeClass("view");
-    $("#gender").removeClass("notview");
-    $("#gender").addClass("view");
   } else {
     updateUrl($selected);
   }
@@ -393,48 +271,16 @@ function updateUrl(element) {
   var formOption = "";
   var $formOptions = $(element).find('input[name=formOptions]');
   var type = $(element).find(".fileTypes").text().split("-")[0];
-// Check type of file
-  if($("#optionsPopUp").find(".pdfIcon").parent().hasClass("choose")) {
-    console.log("here1");
-    formOption = $(element).find(".pdfType").text();
-  } else if($("#optionsPopUp").find(".excelIcon").parent().hasClass("choose")) {
-    if($("#optionsPopUp").find("input[name='cycle']:checked").val() == "Planning") {
-      console.log("aaa");
-      formOption = $(element).find(".excelType").text().split("-")[0];
-    } else {
-      console.log("bbb");
-      formOption = $(element).find(".excelType").text().split("-")[1];
-    }
-    console.log("here2");
-
-  } else {
-    console.log("here3");
-    formOption = $formOptions.val() || 0;
-  }
+  formOption = $formOptions.val() || 0;
   // Check extra options
   var extraOptions = $('form [name!="formOptions"]').serialize() || 0;
   console.log(formOption);
   if(formOption != 0) {
-    console.log("create url yes");
-    generateUrl =
-        baseURL + "/projects/" + centerSession + "/" + formOption + ".do?" + "cycle="
-            + $("input[name='cycle']:checked").val();
+    generateUrl = baseURL + "/summaries/" + formOption + ".do?";
     if(extraOptions != 0) {
       generateUrl += '&' + extraOptions;
     }
-    console.log(reportYear);
-    if($("input[name='cycle']:checked").val() == "Planning") {
-      reportYear = $(".planningYear").text();
-    } else {
-      reportYear = $(".reportingYear").text();
-    }
-
-    if($(element).find(".specificYears").exists()) {
-      reportYear = $(".reportYear").find("option:selected").val();
-    }
-
-// console.log(reportYear);
-    generateUrl += '&year=' + reportYear;
+    console.log(generateUrl);
     setUrl(generateUrl, element);
   } else {
     setUrl('#');
