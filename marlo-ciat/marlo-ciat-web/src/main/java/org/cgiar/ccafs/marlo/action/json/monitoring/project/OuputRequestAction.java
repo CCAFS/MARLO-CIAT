@@ -62,44 +62,8 @@ public class OuputRequestAction extends BaseAction {
     this.sendMail = sendMail;
   }
 
-  public Long getOutcomeID() {
-    return outcomeID;
-  }
-
-  public List<TopicOutcomes> getOutcomes() {
-    return outcomes;
-  }
-
-
-  public String getOutputName() {
-    return outputName;
-  }
-
-
-  public boolean isMessageSent() {
-    return messageSent;
-  }
-
   @Override
-  public void prepare() throws Exception {
-
-    if (this.getRequest().getParameter(APConstants.OUTCOME_ID) != null) {
-      outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
-      LOG.info("The user {} load the output request section related to the program {}.",
-        this.getCurrentUser().getEmail(), outcomeID);
-    }
-
-    if (this.getRequest().getParameter(APConstants.OUTPUT_NAME) != null) {
-      outputName = StringUtils.trim(this.getRequest().getParameter(APConstants.OUTPUT_NAME));
-      LOG.info("The user {} load the output request section related to the program {}.",
-        this.getCurrentUser().getEmail(), outputName);
-    }
-
-
-  }
-
-  @Override
-  public String save() {
+  public String execute() throws Exception {
     String subject;
     StringBuilder message = new StringBuilder();
 
@@ -135,6 +99,42 @@ public class OuputRequestAction extends BaseAction {
     messageSent = true;
 
     return SUCCESS;
+  }
+
+  public Long getOutcomeID() {
+    return outcomeID;
+  }
+
+
+  public List<TopicOutcomes> getOutcomes() {
+    return outcomes;
+  }
+
+
+  public String getOutputName() {
+    return outputName;
+  }
+
+  public boolean isMessageSent() {
+    return messageSent;
+  }
+
+  @Override
+  public void prepare() throws Exception {
+
+    if (this.getRequest().getParameter(APConstants.OUTCOME_ID) != null) {
+      outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
+      LOG.info("The user {} load the output request section related to the program {}.",
+        this.getCurrentUser().getEmail(), outcomeID);
+    }
+
+    if (this.getRequest().getParameter(APConstants.OUTPUT_NAME) != null) {
+      outputName = StringUtils.trim(this.getRequest().getParameter(APConstants.OUTPUT_NAME));
+      LOG.info("The user {} load the output request section related to the program {}.",
+        this.getCurrentUser().getEmail(), outputName);
+    }
+
+
   }
 
   public void setMessageSent(boolean messageSent) {
