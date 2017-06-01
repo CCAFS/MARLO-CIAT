@@ -13,12 +13,11 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.action.monitoring.project;
+package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
@@ -55,7 +54,6 @@ public class OuputRequestAction extends BaseAction {
 
   private IResearchOutcomeService outcomeService;
 
-
   private IProgramService programService;
 
 
@@ -67,7 +65,12 @@ public class OuputRequestAction extends BaseAction {
 
   private boolean messageSent;
 
-  private ResearchOutput output;
+
+  private Long outcomeID;
+
+
+  private String outputName;
+
 
   @Inject
   public OuputRequestAction(APConfig config, IResearchOutcomeService outcomeService, IProgramService programService,
@@ -78,12 +81,17 @@ public class OuputRequestAction extends BaseAction {
     this.sendMail = sendMail;
   }
 
+  public Long getOutcomeID() {
+    return outcomeID;
+  }
+
   public List<TopicOutcomes> getOutcomes() {
     return outcomes;
   }
 
-  public ResearchOutput getOutput() {
-    return output;
+
+  public String getOutputName() {
+    return outputName;
   }
 
   public long getProgramID() {
@@ -99,6 +107,18 @@ public class OuputRequestAction extends BaseAction {
 
     if (this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID) != null) {
       programID = Integer.parseInt(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+      LOG.info("The user {} load the output request section related to the program {}.",
+        this.getCurrentUser().getEmail(), programID);
+    }
+
+    if (this.getRequest().getParameter(APConstants.OUTCOME_ID) != null) {
+      outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
+      LOG.info("The user {} load the output request section related to the program {}.",
+        this.getCurrentUser().getEmail(), programID);
+    }
+
+    if (this.getRequest().getParameter(APConstants.OUTPUT_NAME) != null) {
+      outputName = StringUtils.trim(this.getRequest().getParameter(APConstants.OUTPUT_NAME));
       LOG.info("The user {} load the output request section related to the program {}.",
         this.getCurrentUser().getEmail(), programID);
     }
@@ -132,10 +152,10 @@ public class OuputRequestAction extends BaseAction {
     String subject;
     StringBuilder message = new StringBuilder();
 
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(output.getResearchOutcome().getId());
+    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     String outcomeName = outcome.getComposedName();
-    String outputName = output.getTitle();
+    String outputName = this.outputName;
 
     // message subject
     subject = "[MiLE-" + this.getCenterSession().toUpperCase() + "] Output verification - ";
@@ -170,12 +190,17 @@ public class OuputRequestAction extends BaseAction {
     this.messageSent = messageSent;
   }
 
+  public void setOutcomeID(Long outcomeID) {
+    this.outcomeID = outcomeID;
+  }
+
   public void setOutcomes(List<TopicOutcomes> outcomes) {
     this.outcomes = outcomes;
   }
 
-  public void setOutput(ResearchOutput output) {
-    this.output = output;
+
+  public void setOutputName(String outputName) {
+    this.outputName = outputName;
   }
 
   public void setProgramID(long programID) {
