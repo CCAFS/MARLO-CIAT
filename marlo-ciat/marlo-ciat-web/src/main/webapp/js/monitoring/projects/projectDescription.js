@@ -100,17 +100,24 @@ function init() {
   $(".button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
     var $input = $(this).parent().find('input');
-    $input.val(valueSelected);
-    $(this).parent().find("label").removeClass("radio-checked");
-    $(this).addClass("radio-checked");
+    if($(this).hasClass("radio-checked")) {
+      $(this).removeClass("radio-checked")
+      $input.val("");
+    } else {
+      $input.val(valueSelected);
+      $(this).parent().find("label").removeClass("radio-checked");
+      $(this).addClass("radio-checked");
+    }
   });
 
 // Is this deliverable Open Access
   $(".isRegional .button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
-    if(!valueSelected) {
+    var isChecekd = $(this).hasClass('radio-checked');
+    if(!valueSelected || !isChecekd) {
       $(".regionsBox").hide("slow");
     } else {
+
       $(".regionsBox").show("slow");
     }
   });
