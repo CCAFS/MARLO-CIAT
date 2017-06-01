@@ -85,9 +85,11 @@ function attachEvents() {
     $(".summariesFiles").removeClass("selected");
     $(".extraOptions").fadeOut();
     $(".generateReport").fadeOut();
+    $(".directlyReport").fadeOut();
     $('.extraOptions').find('select, input').attr('disabled', true);
     $($this).find('.extraOptions').fadeIn();
     $($this).find('.generateReport').fadeIn();
+    $($this).find('.directlyReport').fadeIn();
     $($this).find('.extraOptions').find('select, input').attr('disabled', false).trigger("liszt:updated");
     $($this).addClass("selected");
     updateUrl($this);
