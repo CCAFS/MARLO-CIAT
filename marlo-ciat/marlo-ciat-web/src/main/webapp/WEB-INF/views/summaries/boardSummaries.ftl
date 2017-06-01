@@ -21,8 +21,8 @@
     <br /> 
     <div class="summariesButtons clearfix">
       <div id="impactPathway" class="summariesSection current"><span></span><a href="">[@s.text name="summaries.board.options.impactPathway" /]</a></div>
-      <div id="projects" class="summariesSection"><span></span><a href="">[@s.text name="summaries.board.options.projects" /]</a></div>
-      <div id="monitoring" class="summariesSection"><span></span><a href="">[@s.text name="summaries.board.options.monitoring" /]</a></div>
+      <div id="projects" class="summariesSection" style="opacity:0.5;" ><span></span><a href="">[@s.text name="summaries.board.options.projects" /]</a> <div class="blockTab"></div> </div>
+      <div id="monitoring" class="summariesSection" style="opacity:0.5;"><span></span><a href="">[@s.text name="summaries.board.options.monitoring" /]</a> <div class="blockTab"></div> </div>
     </div>
     <div class="summariesContent borderBox col-md-12">
       <div class="loading" style="display:none"></div>
