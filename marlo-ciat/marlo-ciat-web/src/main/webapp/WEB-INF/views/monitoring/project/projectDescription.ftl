@@ -52,21 +52,21 @@
           <h3 class="headTitle">[@s.text name="projectDescription.title" /]</h3>  
           <div id="projectDescription" class="borderBox">            
             <div class="form-group row">  
-            [#-- OCS code --]
-            <div class="col-md-4">
-              [@customForm.input name="project.ocsCode" i18nkey="projectDescription.ocsCode" type="text" disabled=!editable  required=true editable=editable /]
-            </div> 
-            <div class="col-md-2">
-              <br />
-              [#if editable]<div id="fillMetadata" class="checkButtonDisable" style="display:block;">[@s.text name="projectDescription.sync" /]</div>[/#if]
-            </div>
-            <div class="col-md-6">
-                [@customForm.select name="project.projectType.id" label=""  i18nkey="Type" listName="projectTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
-            </div>
-            [#-- Principal Investigator --]
-            <div class="col-md-12">
-              [@customForm.input name="principalInvestigator" i18nkey="projectDescription.pl" type="text" disabled=!editable  required=true editable=false /]
-            </div>   
+              [#-- OCS code --]
+              <div class="col-md-4">
+                [@customForm.input name="project.ocsCode" i18nkey="projectDescription.ocsCode" type="text" disabled=!editable  required=true editable=editable /]
+              </div> 
+              <div class="col-md-2">
+                <br />
+                [#if editable]<div id="fillMetadata" class="checkButtonDisable" style="display:block;">[@s.text name="projectDescription.sync" /]</div>[/#if]
+              </div>
+              <div class="col-md-6">
+                  [@customForm.select name="project.projectType.id" label=""  i18nkey="Type" listName="projectTypes" keyFieldName="id"  displayFieldName="name"  multiple=false required=true header=false className="" editable=editable/]
+              </div>
+              [#-- Principal Investigator --]
+              <div class="col-md-12">
+                [@customForm.input name="principalInvestigator" i18nkey="projectDescription.pl" type="text" disabled=!editable  required=true editable=false /]
+              </div>   
             </div>
             [#-- Project Title --]
             <div class="form-group">
@@ -77,7 +77,7 @@
               [@customForm.textArea name="project.description" i18nkey="projectDescription.description" required=true className="project-title" editable=editable && action.hasPermission("title") /]
             </div>
             <div class="form-group row">  
-            [#-- Short name --]
+              [#-- Short name --]
               <div class="col-md-6">
                 [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
               </div>                            
@@ -96,84 +96,77 @@
                 [@customForm.input name="project.extensionDate" i18nkey="projectDescription.extensionDate" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
-            <div class="form-group row">
-            [#-- Project contact --]
-            <div class="col-md-12 partnerPerson-email userField  form-group">
-              <input type="hidden" class="canEditEmail" value="" />
-              [@customForm.input name="project.projectLeader.composedName" className='userName' type="text"  i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
-              <input class="userId" type="hidden" name="project.projectLeader.id" value="${(project.projectLeader.id)!}" />   
-              [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
+            <div class="form-group ">
+              [#-- Project contact --]
+              <div class="partnerPerson-email userField" style="position: relative;">
+                <input type="hidden" class="canEditEmail" value="" />
+                [@customForm.input name="project.projectLeader.composedName" className='userName' type="text"  i18nkey="projectDescription.contactPerson" required=true readOnly=true editable=editable /]
+                <input class="userId" type="hidden" name="project.projectLeader.id" value="${(project.projectLeader.id)!}" />   
+                [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
+              </div>
             </div>
-            <div class="clearfix"></div>
             [#-- Original Donor --]
-            <div class="col-md-12">
+            <div class="form-group">
               [@customForm.input name="project.originalDonor" i18nkey="projectDescription.originalDonor" type="text" required=true  editable=editable/]
             </div>
             [#-- Customer Donor --]
-            <div class="col-md-12">
+            <div class="form-group">
               [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=false  editable=editable/]
             </div>
             [#-- Total Amount --]
-            <div class="col-md-12">
+            <div class="form-group">
               [@customForm.input name="project.totalAmount" className="amount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
             </div>
             [#-- Funding source --]
-            <div class="form-group col-md-12">
-              <div class="">
-                <label>[@s.text name="projectDescription.fundingSource" /]</label>
-                <div class="borderBox fundingSourceList" listname="project.fundingSources">
-                  [#if project.fundingSources?has_content]
-                    [#list project.fundingSources as fundingSource]
-                      [@fundingSourceMacro element=fundingSource name="project.fundingSources"  index=fundingSource_index /]
-                    [/#list]
-                  [/#if]
-                  <p class="text-center inf" style="display:${(project.fundingSources?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
-                </div>
-                [#if editable]
-                <div class="text-right">
-                  <div class="button-green addFundingSource"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a funding source" /]</div>
-                </div>
+            <div class="form-group ">
+              <label>[@s.text name="projectDescription.fundingSource" /]</label>
+              <div class="borderBox fundingSourceList" listname="project.fundingSources">
+                [#if project.fundingSources?has_content]
+                  [#list project.fundingSources as fundingSource]
+                    [@fundingSourceMacro element=fundingSource name="project.fundingSources"  index=fundingSource_index /]
+                  [/#list]
                 [/#if]
+                <p class="text-center inf" style="display:${(project.fundingSources?has_content)?string('none','block')}">[@s.text name="projectDescription.notFundingSource" /]</p>
               </div>
-            </div>
-            <div class="clearfix"></div>
+              [#if editable]
+              <div class="text-right">
+                <div class="button-green addFundingSource"><span class="glyphicon glyphicon-plus-sign"></span>[@s.text name="Add a funding source" /]</div>
+              </div>
+              [/#if]
+            </div> 
             
             [#-- LOCATION INFORMATION --]
-            <h4 class="headTitle col-md-12">Location information</h4> 
-            <div class="col-md-12 informationWrapper simpleBox">
+            <h4 class="headTitle">Location information</h4> 
+            <div class="informationWrapper simpleBox">
             [#-- GLOBAL DIMENSION --]
             [#if editable]
-              <div class="form-group row ">
-                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.global"  editable=editable inverse=false  cssClass="" /] </div>
+              <div class="form-group">
+                <div class="">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.global"  editable=editable inverse=false  cssClass="" /] </div>
               </div>
               <hr />
-              <div class="form-group row">
-                <div class="col-md-6">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
+              <div class="form-group">
+                <div class="">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
               </div>
               [#else]
-              <div class="form-group row ">
-                <div class="col-md-12">
-              [#if project.global]
-                <label for="">[@s.text name="projectDescription.globalDimensionYes" /]</label>
-              [#else]
-                <label for="">[@s.text name="projectDescription.globalDimensionNo" /]</label>
-              [/#if]
-                </div>
+              <div class="form-group">
+                [#if project.global]
+                  <label for="">[@s.text name="projectDescription.globalDimensionYes" /]</label>
+                [#else]
+                  <label for="">[@s.text name="projectDescription.globalDimensionNo" /]</label>
+                [/#if]
               </div>
               <hr />
-              <div class="form-group row ">
-              <div class="col-md-12">
+              <div class="form-group">
                 [#if project.region]
                   <label for="">[@s.text name="projectDescription.regionallDimensionYes" /]</label>
                 [#else]
                   <label for="">[@s.text name="projectDescription.regionallDimensionNo" /]</label>
                 [/#if]
               </div>
-              </div>
               [/#if]
               [#-- REGIONAL SELECT --]
-              <div class="regionsBox form-group row" style="display:${project.region?string('block','none')}">
-                <div class="panel tertiary col-md-12">
+              <div class="regionsBox form-group" style="display:${project.region?string('block','none')}">
+                <div class="panel tertiary">
                  <div class="panel-head">
                    <label for=""> [@customForm.text name="projectDescription.selectRegions" readText=!editable /]:[@customForm.req required=editable /]</label>
                    <br />
@@ -206,8 +199,8 @@
               </div>
               
               [#-- SELECT COUNTRIES --]
-              <div class="form-group row">
-                <div class="panel tertiary col-md-12">
+              <div class="form-group">
+                <div class="panel tertiary">
                  <div class="panel-head"><label for=""> [@customForm.text name="projectDescription.listCountries" readText=!editable /]:[@customForm.req required=editable/]</label></div>
                   <div id="countryList" class="panel-body" listname="project.countries"> 
                     <ul class="list">
@@ -234,43 +227,40 @@
                 </div>
               </div>
             </div>
-              [#-- Select the cross-cutting dimension(s) to this project? --]
-              <div class="form-group col-md-12">
-                <label for="">[@customForm.text name="projectDescription.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
-                <div class="row">
-                  <div class="col-md-12">
-                    [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (project.projectCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > Climate Change</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.gender"    id="gender"    value="true" [#if (project.projectCrosscutingTheme.gender)!false ]checked="checked"[/#if] > Gender</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.youth"    id="youth"    value="true" [#if (project.projectCrosscutingTheme.youth)!false ]checked="checked"[/#if] > Youth</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
-                    [#else]
-                      [#if (project.projectCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.gender)!false ]<p class="checked"> Gender</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.youth)!false ]<p class="checked"> Youth</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]                      
-                    [/#if]
-                  </div>
-                  <div class="col-md-12">
-                    [#if editable]
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" [#if (project.projectCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (project.projectCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > Impact Assessment</label>
-                      <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" [#if (project.projectCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
-                    [#else]
-                      [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.impactAssessment)!false ]<p class="checked"> Impact Assessment</p>[/#if]
-                      [#if (project.projectCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]                     
-                    [/#if]
-                  </div>
-                </div>
-                <br />
+            [#-- Select the cross-cutting dimension(s) to this project? --]
+            <div class="form-group">
+              <label for="">[@customForm.text name="projectDescription.crossCuttingDimensions" readText=!editable/] [@customForm.req required=editable/]</label>
+              <div class="">
+                [#if editable]
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (project.projectCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > Climate Change</label>
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.gender"    id="gender"    value="true" [#if (project.projectCrosscutingTheme.gender)!false ]checked="checked"[/#if] > Gender</label>
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.youth"    id="youth"    value="true" [#if (project.projectCrosscutingTheme.youth)!false ]checked="checked"[/#if] > Youth</label>
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
+                [#else]
+                  [#if (project.projectCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
+                  [#if (project.projectCrosscutingTheme.gender)!false ]<p class="checked"> Gender</p>[/#if]
+                  [#if (project.projectCrosscutingTheme.youth)!false ]<p class="checked"> Youth</p>[/#if]
+                  [#if (project.projectCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]                      
+                [/#if]
               </div>
-          </div> 
+              <div class="">
+                [#if editable]
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.bigData" id="bigData" value="true" [#if (project.projectCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (project.projectCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > Impact Assessment</label>
+                  <label class="checkbox-inline"><input type="checkbox" name="project.projectCrosscutingTheme.na"       id="na"       value="true" [#if (project.projectCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
+                [#else]
+                  [#if (project.projectCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
+                  [#if (project.projectCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
+                  [#if (project.projectCrosscutingTheme.impactAssessment)!false ]<p class="checked"> Impact Assessment</p>[/#if]
+                  [#if (project.projectCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]                     
+                [/#if]
+              </div>
+            </div>
+           
            
           [#-- Outputs --]
-          <div class="fullPartBlock">      
+          <div class="form-group">      
             <div class="output panel tertiary" listname="project.outputs">
               <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
               <div class="panel-body"> 
@@ -288,23 +278,32 @@
                     <option value="-1">Select an option...</option>
                     [#list outputs as output]
                       <optgroup  label="${(output.outcome.composedName)!}">
-                        [#list output.outputs as op]
-                          <option value="${(op.id)!}">${(op.composedName)!}</option>
-                        [/#list]
+                        [#list output.outputs as op]<option value="${(op.id)!}">${(op.composedName)!}</option>[/#list]
                       </optgroup>
                     [/#list]
                   </select>
                 [/#if] 
               </div>
-            </div> 
-          </div>          
+              [#-- Note --]
+              [#if editable]
+              <hr />
+              <div class="note">
+                If you don't find the <strong>output</strong> you are looking for, request to have it added by
+                <a href="#" class="" data-toggle="modal" data-target="#requestModal">clicking here</a>
+              </div>
+              [/#if]
+            </div>
+          </div>
           
           
+          
+          
+        </div>
       </div>
       [#-- Section Buttons & hidden inputs--]
-          [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
-             
-          [/@s.form] 
+      [#include "/WEB-INF/views/monitoring/project/buttons-projects.ftl" /]
+         
+      [/@s.form] 
     </div>  
 </section>
 
@@ -312,6 +311,49 @@
 [@fundingSourceMacro element={} name="project.fundingSources"  index=-1 isTemplate=true /]
 [@outputMacro element={} name="project.outputs"  index=-1 isTemplate=true /]
 [@usersForm.searchUsers/]
+
+[#-- Request outputs popup --]
+<div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="loading" style="display:none"></div>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Request an Output</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            [@customForm.textArea name="outputName" i18nkey="Output Statement" required=true /]
+          </div>
+          <div class="form-group">
+            [@customForm.select name="outcomeID" i18nkey="Outcome" listName="outcomes" header=true keyFieldName="id" displayFieldName="composedName" value="id" placeholder="Select an outcome..." className="countriesRequest"/]
+          </div>
+          
+          <input type="hidden" name="programID " value="${(programID )!}"/> 
+        </form>
+        
+        <div class="messageBlock" style="display:none">
+          <div class="notyMessage">
+            <h1 class="text-center brand-success"><span class="glyphicon glyphicon-ok-sign"></span></h1>
+            <p  class="text-center col-md-12">
+              Your request was sent to the Mile Support team <br />
+              You will receive a confirmation message as soon as it has been processed.
+            </p>
+            <br />
+            [#-- Buttons --]
+            <div class="text-center">
+              <button class="btn btn-danger" type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"> 
+        <button type="button" class="requestButton btn btn-primary"> <span class="glyphicon glyphicon-send"></span> Request</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 [#-- Region element template --]
 <ul style="display:none">

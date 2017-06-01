@@ -30,7 +30,43 @@ function init() {
   $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
 
-// Country item
+  // Request Outputs popup
+  $('#requestModal').on('show.bs.modal', function(event) {
+    $.noty.closeAll();
+
+    var $modal = $(this);
+    // Show Form & button
+    $modal.find('form, .requestButton').show();
+    $modal.find('.messageBlock').hide();
+
+    $modal.find('select.countriesRequest').val(null).trigger('select2:change');
+    $modal.find('select.countriesRequest').trigger('change');
+
+  });
+  $('#requestModal button.requestButton').on('click', function() {
+    var $modal = $(this).parents('.modal');
+
+    $.ajax({
+        url: baseURL + '/outputRequest.do',
+        data: $('#requestModal form').serialize(),
+        beforeSend: function(data) {
+          $modal.find('.loading').fadeIn();
+        },
+        success: function(data) {
+          console.log(data);
+          if(data.sucess.result == "1") {
+            // Hide Form & button
+            $modal.find('form, .requestButton').hide();
+            $modal.find('.messageBlock').show();
+          }
+        },
+        complete: function() {
+          $modal.find('.loading').fadeOut();
+        }
+    });
+  });
+
+  // Country item
   $(".countriesSelect").on("change", function() {
     var option = $(this).find("option:selected");
     if(option.val() != "-1") {

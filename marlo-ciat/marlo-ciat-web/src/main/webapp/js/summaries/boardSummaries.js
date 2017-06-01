@@ -280,7 +280,7 @@ function updateUrl(element) {
     if(extraOptions != 0) {
       generateUrl += '&' + extraOptions;
     }
-    console.log(generateUrl);
+    console.log(extraOptions);
     setUrl(generateUrl, element);
   } else {
     setUrl('#');
