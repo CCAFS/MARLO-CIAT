@@ -327,9 +327,15 @@
             [@customForm.textArea name="outputName" i18nkey="Output Statement" required=true /]
           </div>
           <div class="form-group">
-            [@customForm.select name="outcomeID" i18nkey="Outcome" listName="outcomes" header=true keyFieldName="id" displayFieldName="composedName" value="id" placeholder="Select an outcome..." className="countriesRequest"/]
+            <select name="outcomeID" class="">
+              <option value="-1">Select an outcome...</option>
+              [#list topicOutcomes as topicOutcome]
+                <optgroup  label="${(topicOutcome.topic.researchTopic)!'No Research topic'}">
+                  [#list topicOutcome.outcomes as outcome]<option value="${(outcome.id)!}">${(outcome.composedName)!}</option>[/#list]
+                </optgroup>
+              [/#list]
+            </select>
           </div>
-          
           <input type="hidden" name="programID " value="${(programID )!}"/> 
         </form>
         
