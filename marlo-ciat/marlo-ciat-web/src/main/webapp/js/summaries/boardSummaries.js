@@ -292,7 +292,7 @@ function setUrl(url,$this) {
   if(url == '#') {
     $('#generateReport').hide();
   } else {
-    $('.okButton a').attr('href', url).fadeIn();
+    $($this).find("div a.generateReport").attr('href', url).fadeIn();
   }
 }
 
