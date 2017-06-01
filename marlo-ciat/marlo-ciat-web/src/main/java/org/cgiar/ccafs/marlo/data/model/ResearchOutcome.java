@@ -141,7 +141,7 @@ public class ResearchOutcome implements Serializable, IAuditLog {
   }
 
   public String getComposedName() {
-    return "OC" + this.id + "- " + this.description;
+    return "OC" + this.id + "- " + this.description != null ? this.description : "title not defined";
   }
 
   public User getCreatedBy() {

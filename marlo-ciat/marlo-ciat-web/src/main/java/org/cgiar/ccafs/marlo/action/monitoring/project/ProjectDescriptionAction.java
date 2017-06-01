@@ -34,6 +34,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
@@ -101,11 +102,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private IProjectFundingSourceService projectFundingSourceService;
 
-
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
 
 
   private IAuditLogService auditLogService;
+
 
   private ProjectDescriptionValidator validator;
 
@@ -113,6 +114,7 @@ public class ProjectDescriptionAction extends BaseAction {
   private ICrpService crpService;
 
   private IProjectTypeService projectTypeService;
+
 
   private ResearchArea selectedResearchArea;
 
@@ -122,10 +124,13 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private List<ResearchArea> researchAreas;
 
-
   private List<ResearchProgram> researchPrograms;
+
   private List<FundingSourceType> fundingSourceTypes;
+
+
   private List<OutcomeOutputs> outputs;
+  private List<TopicOutcomes> topicOutcomes;
   private List<LocElement> regionLists;
   private List<LocElement> countryLists;
   private List<Crp> crps;
@@ -289,6 +294,10 @@ public class ProjectDescriptionAction extends BaseAction {
     return selectedResearchArea;
   }
 
+  public List<TopicOutcomes> getTopicOutcomes() {
+    return topicOutcomes;
+  }
+
   public String getTransaction() {
     return transaction;
   }
@@ -296,7 +305,6 @@ public class ProjectDescriptionAction extends BaseAction {
   public boolean isRegion() {
     return region;
   }
-
 
   @Override
   public void prepare() throws Exception {
@@ -470,6 +478,26 @@ public class ProjectDescriptionAction extends BaseAction {
 
     }
 
+
+    topicOutcomes = new ArrayList<>();
+
+    List<ResearchTopic> researchTopics = new ArrayList<>(
+      selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+
+
+    for (ResearchTopic researchTopic : researchTopics) {
+      TopicOutcomes outcome = new TopicOutcomes();
+      outcome.setTopic(researchTopic);
+      outcome.setOutcomes(new ArrayList<>());
+      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+        researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+      for (ResearchOutcome researchOutcome : researchOutcomes) {
+        outcome.getOutcomes().add(researchOutcome);
+      }
+
+      topicOutcomes.add(outcome);
+    }
+
     String params[] =
       {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DESCRIPTION_BASE_PERMISSION, params));
@@ -596,6 +624,7 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
+
   public void saveCrossCuting(Project projectDB) {
     ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
@@ -621,7 +650,6 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   }
-
 
   public void saveFundingSources(Project projectDB) {
 
@@ -771,6 +799,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
   }
 
+
   public void saveOutputs(Project projectDB) {
 
     if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
@@ -857,10 +886,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.region = region;
   }
 
-
   public void setRegionLists(List<LocElement> regionLists) {
     this.regionLists = regionLists;
   }
+
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
@@ -870,13 +899,17 @@ public class ProjectDescriptionAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
-
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
+
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTopicOutcomes(List<TopicOutcomes> topicOutcomes) {
+    this.topicOutcomes = topicOutcomes;
   }
 
   public void setTransaction(String transaction) {

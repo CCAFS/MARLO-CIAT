@@ -277,8 +277,8 @@
                   <select name="" class="outputSelect">
                     <option value="-1">Select an option...</option>
                     [#list outputs as output]
-                      <optgroup  label="${(output.outcome.description)!}">
-                        [#list output.outputs as op]<option value="${(op.id)!}">${(op.title)!}</option>[/#list]
+                      <optgroup  label="${(output.outcome.composedName)!}">
+                        [#list output.outputs as op]<option value="${(op.id)!}">${(op.composedName)!}</option>[/#list]
                       </optgroup>
                     [/#list]
                   </select>
@@ -327,10 +327,17 @@
             [@customForm.textArea name="outputName" i18nkey="Output Statement" required=true /]
           </div>
           <div class="form-group">
-            [@customForm.select name="outcomeID" i18nkey="Outcome" listName="outcomes" header=true keyFieldName="id" displayFieldName="composedName" value="id" placeholder="Select an outcome..." className="countriesRequest"/]
+            <label for="outcomeID" >Outcome:<span class="red">*</span></label>
+            <select id="outcomeID" name="outcomeID" class="">
+              <option value="-1">Select an outcome...</option>
+              [#list topicOutcomes as topicOutcome]
+                <optgroup  label="${(topicOutcome.topic.researchTopic)!'No Research topic'}">
+                  [#list topicOutcome.outcomes as outcome]<option value="${(outcome.id)!}">${(outcome.composedName)!}</option>[/#list]
+                </optgroup>
+              [/#list]
+            </select>
           </div>
-          
-          <input type="hidden" name="programID " value="${(programID )!}"/> 
+          <input type="hidden" name="programID" value="${(programID )!}"/> 
         </form>
         
         <div class="messageBlock" style="display:none">
