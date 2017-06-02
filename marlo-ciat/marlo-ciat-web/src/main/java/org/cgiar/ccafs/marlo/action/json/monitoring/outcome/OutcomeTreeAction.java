@@ -90,8 +90,8 @@ public class OutcomeTreeAction extends BaseAction {
 
     this.dataProjects = new ArrayList<>();
     for (Project project : hashProjects) {
-      dataProject.put("projectId", project.getId());
-      dataProject.put("projectName", project.getName());
+      dataProject.put("id", project.getId());
+      dataProject.put("name", project.getName());
 
       List<ProjectOutput> projectOutputs =
         new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
@@ -99,8 +99,8 @@ public class OutcomeTreeAction extends BaseAction {
       if (!projectOutputs.isEmpty()) {
         for (ProjectOutput projectOutput : projectOutputs) {
           Map<String, Object> dataOutput = new HashMap<>();
-          dataOutput.put("outputID", projectOutput.getResearchOutput().getId());
-          dataOutput.put("outputName", projectOutput.getResearchOutput().getTitle());
+          dataOutput.put("id", projectOutput.getResearchOutput().getId());
+          dataOutput.put("name", projectOutput.getResearchOutput().getTitle());
 
           dataOutputs.add(dataOutput);
 
@@ -115,8 +115,8 @@ public class OutcomeTreeAction extends BaseAction {
       if (!deliverables.isEmpty()) {
         for (Deliverable deliverable : deliverables) {
           Map<String, Object> dataDeliverable = new HashMap<>();
-          dataDeliverable.put("deliverableID", deliverable.getId());
-          dataDeliverable.put("deliverableName", deliverable.getName());
+          dataDeliverable.put("id", deliverable.getId());
+          dataDeliverable.put("name", deliverable.getName());
 
           dataDeliverables.add(dataDeliverable);
         }
