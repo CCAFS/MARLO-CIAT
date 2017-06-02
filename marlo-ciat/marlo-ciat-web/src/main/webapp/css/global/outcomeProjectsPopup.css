@@ -1,0 +1,25 @@
+ul.projectsList {
+  padding: 0;
+  margin: 0;
+}
+
+ul.projectsList > li {
+  list-style: none;
+  margin-bottom: 2em;
+}
+
+ul.projectsList > li > p{
+  background:#319967;
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+ul.projectsList > li > strong{
+  margin-left: 1.5em;
+}
+
+
+ul.projectsList > li ul{ 
+  margin-bottom: 1em;
+}

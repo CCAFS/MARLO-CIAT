@@ -27,17 +27,18 @@
 <span id="programSelected" class="hidden">${selectedProgram.id}</span>
 
 <section class="container">
+  
   <article class="row" id="mainInformation">
     <div class="col-md-12">
       [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
 
       [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
       [#-- Back --]
-            <div class="pull-right">
-              <a href="[@s.url action='${centerSession}/monitoringOutcomesList'][@s.param name="programID" value=selectedProgram.id /][/@s.url]">
-                <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outcome list
-              </a>
-            </div>  
+      <div class="pull-right">
+        <a href="[@s.url action='${centerSession}/monitoringOutcomesList'][@s.param name="programID" value=selectedProgram.id /][/@s.url]">
+          <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outcome list
+        </a>
+      </div>  
       
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
@@ -201,10 +202,8 @@
       <div class="col-md-3 note center" style="display:${((milestone.researchMilestone.active)!true)?string("none","block")};">
       <span>This milestone was removed from impactPathway</span>
       </div>
-      
-      
-      
     </div>
+    
     [#-- Milestone narrative --]
     <div class="form-group" style="margin-top: 15px;">
       [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this milestone" required=true className="milestone-narrative limitWords-100" editable=editable /]

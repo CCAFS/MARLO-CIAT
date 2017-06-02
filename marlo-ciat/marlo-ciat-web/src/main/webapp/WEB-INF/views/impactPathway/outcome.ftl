@@ -21,8 +21,8 @@
 [@utils.helpInfos hlpInfo="researchOutcomes.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
-  <div class="container"> 
-    
+  <div class="container">
+  
     <div class="row">
       <div class="col-md-3">
         [#include "/WEB-INF/views/impactPathway/menu-impactPathway.ftl" /]

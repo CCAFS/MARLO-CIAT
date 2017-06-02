@@ -50,5 +50,7 @@
   </article>
 </section>
 
+[#-- Outcome Projects Popup --]
+[#include "/WEB-INF/global/macros/outcomeProjectsPopup.ftl" /]
 
 [#include "/WEB-INF/global/pages/footer.ftl"]

@@ -16,10 +16,10 @@
     [#if outcomes?has_content]
       [#list outcomes as outcome]
         <tr>
-        [#-- ID --]
-        <td class="outcomeId">
-          <a href="[@s.url namespace=namespace action=defaultAction][@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url]">OC${outcome.id}</a>
-        </td>
+          [#-- ID --]
+          <td class="outcomeId">
+            <a href="[@s.url namespace=namespace action=defaultAction][@s.param name='outcomeID']${outcome.id?c}[/@s.param][@s.param name='edit']true[/@s.param][/@s.url]">OC${outcome.id}</a>
+          </td>
           [#-- outcome statement --]
           <td class="left"> 
             [#if outcome.description?has_content]
@@ -80,6 +80,7 @@
         <th id="outcomeTitlesM" >[@s.text name="programImpact.outcomeList.statement" /]</th>
         <th id="outcomeTargetYearM">[@s.text name="programImpact.outcomeList.targetYear" /]</th>
         <!-- <th id="statusM">[@s.text name="outcomeList.status" /]</th> -->
+        <th id="projectsLink">Associated Projects</th>
       </tr>
     </thead>
     <tbody>
@@ -111,14 +112,18 @@
           [#-- outcome status --]
           <!--
           <td class="text-center">
-          [#if outcome.status?has_content ]
-          ${(outcome.status)!'none'}
-          [#else]
-          none
-          [/#if]
-            
+            [#if outcome.status?has_content ]
+            ${(outcome.status)!'none'}
+            [#else]
+            none
+            [/#if] 
           </td>
           -->
+          <td class="text-center">
+            <button type="button" class="btn btn-default btn-xs outcomeProjects-${outcome.id}" data-toggle="modal" data-target="#outcomeProjectsModal">
+              <span class="glyphicon glyphicon-pushpin"></span> Projects
+            </button> 
+          </td>
         </tr>  
       [/#list]
       [/#if]
