@@ -168,6 +168,13 @@ public class ProjectDescriptionAction extends BaseAction {
     this.projectTypeService = projectTypeService;
   }
 
+  public Boolean bolValue(String value) {
+    if (value == null || value.isEmpty() || value.toLowerCase().equals("null")) {
+      return null;
+    }
+    return Boolean.valueOf(value);
+  }
+
   @Override
   public String cancel() {
 
@@ -306,6 +313,7 @@ public class ProjectDescriptionAction extends BaseAction {
     return region;
   }
 
+
   @Override
   public void prepare() throws Exception {
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
@@ -427,6 +435,14 @@ public class ProjectDescriptionAction extends BaseAction {
       } else {
         this.setDraft(false);
 
+        System.out.println(String.valueOf(project.getGlobal()));
+        if (project.getGlobal() != null) {
+          project.setsGlobal(String.valueOf(project.getGlobal()));
+        }
+        if (project.getRegion() != null) {
+          project.setsRegion(String.valueOf(project.getRegion()));
+        }
+
         ProjectCrosscutingTheme crosscutingTheme;
         if (this.isEditable()) {
           crosscutingTheme = projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
@@ -465,6 +481,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
       }
+
 
       fundingSourceTypes = new ArrayList<>(
         fundingSourceService.findAll().stream().filter(fst -> fst.isActive()).collect(Collectors.toList()));
@@ -563,8 +580,8 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setEndDate(project.getEndDate());
       projectDB.setExtensionDate(project.getExtensionDate());
       projectDB.setDescription(project.getDescription());
-      projectDB.setGlobal(project.isGlobal());
-      projectDB.setRegion(project.isRegion());
+      projectDB.setGlobal(this.bolValue(project.getsGlobal()));
+      projectDB.setRegion(this.bolValue(project.getsRegion()));
       projectDB.setDirectDonor(project.getDirectDonor());
       projectDB.setOriginalDonor(project.getOriginalDonor());
       projectDB.setTotalAmount(project.getTotalAmount());
@@ -624,7 +641,6 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
-
   public void saveCrossCuting(Project projectDB) {
     ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
@@ -650,6 +666,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
 
   }
+
 
   public void saveFundingSources(Project projectDB) {
 
@@ -799,7 +816,6 @@ public class ProjectDescriptionAction extends BaseAction {
 
   }
 
-
   public void saveOutputs(Project projectDB) {
 
     if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
@@ -886,10 +902,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.region = region;
   }
 
+
   public void setRegionLists(List<LocElement> regionLists) {
     this.regionLists = regionLists;
   }
-
 
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
@@ -899,10 +915,10 @@ public class ProjectDescriptionAction extends BaseAction {
     this.researchPrograms = researchPrograms;
   }
 
+
   public void setSelectedProgram(ResearchProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
-
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;

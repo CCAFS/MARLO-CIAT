@@ -139,13 +139,13 @@
             <h4 class="headTitle">Location information</h4> 
             <div class="informationWrapper simpleBox">
             [#-- GLOBAL DIMENSION --]
-            [#if editable]
+            [#if editable] 
               <div class="form-group">
-                <div class="">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.global"  editable=editable inverse=false  cssClass="" /] </div>
+                <div class="">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.sGlobal"   editable=editable inverse=false  cssClass="" /] </div>
               </div>
               <hr />
               <div class="form-group">
-                <div class="">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.region"  editable=editable inverse=false  cssClass="isRegional" /] </div>
+                <div class="">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.sRegion"    editable=editable inverse=false  cssClass="isRegional" /] </div>
               </div>
               [#else]
               <div class="form-group">
@@ -165,7 +165,7 @@
               </div>
               [/#if]
               [#-- REGIONAL SELECT --]
-              <div class="regionsBox form-group" style="display:${project.region?string('block','none')}">
+              <div class="regionsBox form-group" style="display:${(project.region?string('block','none'))!}">
                 <div class="panel tertiary">
                  <div class="panel-head">
                    <label for=""> [@customForm.text name="projectDescription.selectRegions" readText=!editable /]:[@customForm.req required=editable /]</label>
@@ -261,9 +261,9 @@
            
           [#-- Outputs --]
           <div class="form-group">      
-            <div class="output panel tertiary" listname="project.outputs">
-              <div class="panel-head"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
-              <div class="panel-body"> 
+            <div class="output panel tertiary">
+              <div class="panel-head" listname="project.outputs"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
+              <div class="panel-body" > 
                 <ul id="outputsBlock" class="list outputList">
                 [#if  project.outputs?has_content]  
                   [#list project.outputs as output]
