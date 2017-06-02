@@ -88,10 +88,10 @@ public class OutcomeTreeAction extends BaseAction {
     hashProjects.addAll(projects);
     projects = new ArrayList<>(hashProjects);
 
-    Map<String, Object> dataProject = new HashMap<>();
 
     this.dataProjects = new ArrayList<>();
     for (Project project : hashProjects) {
+      Map<String, Object> dataProject = new HashMap<>();
       dataProject.put("id", project.getId());
       dataProject.put("name", project.getName());
 

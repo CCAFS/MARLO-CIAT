@@ -569,6 +569,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.totalAmount = totalAmount;
   }
 
+  @Override
+  public String toString() {
+    return id.toString();
+  }
 
 }
 
