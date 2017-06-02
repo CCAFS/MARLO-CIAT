@@ -17,21 +17,31 @@ package org.cgiar.ccafs.marlo.action.capdev;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.dao.ICapacityDevelopmentTypeDAO;
 import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
+import org.cgiar.ccafs.marlo.data.model.CapacityDevelopmentType;
 import org.cgiar.ccafs.marlo.data.model.Crp;
+import org.cgiar.ccafs.marlo.data.model.Discipline;
+import org.cgiar.ccafs.marlo.data.model.LocElement;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.TargetGroup;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
+import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
+import org.cgiar.ccafs.marlo.data.service.ILocElementService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.ITargetGroupService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -47,28 +57,42 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private CapacityDevelopment capdev;
   private List<String> approaches = new ArrayList<>();
   private List<String> outcomes = new ArrayList<>();
-  private List<String> types = new ArrayList<>();
   private List<String> deliverables = new ArrayList<>();
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
   private List<Project> projects;
   private List<Crp> crps;
+  private List<LocElement> regionsList;
+  private List<LocElement> countryList;
+  private List<CapacityDevelopmentType> capdevTypes;
+  private List<Discipline> disciplines;
+  private List<TargetGroup> targetGroups;
   private final ICapacityDevelopmentService capdevService;
   private final IResearchAreaService researchAreaService;
   private final IResearchProgramDAO researchProgramSercive;
   private final IProjectService projectService;
   private final ICrpService crpService;
+  private final ICapacityDevelopmentTypeDAO capdevTypeService;
+  private final ILocElementService locElementService;
+  private final IDisciplineService disciplineService;
+  private final ITargetGroupService targetGroupService;
 
   @Inject
   public CapacityDevelopmentDescripcionAction(APConfig config, ICapacityDevelopmentService capdevService,
     IResearchAreaService researchAreaService, IResearchProgramDAO researchProgramSercive,
-    IProjectService projectService, ICrpService crpService) {
+    IProjectService projectService, ICrpService crpService, ICapacityDevelopmentTypeDAO capdevTypeService,
+    ILocElementService locElementService, IDisciplineService disciplineService,
+    ITargetGroupService targetGroupService) {
     super(config);
     this.capdevService = capdevService;
     this.researchAreaService = researchAreaService;
     this.researchProgramSercive = researchProgramSercive;
     this.projectService = projectService;
     this.crpService = crpService;
+    this.capdevTypeService = capdevTypeService;
+    this.locElementService = locElementService;
+    this.disciplineService = disciplineService;
+    this.targetGroupService = targetGroupService;
   }
 
 
@@ -94,6 +118,16 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public List<CapacityDevelopmentType> getCapdevTypes() {
+    return capdevTypes;
+  }
+
+
+  public List<LocElement> getCountryList() {
+    return countryList;
+  }
+
+
   public List<Crp> getCrps() {
     return crps;
   }
@@ -101,6 +135,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public List<String> getDeliverables() {
     return deliverables;
+  }
+
+
+  public List<Discipline> getDisciplines() {
+    return disciplines;
   }
 
 
@@ -114,6 +153,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public List<LocElement> getRegionsList() {
+    return regionsList;
+  }
+
+
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
@@ -124,8 +168,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
-  public List<String> getTypes() {
-    return types;
+  public List<TargetGroup> getTargetGroups() {
+    return targetGroups;
   }
 
 
@@ -146,15 +190,29 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     outcomes.add("outcome 5");
 
 
-    types.add("Thesis");
-    types.add("Publication");
-    types.add("Ph Thesis");
-
     researchAreas = researchAreaService.findAll();
     researchPrograms = researchProgramSercive.findAll();
     projects = projectService.findAll();
     crps = crpService.findAll();
-    System.out.println("research progrmas -->" + researchPrograms.size());
+    capdevTypes = capdevTypeService.findAll();
+
+    // Regions List
+    regionsList = new ArrayList<>(locElementService.findAll().stream()
+      .filter(le -> le.isActive() && (le.getLocElementType() != null) && (le.getLocElementType().getId() == 1))
+      .collect(Collectors.toList()));
+    Collections.sort(regionsList, (r1, r2) -> r1.getName().compareTo(r2.getName()));
+
+    // Country List
+    countryList = new ArrayList<>(locElementService.findAll().stream()
+      .filter(le -> le.isActive() && (le.getLocElementType() != null) && (le.getLocElementType().getId() == 2))
+      .collect(Collectors.toList()));
+    Collections.sort(countryList, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+
+    // Disciplines List
+    disciplines = disciplineService.findAll();
+
+    // Target groups List
+    targetGroups = targetGroupService.findAll();
 
     try {
       capDevID = Integer.parseInt(StringUtils.trim(this.getRequest().getParameter("capDevID")));
@@ -177,7 +235,12 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
 
     System.out.println("este es el titulo -->" + capdev.getTitle());
-    System.out.println("este es el tipo -->" + capdev.getCapdevType());
+    System.out.println("este es el tipo -->" + capdev.getCapdevType().getId());
+    System.out.println("este es el research area -->" + capdev.getResearchArea().getId());
+    System.out.println("esta es la categoria -->" + capdev.getCategory());
+
+    System.out.println("Este es el strartDate -->" + capdev.getStartDate());
+    System.out.println("Este es el endDate -->" + capdev.getEndDate());
 
 
     final Session session = SecurityUtils.getSubject().getSession();
@@ -185,7 +248,9 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
     System.out.println("User actual -->" + currentUser);
 
-    capdev.setCategory(1);
+    capdev.setCtFirstName("Luis");
+    capdev.setCtLastName("Gonzalez");
+    capdev.setCtEmail("l.o.gonzalez@cgiar.org");
     capdev.setActive(true);
     capdev.setUsersByCreatedBy(currentUser);
     capdevService.saveCapacityDevelopment(capdev);
@@ -210,6 +275,16 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public void setCapdevTypes(List<CapacityDevelopmentType> capdevTypes) {
+    this.capdevTypes = capdevTypes;
+  }
+
+
+  public void setCountryList(List<LocElement> countryList) {
+    this.countryList = countryList;
+  }
+
+
   public void setCrps(List<Crp> crps) {
     this.crps = crps;
   }
@@ -217,6 +292,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setDeliverables(List<String> deliverables) {
     this.deliverables = deliverables;
+  }
+
+
+  public void setDisciplines(List<Discipline> disciplines) {
+    this.disciplines = disciplines;
   }
 
 
@@ -230,6 +310,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public void setRegionsList(List<LocElement> regionsList) {
+    this.regionsList = regionsList;
+  }
+
+
   public void setResearchAreas(List<ResearchArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
@@ -240,8 +325,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
-  public void setTypes(List<String> types) {
-    this.types = types;
+  public void setTargetGroups(List<TargetGroup> targetGroups) {
+    this.targetGroups = targetGroups;
   }
 
 

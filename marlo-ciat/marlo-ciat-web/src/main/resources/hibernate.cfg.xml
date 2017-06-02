@@ -90,6 +90,9 @@
 		<mapping resource="xmls/CenterParameters.hbm.xml" />
 		<mapping resource="xmls/CenterCustomParameters.hbm.xml" />
 		<mapping resource="xmls/CapacityDevelopment.hbm.xml" />
+		<mapping resource="xmls/CapacityDevelopmentTypes.hbm.xml" />
+		<mapping resource="xmls/Disciplines.hbm.xml" />
+		<mapping resource="xmls/TargetGroups.hbm.xml" />
 
 	</session-factory>
 

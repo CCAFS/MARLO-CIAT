@@ -23,7 +23,7 @@ public class CapacityDevelopment implements java.io.Serializable {
   private Crp crp;
   private ResearchProgram researchProgram;
   private String title;
-  private String capdevType;
+  private CapacityDevelopmentType capdevType;
   private int category;
   private boolean active;
   private String modificationJustification;
@@ -39,9 +39,9 @@ public class CapacityDevelopment implements java.io.Serializable {
 
 
   public CapacityDevelopment(Project project, User usersByModifiedBy, User usersByCreatedBy, ResearchArea researchArea,
-    Crp crp, ResearchProgram researchProgram, String title, String capdevType, int category, boolean active,
-    String modificationJustification, String ctFirstName, String ctLastName, String ctEmail, Date startDate,
-    Date endDate, Integer numParticipants) {
+    Crp crp, ResearchProgram researchProgram, String title, CapacityDevelopmentType capdevType, int category,
+    boolean active, String modificationJustification, String ctFirstName, String ctLastName, String ctEmail,
+    Date startDate, Date endDate, Integer numParticipants) {
     this.project = project;
     this.usersByModifiedBy = usersByModifiedBy;
     this.usersByCreatedBy = usersByCreatedBy;
@@ -61,8 +61,8 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.numParticipants = numParticipants;
   }
 
-  public CapacityDevelopment(String title, String capdevType, int category, boolean active, String ctFirstName,
-    String ctLastName, String ctEmail, Date startDate) {
+  public CapacityDevelopment(String title, CapacityDevelopmentType capdevType, int category, boolean active,
+    String ctFirstName, String ctLastName, String ctEmail, Date startDate) {
     this.title = title;
     this.capdevType = capdevType;
     this.category = category;
@@ -73,7 +73,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.startDate = startDate;
   }
 
-  public String getCapdevType() {
+  public CapacityDevelopmentType getCapdevType() {
     return this.capdevType;
   }
 
@@ -149,7 +149,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.active = active;
   }
 
-  public void setCapdevType(String capdevType) {
+  public void setCapdevType(CapacityDevelopmentType capdevType) {
     this.capdevType = capdevType;
   }
 

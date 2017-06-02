@@ -56,8 +56,8 @@ public class ManageUsersAction extends BaseAction {
 
   private static String PARAM_EMAIL = "email";
   private static String PARAM_IS_ACTIVE = "isActive";
-  private UserService userManager;
-  private SendMail sendMail;
+  private final UserService userManager;
+  private final SendMail sendMail;
   private String actionName;
 
   private String queryParameter;
@@ -85,13 +85,13 @@ public class ManageUsersAction extends BaseAction {
     newUser.setActive(true);
     newUser.setId(null);
 
-    Long id = userManager.saveUser(newUser, this.getCurrentUser());
+    final Long id = userManager.saveUser(newUser, this.getCurrentUser());
     // If successfully added.
     if (id > 0) {
       newUser = userManager.getUser(id);
 
       this.users = new ArrayList<>();
-      Map<String, Object> userMap = new HashMap<>();
+      final Map<String, Object> userMap = new HashMap<>();
       userMap.put("id", newUser.getId());
       userMap.put("composedName", newUser.getComposedName());
       this.users.add(userMap);
@@ -141,11 +141,11 @@ public class ManageUsersAction extends BaseAction {
         }
       } else {
         // If the email does not belong to the CGIAR.
-        if (newUser.getFirstName() != null && newUser.getLastName() != null) {
+        if ((newUser.getFirstName() != null) && (newUser.getLastName() != null)) {
           newUser.setCgiarUser(false);
           // Generating a random password.
           // String newPassword = RandomStringUtils.random(6, "0123456789abcdefghijkmnpqrstuvwxyz");
-          String newPassword = RandomStringUtils.randomNumeric(6);
+          final String newPassword = RandomStringUtils.randomNumeric(6);
           newUser.setPassword(newPassword);
           if (!this.addUser()) {
             // If user could not be added.
@@ -185,7 +185,7 @@ public class ManageUsersAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    Map<String, Object> parameters = this.getParameters();
+    final Map<String, Object> parameters = this.getParameters();
     // if searching a user, we need to get the queried String.
     if (ActionContext.getContext().getName().equals("searchUsers")) {
 
@@ -215,10 +215,10 @@ public class ManageUsersAction extends BaseAction {
    * @throws Exception if some error appear.
    */
   public String search() throws Exception {
-    List<User> users = userManager.searchUser(queryParameter);
+    final List<User> users = userManager.searchUser(queryParameter);
     this.users = new ArrayList<>();
-    for (User user : users) {
-      Map<String, Object> userMap = new HashMap<>();
+    for (final User user : users) {
+      final Map<String, Object> userMap = new HashMap<>();
       userMap.put("id", user.getId());
       userMap.put("composedName", user.getComposedName());
       this.users.add(userMap);
@@ -236,13 +236,13 @@ public class ManageUsersAction extends BaseAction {
    * @return a populated user with all the information that is coming from the OAD, or null if the email does not exist.
    */
   private User validateOutlookUser(String email) {
-    LDAPService service = new LDAPService();
+    final LDAPService service = new LDAPService();
     if (config.isProduction()) {
       service.setInternalConnection(false);
     } else {
       service.setInternalConnection(true);
     }
-    LDAPUser user = service.searchUserByEmail(email);
+    final LDAPUser user = service.searchUserByEmail(email);
     if (user != null) {
       newUser.setFirstName(user.getFirstName());
       newUser.setLastName(user.getLastName());

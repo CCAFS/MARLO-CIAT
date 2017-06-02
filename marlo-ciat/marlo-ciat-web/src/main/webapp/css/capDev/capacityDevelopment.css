@@ -191,3 +191,10 @@
 	border-left: 3px solid #ccc;
 	border-bottom: 1px solid #ccc;
 }
+
+
+.contactList ul {
+  max-height: 353px;
+  overflow: auto;
+  overflow-x: hidden;
+}

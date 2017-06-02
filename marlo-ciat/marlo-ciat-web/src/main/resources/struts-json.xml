@@ -142,6 +142,17 @@
         <param name="excludeNullProperties">true</param>
       </result>
     </action>
+    
+    
+    
+    <action name="searchContact"
+			class="org.cgiar.ccafs.marlo.action.capdev.ContactPersonAction"
+			method="searchADUser">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
 
 	</package>
 </struts>

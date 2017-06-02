@@ -9,6 +9,8 @@
 
 
 
+
+
 <script src="${baseUrl}/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="${baseUrl}/js/capDev/capacityDevelopment.js"></script>
 
@@ -48,48 +50,52 @@
 			<div class="col-md-12">
 				<div class="col-md-3">
 					<div class="radio">
-					  <label><input  id="individual" type="radio"  name="optradio" class="radioButton" value="individual">Individual</label>
+					  <label><input  id="individual" type="radio"  name="capdev.category" class="radioButton" value="1">Individual</label>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="radio">
-					  <label><input id="gruops" type="radio" name="optradio" class="radioButton" value="gruops">Groups</label>
+					  <label><input id="gruops" type="radio" name="capdev.category" class="radioButton" value="2">Groups</label>
 					</div>
 				</div>
 				
 			</div>
 		</div>
 
-		<!-- type-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
+			<!-- type-->
 			<div class="col-md-6 "> 
-				[@customForm.select name="capdev.capdevType" listName="types" i18nkey="capdev.form.type"  placeholder="select option..." required=true /]
+				[@customForm.select name="capdev.capdevType.id" listName="capdevTypes" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.type"  placeholder="select option..." required=true editable=true/]
 			</div>
+
+			<!-- Contact person -->
 			<div class="col-md-6 ">
-				[@customForm.input name="" i18nkey="capdev.form.contactPerson" type="text"   required=true  /]
+				[@customForm.input name="" i18nkey="capdev.form.contactPerson" type="text" className='contactPerson'  required=true  /]
 			</div>
 			</div>
 		</div>
-		<!-- Strart date-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
+			<!-- Strart date-->
 			<div class="col-md-6 ">
 				[@customForm.input name="capdev.startDate" i18nkey="capdev.form.startDate" type="text" required=true  editable=true /]
 			</div>
+			<!-- end date-->
 			<div class="col-md-6 ">
 				[@customForm.input name="capdev.endDate" i18nkey="capdev.form.endDate" type="text"  editable=true /]
 			</div>
 			</div>
 		</div>
-		<!-- Country-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
+			<!-- Country-->
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="" i18nkey="capdev.form.country" placeholder="select option..."  /]
+				[@customForm.select name="" listName="countryList" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.country" placeholder="select option..."  /]
 			</div>
+			<!-- Region -->
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="" i18nkey="capdev.form.region" placeholder="select option..."  /]
+				[@customForm.select name="" listName="regionsList" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.region" placeholder="select option..."  /]
 			</div>
 			</div>
 		</div>
@@ -97,27 +103,30 @@
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="researchAreas" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.researchArea" placeholder="select option..."  /]
+				[@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.researchArea" placeholder="select option..."  /]
 			</div>
+
+			<!-- research program-->
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="select option..."  /]
+				[@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="select option..."  /]
 			</div>
 			</div>
 		</div>
 		<!-- project-->
 		<div class="row newCapdevField">
 			<div class="col-md-12 ">
-				[@customForm.select name="" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="select option..."  /]
+				[@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="select option..."  /]
 			</div>
 		</div>
 		<!-- CRP -->
 		<div class="row">
 			<div class="col-md-12 newCapdevField">
 			<div class="col-md-6 ">
-				[@customForm.select name="" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="select option..."  /]
+				[@customForm.select name="capdev.crp.id" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="select option..."  /]
 			</div>
+			<!-- num participants -->
 			<div class="col-md-6 ">
-				[@customForm.input name="" i18nkey="capdev.form.dictated" type="text"  /]
+				[@customForm.input name="capdev.numParticipants" i18nkey="capdev.form.numParticipants" type="text"  editable=true /]
 			</div>
 			</div>
 		</div>
@@ -133,15 +142,15 @@
 		<div class="row borderContainer">
 
 			<div class="col-md-12 newCapdevField ">
-				[#if targeted_public?has_content]
-                    [#list targeted_public as approach]
+				[#if targetGroups?has_content]
+                    [#list targetGroups as approach]
                        
                     [/#list]
                  [/#if]
-                 <p class="text-center inf" style="display:${(targeted_public?has_content)?string('none','block')}">[@s.text name="capdev.notDisciplines" /]</p>
+                 <p class="text-center inf" style="display:${(targetGroups?has_content)?string('none','block')}">[@s.text name="capdev.notDisciplines" /]</p>
 			</div>
 			<div class="col-md-12 newCapdevField ">
-				[@customForm.select name="" listName="" i18nkey="Select a targeted public" className="disciplines" multiple=false placeholder="select option..."  /]
+				[@customForm.select name="" listName="targetGroups" keyFieldName="id" displayFieldName="name"  i18nkey="Select a targeted public" className="disciplines" multiple=false placeholder="select option..."  /]
 			</div>
 
 		</div>
@@ -154,20 +163,20 @@
 		</div>
 		<div class="row approachesListContainer">
 			<div class="col-md-12 newCapdevField approachesList">
-				[#if capDevApproaches?has_content]
-                    [#list capDevApproaches as approach]
+				[#if capdev.disciplines?has_content]
+                    [#list disciplines as approach]
                       [@disciplineMacro approach /]  
                     [/#list]
                  [/#if]
-                 <p class="text-center inf" style="display:${(capDevApproaches?has_content)?string('none','block')}">[@s.text name="capdev.notDisciplines" /]</p>
+                 <p class="text-center inf" style="display:${(disciplines?has_content)?string('none','block')}">[@s.text name="capdev.notDisciplines" /]</p>
 			</div>
 			<div class="col-md-12 newCapdevField">
-				[@customForm.select name="" listName="approaches" i18nkey="capdev.form.selectApproach" className="disciplines" multiple=false placeholder="select option..."  /]
+				[@customForm.select name="" listName="disciplines" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.selectApproach" className="disciplines" multiple=false placeholder="select option..."  /]
 			</div>
 		</div>
 
 
-		<!-- OutComes-->
+		<!-- OutPuts-->
 		<div class="row">
 			<div class="col-md-12 newCapdevField objectivesTitle">
 				[@s.text name="capdev.form.objectives"][/@s.text]
@@ -332,6 +341,8 @@
 [@objectiveMacro element={} index=0 isTemplate=true /] 
 [@disciplineMacro element="" isTemplate=true/]
 [@outComeMacro element="" isTemplate=true/]
+
+[#include "/WEB-INF/views/capDev/searchContactPerson.ftl" /]
 
 [#include "/WEB-INF/global/pages/footer.ftl"]
 

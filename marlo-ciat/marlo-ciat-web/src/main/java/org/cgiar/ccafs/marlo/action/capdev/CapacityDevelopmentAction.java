@@ -18,6 +18,7 @@ package org.cgiar.ccafs.marlo.action.capdev;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
+import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +37,16 @@ public class CapacityDevelopmentAction extends BaseAction {
   private List<CapacityDevelopment> capDevs = new ArrayList<CapacityDevelopment>();
   private List<String> objectives = new ArrayList<String>();
   private String objectiveBody;
+  private final ICapacityDevelopmentService capdevService;
 
   private List<String> capDevApproaches = new ArrayList<String>();
   private String approach;
   private int capDevID;
 
   @Inject
-  public CapacityDevelopmentAction(APConfig config) {
+  public CapacityDevelopmentAction(APConfig config, ICapacityDevelopmentService capdevService) {
     super(config);
+    this.capdevService = capdevService;
 
   }
 
@@ -97,17 +100,7 @@ public class CapacityDevelopmentAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-
-
-    /*
-     * capDevs.add(new CapacityDevelopment(1,
-     * "Health, biodiversity and natural resource use in the western amazon lowlands", "thesis"));
-     * capDevs.add(new CapacityDevelopment(2, "Caracterización morfológica y citogenética de las pasifloras andinas",
-     * "Publication"));
-     * capDevs.add(new CapacityDevelopment(3, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
-     * capDevs.add(new CapacityDevelopment(4, "Mathematical modeling relevant to the whitefly ipm project", "Report"));
-     */
-
+    capDevs = capdevService.findAll();
 
   }
 

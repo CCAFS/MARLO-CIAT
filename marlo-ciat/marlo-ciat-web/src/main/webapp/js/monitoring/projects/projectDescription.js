@@ -11,7 +11,7 @@ function init() {
   $('.amount').currencyInput();
 
   datePickerConfig({
-      "startDate": "#project\\.startDate",
+     "startDate": "#project\\.startDate",
       "endDate": "#project\\.endDate",
       "extensionDate": "#project\\.extensionDate"
   });
