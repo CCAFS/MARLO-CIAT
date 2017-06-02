@@ -3,6 +3,8 @@ ul.projectsList {
   margin: 0;
 }
 
+ul.projectsList p{font-weight: bold;cursor: pointer;}
+
 ul.projectsList > li {
   list-style: none;
   margin-bottom: 2em;
@@ -22,4 +24,9 @@ ul.projectsList > li > strong{
 
 ul.projectsList > li ul{ 
   margin-bottom: 1em;
+}
+
+.modal-body {
+  overflow: auto;
+  max-height: 500px;
 }

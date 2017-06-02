@@ -14,7 +14,6 @@ function attachEvents() {
   // This event fires immediately when the show instance method is called.
   $modal.on('show.bs.modal', function(e) {
     var outcomeID = $(e.relatedTarget).classParam("outcomeProjects");
-    console.log(outcomeID);
 
     setModalTitle("Associated Projects to the OC" + outcomeID);
 
@@ -33,45 +32,57 @@ function attachEvents() {
           if(data.dataProjects.length > 0) {
 
             $.each(data.dataProjects, function(i,project) {
+              console.log(project.name);
               var item = "<li> <p> P" + project.id + " - " + project.name + "</p>";
 
-              // Deliverables
-              if(project.deliverables.length > 0) {
-                item += "<strong class='text-muted'>Associated Deliverables</strong>"
-                item += "<ul>"
-                $.each(project.deliverables, function(i,deliverable) {
-                  item += "<li>  D" + deliverable.id + " - " + deliverable.name + "";
-                });
-                item += "</ul>"
-              }
-
+              item += "<ul>"
               // Outputs
               if(project.outputs.length > 0) {
-                item += "<strong class='text-muted'>Associated Outputs</strong>"
+                item += "<li><p class='text-muted'>Associated Outputs</p>"
                 item += "<ul>"
                 $.each(project.outputs, function(i,output) {
                   item += "<li>  O" + output.id + " - " + output.name + "";
                 });
-                item += "</ul>"
+                item += "</ul></li>"
               }
 
-              item += "</li>";
+              // Deliverables
+              if(project.deliverables.length > 0) {
+                item += "<li><p class='text-muted'>Associated Deliverables</p>"
+                item += "<ul>"
+                $.each(project.deliverables, function(i,deliverable) {
+                  item += "<li>  D" + deliverable.id + " - " + deliverable.name + "";
+                });
+                item += "</ul></li>"
+              }
+
+              item += "</ul></li>"
 
               // Adding Project Item
               $modalProjects.append(item);
             });
 
           } else {
-            $modalProjects.append("<p>No projects Linked</p>");
+            $modalProjects.append("<p>No associated projects to this outcome</p>");
           }
         },
         complete: function() {
           $modal.find(".loading").fadeOut();
+          // Setting event to new DOM created
+          $modalProjects.find('p').on('click', collapseList);
         }
     });
 
   });
 
+  // Toogle slide
+
+}
+
+function collapseList() {
+
+  console.log('asd');
+  $(this).parent().find('ul').slideToggle();
 }
 
 function setModalTitle(text) {
