@@ -29,7 +29,7 @@
 <section class="container">
   
   <article class="row" id="mainInformation">
-    <div class="col-md-12">
+    <div class="col-md-offset-1 col-md-10">
       [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
 
       [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
@@ -42,7 +42,7 @@
       
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
-      <div class="simpleBox col-md-12">
+      <div class="simpleBox row">
         <div class="col-md-4">
           <label for="">Research topic:  </label>
           <p>${selectedResearchTopic.researchTopic}</p>
@@ -55,8 +55,11 @@
           <label for="">Expected for ${(outcome.targetYear)!"null"}:  </label>
           <p>${(outcome.value)!"Not Applicable"}</p>
         </div>
-      </div>
-    <div class="clearfix"></div>
+      </div> 
+      [#-- View Porjects contributions --]
+      <button type="button" class="btn btn-default btn-xs pull-right outcomeProjects-${outcome.id}" data-toggle="modal" data-target="#outcomeProjectsModal">
+        <span class="glyphicon glyphicon-pushpin"></span> View Project Contributions
+      </button>
     <div class="">
       [#-- Year Tabs --]
       <ul class="nav nav-tabs" role="tablist">
@@ -139,12 +142,15 @@
       
          
       <div class="clearfix"></div>
-          [#-- Section Buttons & hidden inputs--]
-          [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
+      [#-- Section Buttons & hidden inputs--]
+      [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
     </div>
     [/@s.form] 
   </article>
 </section>
+
+[#-- Outcome Projects Popup --]
+[#include "/WEB-INF/global/macros/outcomeProjectsPopup.ftl" /]
 
 [#-- Bilateral Co-Funded Project Popup --]
 [#include "/WEB-INF/global/macros/milestonePopup.ftl"]

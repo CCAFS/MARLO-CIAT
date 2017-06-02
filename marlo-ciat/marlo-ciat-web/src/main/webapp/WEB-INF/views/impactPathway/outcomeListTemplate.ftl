@@ -80,7 +80,7 @@
         <th id="outcomeTitlesM" >[@s.text name="programImpact.outcomeList.statement" /]</th>
         <th id="outcomeTargetYearM">[@s.text name="programImpact.outcomeList.targetYear" /]</th>
         <!-- <th id="statusM">[@s.text name="outcomeList.status" /]</th> -->
-        <th id="projectsLink">Associated Projects</th>
+        <th id="projectsLink">Contributions</th>
       </tr>
     </thead>
     <tbody>

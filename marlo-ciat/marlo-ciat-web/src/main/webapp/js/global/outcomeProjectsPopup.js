@@ -1,18 +1,14 @@
 var $modal, $modalProjects;
 $(document).ready(function() {
 
+  console.log('outcomeProjectsPopup.js');
+
   $modal = $('#outcomeProjectsModal');
   $modalProjects = $modal.find("ul.projectsList");
 
-  // Events
-  attachEvents();
-
-});
-
-function attachEvents() {
-
   // This event fires immediately when the show instance method is called.
   $modal.on('show.bs.modal', function(e) {
+    console.log(e);
     var outcomeID = $(e.relatedTarget).classParam("outcomeProjects");
 
     setModalTitle("Associated Projects to the OC" + outcomeID);
@@ -74,13 +70,10 @@ function attachEvents() {
 
   });
 
-  // Toogle slide
+});
 
-}
-
+// Toogle slide
 function collapseList() {
-
-  console.log('asd');
   $(this).parent().find('ul').slideToggle();
 }
 
