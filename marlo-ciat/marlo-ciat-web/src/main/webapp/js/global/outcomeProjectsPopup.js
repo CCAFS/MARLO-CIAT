@@ -32,31 +32,30 @@ function attachEvents() {
           if(data.dataProjects.length > 0) {
 
             $.each(data.dataProjects, function(i,project) {
-              console.log(project.name);
               var item = "<li> <p> P" + project.id + " - " + project.name + "</p>";
 
-              item += "<ul>"
+              item += "<ul>";
               // Outputs
               if(project.outputs.length > 0) {
-                item += "<li><p class='text-muted'>Associated Outputs</p>"
-                item += "<ul>"
+                item += "<li><p class='text-muted'> Associated Outputs </p>";
+                item += "<ul >";
                 $.each(project.outputs, function(i,output) {
                   item += "<li>  O" + output.id + " - " + output.name + "";
                 });
-                item += "</ul></li>"
+                item += "</ul></li>";
               }
 
               // Deliverables
               if(project.deliverables.length > 0) {
-                item += "<li><p class='text-muted'>Associated Deliverables</p>"
-                item += "<ul>"
+                item += "<li><p class='text-muted'> Associated Deliverables </p>";
+                item += "<ul>";
                 $.each(project.deliverables, function(i,deliverable) {
                   item += "<li>  D" + deliverable.id + " - " + deliverable.name + "";
                 });
-                item += "</ul></li>"
+                item += "</ul></li>";
               }
 
-              item += "</ul></li>"
+              item += "</ul></li>";
 
               // Adding Project Item
               $modalProjects.append(item);
@@ -69,7 +68,7 @@ function attachEvents() {
         complete: function() {
           $modal.find(".loading").fadeOut();
           // Setting event to new DOM created
-          $modalProjects.find('p').on('click', collapseList);
+          $modalProjects.find('li p').on('click', collapseList);
         }
     });
 
