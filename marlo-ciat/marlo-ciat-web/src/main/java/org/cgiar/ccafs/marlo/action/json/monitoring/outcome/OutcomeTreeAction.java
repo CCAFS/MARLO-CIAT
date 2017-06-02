@@ -75,7 +75,9 @@ public class OutcomeTreeAction extends BaseAction {
         if (!projectOutputs.isEmpty()) {
 
           for (ProjectOutput projectOutput : projectOutputs) {
-            projects.add(projectOutput.getProject());
+            if (projectOutput.getProject().isActive()) {
+              projects.add(projectOutput.getProject());
+            }
           }
 
         }
@@ -105,9 +107,9 @@ public class OutcomeTreeAction extends BaseAction {
           dataOutputs.add(dataOutput);
 
         }
-        dataProject.put("outputs", dataOutputs);
-      }
 
+      }
+      dataProject.put("outputs", dataOutputs);
 
       List<Deliverable> deliverables =
         new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
@@ -121,9 +123,8 @@ public class OutcomeTreeAction extends BaseAction {
           dataDeliverables.add(dataDeliverable);
         }
 
-        dataProject.put("deliverables", dataDeliverables);
       }
-
+      dataProject.put("deliverables", dataDeliverables);
       this.dataProjects.add(dataProject);
     }
 
