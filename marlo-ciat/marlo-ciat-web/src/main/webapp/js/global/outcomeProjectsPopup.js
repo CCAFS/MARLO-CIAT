@@ -28,15 +28,21 @@ $(document).ready(function() {
           if(data.dataProjects.length > 0) {
 
             $.each(data.dataProjects, function(i,project) {
-              var item = "<li> <p> P" + project.id + " - " + project.name + "</p>";
-
+              var projectLink = baseURL + "/monitoring/CIAT/projectDescription.do?projectID=" + project.id;
+              var item = "<li>";
+              item += "<p> P" + project.id + " - " + project.name + "";
+              item += "<a href='" + projectLink + "' class='pull-right' target='_blank'>";
+              item += "<span class='glyphicon glyphicon-new-window'></span></a> ";
+              item += "</a>";
+              item += "</p>";
               item += "<ul>";
               // Outputs
               if(project.outputs.length > 0) {
                 item += "<li><p class='text-muted'> Associated Outputs </p>";
-                item += "<ul >";
-                $.each(project.outputs, function(i,output) {
-                  item += "<li>  O" + output.id + " - " + output.name + "";
+                item += "<ul>";
+                $.each(project.outputs, function(i,o) {
+                  var outputLink = baseURL + "/impactPathway/CIAT/outputs.do?outputID=" + o.id;
+                  item += "<li><a href='" + outputLink + "' target='_blank'>O" + o.id + "</a> - " + o.name;
                 });
                 item += "</ul></li>";
               }
@@ -45,8 +51,9 @@ $(document).ready(function() {
               if(project.deliverables.length > 0) {
                 item += "<li><p class='text-muted'> Associated Deliverables </p>";
                 item += "<ul>";
-                $.each(project.deliverables, function(i,deliverable) {
-                  item += "<li>  D" + deliverable.id + " - " + deliverable.name + "";
+                $.each(project.deliverables, function(i,d) {
+                  var dLink = baseURL + "/monitoring/CIAT/projectDeliverable.do?deliverableID=" + d.id;
+                  item += "<li><a href='" + dLink + "' target='_blank'>D" + d.id + "</a> - " + d.name;
                 });
                 item += "</ul></li>";
               }
