@@ -134,7 +134,7 @@
                     [/#if]  
                     </ul>
                     [#if editable]
-                      [@customForm.select name="" label="" disabled=!canEdit i18nkey="" listName="outputs" keyFieldName="id"  displayFieldName="title" className="outputSelect" value="" /]
+                      [@customForm.select name="" label="" disabled=!canEdit i18nkey="" listName="outputs" keyFieldName="id"  displayFieldName="composedName" className="outputSelect" value="" /]
                     [/#if] 
                   </div>
                 </div> 

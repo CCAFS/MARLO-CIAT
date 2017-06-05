@@ -15,8 +15,10 @@ public class DeliverableOutput implements java.io.Serializable, IAuditLog {
 
   private static final long serialVersionUID = -2940234556389524742L;
 
+
   @Expose
   private Long id;
+
 
   @Expose
   private User modifiedBy;
@@ -39,10 +41,8 @@ public class DeliverableOutput implements java.io.Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
-
   public DeliverableOutput() {
   }
-
 
   public DeliverableOutput(Long id, User modifiedBy, User createdBy, Deliverable deliverable,
     ResearchOutput researchOutput, boolean active, Date activeSince, String modificationJustification) {
@@ -55,6 +55,29 @@ public class DeliverableOutput implements java.io.Serializable, IAuditLog {
     this.active = active;
     this.activeSince = activeSince;
     this.modificationJustification = modificationJustification;
+  }
+
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    DeliverableOutput other = (DeliverableOutput) obj;
+    if (id == null) {
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -97,8 +120,17 @@ public class DeliverableOutput implements java.io.Serializable, IAuditLog {
     return modifiedBy;
   }
 
+
   public ResearchOutput getResearchOutput() {
     return researchOutput;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override

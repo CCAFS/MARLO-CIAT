@@ -331,6 +331,9 @@ public class ProjectDeliverableAction extends BaseAction {
 
         deliverable.setDocuments(new ArrayList<>(
           deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
+
+        deliverable.setOutputs(
+          deliverable.getDeliverableOutputs().stream().filter(o -> o.isActive()).collect(Collectors.toList()));
       }
     }
 
@@ -409,9 +412,11 @@ public class ProjectDeliverableAction extends BaseAction {
       }
 
       this.saveDocuments(deliverableDB);
+      this.saveOutputs(deliverableDB);
 
       List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.DELIVERABLE_DOCUMENT_RELATION);
+      relationsName.add(APConstants.DELIVERABLE_OUTPUTS_RELATION);
       deliverable = deliverableService.getDeliverableById(deliverableID);
       deliverable.setActiveSince(new Date());
       deliverable.setModifiedBy(this.getCurrentUser());
@@ -518,6 +523,41 @@ public class ProjectDeliverableAction extends BaseAction {
       }
     }
 
+  }
+
+  public void saveOutputs(Deliverable deliverableDB) {
+    if (deliverableDB.getDeliverableOutputs() != null && deliverableDB.getDeliverableOutputs().size() > 0) {
+      List<DeliverableOutput> deliverableOutputsPrew = new ArrayList<>(
+        deliverableDB.getDeliverableOutputs().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
+
+      for (DeliverableOutput deliverableOutput : deliverableOutputsPrew) {
+        if (!deliverable.getOutputs().contains(deliverableOutput)) {
+          deliverableOutputService.deleteDeliverableOutput(deliverableOutput.getId());
+        }
+      }
+
+    }
+
+    if (deliverable.getOutputs() != null) {
+      for (DeliverableOutput deliverableOutput : deliverable.getOutputs()) {
+        if (deliverableOutput.getId() == null || deliverableOutput.getId() == -1) {
+          DeliverableOutput deliverableOutputSave = new DeliverableOutput();
+
+          deliverableOutputSave.setActive(true);
+          deliverableOutputSave.setCreatedBy(this.getCurrentUser());
+          deliverableOutputSave.setModifiedBy(this.getCurrentUser());
+          deliverableOutputSave.setActiveSince(new Date());
+          deliverableOutputSave.setModificationJustification("");
+
+          ResearchOutput output = outputService.getResearchOutputById(deliverableOutput.getResearchOutput().getId());
+          deliverableOutputSave.setResearchOutput(output);
+          deliverableOutputSave.setDeliverable(deliverableDB);
+
+          deliverableOutputService.saveDeliverableOutput(deliverableOutputSave);
+
+        }
+      }
+    }
   }
 
   public void setAreaID(long areaID) {

@@ -109,6 +109,12 @@ public class DeliverableValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-deliverable.deliverableType", InvalidFieldsMessages.EMPTYFIELD);
     }
 
+    if (deliverable.getOutputs() == null || deliverable.getOutputs().isEmpty()) {
+      this.addMessage(baseAction.getText("projectDescription.actio.outputs"));
+      baseAction.getInvalidFields().put("list-deliverable.outputs",
+        baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Outputs"}));
+    }
+
     if (deliverable.getDocuments() == null || deliverable.getDocuments().isEmpty()) {
       this.addMessage(baseAction.getText("deliverable.action.documents"));
       baseAction.getInvalidFields().put("list-deliverable.documents",
@@ -130,5 +136,6 @@ public class DeliverableValidator extends BaseValidator {
     }
 
   }
+
 
 }
