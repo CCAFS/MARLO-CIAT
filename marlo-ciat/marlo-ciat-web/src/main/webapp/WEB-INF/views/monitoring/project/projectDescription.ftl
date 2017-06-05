@@ -140,11 +140,11 @@
             <div class="informationWrapper simpleBox">
             [#-- GLOBAL DIMENSION --]
             [#if editable] 
-              <div class="form-group">
+              <div class="form-group projectsGlobal">
                 <div class="">[@customForm.yesNoInput  label="projectDescription.globalDimensionQuestion" name="project.sGlobal"   editable=editable inverse=false  cssClass="" /] </div>
               </div>
               <hr />
-              <div class="form-group">
+              <div class="form-group projectsRegion">
                 <div class="">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.sRegion"    editable=editable inverse=false  cssClass="isRegional" /] </div>
               </div>
               [#else]

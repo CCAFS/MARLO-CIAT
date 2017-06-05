@@ -5523,7 +5523,7 @@ table.evaluationRank thead th{
 
 .button-wrap {
   display: inline-block;
-  /* position: relative; */
+  position: relative;
   /* top: 50%; */
   /* margin-top: -2.5em; */
 }
