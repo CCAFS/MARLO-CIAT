@@ -17,6 +17,10 @@ ul.projectsList > li > p{
   border-radius: 2px;
 }
 
+ul.projectsList > li > p a{ 
+  color: #fff; 
+}
+
 ul.projectsList > li > ul > li {
   list-style: none;
 }
