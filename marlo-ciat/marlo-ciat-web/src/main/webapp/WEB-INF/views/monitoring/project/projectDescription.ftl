@@ -165,7 +165,7 @@
               </div>
               [/#if]
               [#-- REGIONAL SELECT --]
-              <div class="regionsBox form-group" style="display:${(project.region?string('block','none'))!}">
+              <div class="regionsBox form-group" style="display:[#if project.region??][#if project.region]block[#else]none[/#if][#else]none[/#if]">
                 <div class="panel tertiary">
                  <div class="panel-head">
                    <label for=""> [@customForm.text name="projectDescription.selectRegions" readText=!editable /]:[@customForm.req required=editable /]</label>
@@ -262,8 +262,8 @@
           [#-- Outputs --]
           <div class="form-group">      
             <div class="output panel tertiary">
-              <div class="panel-head" listname="project.outputs"><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
-              <div class="panel-body" > 
+              <div class="panel-head" ><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
+              <div class="panel-body" listname="project.outputs"> 
                 <ul id="outputsBlock" class="list outputList">
                 [#if  project.outputs?has_content]  
                   [#list project.outputs as output]
