@@ -37,6 +37,9 @@
     <property name="shortName" type="string">
       <column name="short_name" />
     </property>
+    <property name="otherIdo" type="string">
+      <column name="other_ido" />
+    </property>
 		  <property name="description" type="string">
       <column name="description" length="65535" not-null="true" />
     </property>

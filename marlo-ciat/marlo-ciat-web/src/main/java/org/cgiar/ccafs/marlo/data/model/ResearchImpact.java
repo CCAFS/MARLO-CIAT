@@ -85,19 +85,22 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private String shortName;
 
-
   @Expose
   private SrfIdo srfIdo;
+
+
+  @Expose
+  private String otherIdo;
 
 
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
 
   private Set<ResearchImpactObjective> researchImpactObjectives = new HashSet<>(0);
 
+
   private Set<ResearchImpactBeneficiary> researchImpactBeneficiaries = new HashSet<ResearchImpactBeneficiary>(0);
 
   private List<ResearchObjective> objectives;
-
 
   private List<ResearchImpactBeneficiary> beneficiaries;
 
@@ -154,14 +157,15 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return activeSince;
   }
 
-
   public List<ResearchImpactBeneficiary> getBeneficiaries() {
     return beneficiaries;
   }
 
+
   public String getColor() {
     return color;
   }
+
 
   public User getCreatedBy() {
     return createdBy;
@@ -190,7 +194,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return modificationJustification;
   }
 
-
   @Override
   public User getModifiedBy() {
     return modifiedBy;
@@ -199,6 +202,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public List<ResearchObjective> getObjectives() {
     return objectives;
   }
+
 
   /**
    * @return an array of integers.
@@ -216,19 +220,23 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return null;
   }
 
-
   public String getObjectiveValue() {
     return objectiveValue;
   }
+
+  public String getOtherIdo() {
+    return otherIdo;
+  }
+
 
   public Set<ResearchImpactBeneficiary> getResearchImpactBeneficiaries() {
     return researchImpactBeneficiaries;
   }
 
-
   public Set<ResearchImpactObjective> getResearchImpactObjectives() {
     return researchImpactObjectives;
   }
+
 
   /**
    * @return the researchOutcomes
@@ -236,7 +244,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public Set<ResearchOutcome> getResearchOutcomes() {
     return researchOutcomes;
   }
-
 
   /**
    * @return the researchProgram
@@ -250,10 +257,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return shortName;
   }
 
+
   public SrfIdo getSrfIdo() {
     return srfIdo;
   }
-
 
   /**
    * @return the targetYear
@@ -261,6 +268,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public Integer getTargetYear() {
     return targetYear;
   }
+
 
   @Override
   public int hashCode() {
@@ -287,7 +295,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     this.beneficiaries = beneficiaries;
   }
 
-
   public void setColor(String color) {
     this.color = color;
   }
@@ -296,6 +303,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
+
 
   public void setDescription(String description) {
     this.description = description;
@@ -322,6 +330,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   public void setObjectiveValue(String objectiveValue) {
     this.objectiveValue = objectiveValue;
+  }
+
+  public void setOtherIdo(String otherIdo) {
+    this.otherIdo = otherIdo;
   }
 
   public void setResearchImpactBeneficiaries(Set<ResearchImpactBeneficiary> researchImpactBeneficiaries) {
