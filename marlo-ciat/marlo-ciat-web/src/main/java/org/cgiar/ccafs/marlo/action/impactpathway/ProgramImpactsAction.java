@@ -511,7 +511,13 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
           SrfIdo ido = idoService.getSrfIdoById(researchImpact.getSrfIdo().getId());
-          researchImpactNew.setSrfIdo(ido);
+          if (ido != null) {
+            researchImpactNew.setSrfIdo(ido);
+            researchImpactNew.setOtherIdo(null);
+          } else {
+            researchImpactNew.setSrfIdo(null);
+            researchImpactNew.setOtherIdo(researchImpact.getOtherIdo());
+          }
 
           long impactId = impactService.saveResearchImpact(researchImpactNew);
 
