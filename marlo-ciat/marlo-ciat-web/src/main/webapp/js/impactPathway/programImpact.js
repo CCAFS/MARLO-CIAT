@@ -48,6 +48,15 @@ function attachEvents() {
       $select.trigger("change.select2");
     });
   });
+
+  $(".srfIdoSelect").on("change", function() {
+    var option = $(this).find("option:selected");
+    if(option.val() == "-1") {
+      $(".otherSrf").show("slow");
+    } else {
+      $(".otherSrf").hide("slow");
+    }
+  });
 }
 
 /**
