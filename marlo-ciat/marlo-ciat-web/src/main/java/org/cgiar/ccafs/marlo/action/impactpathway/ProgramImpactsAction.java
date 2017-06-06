@@ -551,10 +551,18 @@ public class ProgramImpactsAction extends BaseAction {
             if (researchImpactRew.getSrfIdo() == null || !researchImpactRew.getSrfIdo().equals(ido)) {
               hasChanges = true;
               researchImpactRew.setSrfIdo(ido);
+              researchImpactRew.setOtherIdo(null);
             }
+
           } else {
             hasChanges = true;
             researchImpactRew.setSrfIdo(null);
+
+            if (researchImpactRew.getOtherIdo() == null
+              || !researchImpactRew.getOtherIdo().equals(researchImpact.getOtherIdo().trim())) {
+              hasChanges = true;
+              researchImpactRew.setOtherIdo(researchImpact.getOtherIdo().trim());
+            }
           }
 
 
