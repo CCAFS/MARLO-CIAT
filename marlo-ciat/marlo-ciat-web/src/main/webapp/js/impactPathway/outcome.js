@@ -13,7 +13,7 @@ function init() {
   $('form select').select2();
 
   /* Numeric Inputs */
-  $('input.targetValue , input.targetYear').numericInput();
+  $('input.targetValue , input.targetYear').integerInput();
 
   /* Percentage Inputs */
   $('.outcomes-list input.contribution').percentageInput();

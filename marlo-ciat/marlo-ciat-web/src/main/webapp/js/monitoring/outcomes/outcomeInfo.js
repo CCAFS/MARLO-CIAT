@@ -7,8 +7,8 @@ function init() {
 
   /* Init Select2 plugin */
   $('form select').select2();
-  
-  $('form input.initialBaseLine').numericInput();
+
+  $('form input.initialBaseLine').integerInput();
 
 }
 
