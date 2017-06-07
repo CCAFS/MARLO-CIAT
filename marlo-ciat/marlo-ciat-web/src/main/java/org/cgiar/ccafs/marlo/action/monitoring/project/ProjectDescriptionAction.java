@@ -585,6 +585,7 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setDirectDonor(project.getDirectDonor());
       projectDB.setOriginalDonor(project.getOriginalDonor());
       projectDB.setTotalAmount(project.getTotalAmount());
+      projectDB.setSuggestedName(project.getSuggestedName());
 
       if (project.getProjectType().getId() != null) {
         ProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());

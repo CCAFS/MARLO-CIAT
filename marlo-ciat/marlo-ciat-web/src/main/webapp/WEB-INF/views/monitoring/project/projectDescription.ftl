@@ -72,6 +72,10 @@
             <div class="form-group">
               [@customForm.textArea name="project.name" i18nkey="projectDescription.name" required=true className="project-title" editable=editable && action.hasPermission("title") /]
             </div>
+            [#-- Project Suggested Title --]
+            <div class="form-group">
+              [@customForm.textArea name="project.suggestedName" i18nkey="projectDescription.suggestedName" required=false className="project-title" editable=editable && action.hasPermission("title") /]
+            </div>
             [#-- Project Description --]
             <div class="form-group">
               [@customForm.textArea name="project.description" i18nkey="projectDescription.description" required=true className="project-title" editable=editable && action.hasPermission("title") /]
@@ -119,7 +123,7 @@
             </div>
             [#-- Funding source --]
             <div class="form-group ">
-              <label>[@s.text name="projectDescription.fundingSource" /]</label>
+              <label>[@s.text name="projectDescription.fundingSource" /]<span class="red">*</span></label>
               <div class="borderBox fundingSourceList" listname="project.fundingSources">
                 [#if project.fundingSources?has_content]
                   [#list project.fundingSources as fundingSource]
@@ -262,7 +266,7 @@
           [#-- Outputs --]
           <div class="form-group">      
             <div class="output panel tertiary">
-              <div class="panel-head" ><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]</label></div> 
+              <div class="panel-head" ><label for="">[@customForm.text name="projectDescription.outputs" readText=!editable /]<span class="red">*</span></label></div> 
               <div class="panel-body" listname="project.outputs"> 
                 <ul id="outputsBlock" class="list outputList">
                 [#if  project.outputs?has_content]  

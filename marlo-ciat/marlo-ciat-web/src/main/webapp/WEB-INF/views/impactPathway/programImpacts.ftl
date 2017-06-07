@@ -117,7 +117,7 @@
     
     [#-- SRF Ido --]
     <div class="form-group">
-      [@customForm.select name="${customName}.srfIdo.id"  i18nkey="programImpact.ido" listName="idos" keyFieldName="id"  displayFieldName="description" required=true  className="srfIdoSelect"  editable=editable/]
+      [@customForm.select name="${customName}.srfIdo.id"  i18nkey="programImpact.ido" listName="idos" keyFieldName="id"  displayFieldName="description" required=false  className="srfIdoSelect"  editable=editable/]
     </div>
      <div class="form-group otherSrf" style="display: [#if element.srfIdo??][#if element.srfIdo.id==-1]block[#else]none[/#if][#else]block[/#if]">[@customForm.input name="${customName}.otherIdo" i18nkey="programImpact.otherIdo" className="limitChar-30" required=false editable=editable /]</div>   
      
