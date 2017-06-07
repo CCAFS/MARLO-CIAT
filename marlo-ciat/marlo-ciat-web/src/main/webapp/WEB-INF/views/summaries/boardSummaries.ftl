@@ -37,7 +37,7 @@
           [#--impactPathway full report --]
           <div class="summariesFiles borderBox col-md-12">
             <div class="col-md-12 title-file">
-              <input class="hidden" type="radio" name="formOptions" id="leadProjectInstitutionsSummary" value="leadProjectInstitutionsSummary"/>
+              <input class="hidden" type="radio" name="formOptions" id="leadProjectInstitutionsSummary" value="impactPathwayOutcomes"/>
               <label for="">[@s.text name="summaries.board.report.ipFullReport" /] </label>
             </div>
             <span class="description col-md-12">[@s.text name="summaries.board.report.ipFullReport.description" /]</span>
@@ -45,8 +45,9 @@
               <span class="hidden forPlanningCycle forCycle"></span>
               <span class="hidden forReportingCycle forCycle"></span>
               <span class="hidden fileTypes excelType">leadProjectInstitutionsSummary-leadProjectInstitutionsSummary</span>
+              [@customForm.select name="programID" header=false   label=""  i18nkey="Select a Research Program"  listName="programs"  keyFieldName="id"  displayFieldName="composedName" className="allPrograms"   multiple=false required=true   editable=true/]
               <div class="pull-right">
-                <a style="display:none;" target="_blank" class="directlyReport addButton pull-right" href="[@s.url action='impactPathwayOutcomes'][/@s.url]">[@s.text name="form.buttons.generate" /]</a>
+                <a style="display:none;" target="_blank" class="generateReport addButton pull-right" href="#">[@s.text name="form.buttons.generate" /]</a>
               </div>
             </div>
           </div>
