@@ -26,6 +26,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
 import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
+import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.pentaho.reporting.engine.classic.core.Band;
 import org.pentaho.reporting.engine.classic.core.CompoundDataFactory;
@@ -528,6 +530,14 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
 
   @Override
   public void prepare() {
+    long programID = -1;
+    try {
+      programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
+      researchProgram = programService.getProgramById(programID);
+    } catch (Exception e) {
+      LOG.error("Failed to get " + APConstants.CENTER_PROGRAM_ID
+        + " parameter. Parameter will be set as -1. Exception: " + e.getMessage());
+    }
     // Calculate time to generate report
     startTime = System.currentTimeMillis();
     LOG.info(
