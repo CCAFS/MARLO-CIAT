@@ -25,7 +25,6 @@ import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.impl.CenterService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.ByteArrayInputStream;
@@ -80,9 +79,10 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
   private IProjectService projectService;
 
   @Inject
-  public ProjectSummaryAction(APConfig config, CenterService centerService) {
+  public ProjectSummaryAction(APConfig config, ICenterService centerService, IProjectService projectService) {
     super(config);
     this.centerService = centerService;
+    this.projectService = projectService;
   }
 
   @Override
@@ -243,12 +243,15 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     for (Deliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
       .collect(Collectors.toList())) {
       Long id = deliverable.getId();
-      String deliverableTitle = deliverable.getName();
+      String deliverableTitle = null;
+      if (deliverable.getName() != null && !deliverable.getName().trim().isEmpty()) {
+        deliverableTitle = deliverable.getName();
+      }
       String type = null;
       String subType = null;
       if (deliverable.getDeliverableType() != null && deliverable.getDeliverableType().getDeliverableType() != null) {
-        type = deliverable.getDeliverableType().getName();
-        subType = deliverable.getDeliverableType().getDeliverableType().getName();
+        subType = deliverable.getDeliverableType().getName();
+        type = deliverable.getDeliverableType().getDeliverableType().getName();
       }
 
       SimpleDateFormat formatter = new SimpleDateFormat("MMM yyyy");
@@ -264,42 +267,59 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
 
       String crossCutting = "";
       if (deliverable.getDeliverableCrosscutingTheme() != null) {
-
-        if (deliverable.getDeliverableCrosscutingTheme().getClimateChange()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getClimateChange() != null
+          && deliverable.getDeliverableCrosscutingTheme().getClimateChange()) {
           crossCutting += "&#9679;  Climate Change <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getGender()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getGender() != null
+          && deliverable.getDeliverableCrosscutingTheme().getGender()) {
           crossCutting += "&#9679;  Gender <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getYouth()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getYouth() != null
+          && deliverable.getDeliverableCrosscutingTheme().getYouth()) {
           crossCutting += "&#9679;  Youth <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getNa()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getNa() != null
+          && deliverable.getDeliverableCrosscutingTheme().getNa()) {
           crossCutting += "&#9679;  N/A <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getCapacityDevelopment()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getCapacityDevelopment() != null
+          && deliverable.getDeliverableCrosscutingTheme().getCapacityDevelopment()) {
           crossCutting += "&#9679;  Capacity Development <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getBigData()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getBigData() != null
+          && deliverable.getDeliverableCrosscutingTheme().getBigData()) {
           crossCutting += "&#9679;  Big Data <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getImpactAssessment()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getImpactAssessment() != null
+          && deliverable.getDeliverableCrosscutingTheme().getImpactAssessment()) {
           crossCutting += "&#9679;  Impact Assessment <br>";
         }
-        if (deliverable.getDeliverableCrosscutingTheme().getPoliciesInstitutions()) {
+        if (deliverable.getDeliverableCrosscutingTheme().getPoliciesInstitutions() != null
+          && deliverable.getDeliverableCrosscutingTheme().getPoliciesInstitutions()) {
           crossCutting += "&#9679;  Policies and Institutions <br>";
         }
+      }
+      if (crossCutting.isEmpty()) {
+        crossCutting = null;
       }
       String deliverableOutputs = "";
       for (DeliverableOutput deliverableOutput : deliverable.getDeliverableOutputs().stream()
         .filter(deo -> deo.isActive()).collect(Collectors.toList())) {
-        deliverableOutputs += "&#9679;  " + deliverableOutput.getResearchOutput().getId() + " - "
-          + deliverableOutput.getResearchOutput().getTitle() + "<br>";
+        deliverableOutputs += "&#9679;  " + deliverableOutput.getResearchOutput().getTitle() + "<br>";
       }
-      String supportingDocuments = null;
+      if (deliverableOutputs.isEmpty()) {
+        deliverableOutputs = null;
+      }
+      String supportingDocuments = "";
       for (DeliverableDocument deliverableDocument : deliverable.getDeliverableDocuments().stream()
         .filter(dd -> dd.isActive()).collect(Collectors.toList())) {
-        supportingDocuments += "&#9679;  " + deliverableDocument.getLink() + "<br>";
+        if (deliverableDocument.getLink() != null && !deliverableDocument.getLink().trim().isEmpty()) {
+          supportingDocuments += "&#9679;  " + deliverableDocument.getLink() + "<br>";
+        }
+      }
+      if (supportingDocuments.isEmpty()) {
+        supportingDocuments = null;
       }
 
       model.addRow(new Object[] {id, deliverableTitle, type, subType, startDate, endDate, crossCutting,
@@ -425,7 +445,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     for (ProjectPartner projectPartner : project.getProjectPartners().stream().filter(pp -> pp.isActive())
       .collect(Collectors.toList())) {
       String partnerName = projectPartner.getInstitution().getComposedName();
-      Long institution_id = projectPartner.getId();
+      Long institution_id = projectPartner.getInstitution().getId();
       String partnerType = null;
       if (projectPartner.isInternal()) {
         partnerType = "Internal";
