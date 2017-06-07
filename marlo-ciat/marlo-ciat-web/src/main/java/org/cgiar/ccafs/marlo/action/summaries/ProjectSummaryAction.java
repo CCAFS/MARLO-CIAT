@@ -17,7 +17,11 @@ package org.cgiar.ccafs.marlo.action.summaries;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
+import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
+import org.cgiar.ccafs.marlo.data.model.DeliverableOutput;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
@@ -33,6 +37,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -121,6 +126,8 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
 
       // Subreport Description
       this.fillSubreport((SubReport) hm.get("description"), "description");
+      this.fillSubreport((SubReport) hm.get("partners"), "partners");
+      this.fillSubreport((SubReport) hm.get("deliverables"), "deliverables");
 
       PdfReportUtil.createPDF(masterReport, os);
       bytesPDF = os.toByteArray();
@@ -146,6 +153,12 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     switch (query) {
       case "description":
         model = this.getDescriptionTableModel();
+        break;
+      case "partners":
+        model = this.getPartnersTableModel();
+        break;
+      case "deliverables":
+        model = this.getDeliverablesTableModel();
         break;
     }
     sdf.addTable(query, model);
@@ -220,8 +233,82 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     return "application/pdf";
   }
 
+  private TypedTableModel getDeliverablesTableModel() {
+    TypedTableModel model = new TypedTableModel(
+      new String[] {"id", "deliverableTitle", "type", "subType", "startDate", "endDate", "crossCutting",
+        "deliverableOutputs", "supportingDocuments"},
+      new Class[] {Long.class, String.class, String.class, String.class, String.class, String.class, String.class,
+        String.class, String.class});
+
+    for (Deliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
+      .collect(Collectors.toList())) {
+      Long id = deliverable.getId();
+      String deliverableTitle = deliverable.getName();
+      String type = null;
+      String subType = null;
+      if (deliverable.getDeliverableType() != null && deliverable.getDeliverableType().getDeliverableType() != null) {
+        type = deliverable.getDeliverableType().getName();
+        subType = deliverable.getDeliverableType().getDeliverableType().getName();
+      }
+
+      SimpleDateFormat formatter = new SimpleDateFormat("MMM yyyy");
+      String startDate = null;
+
+      if (deliverable.getStartDate() != null) {
+        startDate = formatter.format(deliverable.getStartDate());
+      }
+      String endDate = null;
+      if (deliverable.getEndDate() != null) {
+        endDate = formatter.format(deliverable.getEndDate());
+      }
+
+      String crossCutting = "";
+      if (deliverable.getDeliverableCrosscutingTheme() != null) {
+
+        if (deliverable.getDeliverableCrosscutingTheme().getClimateChange()) {
+          crossCutting += "&#9679;  Climate Change <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getGender()) {
+          crossCutting += "&#9679;  Gender <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getYouth()) {
+          crossCutting += "&#9679;  Youth <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getNa()) {
+          crossCutting += "&#9679;  N/A <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getCapacityDevelopment()) {
+          crossCutting += "&#9679;  Capacity Development <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getBigData()) {
+          crossCutting += "&#9679;  Big Data <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getImpactAssessment()) {
+          crossCutting += "&#9679;  Impact Assessment <br>";
+        }
+        if (deliverable.getDeliverableCrosscutingTheme().getPoliciesInstitutions()) {
+          crossCutting += "&#9679;  Policies and Institutions <br>";
+        }
+      }
+      String deliverableOutputs = "";
+      for (DeliverableOutput deliverableOutput : deliverable.getDeliverableOutputs().stream()
+        .filter(deo -> deo.isActive()).collect(Collectors.toList())) {
+        deliverableOutputs += "&#9679;  " + deliverableOutput.getResearchOutput().getId() + " - "
+          + deliverableOutput.getResearchOutput().getTitle() + "<br>";
+      }
+      String supportingDocuments = null;
+      for (DeliverableDocument deliverableDocument : deliverable.getDeliverableDocuments().stream()
+        .filter(dd -> dd.isActive()).collect(Collectors.toList())) {
+        supportingDocuments += "&#9679;  " + deliverableDocument.getLink() + "<br>";
+      }
+
+      model.addRow(new Object[] {id, deliverableTitle, type, subType, startDate, endDate, crossCutting,
+        deliverableOutputs, supportingDocuments});
+    }
+    return model;
+  }
+
   private TypedTableModel getDescriptionTableModel() {
-    // TODO Auto-generated method stub
     TypedTableModel model = new TypedTableModel(
       new String[] {"title", "startDate", "endDate", "principalInvestigator", "projectContact", "crossCutting",
         "projectOutputs"},
@@ -327,6 +414,27 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     String imageUrl = this.getBaseUrl() + "/images/global/centers/CIAT.png";
 
     model.addRow(new Object[] {shortTitle, currentDate, projectSubmission, imageUrl});
+    return model;
+  }
+
+  private TypedTableModel getPartnersTableModel() {
+    TypedTableModel model =
+      new TypedTableModel(new String[] {"partnerName", "partnerType", "institution_id", "project_id"},
+        new Class[] {String.class, String.class, Long.class, Long.class});
+
+    for (ProjectPartner projectPartner : project.getProjectPartners().stream().filter(pp -> pp.isActive())
+      .collect(Collectors.toList())) {
+      String partnerName = projectPartner.getInstitution().getComposedName();
+      Long institution_id = projectPartner.getId();
+      String partnerType = null;
+      if (projectPartner.isInternal()) {
+        partnerType = "Internal";
+      }
+      if (!projectPartner.isInternal()) {
+        partnerType = "External";
+      }
+      model.addRow(new Object[] {partnerName, partnerType, institution_id, project.getId()});
+    }
     return model;
   }
 
