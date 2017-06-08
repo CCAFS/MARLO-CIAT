@@ -188,7 +188,6 @@
                   </div>
                 </div>
               </div>
-              <hr />
               [#if editable]
               <div class="form-group projectsRegion">
                 <div class="">[@customForm.yesNoInput  label="projectDescription.regionalDimensionQuestion" name="project.sRegion"    editable=editable inverse=false  cssClass="isRegional" /] </div>
