@@ -151,7 +151,7 @@
               [#else]
               <div class="form-group">
                 [#if project.sGlobal??]
-                  [#if project.sGlobal]
+                  [#if project.sGlobal=="true"]
                     <label for="">[@s.text name="projectDescription.globalDimensionYes" /]</label>
                   [#else]
                     <label for="">[@s.text name="projectDescription.globalDimensionNo" /]</label>
@@ -197,7 +197,7 @@
               [#else]
               <div class="form-group">
                 [#if project.sRegion??]
-                  [#if project.sRegion]
+                  [#if project.sRegion=="true"]
                     <label for="">[@s.text name="projectDescription.regionallDimensionYes" /]</label>
                   [#else]
                     <label for="">[@s.text name="projectDescription.regionallDimensionNo" /]</label>
