@@ -43,7 +43,7 @@
         </select>            
       </div>
       <div class="loadingBlock"></div>
-      <div style="display:none">[@outcomesListMonitoring.outcomesListMonitoring outcomes=outcomes canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/monitoringOutcome" /]</div>
+      <div style="display:none">[@outcomesListMonitoring.outcomesListMonitoring outcomes=outcomes canValidate=true canEdit=editable namespace="/monitoring" defaultAction="${(centerSession)!}/monitoringOutcome" /]</div>
       <div class="clearfix"></div>
     </div>
     

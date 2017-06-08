@@ -110,7 +110,7 @@
             <div class="col-md-12 form-group">
             <h5 class="sectionSubTitle">Progress towards your long-term outcome target contribution:</h5>
             <div class="form-group" style="margin-top: 15px;">
-              [@customForm.textArea name="outcome.monitorings[${outcome_index}].narrative" i18nkey="Narrative for your level of progress on this long-term outcome" required=true className="outcome-narrative limitWords-100" editable=editable /]
+              [@customForm.textArea name="outcome.monitorings[${outcome_index}].narrative" i18nkey="outcome.narrative.longTerm" required=true className="outcome-narrative limitWords-100" editable=editable /]
             </div> 
             </div>
             <br />
@@ -212,7 +212,7 @@
     
     [#-- Milestone narrative --]
     <div class="form-group" style="margin-top: 15px;">
-      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this milestone" required=true className="milestone-narrative limitWords-100" editable=editable /]
+      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="outcome.milestone.index.narrative" required=true className="milestone-narrative limitWords-100" editable=editable /]
     </div> 
     
   </div>
