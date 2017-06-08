@@ -114,8 +114,19 @@ function init() {
       $(this).addClass("radio-checked");
     }
   });
+  
+// Is this project has a global dimension
+  $(".isGlobal .button-label").on("click", function() {
+    var valueSelected = $(this).hasClass('yes-button-label');
+    var isChecekd = $(this).hasClass('radio-checked');
+    if(!valueSelected || !isChecekd) {
+      $(".countriesBox").show("slow");
+    } else {
+      $(".countriesBox").hide("slow");
+    }
+  });
 
-// Is this deliverable Open Access
+// Is this project has a regional dimension
   $(".isRegional .button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
     var isChecekd = $(this).hasClass('radio-checked');
