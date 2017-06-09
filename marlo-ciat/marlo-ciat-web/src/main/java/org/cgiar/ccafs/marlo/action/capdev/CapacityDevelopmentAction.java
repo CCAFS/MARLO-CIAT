@@ -35,13 +35,11 @@ public class CapacityDevelopmentAction extends BaseAction {
   private CapacityDevelopment capdev;
 
   private List<CapacityDevelopment> capDevs = new ArrayList<CapacityDevelopment>();
-  private List<String> objectives = new ArrayList<String>();
-  private String objectiveBody;
+
   private final ICapacityDevelopmentService capdevService;
 
-  private List<String> capDevApproaches = new ArrayList<String>();
-  private String approach;
   private int capDevID;
+  private String capdevCategory;
 
   @Inject
   public CapacityDevelopmentAction(APConfig config, ICapacityDevelopmentService capdevService) {
@@ -54,12 +52,8 @@ public class CapacityDevelopmentAction extends BaseAction {
   @Override
   public String add() {
 
+    System.out.println("esta es la categoria del CapacityDevelopmentAction-->" + capdevCategory);
     return SUCCESS;
-  }
-
-
-  public String getApproach() {
-    return approach;
   }
 
 
@@ -68,8 +62,8 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
-  public List<String> getCapDevApproaches() {
-    return capDevApproaches;
+  public String getCapdevCategory() {
+    return capdevCategory;
   }
 
 
@@ -80,16 +74,6 @@ public class CapacityDevelopmentAction extends BaseAction {
 
   public List<CapacityDevelopment> getCapDevs() {
     return capDevs;
-  }
-
-
-  public String getObjectiveBody() {
-    return objectiveBody;
-  }
-
-
-  public List<String> getObjectives() {
-    return objectives;
   }
 
 
@@ -111,18 +95,13 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
-  public void setApproach(String approach) {
-    this.approach = approach;
-  }
-
-
   public void setCapdev(CapacityDevelopment capdev) {
     this.capdev = capdev;
   }
 
 
-  public void setCapDevApproaches(List<String> capDevApproaches) {
-    this.capDevApproaches = capDevApproaches;
+  public void setCapdevCategory(String capdevCategory) {
+    this.capdevCategory = capdevCategory;
   }
 
 
@@ -133,16 +112,6 @@ public class CapacityDevelopmentAction extends BaseAction {
 
   public void setCapDevs(List<CapacityDevelopment> capDevs) {
     this.capDevs = capDevs;
-  }
-
-
-  public void setObjectiveBody(String objectiveBody) {
-    this.objectiveBody = objectiveBody;
-  }
-
-
-  public void setObjectives(List<String> objectives) {
-    this.objectives = objectives;
   }
 
 

@@ -194,7 +194,38 @@
 
 
 .contactList ul {
-  max-height: 353px;
+  max-height: 355px;
   overflow: auto;
   overflow-x: hidden;
+}
+
+.searchFields{
+	display: inline-block;
+}
+
+.searchcontact-input{
+	width: 80%;
+	margin-bottom: 7px;
+}
+
+.search-loader{
+	float: right;
+	margin-right: 96px;
+	margin-bottom: 8px;
+}
+
+
+.listContainer{
+	margin-left: 3%;
+	border-left: 3px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	width: 47%;
+}
+
+.listContainerTitle{
+	margin-left:3%;
+	border-bottom: 1px solid #ccc;
+	width: 45%;
+	font-family: Sans-serif;
+	font-weight: 600;
 }

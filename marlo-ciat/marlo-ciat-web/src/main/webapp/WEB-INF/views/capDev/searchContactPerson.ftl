@@ -11,48 +11,36 @@
 
 			</div>	
 
-			<div class="col-md-12">
+			
+			<div class="col-md-12 searchFields">
+				<div class="searchcontact-content clearfix">
+					<div class="col-md- searchcontact-input">
+						[@customForm.input name="" showTitle=false type="text" i18nkey="" className='contact' placeholder="First name, last name or email"/]
+						<div class="col-md- search-loader" style="display:none;"><img src="${baseUrl}/images/global/loading_2.gif"></div>
+					</div>  
+					<div class="col-md- search-button">[@s.text name="Search" /]</div>
+				</div>
 				
 			</div>
+			
 
-			<div class="accordion-block">
-
-				<div class="searchcontact-content clearfix">
-					<div class="searchcontact-input">
-						[@customForm.input name="" showTitle=false type="text" i18nkey="" placeholder="First name, last name or email"/]
-						<div class="search-loader" style="display:none"><img src="${baseUrl}/images/global/loading_2.gif"></div>
-					</div>  
-					<div class="search-button">[@s.text name="Search" /]</div>
-				</div>
-
-			<!--<div class="contactList panel secondary">
-				<div class="panel-head"> [@s.text name="AD users List" /]</div>
-				<div class="panel-body"> 
-					<p class="userMessage">
-						[@s.text name="No se encontro resultados"]
-						[@s.param name="0"]<span class="link">[@s.text name="form.buttons.clickingHere" /]</span>[/@s.param]
-						[/@s.text] 
-					</p>
-					<ul></ul>
-				</div>
-
-			</div> -->
-
-		</div>	
-
-
+			<div class="col-md-12">
+				<div class="contactList panel secondary">
+					<div class="panel-head"> [@s.text name="AD users List" /]</div>
+					<div class="panel-body"> 
+						<p class="userMessage">
+							no se encontraron resultados para la entrada ingresada
+							
+							 
+						</p>
+						<ul></ul>
+					</div>
+				</div> 
+			</div>
 
 		</div>
 
 	</form>
-
-
-
-
-
-
-
-
 
 	
 
@@ -60,9 +48,11 @@
 	[#-- User Template --]
 	<ul style="display:none"> 
 		<li id="userTemplate">
+			  
+			<span class="idUser">{idUser}</span>
 			<span class="contact firstname">{firstName}</span>  
 			<span class="contact lastname">{lastName}</span>  
-			<span class="contact email">{email}</span>  
+			<span class="contact email">  {email} </span>  
 			<span class="listButton select">[@s.text name="form.buttons.select" /]</span>
 		</li> 
 	</ul> 

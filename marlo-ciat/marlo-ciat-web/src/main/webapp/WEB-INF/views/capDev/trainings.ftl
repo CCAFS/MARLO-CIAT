@@ -2,9 +2,14 @@
 
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css"] /]
 [#assign customCSS = ["${baseUrl}/css/capDev/capacityDevelopment.css"] /]
+[#assign customJS = ["${baseUrl}/js/capDev/capacityDevelopment.js"] /]
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
+
+
+<script src="${baseUrl}/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="${baseUrl}/js/capDev/capacityDevelopment.js"></script>
 
 	<div class="container">
 		<div class="row titleContainer">
@@ -109,12 +114,69 @@
 				<div class="buttons">
 		        	<div class="buttons-content">        
 			          	<a class="addButton" href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']-1[/@s.param][/@s.url]">[@s.text name="Add capacity development" /]</a>
+
+			          	
 			        	<div class="clearfix"></div>
 		        	</div>
     			</div>
 			</div>
 		</div>
 	 </div>
+
+
+
+
+	 <!-- <div id="dialog-capdevCategory" style="display: none" class="capdevCategoryModal">
+	 	<form class="pure-form">
+	 		<div class="row newCapdevField"> 
+	 		<span class="glyphicon glyphicon-remove-circle close-dialog"></span>
+	 			<div class="col-md-12 newCapdevField">
+	 				[@s.text name="Category" ][/@s.text] 
+	 			</div>
+	 			<div class="col-md-12">
+	 				<div class="col-md-3">
+	 					<div class="radio">
+	 						<label><input  id="individual" class="radioButton" type="radio"  name="capdevCategory" value="1">Individual</label>
+	 					</div>
+	 				</div>
+	 				<div class="col-md-3">
+	 					<div class="radio">
+	 						<label><input id="groups" class="radioButton" type="radio" name="capdevCategory" value="2">Groups</label>
+	 					</div>
+	 				</div>
+
+
+
+	 			</div>
+
+	 			<div class="col-md-12">
+	 				<div class="col-md-6">
+				
+				<div class="buttons">
+		        	<div class="buttons-content">        
+			          	 <a class="addButton" href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capDevID']-1[/@s.param] [/@s.url]">[@s.text name="Accept" /]</a> 
+
+			          	 
+
+			          	  
+			        	<div class="clearfix"></div>
+		        	</div>
+    			</div>
+			</div>
+			<div class="col-md-6">
+				
+				<div class="buttons">
+		        	<div class="buttons-content">        
+			          	<div id="" class="addButton addCapDevButton" >[@s.text name="Cancel" /]</div>
+			        	<div class="clearfix"></div>
+		        	</div>
+    			</div>
+			</div>
+	 			</div>
+	 		</div>
+
+	 	</form>
+	 </div> -->
 
 
 

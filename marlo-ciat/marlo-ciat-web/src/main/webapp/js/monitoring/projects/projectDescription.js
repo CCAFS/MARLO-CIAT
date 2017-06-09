@@ -109,6 +109,7 @@ function addCountry(option) {
   var $list = $(option).parents(".select").parents("#countryList").find(".list");
   var $item = $("#countryTemplate").clone(true).removeAttr("id");
   var v = $(option).text().length > 12 ? $(option).text().substr(0, 12) + ' ... ' : $(option).text();
+  console.log($list)
 
 // Check if is already selected
   $list.find('.country').each(function(i,e) {

@@ -21,6 +21,7 @@ import org.cgiar.ccafs.marlo.data.dao.ICapacityDevelopmentTypeDAO;
 import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopmentType;
+import org.cgiar.ccafs.marlo.data.model.CapdevLocations;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.Discipline;
 import org.cgiar.ccafs.marlo.data.model.LocElement;
@@ -30,6 +31,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.TargetGroup;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
+import org.cgiar.ccafs.marlo.data.service.ICapdevLocationsService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.ILocElementService;
@@ -40,6 +42,7 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,8 +57,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private static final long serialVersionUID = 1L;
 
   private int capDevID;
+  private long capdevId;
   private CapacityDevelopment capdev;
-  private List<String> approaches = new ArrayList<>();
   private List<String> outcomes = new ArrayList<>();
   private List<String> deliverables = new ArrayList<>();
   private List<ResearchArea> researchAreas;
@@ -66,7 +69,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private List<LocElement> countryList;
   private List<CapacityDevelopmentType> capdevTypes;
   private List<Discipline> disciplines;
+  private List<Long> disciplinesSelected;
   private List<TargetGroup> targetGroups;
+  private List<Long> capdevCountries;
+  private List<Long> capdevRegions;
   private final ICapacityDevelopmentService capdevService;
   private final IResearchAreaService researchAreaService;
   private final IResearchProgramDAO researchProgramSercive;
@@ -76,13 +82,18 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private final ILocElementService locElementService;
   private final IDisciplineService disciplineService;
   private final ITargetGroupService targetGroupService;
+  private final ICapdevLocationsService capdevLocationService;
+
+  final Session session = SecurityUtils.getSubject().getSession();
+
+  final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
 
   @Inject
   public CapacityDevelopmentDescripcionAction(APConfig config, ICapacityDevelopmentService capdevService,
     IResearchAreaService researchAreaService, IResearchProgramDAO researchProgramSercive,
     IProjectService projectService, ICrpService crpService, ICapacityDevelopmentTypeDAO capdevTypeService,
-    ILocElementService locElementService, IDisciplineService disciplineService,
-    ITargetGroupService targetGroupService) {
+    ILocElementService locElementService, IDisciplineService disciplineService, ITargetGroupService targetGroupService,
+    ICapdevLocationsService capdevLocationService) {
     super(config);
     this.capdevService = capdevService;
     this.researchAreaService = researchAreaService;
@@ -93,6 +104,7 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     this.locElementService = locElementService;
     this.disciplineService = disciplineService;
     this.targetGroupService = targetGroupService;
+    this.capdevLocationService = capdevLocationService;
   }
 
 
@@ -103,18 +115,23 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
-  public List<String> getApproaches() {
-    return approaches;
-  }
-
-
   public CapacityDevelopment getCapdev() {
     return capdev;
   }
 
 
+  public List<Long> getCapdevCountries() {
+    return capdevCountries;
+  }
+
+
   public int getCapDevID() {
     return capDevID;
+  }
+
+
+  public List<Long> getCapdevRegions() {
+    return capdevRegions;
   }
 
 
@@ -140,6 +157,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public List<Discipline> getDisciplines() {
     return disciplines;
+  }
+
+
+  public List<Long> getDisciplinesSelected() {
+    return disciplinesSelected;
   }
 
 
@@ -176,12 +198,6 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   @Override
   public void prepare() throws Exception {
 
-    approaches.add("Gender");
-    approaches.add("Ecosystems");
-    approaches.add("Climate change");
-    approaches.add("Freedom");
-    approaches.add("Food security");
-    approaches.add("Best Practices");
 
     outcomes.add("outcome 1");
     outcomes.add("outcome 2");
@@ -216,6 +232,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
     try {
       capDevID = Integer.parseInt(StringUtils.trim(this.getRequest().getParameter("capDevID")));
+
+
     } catch (final Exception e) {
       capDevID = -1;
     }
@@ -224,44 +242,72 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
     } else {
       capdev = new CapacityDevelopment();
+      capdevCountries = new ArrayList<Long>();
+      capdevRegions = new ArrayList<Long>();
+      disciplinesSelected = new ArrayList<Long>();
     }
 
 
   }
 
-
   @Override
   public String save() {
 
-
-    System.out.println("este es el titulo -->" + capdev.getTitle());
-    System.out.println("este es el tipo -->" + capdev.getCapdevType().getId());
-    System.out.println("este es el research area -->" + capdev.getResearchArea().getId());
-    System.out.println("esta es la categoria -->" + capdev.getCategory());
-
-    System.out.println("Este es el strartDate -->" + capdev.getStartDate());
-    System.out.println("Este es el endDate -->" + capdev.getEndDate());
-
-
-    final Session session = SecurityUtils.getSubject().getSession();
-
-    final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
-    System.out.println("User actual -->" + currentUser);
+    System.out.println("Estas son las disciplinas -->" + disciplinesSelected.size());
+    System.out.println("title -->" + capdev.getTitle());
 
     capdev.setCtFirstName("Luis");
     capdev.setCtLastName("Gonzalez");
-    capdev.setCtEmail("l.o.gonzalez@cgiar.org");
+    capdev.setCtEmail("l.o.gonzalez@gmail.com");
     capdev.setActive(true);
     capdev.setUsersByCreatedBy(currentUser);
-    capdevService.saveCapacityDevelopment(capdev);
+    // capdevService.saveCapacityDevelopment(capdev);
+
+
+    // this.saveCapDevCountries(capdevCountries, capdev);
+    // this.saveCapDevRegions(capdevRegions, capdev);
 
 
     return SUCCESS;
   }
 
+  public void saveCapDevCountries(List<Long> capdevCountries, CapacityDevelopment capdev) {
 
-  public void setApproaches(List<String> approaches) {
-    this.approaches = approaches;
+    CapdevLocations capdevLocations = null;
+    if (!capdevCountries.isEmpty()) {
+      for (final Long iterator : capdevCountries) {
+        final LocElement country = locElementService.getLocElementById(iterator);
+        capdevLocations = new CapdevLocations();
+        capdevLocations.setCapacityDevelopment(capdev);
+        capdevLocations.setLocElement(country);
+        capdevLocations.setActive(true);
+        capdevLocations.setActiveSince(new Date());
+        capdevLocations.setUsersByCreatedBy(currentUser);
+        capdevLocationService.saveCapdevLocations(capdevLocations);
+      }
+    }
+  }
+
+
+  public void saveCapDevDisciplines(List<Long> disciplines, CapacityDevelopment capdev) {
+
+  }
+
+  public void saveCapDevRegions(List<Long> capdevRegions, CapacityDevelopment capdev) {
+
+    CapdevLocations capdevLocations = null;
+    if (!capdevRegions.isEmpty()) {
+      for (final Long iterator : capdevCountries) {
+        final LocElement country = locElementService.getLocElementById(iterator);
+        capdevLocations = new CapdevLocations();
+        capdevLocations.setCapacityDevelopment(capdev);
+        capdevLocations.setLocElement(country);
+        capdevLocations.setActive(true);
+        capdevLocations.setActiveSince(new Date());
+        capdevLocations.setUsersByCreatedBy(currentUser);
+        capdevLocationService.saveCapdevLocations(capdevLocations);
+      }
+    }
   }
 
 
@@ -270,8 +316,18 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public void setCapdevCountries(List<Long> capdevCountries) {
+    this.capdevCountries = capdevCountries;
+  }
+
+
   public void setCapDevID(int capDevID) {
     this.capDevID = capDevID;
+  }
+
+
+  public void setCapdevRegions(List<Long> capdevRegions) {
+    this.capdevRegions = capdevRegions;
   }
 
 
@@ -297,6 +353,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setDisciplines(List<Discipline> disciplines) {
     this.disciplines = disciplines;
+  }
+
+
+  public void setDisciplinesSelected(List<Long> disciplinesSelected) {
+    this.disciplinesSelected = disciplinesSelected;
   }
 
 

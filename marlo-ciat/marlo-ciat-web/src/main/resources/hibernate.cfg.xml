@@ -91,6 +91,7 @@
 		<mapping resource="xmls/CenterCustomParameters.hbm.xml" />
 		<mapping resource="xmls/CapacityDevelopment.hbm.xml" />
 		<mapping resource="xmls/CapacityDevelopmentTypes.hbm.xml" />
+		<mapping resource="xmls/CapDevLocations.hbm.xml" />
 		<mapping resource="xmls/Disciplines.hbm.xml" />
 		<mapping resource="xmls/TargetGroups.hbm.xml" />
 

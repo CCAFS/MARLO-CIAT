@@ -15,8 +15,8 @@
 			<column name="capdev_type" not-null="true" />
 		</many-to-one>
 		<many-to-one name="project"
-			class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select">
-			<column name="project" />
+			class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select" >
+			<column name="project" not-null="false" />
 		</many-to-one>
 		<many-to-one name="usersByModifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
 			fetch="select">
@@ -27,15 +27,15 @@
 			<column name="created_by" />
 		</many-to-one>
 		<many-to-one name="researchArea"
-			class="org.cgiar.ccafs.marlo.data.model.ResearchArea" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.ResearchArea" fetch="select" >
 			<column name="research_area" />
 		</many-to-one>
 		<many-to-one name="crp" class="org.cgiar.ccafs.marlo.data.model.Crp"
-			fetch="select">
+			fetch="select" >
 			<column name="crp" />
 		</many-to-one>
 		<many-to-one name="researchProgram"
-			class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" fetch="select" >
 			<column name="research_program" />
 		</many-to-one>
 		<property name="title" type="string">
@@ -68,5 +68,12 @@
 		<property name="numParticipants" type="java.lang.Integer">
 			<column name="num_participants" />
 		</property>
+		<set name="capdevLocations" table="capdev_locations" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="capdev_id" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CapdevLocations" />
+		</set>
 	</class>
 </hibernate-mapping>
