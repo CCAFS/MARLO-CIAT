@@ -54,6 +54,7 @@ public class ProgramCoordinatorAction extends BaseAction {
     super(config);
     this.userService = userService;
     this.roleService = roleService;
+    this.centerService = centerService;
   }
 
   public ResearchCenter getLoggedCenter() {
