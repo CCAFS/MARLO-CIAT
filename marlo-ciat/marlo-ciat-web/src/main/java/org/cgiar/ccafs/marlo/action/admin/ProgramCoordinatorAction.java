@@ -76,8 +76,7 @@ public class ProgramCoordinatorAction extends BaseAction {
 
     Role role = roleService.getRoleById(coorRoleId);
 
-    userRoles = new ArrayList<>(
-      userRoleService.findAll().stream().filter(ur -> ur.getRole().equals(role)).collect(Collectors.toList()));
+    userRoles = new ArrayList<>(role.getUserRoles());
 
     String params[] = {loggedCenter.getAcronym() + ""};
     this.setBasePermission(this.getText(Permission.CENTER_ADMIN_BASE_PERMISSION, params));
