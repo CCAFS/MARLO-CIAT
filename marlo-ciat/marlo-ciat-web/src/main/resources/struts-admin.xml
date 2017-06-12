@@ -17,7 +17,7 @@
 		<action name="{centerSession}/objectives"
       class="org.cgiar.ccafs.marlo.action.admin.StrategicObjectivesAction">
       <interceptor-ref name="homeStack" />
-      <result name="input">/WEB-INF/views/admin/objectives.ftl</result>
+      <result name="input">/WEB-INF/views/admin/strategicObjectives.ftl</result>
       <result name="success" type="redirectAction">
         <param name="actionName">${centerSession}/objectives</param>
         <param name="edit">true</param>

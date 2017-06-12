@@ -1,7 +1,7 @@
 [#ftl]
 [#assign items= [
   { 'slug': 'coordination',       'name': 'admin.menu.hrefCoordination', 'action': 'coordination',       'active': true },
-  { 'slug': 'objectives',  'name': 'admin.menu.hrefObjectives',   'action': 'objectives',  'active': true },
+  { 'slug': 'strategicObjectives',  'name': 'admin.menu.hrefObjectives',   'action': 'objectives',  'active': true },
   { 'slug': 'researchManagement',      'name': 'admin.menu.hrefManagement',       'action': 'researchManagement',      'active': true }
 ]/]
 

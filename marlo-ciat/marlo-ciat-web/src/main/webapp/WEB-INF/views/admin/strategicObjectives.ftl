@@ -1,13 +1,13 @@
 [#ftl]
-[#assign title = "Coordination" /]
+[#assign title = "Strategic Objectives" /]
 [#assign currentSectionString = "${actionName?replace('/','-')}" /]
-[#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/admin/management.js" ] /]
+[#assign customJS = ["${baseUrl}/js/global/usersManagement.js"] /]
 [#assign currentSection = "admin" /]
-[#assign currentStage = "coordination" /]
+[#assign currentStage = "strategicObjectives" /]
 
 [#assign breadCrumb = [
-  {"label":"superadmin.admin", "nameSpace":"/admin", "action":"coordination"},
-  {"label":"superadmin.coordination", "nameSpace":"", "action":""}
+  {"label":"superadmin.admin", "nameSpace":"/admin", "action":"objectives"},
+  {"label":"superadmin.strategicObjectives", "nameSpace":"", "action":""}
 ]/]
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
@@ -22,29 +22,21 @@
       <div class="col-md-9">
         [@s.form action=actionName enctype="multipart/form-data" ]  
         
-        <h4 class="sectionTitle form-group">[@s.text name="programCoordination.title" /]</h4>
+        <h4 class="sectionTitle form-group">[@s.text name="strategicObjectives.title" /]</h4>
         
-        <label for="">Program coordinators:</label>
         <div class="users-block">
         
-        <div class="items-list simpleBox" listname="coordinators">
-          <ul>
-          [#if coordinators?has_content]
-            [#list coordinators as item]
-              [@programCoordinator element=item name="coordinators" index=item_index /]
-            [/#list]
-          [/#if] 
-          </ul>
-          <p class="emptyMessage text-center usersMessage" style="display:${(coordinators?has_content)?string('none','block')}">No assigned a coordinators yet.</p>
-        </div>
-        [#-- if editable--]
-        <div class="text-center">
-          <div class="searchUser button-green">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addPerson" /]
+          <div class="items-list simpleBox" listname="objectives">
+            <ul>
+            [#if coordinators?has_content]
+              [#list coordinators as item]
+                [@programCoordinator element=item name="coordinators" index=item_index /]
+              [/#list]
+            [/#if] 
+            </ul>
+            <p class="emptyMessage text-center usersMessage" style="display:${(coordinators?has_content)?string('none','block')}">No Strategic Objectives added yet.</p>
           </div>
         </div>
-        [#--if--]
-      </div>
       
       [#-- Section Buttons--]
         <div class="buttons">

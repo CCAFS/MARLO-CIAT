@@ -6234,7 +6234,7 @@ p.title{
     padding: 2px;
     font-weight:500!important;
     background: linear-gradient(to right, rgb(32, 144, 90), rgb(44, 150, 100), rgb(50, 153, 104));
-    z-index: 999;
+    z-index: 99;
 }
 
 .error-info{
