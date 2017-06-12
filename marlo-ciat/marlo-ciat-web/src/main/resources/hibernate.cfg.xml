@@ -93,7 +93,11 @@
 		<mapping resource="xmls/CapacityDevelopmentTypes.hbm.xml" />
 		<mapping resource="xmls/CapDevLocations.hbm.xml" />
 		<mapping resource="xmls/Disciplines.hbm.xml" />
+		<mapping resource="xmls/CapdevDiscipline.hbm.xml" />
 		<mapping resource="xmls/TargetGroups.hbm.xml" />
+		<mapping resource="xmls/CapdevTargetgroup.hbm.xml" />
+		<mapping resource="xmls/CapdevParticipant.hbm.xml" />
+		<mapping resource="xmls/Participant.hbm.xml" />
 
 	</session-factory>
 

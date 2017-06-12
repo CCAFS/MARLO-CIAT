@@ -21,17 +21,22 @@ import org.cgiar.ccafs.marlo.data.dao.ICapacityDevelopmentTypeDAO;
 import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopmentType;
+import org.cgiar.ccafs.marlo.data.model.CapdevDiscipline;
 import org.cgiar.ccafs.marlo.data.model.CapdevLocations;
+import org.cgiar.ccafs.marlo.data.model.CapdevTargetgroup;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.Discipline;
 import org.cgiar.ccafs.marlo.data.model.LocElement;
+import org.cgiar.ccafs.marlo.data.model.Participant;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.TargetGroup;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
+import org.cgiar.ccafs.marlo.data.service.ICapdevDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevLocationsService;
+import org.cgiar.ccafs.marlo.data.service.ICapdevTargetgroupService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.ILocElementService;
@@ -71,8 +76,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private List<Discipline> disciplines;
   private List<Long> disciplinesSelected;
   private List<TargetGroup> targetGroups;
+  private List<Long> targetGroupsSelected;
   private List<Long> capdevCountries;
   private List<Long> capdevRegions;
+  private Participant participant;
   private final ICapacityDevelopmentService capdevService;
   private final IResearchAreaService researchAreaService;
   private final IResearchProgramDAO researchProgramSercive;
@@ -83,6 +90,9 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private final IDisciplineService disciplineService;
   private final ITargetGroupService targetGroupService;
   private final ICapdevLocationsService capdevLocationService;
+  private final ICapdevDisciplineService capdevDisciplineService;
+  private final ICapdevTargetgroupService capdevTargetgroupService;
+
 
   final Session session = SecurityUtils.getSubject().getSession();
 
@@ -93,7 +103,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     IResearchAreaService researchAreaService, IResearchProgramDAO researchProgramSercive,
     IProjectService projectService, ICrpService crpService, ICapacityDevelopmentTypeDAO capdevTypeService,
     ILocElementService locElementService, IDisciplineService disciplineService, ITargetGroupService targetGroupService,
-    ICapdevLocationsService capdevLocationService) {
+    ICapdevLocationsService capdevLocationService, ICapdevDisciplineService capdevDisciplineService,
+    ICapdevTargetgroupService capdevTargetgroupService) {
     super(config);
     this.capdevService = capdevService;
     this.researchAreaService = researchAreaService;
@@ -105,6 +116,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     this.disciplineService = disciplineService;
     this.targetGroupService = targetGroupService;
     this.capdevLocationService = capdevLocationService;
+    this.capdevDisciplineService = capdevDisciplineService;
+    this.capdevTargetgroupService = capdevTargetgroupService;
   }
 
 
@@ -170,6 +183,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public Participant getParticipant() {
+    return participant;
+  }
+
+
   public List<Project> getProjects() {
     return projects;
   }
@@ -194,6 +212,9 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     return targetGroups;
   }
 
+  public List<Long> getTargetGroupsSelected() {
+    return targetGroupsSelected;
+  }
 
   @Override
   public void prepare() throws Exception {
@@ -253,26 +274,36 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   @Override
   public String save() {
 
-    System.out.println("Estas son las disciplinas -->" + disciplinesSelected.size());
+    System.out.println("Estas son los target groups -->" + targetGroupsSelected.size());
     System.out.println("title -->" + capdev.getTitle());
+
+    if (capdev.getCategory() == 1) {
+      capdev.setTitle(participant.getName() + " " + participant.getLastName());
+    }
+
+    if (capdev.getCategory() == 2) {
+
+    }
 
     capdev.setCtFirstName("Luis");
     capdev.setCtLastName("Gonzalez");
     capdev.setCtEmail("l.o.gonzalez@gmail.com");
     capdev.setActive(true);
     capdev.setUsersByCreatedBy(currentUser);
-    // capdevService.saveCapacityDevelopment(capdev);
+    capdevService.saveCapacityDevelopment(capdev);
 
 
     // this.saveCapDevCountries(capdevCountries, capdev);
     // this.saveCapDevRegions(capdevRegions, capdev);
+    // this.saveCapDevDisciplines(disciplinesSelected, capdev);
+    // this.saveCapdevTargetGroups(targetGroupsSelected, capdev);
 
 
     return SUCCESS;
   }
 
-  public void saveCapDevCountries(List<Long> capdevCountries, CapacityDevelopment capdev) {
 
+  public void saveCapDevCountries(List<Long> capdevCountries, CapacityDevelopment capdev) {
     CapdevLocations capdevLocations = null;
     if (!capdevCountries.isEmpty()) {
       for (final Long iterator : capdevCountries) {
@@ -290,8 +321,21 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
 
   public void saveCapDevDisciplines(List<Long> disciplines, CapacityDevelopment capdev) {
-
+    CapdevDiscipline capdevDiscipline = null;
+    if (!disciplines.isEmpty()) {
+      for (final Long iterator : disciplines) {
+        final Discipline discipline = disciplineService.getDisciplineById(iterator);
+        capdevDiscipline = new CapdevDiscipline();
+        capdevDiscipline.setCapacityDevelopment(capdev);
+        capdevDiscipline.setDisciplines(discipline);
+        capdevDiscipline.setActive(true);
+        capdevDiscipline.setActiveSince(new Date());
+        capdevDiscipline.setUsersByCreatedBy(currentUser);
+        capdevDisciplineService.saveCapdevDiscipline(capdevDiscipline);
+      }
+    }
   }
+
 
   public void saveCapDevRegions(List<Long> capdevRegions, CapacityDevelopment capdev) {
 
@@ -306,6 +350,23 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
         capdevLocations.setActiveSince(new Date());
         capdevLocations.setUsersByCreatedBy(currentUser);
         capdevLocationService.saveCapdevLocations(capdevLocations);
+      }
+    }
+  }
+
+
+  public void saveCapdevTargetGroups(List<Long> targetGroups, CapacityDevelopment capdev) {
+    CapdevTargetgroup capdevTargetgroup = null;
+    if (!targetGroups.isEmpty()) {
+      for (final Long iterator : targetGroups) {
+        final TargetGroup targetGroup = targetGroupService.getTargetGroupById(iterator);
+        capdevTargetgroup = new CapdevTargetgroup();
+        capdevTargetgroup.setCapacityDevelopment(capdev);
+        capdevTargetgroup.setTargetGroups(targetGroup);
+        capdevTargetgroup.setActive(true);
+        capdevTargetgroup.setActiveSince(new Date());
+        capdevTargetgroup.setUsersByCreatedBy(currentUser);
+        capdevTargetgroupService.saveCapdevTargetgroup(capdevTargetgroup);
       }
     }
   }
@@ -366,6 +427,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public void setParticipant(Participant participant) {
+    this.participant = participant;
+  }
+
+
   public void setProjects(List<Project> projects) {
     this.projects = projects;
   }
@@ -388,6 +454,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setTargetGroups(List<TargetGroup> targetGroups) {
     this.targetGroups = targetGroups;
+  }
+
+
+  public void setTargetGroupsSelected(List<Long> targetGroupsSelected) {
+    this.targetGroupsSelected = targetGroupsSelected;
   }
 
 

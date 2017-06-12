@@ -281,7 +281,7 @@
 							<div class="removeTargetGroup removeIcon" title="Remove targetGroup"></div>
 							[/#if]
 							<input class="id" type="hidden" name="" value="" />
-							<input class="tgId" type="hidden" name="targetGroups[-1]" value="" />
+							<input class="tgId" type="hidden" name="targetGroupsSelected[-1]" value="" />
 							<span class="name"></span>
 							<div class="clearfix"></div>
 						</li>
@@ -407,7 +407,7 @@
 				</div>
 				<div class="col-md-12">
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Reference" type="text" required=true /]
+						[@customForm.input name="" i18nkey="Supervisor" type="text" required=true /]
 					</div>
 					<div class="col-md-6">
 						[@customForm.input name="" i18nkey="Fellowship" type="text"  required=true /]
@@ -472,9 +472,6 @@
 </div>
 
 
-[@objectiveMacro element={} index=0 isTemplate=true /] 
-[@disciplineMacro element="" isTemplate=true/]
-[@outComeMacro element="" isTemplate=true/]
 
 
 <!-- country list template-->
@@ -515,7 +512,7 @@
   <li id="targetGroupTemplate" class="targetGroup clearfix col-md-4">
       <div class="removetargetGroup removeIcon" title="Remove targetGroup"></div>
       <input class="id" type="hidden" name="" value="" />
-      <input class="tgId" type="hidden" name="targetGroups[-1]" value="" />
+      <input class="tgId" type="hidden" name="targetGroupsSelected[-1]" value="" />
       <span class="name"></span>
       <div class="clearfix"></div>
     </li>
@@ -543,14 +540,14 @@
 [/#macro]
 
 
-[#macro disciplineMacro element isTemplate=false]
+<!-- [#macro disciplineMacro element isTemplate=false]
 	<div id="approach-${isTemplate?string('template',(element)!)}" class="approach  borderBox col-md-4 " style="display:${isTemplate?string('none','block')}" >
 		<div class="removeDiscipline removeIcon" title="Remove approach"></div>
 		<div class="col-md-4">
 			 [@s.text name="element" /]
 		</div>
 	</div>
-[/#macro]
+[/#macro] -->
 
 
 [#macro outComeMacro element isTemplate=false]

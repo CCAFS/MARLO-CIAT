@@ -39,6 +39,9 @@ public class CapacityDevelopment implements java.io.Serializable {
   private Set<CapdevLocations> capdevLocations = new HashSet<CapdevLocations>(0);
   private List<CapdevLocations> capDevCountries;
   private List<CapdevLocations> capDevRegions;
+  private Set<CapdevDiscipline> capdevDisciplines = new HashSet<CapdevDiscipline>(0);
+  private Set<CapdevTargetgroup> capdevTargetgroups = new HashSet<CapdevTargetgroup>(0);
+  private Set<CapdevParticipant> capdevParticipants = new HashSet<CapdevParticipant>(0);
 
   public CapacityDevelopment() {
   }
@@ -47,7 +50,9 @@ public class CapacityDevelopment implements java.io.Serializable {
   public CapacityDevelopment(Project project, User usersByModifiedBy, User usersByCreatedBy, ResearchArea researchArea,
     Crp crp, ResearchProgram researchProgram, String title, CapacityDevelopmentType capdevType, int category,
     boolean active, String modificationJustification, String ctFirstName, String ctLastName, String ctEmail,
-    Date startDate, Date endDate, Integer numParticipants, Set<CapdevLocations> capdevLocations) {
+    Date startDate, Date endDate, Integer numParticipants, Set<CapdevLocations> capdevLocations,
+    Set<CapdevDiscipline> capdevDisciplines, Set<CapdevTargetgroup> capdevTargetgroups,
+    Set<CapdevParticipant> capdevParticipants) {
     this.project = project;
     this.usersByModifiedBy = usersByModifiedBy;
     this.usersByCreatedBy = usersByCreatedBy;
@@ -66,6 +71,9 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.endDate = endDate;
     this.numParticipants = numParticipants;
     this.capdevLocations = capdevLocations;
+    this.capdevDisciplines = capdevDisciplines;
+    this.capdevTargetgroups = capdevTargetgroups;
+    this.capdevParticipants = capdevParticipants;
   }
 
   public CapacityDevelopment(String title, CapacityDevelopmentType capdevType, int category, boolean active,
@@ -84,12 +92,24 @@ public class CapacityDevelopment implements java.io.Serializable {
     return capDevCountries;
   }
 
+  public Set<CapdevDiscipline> getCapdevDisciplines() {
+    return capdevDisciplines;
+  }
+
   public Set<CapdevLocations> getCapdevLocations() {
     return capdevLocations;
   }
 
+  public Set<CapdevParticipant> getCapdevParticipants() {
+    return capdevParticipants;
+  }
+
   public List<CapdevLocations> getCapDevRegions() {
     return capDevRegions;
+  }
+
+  public Set<CapdevTargetgroup> getCapdevTargetgroups() {
+    return capdevTargetgroups;
   }
 
   public CapacityDevelopmentType getCapdevType() {
@@ -172,12 +192,24 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.capDevCountries = capDevCountries;
   }
 
+  public void setCapdevDisciplines(Set<CapdevDiscipline> capdevDisciplines) {
+    this.capdevDisciplines = capdevDisciplines;
+  }
+
   public void setCapdevLocations(Set<CapdevLocations> capdevLocations) {
     this.capdevLocations = capdevLocations;
   }
 
+  public void setCapdevParticipants(Set<CapdevParticipant> capdevParticipants) {
+    this.capdevParticipants = capdevParticipants;
+  }
+
   public void setCapDevRegions(List<CapdevLocations> capDevRegions) {
     this.capDevRegions = capDevRegions;
+  }
+
+  public void setCapdevTargetgroups(Set<CapdevTargetgroup> capdevTargetgroups) {
+    this.capdevTargetgroups = capdevTargetgroups;
   }
 
   public void setCapdevType(CapacityDevelopmentType capdevType) {
@@ -200,25 +232,31 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.ctFirstName = ctFirstName;
   }
 
+
   public void setCtLastName(String ctLastName) {
     this.ctLastName = ctLastName;
   }
+
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }
 
+
   public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
 
+
   public void setNumParticipants(Integer numParticipants) {
     this.numParticipants = numParticipants;
   }
+
 
   public void setProject(Project project) {
     this.project = project;
