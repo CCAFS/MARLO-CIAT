@@ -52,6 +52,7 @@ function attachEvents() {
   $(".srfIdoSelect").on("change", function() {
     var option = $(this).find("option:selected");
     if(option.val() == "-1") {
+      $(this).parents(".programImpact").find(".otherSrf").find("input").val("");
       $(".otherSrf").show("slow");
     } else {
       $(".otherSrf").hide("slow");
