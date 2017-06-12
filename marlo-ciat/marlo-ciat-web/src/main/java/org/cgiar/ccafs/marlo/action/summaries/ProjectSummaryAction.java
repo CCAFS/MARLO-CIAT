@@ -21,6 +21,9 @@ import org.cgiar.ccafs.marlo.data.model.Deliverable;
 import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
 import org.cgiar.ccafs.marlo.data.model.DeliverableOutput;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
+import org.cgiar.ccafs.marlo.data.model.ProjectLocation;
+import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
@@ -128,6 +131,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
       this.fillSubreport((SubReport) hm.get("description"), "description");
       this.fillSubreport((SubReport) hm.get("partners"), "partners");
       this.fillSubreport((SubReport) hm.get("deliverables"), "deliverables");
+      this.fillSubreport((SubReport) hm.get("descriptionFS"), "descriptionFS");
 
       PdfReportUtil.createPDF(masterReport, os);
       bytesPDF = os.toByteArray();
@@ -159,6 +163,9 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
         break;
       case "deliverables":
         model = this.getDeliverablesTableModel();
+        break;
+      case "descriptionFS":
+        model = this.getFundingSourcesTableModel();
         break;
     }
     sdf.addTable(query, model);
@@ -330,9 +337,12 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
 
   private TypedTableModel getDescriptionTableModel() {
     TypedTableModel model = new TypedTableModel(
-      new String[] {"title", "startDate", "endDate", "principalInvestigator", "projectContact", "crossCutting",
-        "projectOutputs"},
-      new Class[] {String.class, String.class, String.class, String.class, String.class, String.class, String.class});
+      new String[] {"title", "startDate", "endDate", "extensionDate", "principalInvestigator", "projectContact",
+        "ocsCode", "type", "suggestedTitle", "descriptionObjectives", "originalDonor", "customer", "totalAmount",
+        "globalDimension", "crossCutting", "projectOutputs", "regionalDimension"},
+      new Class[] {String.class, String.class, String.class, String.class, String.class, String.class, String.class,
+        String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class,
+        String.class, String.class});
 
     String title = null;
     if (project.getName() != null && !project.getName().isEmpty()) {
@@ -354,8 +364,10 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
       extensionDate = formatter.format(project.getExtensionDate());
     }
     String principalInvestigator = null;
-    if (project.getResearchProgram().getLeaders() != null) {
-      principalInvestigator = project.getResearchProgram().getLeaders().get(0).getUser().getComposedName();
+
+    if (project.getResearchProgram().getResearchLeaders() != null) {
+      principalInvestigator = project.getResearchProgram().getResearchLeaders().stream().collect(Collectors.toList())
+        .get(0).getUser().getComposedName();
     }
 
     String projectContact = null;
@@ -379,7 +391,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     }
 
     String descriptionObjectives = null;
-    if (project.getDescription() != null && project.getDescription().trim().isEmpty()) {
+    if (project.getDescription() != null && !project.getDescription().trim().isEmpty()) {
       descriptionObjectives = project.getDescription();
     }
 
@@ -399,21 +411,116 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     }
     String globalDimension = null;
     if (project.getGlobal() != null && project.getGlobal()) {
-      globalDimension = "Yes";
+      globalDimension = "&#9679 Yes";
     } else if (project.getGlobal() != null && !project.getGlobal()) {
-      globalDimension = "No";
+      globalDimension = "";
+      for (ProjectLocation projectLocation : project.getProjectLocations().stream()
+        .filter(pl -> pl.isActive() && pl.getLocElement().getLocElementType().getId() == 2)
+        .collect(Collectors.toList())) {
+        if (globalDimension.isEmpty()) {
+          globalDimension += "&#9679 " + projectLocation.getLocElement().getName();
+        } else {
+          globalDimension += "<br>&#9679 " + projectLocation.getLocElement().getName();
+        }
+      }
     }
-
     String regionalDimension = null;
     if (project.getRegion() != null && project.getRegion()) {
-
+      regionalDimension = "";
+      for (ProjectLocation projectLocation : project.getProjectLocations().stream()
+        .filter(pl -> pl.isActive() && pl.getLocElement().getLocElementType().getId() == 1)
+        .collect(Collectors.toList())) {
+        if (regionalDimension.isEmpty()) {
+          regionalDimension += "&#9679 " + projectLocation.getLocElement().getName();
+        } else {
+          regionalDimension += "<br>&#9679 " + projectLocation.getLocElement().getName();
+        }
+      }
     } else if (project.getRegion() != null && !project.getRegion()) {
-      regionalDimension = "No";
+      regionalDimension = "&#9679 No";
     }
 
+    String crossCutting = "";
+    if (project.getProjectCrosscutingTheme() != null) {
+      if (project.getProjectCrosscutingTheme().getClimateChange() != null
+        && project.getProjectCrosscutingTheme().getClimateChange()) {
+        crossCutting += "&#9679 Climate Change";
+      }
+      if (project.getProjectCrosscutingTheme().getGender() != null
+        && project.getProjectCrosscutingTheme().getGender()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 Gender";
+        } else {
+          crossCutting += "<br>&#9679 Gender";
+        }
+      }
+      if (project.getProjectCrosscutingTheme().getYouth() != null && project.getProjectCrosscutingTheme().getYouth()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 Youth";
+        } else {
+          crossCutting += "<br>&#9679 Youth";
+        }
+      }
+      if (project.getProjectCrosscutingTheme().getPoliciesInstitutions() != null
+        && project.getProjectCrosscutingTheme().getPoliciesInstitutions()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 Policies and Institutions";
+        } else {
+          crossCutting += "<br>&#9679 Policies and Institutions";
+        }
+      }
+      if (project.getProjectCrosscutingTheme().getCapacityDevelopment() != null
+        && project.getProjectCrosscutingTheme().getCapacityDevelopment()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 Capacity Development";
+        } else {
+          crossCutting += "<br>&#9679 Capacity Development";
+        }
+      }
+      if (project.getProjectCrosscutingTheme().getBigData() != null
+        && project.getProjectCrosscutingTheme().getBigData()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 Big Data";
+        } else {
+          crossCutting += "<br>&#9679 Big Data";
+        }
+      }
+      if (project.getProjectCrosscutingTheme().getImpactAssessment() != null
+        && project.getProjectCrosscutingTheme().getImpactAssessment()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 Impact Assessment";
+        } else {
+          crossCutting += "<br>&#9679 Impact Assessment";
+        }
+      }
+      if (project.getProjectCrosscutingTheme().getNa() != null && project.getProjectCrosscutingTheme().getNa()) {
+        if (crossCutting.isEmpty()) {
+          crossCutting += "&#9679 N/A";
+        } else {
+          crossCutting += "<br>&#9679 N/A";
+        }
+      }
+    }
+    if (crossCutting != null && crossCutting.trim().isEmpty()) {
+      crossCutting = null;
+    }
+
+    String projectOutputs = "";
+    for (ProjectOutput projectOutput : project.getProjectOutputs().stream().filter(po -> po.isActive())
+      .collect(Collectors.toList())) {
+      if (projectOutputs.isEmpty()) {
+        projectOutputs = "&#9679 " + projectOutput.getResearchOutput().getShortName();
+      } else {
+        projectOutputs += "<br>&#9679 " + projectOutput.getResearchOutput().getShortName();
+      }
+    }
+    if (projectOutputs.trim().isEmpty()) {
+      projectOutputs = null;
+    }
 
     model.addRow(new Object[] {title, startDate, endDate, extensionDate, principalInvestigator, projectContact, ocsCode,
-      type, suggestedTitle, descriptionObjectives, originalDonor, customer, totalAmount, globalDimension});
+      type, suggestedTitle, descriptionObjectives, originalDonor, customer, totalAmount, globalDimension, crossCutting,
+      projectOutputs, regionalDimension});
     return model;
   }
 
@@ -453,6 +560,30 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     }
   }
 
+  private TypedTableModel getFundingSourcesTableModel() {
+    TypedTableModel model = new TypedTableModel(new String[] {"crp", "fundingSource", "projectTitle"},
+      new Class[] {String.class, String.class, String.class});
+    for (ProjectFundingSource projectFundingSource : project.getProjectFundingSources().stream()
+      .filter(fs -> fs.isActive()).collect(Collectors.toList())) {
+      String crp = null;
+
+      if (projectFundingSource.getCrp() != null) {
+        crp = projectFundingSource.getCrp().getName();
+      }
+      String fundingSource = null;
+      if (projectFundingSource.getFundingSourceType() != null) {
+        fundingSource = projectFundingSource.getFundingSourceType().getName();
+      }
+      String projectTitle = null;
+      if (projectFundingSource.getTitle() != null && !projectFundingSource.getTitle().trim().isEmpty()) {
+        projectTitle = projectFundingSource.getTitle();
+      }
+
+      model.addRow(new Object[] {crp, fundingSource, projectTitle});
+    }
+    return model;
+  }
+
   @Override
   public InputStream getInputStream() {
     if (inputStream == null) {
@@ -473,8 +604,8 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
         new Class[] {String.class, String.class, String.class, String.class});
     // Set short title
     String shortTitle = "";
-    if (project.getShortName() != null && !project.getShortName().isEmpty()) {
-      shortTitle += project.getShortName() + " - ";
+    if (project.getName() != null && !project.getName().isEmpty()) {
+      shortTitle += project.getName() + " - ";
     }
     if (loggedCenter.getAcronym() != null && !loggedCenter.getAcronym().isEmpty()) {
       shortTitle += loggedCenter.getAcronym() + " - ";
