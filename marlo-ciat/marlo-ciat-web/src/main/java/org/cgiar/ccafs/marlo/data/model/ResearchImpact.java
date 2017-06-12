@@ -41,28 +41,21 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
-  /**
-   * The impact description text.
-   */
   @Expose
   private String description;
 
 
-  /**
-   * The research impact target year.
-   */
   @Expose
   private Integer targetYear;
 
-  /**
-   * The research Program to which this research impact relates to.
-   */
+
   @Expose
   private boolean active;
 
 
   @Expose
   private Date activeSince;
+
 
   @Expose
   private User createdBy;
@@ -86,11 +79,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   private String shortName;
 
   @Expose
-  private SrfIdo srfIdo;
-
-
-  @Expose
-  private String otherIdo;
+  private ResearchImpactStatement researchImpactStatement;
 
 
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
@@ -102,10 +91,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   private List<ResearchObjective> objectives;
 
+
   private List<ResearchImpactBeneficiary> beneficiaries;
 
   private String objectiveValue;
-
 
   private List<String> objectiveValueText;
 
@@ -166,14 +155,15 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return color;
   }
 
-
   public User getCreatedBy() {
     return createdBy;
   }
 
+
   public String getDescription() {
     return description;
   }
+
 
   /**
    * @return the id
@@ -203,7 +193,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return objectives;
   }
 
-
   /**
    * @return an array of integers.
    */
@@ -224,10 +213,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return objectiveValue;
   }
 
-  public String getOtherIdo() {
-    return otherIdo;
-  }
-
 
   public Set<ResearchImpactBeneficiary> getResearchImpactBeneficiaries() {
     return researchImpactBeneficiaries;
@@ -237,6 +222,9 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return researchImpactObjectives;
   }
 
+  public ResearchImpactStatement getResearchImpactStatement() {
+    return researchImpactStatement;
+  }
 
   /**
    * @return the researchOutcomes
@@ -245,6 +233,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return researchOutcomes;
   }
 
+
   /**
    * @return the researchProgram
    */
@@ -252,15 +241,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return researchProgram;
   }
 
-
   public String getShortName() {
     return shortName;
   }
 
-
-  public SrfIdo getSrfIdo() {
-    return srfIdo;
-  }
 
   /**
    * @return the targetYear
@@ -277,6 +261,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
+
 
   @Override
   public boolean isActive() {
@@ -299,7 +284,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     this.color = color;
   }
 
-
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
@@ -308,6 +292,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public void setDescription(String description) {
     this.description = description;
   }
+
 
   /**
    * @param id the id to set
@@ -332,16 +317,16 @@ public class ResearchImpact implements Serializable, IAuditLog {
     this.objectiveValue = objectiveValue;
   }
 
-  public void setOtherIdo(String otherIdo) {
-    this.otherIdo = otherIdo;
-  }
-
   public void setResearchImpactBeneficiaries(Set<ResearchImpactBeneficiary> researchImpactBeneficiaries) {
     this.researchImpactBeneficiaries = researchImpactBeneficiaries;
   }
 
   public void setResearchImpactObjectives(Set<ResearchImpactObjective> researchImpactObjectives) {
     this.researchImpactObjectives = researchImpactObjectives;
+  }
+
+  public void setResearchImpactStatement(ResearchImpactStatement researchImpactStatement) {
+    this.researchImpactStatement = researchImpactStatement;
   }
 
   /**
@@ -360,10 +345,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   public void setShortName(String shortName) {
     this.shortName = shortName;
-  }
-
-  public void setSrfIdo(SrfIdo srfIdo) {
-    this.srfIdo = srfIdo;
   }
 
   /**

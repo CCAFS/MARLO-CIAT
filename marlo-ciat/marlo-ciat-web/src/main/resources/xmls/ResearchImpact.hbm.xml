@@ -19,9 +19,9 @@
       fetch="select">
       <column name="created_by" not-null="false" />
     </many-to-one>
-    <many-to-one name="srfIdo" class="org.cgiar.ccafs.marlo.data.model.SrfIdo"
+    <many-to-one name="researchImpactStatement" class="org.cgiar.ccafs.marlo.data.model.ResearchImpactStatement"
       fetch="select">
-      <column name="ido_id"/>
+      <column name="impact_statement_id"/>
     </many-to-one>
     <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
       fetch="select">
@@ -36,9 +36,6 @@
     </property>
     <property name="shortName" type="string">
       <column name="short_name" />
-    </property>
-    <property name="otherIdo" type="string">
-      <column name="other_ido" />
     </property>
 		  <property name="description" type="string">
       <column name="description" length="65535" not-null="true" />
