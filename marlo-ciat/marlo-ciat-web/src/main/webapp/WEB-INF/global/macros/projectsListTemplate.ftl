@@ -26,7 +26,7 @@
           <td class="left">
             [#if project.name?has_content]
               <a href="${projectUrl}" title="${project.name}">
-              [#if project.name?length < 120] ${project.name}</a> [#else] [@utilities.wordCutter string=project.title maxPos=120 /]...</a> [/#if]
+              [#if project.name?length < 120] ${project.name}</a> [#else] [@utilities.wordCutter string=project.name maxPos=120 /]...</a> [/#if]
             [#else]
               <a href="${projectUrl}">
                 [@s.text name="projectsList.none" /]

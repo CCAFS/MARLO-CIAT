@@ -238,8 +238,8 @@ public class Project implements java.io.Serializable, IAuditLog {
     String pattern = "yyyy-MM-dd";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
     String date = "";
-    if (this.startDate != null) {
-      date = simpleDateFormat.format(this.startDate);
+    if (this.endDate != null) {
+      date = simpleDateFormat.format(this.endDate);
     }
     return date;
   }
