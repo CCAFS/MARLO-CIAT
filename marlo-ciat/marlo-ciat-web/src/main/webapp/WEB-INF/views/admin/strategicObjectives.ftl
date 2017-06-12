@@ -35,6 +35,10 @@
             <p class="emptyMessage text-center usersMessage" style="display:${(objectives?has_content)?string('none','block')}">No Strategic Objectives added yet.</p>
           </div>
         </div>
+        [#-- Add Milestone Button --]
+          <div class="text-right">
+            <div class=" button-blue"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="Add objective"/]</div>
+          </div>
       
       [#-- Section Buttons--]
         <div class="buttons">
