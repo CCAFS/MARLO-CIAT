@@ -4,11 +4,11 @@
 [#assign pageLibs = ["vanilla-color-picker"] /]
 [#assign customJS = ["${baseUrl}/js/global/usersManagement.js", "${baseUrl}/js/admin/management.js" ] /]
 [#assign currentSection = "admin" /]
-[#assign currentStage = "management" /]
+[#assign currentStage = "coordination" /]
 
 [#assign breadCrumb = [
-  {"label":"menu.superadmin.admin", "nameSpace":"/admin", "action":"coordination"},
-  {"label":"management", "nameSpace":"", "action":""}
+  {"label":"superadmin.admin", "nameSpace":"/admin", "action":"coordination"},
+  {"label":"superadmin.coordination", "nameSpace":"", "action":""}
 ]/]
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
@@ -23,7 +23,29 @@
       <div class="col-md-9">
         [@s.form action=actionName enctype="multipart/form-data" ]  
         
-        <h4 class="sectionTitle">[@s.text name="programManagement.title" /]</h4>
+        <h4 class="sectionTitle form-group">[@s.text name="programCoordination.title" /]</h4>
+        
+        <label for="">Program coordinators:</label>
+        <div class="users-block">
+        
+        <div class="items-list simpleBox" listname="coordinators">
+          <ul>
+          [#if coordinators?has_content]
+            [#list coordinators as item]
+              [@programCoordinator element=item name="coordinators" index=item_index /]
+            [/#list]
+          [/#if] 
+          </ul>
+          <p class="emptyMessage text-center usersMessage" style="display:${(coordinators?has_content)?string('none','block')}">No assigned a coordinators yet.</p>
+        </div>
+        [#-- if editable--]
+        <div class="text-center">
+          <div class="searchUser button-green">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> [@s.text name="form.buttons.addPerson" /]
+          </div>
+        </div>
+        [#--if--]
+      </div>
         
         [/@s.form]
       </div>
@@ -35,12 +57,20 @@
 [#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
 [@usersForm.searchUsers/]
 
-[#-- Program template --]
-[@programItem element={} index=0 name="" template=true /]
-
-<ul style="display:none">
-  [#-- User template --]
-  [@userItem element={} index=0 name="" userRole="-1" template=true /]
-</ul>
+[@programCoordinator element={} name="coordinators" index=-1 template=true/]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
+
+[#macro programCoordinator element name index template=false]
+  [#local customName = "${name}[${index}]" /]
+  <li id="user-${template?string('template',index)}" class="user userItem" style="display:${template?string('none','block')}">
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    <span class="name"> ${(element.user.getComposedName()?html)!'Unknown user'}</span>
+    <input class="user" type="hidden" name="${customName}.user.id" value="${(element.user.id)!}"/>
+    <input class="id" type="hidden" name="${customName}.id" value="${(element.id)!}"/>
+    [#-- Remove Button --]
+    [#if editable]
+      <span class="glyphicon glyphicon-remove pull-right remove-userItem" aria-hidden="true"></span>
+    [/#if]
+  </li>
+[/#macro]
