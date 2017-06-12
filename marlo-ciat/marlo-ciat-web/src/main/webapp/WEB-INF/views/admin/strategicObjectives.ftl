@@ -27,14 +27,12 @@
         <div class="users-block">
         
           <div class="items-list simpleBox" listname="objectives">
-            <ul>
-            [#if coordinators?has_content]
-              [#list coordinators as item]
-                [@programCoordinator element=item name="coordinators" index=item_index /]
+            [#if objectives?has_content]
+              [#list objectives as item]
+                [@strategicObjectives element=item name="objectives" index=item_index /]
               [/#list]
             [/#if] 
-            </ul>
-            <p class="emptyMessage text-center usersMessage" style="display:${(coordinators?has_content)?string('none','block')}">No Strategic Objectives added yet.</p>
+            <p class="emptyMessage text-center usersMessage" style="display:${(objectives?has_content)?string('none','block')}">No Strategic Objectives added yet.</p>
           </div>
         </div>
       
@@ -58,24 +56,21 @@
   </div>
 </section>
 
-[#-- Search users Interface --]
-[#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
-[@usersForm.searchUsers/]
 
-[@programCoordinator element={} name="coordinators" index=-1 template=true/]
+[@strategicObjectives element={} name="coordinators" index=-1 template=true/]
 
 [#include "/WEB-INF/global/pages/footer.ftl" /]
 
-[#macro programCoordinator element name index template=false]
+[#macro strategicObjectives element name index template=false]
   [#local customName = "${name}[${index}]" /]
-  <li id="user-${template?string('template',index)}" class="user userItem" style="display:${template?string('none','block')}">
-    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-    <span class="name"> ${(element.user.getComposedName()?html)!'Unknown user'}</span>
-    <input class="user" type="hidden" name="${customName}.user.id" value="${(element.user.id)!}"/>
+  <div id="objective-${template?string('template',index)}" class="objective simpleBox" style="display:${template?string('none','block')}">
+    <label for="">Strategic objective #${index+1}</label>
+    [@customForm.textArea name="${customName}.description" showTitle=false   required=false className="outcome-statement limitWords-100" editable=true /]
+    <div class="clearfix"></div>
     <input class="id" type="hidden" name="${customName}.id" value="${(element.id)!}"/>
     [#-- Remove Button --]
     [#if editable]
       <span class="glyphicon glyphicon-remove pull-right remove-userItem" aria-hidden="true"></span>
     [/#if]
-  </li>
+  </div>
 [/#macro]
