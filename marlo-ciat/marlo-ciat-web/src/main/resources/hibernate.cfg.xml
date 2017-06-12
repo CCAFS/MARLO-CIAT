@@ -91,6 +91,7 @@
 		<mapping resource="xmls/CenterCustomParameters.hbm.xml" />
 		<mapping resource="xmls/SrfCrossCuttingIssues.hbm.xml" />
 		<mapping resource="xmls/SrfIdos.hbm.xml" />
+		<mapping resource="xmls/ResearchImpactStatement.hbm.xml" />		
 	</session-factory>
 
 </hibernate-configuration>
