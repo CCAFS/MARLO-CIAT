@@ -67,7 +67,7 @@
             [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=false className="outcome-statement limitWords-50" editable=editable /]
           
             <div class="row">
-              <div class="col-sm-7">[@customForm.input name="${outcomeCustomName}.shortName" i18nkey="outcome.shortName" className="limitChar-30" required=true editable=editable /]</div>       
+              <div class="col-sm-7">[@customForm.input name="${outcomeCustomName}.shortName" i18nkey="outcome.shortName" className="limitChar-30" required=false editable=editable /]</div>       
             </div> 
           </div>
           <div class="row form-group target-block">            

@@ -372,6 +372,10 @@ public class ProjectDeliverableAction extends BaseAction {
         deliverable.getDocuments().clear();
       }
 
+      if (deliverable.getOutputs() != null) {
+        deliverable.getOutputs().clear();
+      }
+
       if (deliverable.getDeliverableCrosscutingTheme() != null) {
         deliverable.getDeliverableCrosscutingTheme().setPoliciesInstitutions(null);
         deliverable.getDeliverableCrosscutingTheme().setGender(null);

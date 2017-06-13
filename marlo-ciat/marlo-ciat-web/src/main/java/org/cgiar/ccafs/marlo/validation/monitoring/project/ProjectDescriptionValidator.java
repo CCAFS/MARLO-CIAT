@@ -117,10 +117,6 @@ public class ProjectDescriptionValidator extends BaseValidator {
       baseAction.getInvalidFields().put("input-project.description", InvalidFieldsMessages.EMPTYFIELD);
     }
 
-    if (!this.isValidString(project.getShortName()) && this.wordCount(project.getShortName()) <= 30) {
-      this.addMessage(baseAction.getText("projectDescription.action.shortName"));
-      baseAction.getInvalidFields().put("input-project.shortName", InvalidFieldsMessages.EMPTYFIELD);
-    }
 
     if (!this.isValidString(project.getOriginalDonor()) && this.wordCount(project.getOriginalDonor()) <= 100) {
       this.addMessage(baseAction.getText("projectDescription.action.originalDonor"));

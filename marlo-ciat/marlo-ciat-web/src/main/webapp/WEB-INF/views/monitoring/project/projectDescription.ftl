@@ -79,13 +79,7 @@
             [#-- Project Description --]
             <div class="form-group">
               [@customForm.textArea name="project.description" i18nkey="projectDescription.description" required=true className="project-title" editable=editable && action.hasPermission("title") /]
-            </div>
-            <div class="form-group row">  
-              [#-- Short name --]
-              <div class="col-md-6">
-                [@customForm.input name="project.shortName" i18nkey="projectDescription.shortName" type="text" disabled=!editable  required=true editable=editable /]
-              </div>                            
-            </div>
+            </div>            
             <div class="form-group row">  
               [#-- Start Date --]
               <div class="col-md-4">
@@ -109,19 +103,8 @@
                 [#if editable]<div class="searchUser button-blue button-float">[@s.text name="form.buttons.searchUser" /]</div>[/#if]
               </div>
             </div>
-            [#-- Original Donor --]
-            <div class="form-group">
-              [@customForm.input name="project.originalDonor" i18nkey="projectDescription.originalDonor" type="text" required=true  editable=editable/]
-            </div>
-            [#-- Customer Donor --]
-            <div class="form-group">
-              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=false  editable=editable/]
-            </div>
-            [#-- Total Amount --]
-            <div class="form-group">
-              [@customForm.input name="project.totalAmount" className="amount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
-            </div>
-            [#-- Funding source --]
+            
+             [#-- Funding source --]
             <div class="form-group ">
               <label>[@s.text name="projectDescription.fundingSource" /]<span class="red">*</span></label>
               <div class="borderBox fundingSourceList" listname="project.fundingSources">
@@ -138,6 +121,21 @@
               </div>
               [/#if]
             </div> 
+            
+            
+            [#-- Original Donor --]
+            <div class="form-group">
+              [@customForm.input name="project.originalDonor" i18nkey="projectDescription.originalDonor" type="text" required=true  editable=editable/]
+            </div>
+            [#-- Customer Donor --]
+            <div class="form-group">
+              [@customForm.input name="project.directDonor" i18nkey="projectDescription.customerDonor" type="text" required=false  editable=editable/]
+            </div>
+            [#-- Total Amount --]
+            <div class="form-group">
+              [@customForm.input name="project.totalAmount" className="amount" i18nkey="projectDescription.totalAmount" type="text" required=true  editable=editable/]
+            </div>
+           
             
             [#-- LOCATION INFORMATION --]
             <h4 class="headTitle">Location information</h4> 

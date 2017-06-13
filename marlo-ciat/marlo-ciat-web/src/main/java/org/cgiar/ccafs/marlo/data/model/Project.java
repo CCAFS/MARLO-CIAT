@@ -46,11 +46,6 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private String name;
 
-
-  @Expose
-  private String shortName;
-
-
   @Expose
   private Date startDate;
 
@@ -163,15 +158,14 @@ public class Project implements java.io.Serializable, IAuditLog {
 
 
   public Project(User modifiedBy, User contactPerson, User projectLeader, User createdBy, ProjectStatus projectStatus,
-    String name, String shortName, Date startDate, Date endDate, boolean active, Date activeSince,
-    String modificationJustification, Set<ProjectOutput> projectOutputs) {
+    String name, Date startDate, Date endDate, boolean active, Date activeSince, String modificationJustification,
+    Set<ProjectOutput> projectOutputs) {
     this.modifiedBy = modifiedBy;
     this.contactPerson = contactPerson;
     this.projectLeader = projectLeader;
     this.createdBy = createdBy;
     this.projectStatus = projectStatus;
     this.name = name;
-    this.shortName = shortName;
     this.startDate = startDate;
     this.endDate = endDate;
     this.active = active;
@@ -357,10 +351,6 @@ public class Project implements java.io.Serializable, IAuditLog {
 
   public String getsGlobal() {
     return sGlobal;
-  }
-
-  public String getShortName() {
-    return shortName;
   }
 
 
@@ -555,9 +545,6 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.sGlobal = sGlobal;
   }
 
-  public void setShortName(String shortName) {
-    this.shortName = shortName;
-  }
 
   public void setsRegion(String sRegion) {
     this.sRegion = sRegion;
