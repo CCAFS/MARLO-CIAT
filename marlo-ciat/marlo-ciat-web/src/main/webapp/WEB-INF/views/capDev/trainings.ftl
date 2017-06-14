@@ -83,6 +83,7 @@
 				    <th style="width: 7%">Items</th>
 				  </tr>
 				  
+				  [if capDevs?has_content]
 				  [#list capDevs as i]
 					  <tr>
 					    <td>${i.id}</td>
@@ -105,6 +106,8 @@
 					    </td>
 					  </tr>
 				  [/#list]
+
+				  [/#if]
 				</table>
 			</div>
 		</div>
