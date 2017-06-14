@@ -86,6 +86,7 @@ public class DeliverableListAction extends BaseAction {
     deliverable.setProject(project);
     deliverable.setProjectStatus(new ProjectStatus(new Long(2), true));
 
+
     DeliverableCrosscutingTheme deliverableCrosscutingTheme = new DeliverableCrosscutingTheme();
 
     deliverableCrosscutingTheme.setActive(true);
