@@ -15,7 +15,7 @@
 		<action name="{center}/addCapdev"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentAction"
 			method="add">
-			<result name="input">/WEB-INF/views/capDev/trainings.ftl
+			<result name="input">/WEB-INF/views/capDev/capdevList.ftl
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">${centerSession}/detailCapdev</param>
