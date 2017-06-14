@@ -348,7 +348,7 @@
 						<div class="pull-right">
 							<button type="button" class="" aria-label="Left Align" >
 								
-								<a class="addButton" href="[@s.url action='template/dowmloadFile' /] ">[@s.text name="Download Template" /]</a> 
+								<a class="addButton" href="[@s.url action='${centerSession}/downloadFile' /] ">[@s.text name="Download Template" /]</a> 
 							</button>
 						</div>
 					</div>

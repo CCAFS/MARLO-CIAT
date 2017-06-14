@@ -60,12 +60,17 @@ public class ParticipantsAction extends BaseAction {
       final Cell cell = row.createCell(i);
       cell.setCellValue(HEAD_TEMPLATE[i]);
 
+
     }
 
-    // final FileOutputStream fileOut;
+    for (int i = 0; i < HEAD_TEMPLATE.length; i++) {
+      participants.autoSizeColumn(i);
+
+
+    }
+
 
     try {
-      // fileOut = new FileOutputStream("C:/Users/logonzalez/Downloads/workbook.xlsx");
       final ByteArrayOutputStream fileOut = new ByteArrayOutputStream();
       wb.write(fileOut);
       wb.close();

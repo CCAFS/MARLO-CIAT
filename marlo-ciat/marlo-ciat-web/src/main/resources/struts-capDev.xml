@@ -28,9 +28,8 @@
 			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl
 			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">${centerSession}/detailCapdev</param>
+				<param name="actionName">${centerSession}/capdev</param>
 				<param name="capDevID">${capDevID}</param>
-				
 				<param name="edit">true</param>
 			</result>
 		</action>
@@ -41,6 +40,17 @@
 			<result name="input">/WEB-INF/views/capDev/newDeliverable.ftl
 			</result>
 			<result type="freemarker" name="success">/WEB-INF/views/capDev/newDeliverable.ftl
+			</result>
+		</action>
+		
+		<action name="{center}/downloadFile"
+			class="org.cgiar.ccafs.marlo.action.capdev.ParticipantsAction"
+			method="dowmloadTemplate">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="participants.xlsx"</param>
+				<param name="bufferSize">4096</param>
 			</result>
 		</action>
 		

@@ -64,8 +64,7 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   private static final long serialVersionUID = 1L;
 
-  private static final String[] HEAD_TEMPLATE = {"Code", "Name", "Last Name", "Gender", "Citizenship",
-    "Country of residence", "Highest degree", "Institution", "email", "Reference", "Fellowship"};
+
   private int capDevID;
   private long capdevId;
   private CapacityDevelopment capdev;
