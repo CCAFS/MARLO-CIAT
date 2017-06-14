@@ -143,7 +143,21 @@
       </result>
     </action>
     
+    <action name="outputRequest"
+      class="org.cgiar.ccafs.marlo.action.json.monitoring.project.OuputRequestAction">
+      <result type="json">
+        <param name="noCache">true</param>
+        <param name="excludeNullProperties">true</param>
+      </result>
+    </action>
     
+     <action name="outcomeTree"
+      class="org.cgiar.ccafs.marlo.action.json.monitoring.outcome.OutcomeTreeAction">
+      <result type="json">
+        <param name="noCache">true</param>
+        <param name="excludeNullProperties">true</param>
+      </result>
+    </action>
     
     <action name="searchContact"
 			class="org.cgiar.ccafs.marlo.action.capdev.ContactPersonAction"

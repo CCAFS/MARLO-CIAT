@@ -34,6 +34,7 @@ import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
@@ -101,11 +102,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private IProjectFundingSourceService projectFundingSourceService;
 
-
   private IProjectCrosscutingThemeService projectCrosscutingThemeService;
 
 
   private IAuditLogService auditLogService;
+
 
   private ProjectDescriptionValidator validator;
 
@@ -113,6 +114,7 @@ public class ProjectDescriptionAction extends BaseAction {
   private ICrpService crpService;
 
   private IProjectTypeService projectTypeService;
+
 
   private ResearchArea selectedResearchArea;
 
@@ -122,10 +124,13 @@ public class ProjectDescriptionAction extends BaseAction {
 
   private List<ResearchArea> researchAreas;
 
-
   private List<ResearchProgram> researchPrograms;
+
   private List<FundingSourceType> fundingSourceTypes;
+
+
   private List<OutcomeOutputs> outputs;
+  private List<TopicOutcomes> topicOutcomes;
   private List<LocElement> regionLists;
   private List<LocElement> countryLists;
   private List<Crp> crps;
@@ -161,6 +166,13 @@ public class ProjectDescriptionAction extends BaseAction {
     this.auditLogService = auditLogService;
     this.crpService = crpService;
     this.projectTypeService = projectTypeService;
+  }
+
+  public Boolean bolValue(String value) {
+    if (value == null || value.isEmpty() || value.toLowerCase().equals("null")) {
+      return null;
+    }
+    return Boolean.valueOf(value);
   }
 
   @Override
@@ -287,6 +299,10 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public ResearchArea getSelectedResearchArea() {
     return selectedResearchArea;
+  }
+
+  public List<TopicOutcomes> getTopicOutcomes() {
+    return topicOutcomes;
   }
 
   public String getTransaction() {
@@ -419,6 +435,14 @@ public class ProjectDescriptionAction extends BaseAction {
       } else {
         this.setDraft(false);
 
+        System.out.println(String.valueOf(project.getGlobal()));
+        if (project.getGlobal() != null) {
+          project.setsGlobal(String.valueOf(project.getGlobal()));
+        }
+        if (project.getRegion() != null) {
+          project.setsRegion(String.valueOf(project.getRegion()));
+        }
+
         ProjectCrosscutingTheme crosscutingTheme;
         if (this.isEditable()) {
           crosscutingTheme = projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
@@ -458,6 +482,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
       }
 
+
       fundingSourceTypes = new ArrayList<>(
         fundingSourceService.findAll().stream().filter(fst -> fst.isActive()).collect(Collectors.toList()));
 
@@ -468,6 +493,26 @@ public class ProjectDescriptionAction extends BaseAction {
 
       this.getProgramOutputs();
 
+    }
+
+
+    topicOutcomes = new ArrayList<>();
+
+    List<ResearchTopic> researchTopics = new ArrayList<>(
+      selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
+
+
+    for (ResearchTopic researchTopic : researchTopics) {
+      TopicOutcomes outcome = new TopicOutcomes();
+      outcome.setTopic(researchTopic);
+      outcome.setOutcomes(new ArrayList<>());
+      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+        researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+      for (ResearchOutcome researchOutcome : researchOutcomes) {
+        outcome.getOutcomes().add(researchOutcome);
+      }
+
+      topicOutcomes.add(outcome);
     }
 
     String params[] =
@@ -529,17 +574,17 @@ public class ProjectDescriptionAction extends BaseAction {
       Project projectDB = projectService.getProjectById(projectID);
 
       projectDB.setName(project.getName());
-      projectDB.setShortName(project.getShortName());
       projectDB.setOcsCode(project.getOcsCode());
       projectDB.setStartDate(project.getStartDate());
       projectDB.setEndDate(project.getEndDate());
       projectDB.setExtensionDate(project.getExtensionDate());
       projectDB.setDescription(project.getDescription());
-      projectDB.setGlobal(project.isGlobal());
-      projectDB.setRegion(project.isRegion());
+      projectDB.setGlobal(this.bolValue(project.getsGlobal()));
+      projectDB.setRegion(this.bolValue(project.getsRegion()));
       projectDB.setDirectDonor(project.getDirectDonor());
       projectDB.setOriginalDonor(project.getOriginalDonor());
       projectDB.setTotalAmount(project.getTotalAmount());
+      projectDB.setSuggestedName(project.getSuggestedName());
 
       if (project.getProjectType().getId() != null) {
         ProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());
@@ -877,6 +922,10 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
+  }
+
+  public void setTopicOutcomes(List<TopicOutcomes> topicOutcomes) {
+    this.topicOutcomes = topicOutcomes;
   }
 
   public void setTransaction(String transaction) {

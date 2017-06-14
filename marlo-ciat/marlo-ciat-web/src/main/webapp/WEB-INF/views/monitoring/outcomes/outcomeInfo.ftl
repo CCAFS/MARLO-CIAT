@@ -27,21 +27,22 @@
 <span id="programSelected" class="hidden">${selectedProgram.id}</span>
 
 <section class="container">
+  
   <article class="row" id="mainInformation">
-    <div class="col-md-12">
+    <div class="col-md-offset-1 col-md-10">
       [#include "/WEB-INF/views/monitoring/outcomes/submenu-outcomes.ftl" /]
 
       [@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
       [#-- Back --]
-            <div class="pull-right">
-              <a href="[@s.url action='${centerSession}/monitoringOutcomesList'][@s.param name="programID" value=selectedProgram.id /][/@s.url]">
-                <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outcome list
-              </a>
-            </div>  
+      <div class="pull-right">
+        <a href="[@s.url action='${centerSession}/monitoringOutcomesList'][@s.param name="programID" value=selectedProgram.id /][/@s.url]">
+          <span class="glyphicon glyphicon-circle-arrow-left"></span> Back to the outcome list
+        </a>
+      </div>  
       
       [#-- Outcomes List --]
       <h3 class="headTitle text-center"></h3>
-      <div class="simpleBox col-md-12">
+      <div class="simpleBox row">
         <div class="col-md-4">
           <label for="">Research topic:  </label>
           <p>${selectedResearchTopic.researchTopic}</p>
@@ -54,8 +55,11 @@
           <label for="">Expected for ${(outcome.targetYear)!"null"}:  </label>
           <p>${(outcome.value)!"Not Applicable"}</p>
         </div>
-      </div>
-    <div class="clearfix"></div>
+      </div> 
+      [#-- View Porjects contributions --]
+      <button type="button" class="btn btn-default btn-xs pull-right outcomeProjects-${outcome.id}" data-toggle="modal" data-target="#outcomeProjectsModal">
+        <span class="glyphicon glyphicon-pushpin"></span> View Project Contributions
+      </button>
     <div class="">
       [#-- Year Tabs --]
       <ul class="nav nav-tabs" role="tablist">
@@ -106,7 +110,7 @@
             <div class="col-md-12 form-group">
             <h5 class="sectionSubTitle">Progress towards your long-term outcome target contribution:</h5>
             <div class="form-group" style="margin-top: 15px;">
-              [@customForm.textArea name="outcome.monitorings[${outcome_index}].narrative" i18nkey="Narrative for your level of progress on this long-term outcome" required=true className="outcome-narrative limitWords-100" editable=editable /]
+              [@customForm.textArea name="outcome.monitorings[${outcome_index}].narrative" i18nkey="outcome.narrative.longTerm" required=true className="outcome-narrative limitWords-100" editable=editable /]
             </div> 
             </div>
             <br />
@@ -138,12 +142,15 @@
       
          
       <div class="clearfix"></div>
-          [#-- Section Buttons & hidden inputs--]
-          [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
+      [#-- Section Buttons & hidden inputs--]
+      [#include "/WEB-INF/views/impactPathway/buttons-impactPathway-outcome.ftl" /]
     </div>
     [/@s.form] 
   </article>
 </section>
+
+[#-- Outcome Projects Popup --]
+[#include "/WEB-INF/global/macros/outcomeProjectsPopup.ftl" /]
 
 [#-- Bilateral Co-Funded Project Popup --]
 [#include "/WEB-INF/global/macros/milestonePopup.ftl"]
@@ -201,13 +208,11 @@
       <div class="col-md-3 note center" style="display:${((milestone.researchMilestone.active)!true)?string("none","block")};">
       <span>This milestone was removed from impactPathway</span>
       </div>
-      
-      
-      
     </div>
+    
     [#-- Milestone narrative --]
     <div class="form-group" style="margin-top: 15px;">
-      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="Narrative for your level of progress on this milestone" required=true className="milestone-narrative limitWords-100" editable=editable /]
+      [@customForm.textArea name="${milestoneCustomName}.narrative" i18nkey="outcome.milestone.index.narrative" required=true className="milestone-narrative limitWords-100" editable=editable /]
     </div> 
     
   </div>

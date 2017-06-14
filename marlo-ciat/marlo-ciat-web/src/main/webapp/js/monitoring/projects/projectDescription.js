@@ -30,7 +30,48 @@ function init() {
   $(".outputSelect").on("change", addOutput);
   $(".removeOutput").on("click", removeOutput);
 
-// Country item
+  // Request Outputs popup
+  $('#requestModal').on('show.bs.modal', function(event) {
+    $.noty.closeAll();
+
+    var $modal = $(this);
+    // Show Form & button
+    $modal.find('form, .requestButton').show();
+    $modal.find('.messageBlock').hide();
+
+    $modal.find('select.countriesRequest').val(null).trigger('select2:change');
+    $modal.find('select.countriesRequest').trigger('change');
+
+  });
+  $('#requestModal button.requestButton').on('click', function() {
+    var $modal = $(this).parents('.modal');
+    var outcomeID = $modal.find('select#outcomeID').val();
+    
+    if(outcomeID == -1){
+      return
+    }
+    
+    $.ajax({
+        url: baseURL + '/outputRequest.do',
+        data: $('#requestModal form').serialize(),
+        beforeSend: function(data) {
+          $modal.find('.loading').fadeIn();
+        },
+        success: function(data) {
+          console.log(data);
+          if(data.messageSent) {
+            // Hide Form & button
+            $modal.find('form, .requestButton').hide();
+            $modal.find('.messageBlock').show();
+          }
+        },
+        complete: function() {
+          $modal.find('.loading').fadeOut();
+        }
+    });
+  });
+
+  // Country item
   $(".countriesSelect").on("change", function() {
     var option = $(this).find("option:selected");
     if(option.val() != "-1") {
@@ -64,17 +105,35 @@ function init() {
   $(".button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
     var $input = $(this).parent().find('input');
-    $input.val(valueSelected);
-    $(this).parent().find("label").removeClass("radio-checked");
-    $(this).addClass("radio-checked");
+    if($(this).hasClass("radio-checked")) {
+      $(this).removeClass("radio-checked")
+      $input.val("");
+    } else {
+      $input.val(valueSelected);
+      $(this).parent().find("label").removeClass("radio-checked");
+      $(this).addClass("radio-checked");
+    }
+  });
+  
+// Is this project has a global dimension
+  $(".isGlobal .button-label").on("click", function() {
+    var valueSelected = $(this).hasClass('yes-button-label');
+    var isChecekd = $(this).hasClass('radio-checked');
+    if(!valueSelected || !isChecekd) {
+      $(".countriesBox").show("slow");
+    } else {
+      $(".countriesBox").hide("slow");
+    }
   });
 
-// Is this deliverable Open Access
+// Is this project has a regional dimension
   $(".isRegional .button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
-    if(!valueSelected) {
+    var isChecekd = $(this).hasClass('radio-checked');
+    if(!valueSelected || !isChecekd) {
       $(".regionsBox").hide("slow");
     } else {
+
       $(".regionsBox").show("slow");
     }
   });

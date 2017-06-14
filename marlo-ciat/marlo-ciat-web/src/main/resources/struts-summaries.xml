@@ -5,6 +5,24 @@
 	<package name="summaries" namespace="/summaries"
 		extends="marlo-default">
 		
+		<action name="outcomesContributions"
+      class="org.cgiar.ccafs.marlo.action.summaries.OutcomesContributionsSummaryAction">
+      <result name="success" type="stream">
+        <param name="inputName">inputStream</param>
+        <param name="contentType">${contentType}</param>
+        <param name="contentDisposition">filename="${fileName}"</param>
+      </result>
+    </action>
+		
+		<action name="impactPathwayOutcomes"
+      class="org.cgiar.ccafs.marlo.action.summaries.ImpactPathwayOutcomesSummaryAction">
+      <result name="success" type="stream">
+        <param name="inputName">inputStream</param>
+        <param name="contentType">${contentType}</param>
+        <param name="contentDisposition">filename="${fileName}"</param>
+      </result>
+    </action>
+    
 		<action name="impactPathwaySubmissions"
       class="org.cgiar.ccafs.marlo.action.summaries.ImpactSubmissionSummaryAction">
       <result name="success" type="stream">

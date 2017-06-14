@@ -41,28 +41,21 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private Long id;
 
-  /**
-   * The impact description text.
-   */
   @Expose
   private String description;
 
 
-  /**
-   * The research impact target year.
-   */
   @Expose
   private Integer targetYear;
 
-  /**
-   * The research Program to which this research impact relates to.
-   */
+
   @Expose
   private boolean active;
 
 
   @Expose
   private Date activeSince;
+
 
   @Expose
   private User createdBy;
@@ -78,13 +71,16 @@ public class ResearchImpact implements Serializable, IAuditLog {
   @Expose
   private ResearchProgram researchProgram;
 
-
   @Expose
   private String color;
 
 
   @Expose
   private String shortName;
+
+  @Expose
+  private ResearchImpactStatement researchImpactStatement;
+
 
   private Set<ResearchOutcome> researchOutcomes = new HashSet<ResearchOutcome>(0);
 
@@ -99,7 +95,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
   private List<ResearchImpactBeneficiary> beneficiaries;
 
   private String objectiveValue;
-
 
   private List<String> objectiveValueText;
 
@@ -124,7 +119,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
     this.researchProgram = researchProgram;
   }
 
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -147,6 +141,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return true;
   }
 
+
   public Date getActiveSince() {
     return activeSince;
   }
@@ -154,6 +149,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public List<ResearchImpactBeneficiary> getBeneficiaries() {
     return beneficiaries;
   }
+
 
   public String getColor() {
     return color;
@@ -163,9 +159,11 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return createdBy;
   }
 
+
   public String getDescription() {
     return description;
   }
+
 
   /**
    * @return the id
@@ -174,7 +172,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public Long getId() {
     return id;
   }
-
 
   @Override
   public String getLogDeatil() {
@@ -191,7 +188,6 @@ public class ResearchImpact implements Serializable, IAuditLog {
   public User getModifiedBy() {
     return modifiedBy;
   }
-
 
   public List<ResearchObjective> getObjectives() {
     return objectives;
@@ -213,20 +209,22 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return null;
   }
 
-
   public String getObjectiveValue() {
     return objectiveValue;
   }
+
 
   public Set<ResearchImpactBeneficiary> getResearchImpactBeneficiaries() {
     return researchImpactBeneficiaries;
   }
 
-
   public Set<ResearchImpactObjective> getResearchImpactObjectives() {
     return researchImpactObjectives;
   }
 
+  public ResearchImpactStatement getResearchImpactStatement() {
+    return researchImpactStatement;
+  }
 
   /**
    * @return the researchOutcomes
@@ -235,6 +233,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return researchOutcomes;
   }
 
+
   /**
    * @return the researchProgram
    */
@@ -242,10 +241,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return researchProgram;
   }
 
-
   public String getShortName() {
     return shortName;
   }
+
 
   /**
    * @return the targetYear
@@ -254,6 +253,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     return targetYear;
   }
 
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -261,6 +261,7 @@ public class ResearchImpact implements Serializable, IAuditLog {
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
+
 
   @Override
   public boolean isActive() {
@@ -275,11 +276,9 @@ public class ResearchImpact implements Serializable, IAuditLog {
     this.activeSince = activeSince;
   }
 
-
   public void setBeneficiaries(List<ResearchImpactBeneficiary> beneficiaries) {
     this.beneficiaries = beneficiaries;
   }
-
 
   public void setColor(String color) {
     this.color = color;
@@ -289,9 +288,11 @@ public class ResearchImpact implements Serializable, IAuditLog {
     this.createdBy = createdBy;
   }
 
+
   public void setDescription(String description) {
     this.description = description;
   }
+
 
   /**
    * @param id the id to set
@@ -322,6 +323,10 @@ public class ResearchImpact implements Serializable, IAuditLog {
 
   public void setResearchImpactObjectives(Set<ResearchImpactObjective> researchImpactObjectives) {
     this.researchImpactObjectives = researchImpactObjectives;
+  }
+
+  public void setResearchImpactStatement(ResearchImpactStatement researchImpactStatement) {
+    this.researchImpactStatement = researchImpactStatement;
   }
 
   /**

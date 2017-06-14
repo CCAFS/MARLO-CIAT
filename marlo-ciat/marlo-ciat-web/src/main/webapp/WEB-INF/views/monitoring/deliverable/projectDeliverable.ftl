@@ -122,7 +122,7 @@
             [#-- Outputs --]
               <div class="fullPartBlock">      
                 <div class="output panel tertiary" listname="deliverable.outputs">
-                  <div class="panel-head"><label for="">[@customForm.text name="deliverable.outputs" readText=!editable /]</label></div> 
+                  <div class="panel-head"><label for="">[@customForm.text name="deliverable.outputs" readText=!editable /]<span class="red">*</span></label></div> 
                   <div class="panel-body"> 
                     <ul id="outputsBlock" class="list outputList">
                     [#if  deliverable.outputs?has_content]  
@@ -134,7 +134,7 @@
                     [/#if]  
                     </ul>
                     [#if editable]
-                      [@customForm.select name="" label="" disabled=!canEdit i18nkey="" listName="outputs" keyFieldName="id"  displayFieldName="title" className="outputSelect" value="" /]
+                      [@customForm.select name="" label="" disabled=!canEdit i18nkey="" listName="outputs" keyFieldName="id"  displayFieldName="composedName" className="outputSelect" value="" /]
                     [/#if] 
                   </div>
                 </div> 

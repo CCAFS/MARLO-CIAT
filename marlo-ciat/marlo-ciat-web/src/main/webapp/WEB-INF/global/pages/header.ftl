@@ -48,7 +48,7 @@
     [#if !(avoidHeader!false)]
       <header class="clearfix">
         [#-- MARLO Admin Menu --]
-        [#-- include "/WEB-INF/global/pages/superadmin-menu.ftl" /--]
+        [#include "/WEB-INF/global/pages/superadmin-menu.ftl" /]
         
         <div class="container">
           <div id="marlo-logo" class="animated fadeIn">

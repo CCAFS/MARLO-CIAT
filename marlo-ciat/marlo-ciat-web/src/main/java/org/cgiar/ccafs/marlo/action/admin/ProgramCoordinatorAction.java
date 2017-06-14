@@ -54,6 +54,7 @@ public class ProgramCoordinatorAction extends BaseAction {
     super(config);
     this.userService = userService;
     this.roleService = roleService;
+    this.centerService = centerService;
   }
 
   public ResearchCenter getLoggedCenter() {
@@ -70,12 +71,12 @@ public class ProgramCoordinatorAction extends BaseAction {
     loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
-    long coorRoleId = Long.parseLong(this.getParameterValue(APConstants.CENTER_COORD_ROLE));
+    System.out.println("ROLE ----------- " + this.getSession().get(APConstants.CENTER_COORD_ROLE).toString());
+    long coorRoleId = Long.parseLong(this.getSession().get(APConstants.CENTER_COORD_ROLE).toString());
 
     Role role = roleService.getRoleById(coorRoleId);
 
-    userRoles = new ArrayList<>(
-      userRoleService.findAll().stream().filter(ur -> ur.getRole().equals(role)).collect(Collectors.toList()));
+    userRoles = new ArrayList<>(role.getUserRoles());
 
     String params[] = {loggedCenter.getAcronym() + ""};
     this.setBasePermission(this.getText(Permission.CENTER_ADMIN_BASE_PERMISSION, params));

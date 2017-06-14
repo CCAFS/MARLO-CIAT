@@ -21,8 +21,8 @@
 [@utils.helpInfos hlpInfo="researchOutcomes.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
-  <div class="container"> 
-    
+  <div class="container">
+  
     <div class="row">
       <div class="col-md-3">
         [#include "/WEB-INF/views/impactPathway/menu-impactPathway.ftl" /]
@@ -67,7 +67,7 @@
             [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=false className="outcome-statement limitWords-50" editable=editable /]
           
             <div class="row">
-              <div class="col-sm-7">[@customForm.input name="${outcomeCustomName}.shortName" i18nkey="outcome.shortName" className="limitChar-30" required=true editable=editable /]</div>       
+              <div class="col-sm-7">[@customForm.input name="${outcomeCustomName}.shortName" i18nkey="outcome.shortName" className="limitChar-30" required=false editable=editable /]</div>       
             </div> 
           </div>
           <div class="row form-group target-block">            

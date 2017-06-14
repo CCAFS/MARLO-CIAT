@@ -85,8 +85,12 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
   nodesInit.forEach(function(ele) {
     var label = ele.data("label");
-    var short = label.length > 7 ? label.substr(0, 7) + ' ... ' : label;
-    ele.data("label", short);
+    var shortLabel = label;
+    if(label.length > 7){
+      shortLabel=label.substr(0, 7) + ' ... ';
+    }
+    
+    ele.data("label", shortLabel);
     ele.css('background-color', ele.data('color'));
     if(ele.data('type') === 'F') {
       colorFlagship = ele.data('color');
@@ -460,6 +464,7 @@ $("#overlay .btn").on("click", function() {
   $("#impactGraphic-content").dialog({
       resizable: false,
       width: '90%',
+      closeText: "",
       modal: true,
       height: $(window).height() * 0.80,
       show: {
