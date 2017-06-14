@@ -99,6 +99,30 @@ $dialogContent.find(".searchcontact-content input").on("keyup", searchUsersEvent
 }
 
 
+//event to download participants template 
+
+$(".dowmloadTemplate").on("click", function(){
+  $.ajax({
+          'url': baseURL + '/template/dowmloadTemplate',
+          
+          beforeSend: function() {
+            console.log("estoy preparando todo")
+          },
+          success: function() {
+             console.log("todo salio bien")
+
+          },
+          error: function() {
+             console.log("Pailas algo paso")
+          },
+
+          complete: function() {
+             console.log("Listo papito!")
+          }
+        });
+});
+
+
 
 
 
@@ -309,6 +333,9 @@ $(".removeDiscipline").on("click", removeDiscipline);
 
   //event remove target group
   $(".removetargetGroup").on("click", removeTargetGroup);
+
+
+
   
 
 

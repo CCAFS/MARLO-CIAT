@@ -215,7 +215,7 @@
 				<div class="col-md-12 newCapdevField">
 					<div class="col-md-6 ">
 						<!-- [@customForm.select name="capdev.crp.id" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="select option..."  /] -->
-						[@s.label key="capdev.form.crp " /]
+						[@s.label key="capdev.form.crp" /]
 						<select class="selectpicker" name="capdev.crp" >
 							<option value="" >select an option...</option>
 						[#list crps as crp]
@@ -347,7 +347,8 @@
 					<div class="col-md-6 ">
 						<div class="pull-right">
 							<button type="button" class="" aria-label="Left Align" >
-								Dowmload template
+								
+								<a class="addButton" href="[@s.url action='template/dowmloadFile' /] ">[@s.text name="Download Template" /]</a> 
 							</button>
 						</div>
 					</div>
@@ -371,51 +372,57 @@
 					</div>
 				</div>
 				<div class="col-md-12">
-					[@customForm.input name="" i18nkey="code" type="text" required=true /]
+					[@customForm.input name="participant.code" i18nkey="code" type="text" required=true /]
 				</div>
 				<div class="col-md-12">
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="First name" type="text" required=true /]
+						[@customForm.input name="participant.name" i18nkey="First name" type="text" required=true /]
 					</div>
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Last name" type="text" required=true /]
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Gender" type="text" required=true /]
-					</div>
-					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="citizenship" type="text" required=true /]
+						[@customForm.input name="participant.lastName" i18nkey="Last name" type="text" required=true /]
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Country of residence" type="text" required=true /]
+						<div>
+							[@s.label key="Gender" /]
+						</div>
+						<select class="selectpicker" name="participant.gender">
+							<option value="1" >Male</option>
+						  	<option value="2">Female</option>
+						</select>
 					</div>
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Highest degree" type="text" required=true /]
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Institution" type="text" required=true /]
-					</div>
-					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Email" type="text" required=true /]
+						[@customForm.input name="participant.citizenship" i18nkey="citizenship" type="text" required=true /]
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Supervisor" type="text" required=true /]
+						[@customForm.input name="participant.countryOfResidence" i18nkey="Country of residence" type="text" required=true /]
 					</div>
 					<div class="col-md-6">
-						[@customForm.input name="" i18nkey="Fellowship" type="text"  required=true /]
+						[@customForm.input name="participant.highestDegree" i18nkey="Highest degree" type="text" required=true /]
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-6">
+						[@customForm.input name="participant.institution" i18nkey="Institution" type="text" required=true /]
+					</div>
+					<div class="col-md-6">
+						[@customForm.input name="participant.email" i18nkey="Email" type="text" required=true /]
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-6">
+						[@customForm.input name="participant.supervisor" i18nkey="Supervisor" type="text" required=true /]
+					</div>
+					<div class="col-md-6">
+						[@customForm.input name="participant.fellowship" i18nkey="Fellowship" type="text" /]
 					</div>
 				</div>
 			</div>
 
-			<!-- Deliverables -->
+			<!-- supporting documents -->
 			<div class="row">
 				<div class="col-md-12 newCapdevField deliverablesTitle">
 					Supporting Documents

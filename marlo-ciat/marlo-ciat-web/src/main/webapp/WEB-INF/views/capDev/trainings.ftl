@@ -86,7 +86,7 @@
 				  [#list capDevs as i]
 					  <tr>
 					    <td>${i.id}</td>
-					    <td><a  href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']${i.id?c}[/@s.param][/@s.url]">${i.title}</a></td> 
+					    <td><a  href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capDevID']${i.id?c}[/@s.param][/@s.url]">${i.title}</a></td> 
 					    <td>${i.capdevType.name}</td>
 					    <td>--</td>
 					    <td>--</td>

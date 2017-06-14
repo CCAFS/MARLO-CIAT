@@ -43,17 +43,8 @@
 			<result type="freemarker" name="success">/WEB-INF/views/capDev/newDeliverable.ftl
 			</result>
 		</action>
-
-
-
 		
-
-
-
-
-
-
-
+		
 	</package>
 
 </struts>
