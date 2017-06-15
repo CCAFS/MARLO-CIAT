@@ -17,7 +17,11 @@ package org.cgiar.ccafs.marlo.action.summaries;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
+import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.service.IProgramService;
@@ -30,8 +34,16 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -45,7 +57,7 @@ import org.pentaho.reporting.engine.classic.core.MasterReport;
 import org.pentaho.reporting.engine.classic.core.ReportFooter;
 import org.pentaho.reporting.engine.classic.core.SubReport;
 import org.pentaho.reporting.engine.classic.core.TableDataFactory;
-import org.pentaho.reporting.engine.classic.core.modules.output.table.html.HtmlReportUtil;
+import org.pentaho.reporting.engine.classic.core.modules.output.table.xls.ExcelReportUtil;
 import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
@@ -63,12 +75,14 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   // Streams
   InputStream inputStream;
   // PDF bytes
-  private byte[] bytesPDF;
+  private byte[] bytesExcel;
   // Services
   private IProgramService programService;
   // Params
   private ResearchProgram researchProgram;
   private long startTime;
+  // Store parters budgets HashMap<Outcome, ProjectCount>
+  HashMap<ResearchOutcome, Integer> allOutcomesProjects = new HashMap<ResearchOutcome, Integer>();
 
   @Inject
   public OutcomesContributionsSummaryAction(APConfig config, IProgramService programService) {
@@ -115,9 +129,9 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
 
       // Subreport Description
       this.fillSubreport((SubReport) hm.get("details"), "details");
-      HtmlReportUtil.createStreamHTML(masterReport, os);
-      // PdfReportUtil.createPDF(masterReport, os);
-      bytesPDF = os.toByteArray();
+      this.fillSubreport((SubReport) hm.get("outcomesProjects"), "outcomesProjects");
+      ExcelReportUtil.createXLSX(masterReport, os);
+      bytesExcel = os.toByteArray();
       os.close();
     } catch (Exception e) {
       LOG.error("Error generating PDF " + e.getMessage());
@@ -139,6 +153,9 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
     switch (query) {
       case "details":
         model = this.getOutcomesDetailsTableModel();
+        break;
+      case "outcomesProjects":
+        model = this.getOutcomesProjectsTableModel();
         break;
     }
     sdf.addTable(query, model);
@@ -199,17 +216,17 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   }
 
   public byte[] getBytesPDF() {
-    return bytesPDF;
+    return bytesExcel;
   }
 
   @Override
   public int getContentLength() {
-    return bytesPDF.length;
+    return bytesExcel.length;
   }
 
   @Override
   public String getContentType() {
-    return "text/html";
+    return "application/xlsx";
   }
 
   private File getFile(String fileName) {
@@ -224,7 +241,7 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
     StringBuffer fileName = new StringBuffer();
     fileName.append("Outcomes_Contributions_Report-");
     fileName.append(new SimpleDateFormat("yyyyMMdd-HHmm").format(new Date()));
-    fileName.append(".pdf");
+    fileName.append(".xlsx");
     return fileName.toString();
 
   }
@@ -250,7 +267,7 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   @Override
   public InputStream getInputStream() {
     if (inputStream == null) {
-      inputStream = new ByteArrayInputStream(bytesPDF);
+      inputStream = new ByteArrayInputStream(bytesExcel);
     }
     return inputStream;
   }
@@ -262,9 +279,9 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
    */
   private TypedTableModel getMasterTableModel() {
     // Initialization of Model
-    TypedTableModel model =
-      new TypedTableModel(new String[] {"current_date", "imageUrl", "research_program_id", "center"},
-        new Class[] {String.class, String.class, Long.class, String.class});
+    TypedTableModel model = new TypedTableModel(
+      new String[] {"current_date", "imageUrl", "research_program_id", "center", "researchProgramTitle"},
+      new Class[] {String.class, String.class, Long.class, String.class, String.class});
     String currentDate = "";
     // Get datetime
     ZonedDateTime timezone = ZonedDateTime.now();
@@ -277,26 +294,110 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
     String center = null;
     center = researchProgram.getResearchArea().getResearchCenter().getName();
 
-    model.addRow(new Object[] {currentDate, imageUrl, researchProgram.getId(), center});
+    String researchProgramTitle = null;
+    if (researchProgram.getName() != null && !researchProgram.getName().trim().isEmpty()) {
+      researchProgramTitle = researchProgram.getName();
+    }
+
+    model.addRow(new Object[] {currentDate, imageUrl, researchProgram.getId(), center, researchProgramTitle});
     return model;
   }
 
   private TypedTableModel getOutcomesDetailsTableModel() {
-    TypedTableModel model =
-      new TypedTableModel(new String[] {"researchProgram", "researchTopic", "researchOutcome", "researchImpact"},
-        new Class[] {String.class, String.class, String.class, String.class});
+    TypedTableModel model = new TypedTableModel(new String[] {"researchTopicTitle", "researchOutcomeTitle",
+      "researchImpactTitle", "projectOutputs", "projectDeliverables"},
+      new Class[] {String.class, String.class, String.class, String.class, String.class});
 
-    String programImpact = null;
     for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
       .collect(Collectors.toList())) {
       for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
 
-        // researchOutcome.getResearchImpact().getId() + " - " + researchOutcome.getResearchImpact().getShortName()
-        model.addRow(new Object[] {researchProgram.getId() + " - " + researchProgram.getName(),
-          researchTopic.getId() + " - " + researchTopic.getShortName(),
-          researchOutcome.getId() + " - " + researchOutcome.getShortName()});
+        String researchTopicTitle = null;
+        if (researchTopic.getResearchTopic() != null && !researchTopic.getResearchTopic().trim().isEmpty()) {
+          researchTopicTitle = researchTopic.getResearchTopic();
+        }
+
+        String researchOutcomeTitle = null;
+        researchOutcomeTitle = researchOutcome.getComposedName()
+          + (researchOutcome.getShortName() != null && !researchOutcome.getShortName().trim().isEmpty()
+            ? " (" + researchOutcome.getShortName() + ")" : "");
+
+        String researchImpactTitle = null;
+        if (researchOutcome.getResearchImpact() != null && researchOutcome.getResearchImpact().getDescription() != null
+          && !researchOutcome.getResearchImpact().getDescription().trim().isEmpty()) {
+          researchImpactTitle = researchOutcome.getResearchImpact().getDescription();
+        }
+        List<Project> projects = new ArrayList<>();
+        // Project Outputs
+        String projectOutputs = "";
+        for (ResearchOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
+          .collect(Collectors.toList())) {
+          for (ProjectOutput projectOutput : researchOutput.getProjectOutputs().stream().filter(po -> po.isActive())
+            .collect(Collectors.toList())) {
+            if (projectOutputs.isEmpty()) {
+              projectOutputs =
+                "P" + projectOutput.getProject().getId() + " - " + projectOutput.getResearchOutput().getComposedName();
+            } else {
+              projectOutputs += "\nP" + projectOutput.getProject().getId() + " - "
+                + projectOutput.getResearchOutput().getComposedName();
+            }
+            projects.add(projectOutput.getProject());
+          }
+        }
+        if (projectOutputs.trim().isEmpty()) {
+          projectOutputs = null;
+        }
+
+        // Project Deliverables
+        HashSet<Project> hashProjects = new HashSet<>();
+        hashProjects.addAll(projects);
+        projects = new ArrayList<>(hashProjects);
+
+        String projectDeliverables = "";
+        for (Project project : projects) {
+          for (Deliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
+            .collect(Collectors.toList())) {
+            if (projectDeliverables.isEmpty()) {
+              projectDeliverables = "P" + project.getId() + " - " + "D" + deliverable.getId() + ": "
+                + (deliverable.getName() != null && !deliverable.getName().trim().isEmpty() ? deliverable.getName()
+                  : "");
+            } else {
+              projectDeliverables += "\nP" + project.getId() + " - " + "D" + deliverable.getId() + ": "
+                + (deliverable.getName() != null && !deliverable.getName().trim().isEmpty() ? deliverable.getName()
+                  : "");
+            }
+          }
+        }
+        if (projectDeliverables.trim().isEmpty()) {
+          projectDeliverables = null;
+        }
+
+        model.addRow(new Object[] {researchTopicTitle, researchOutcomeTitle, researchImpactTitle, projectOutputs,
+          projectDeliverables});
+
+        // Increment outcomes Projects count
+        if (allOutcomesProjects.containsKey(researchOutcome)) {
+          allOutcomesProjects.put(researchOutcome, allOutcomesProjects.get(researchOutcome) + projects.size());
+        } else {
+          if (projects.size() > 0) {
+            allOutcomesProjects.put(researchOutcome, projects.size());
+          }
+
+        }
       }
+    }
+    return model;
+  }
+
+  private TypedTableModel getOutcomesProjectsTableModel() {
+    TypedTableModel model =
+      new TypedTableModel(new String[] {"outcomeTitle", "projectCount"}, new Class[] {String.class, String.class});
+    // Sort allOutcomesProjects per count
+    allOutcomesProjects = this.sortByComparator(allOutcomesProjects);
+
+    for (ResearchOutcome researchOutcome : allOutcomesProjects.keySet()) {
+      model.addRow(new Object[] {"OC" + researchOutcome.getId().toString(), allOutcomesProjects.get(researchOutcome)});
     }
     return model;
   }
@@ -321,11 +422,42 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   }
 
   public void setBytesPDF(byte[] bytesPDF) {
-    this.bytesPDF = bytesPDF;
+    this.bytesExcel = bytesPDF;
   }
 
   public void setResearchProgram(ResearchProgram researchProgram) {
     this.researchProgram = researchProgram;
+  }
+
+  /**
+   * method that sort a map list alphabetical
+   * 
+   * @param unsortMap - map to sort
+   * @return
+   */
+  private HashMap<ResearchOutcome, Integer> sortByComparator(HashMap<ResearchOutcome, Integer> unsortMap) {
+
+    // Convert Map to List
+    List<HashMap.Entry<ResearchOutcome, Integer>> list =
+      new LinkedList<HashMap.Entry<ResearchOutcome, Integer>>(unsortMap.entrySet());
+
+    // Sort list with comparator, to compare the Map values
+    Collections.sort(list, new Comparator<HashMap.Entry<ResearchOutcome, Integer>>() {
+
+      @Override
+      public int compare(HashMap.Entry<ResearchOutcome, Integer> o1, HashMap.Entry<ResearchOutcome, Integer> o2) {
+
+        return (o2.getValue().compareTo(o1.getValue()));
+      }
+    });
+
+    // Convert sorted map back to a Map
+    HashMap<ResearchOutcome, Integer> sortedMap = new LinkedHashMap<ResearchOutcome, Integer>();
+    for (Iterator<HashMap.Entry<ResearchOutcome, Integer>> it = list.iterator(); it.hasNext();) {
+      HashMap.Entry<ResearchOutcome, Integer> entry = it.next();
+      sortedMap.put(entry.getKey(), entry.getValue());
+    }
+    return sortedMap;
   }
 
 }
