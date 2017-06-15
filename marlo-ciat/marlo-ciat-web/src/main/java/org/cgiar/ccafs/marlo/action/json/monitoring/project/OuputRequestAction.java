@@ -73,7 +73,7 @@ public class OuputRequestAction extends BaseAction {
     String outputName = this.outputName;
 
     // message subject
-    subject = "[MiLE-" + this.getCenterSession().toUpperCase() + "] Output verification - ";
+    subject = "[MARLO -" + this.getCenterSession().toUpperCase() + "] Output verification - " + "P";
     // Message content
     message.append(this.getCurrentUser().getFirstName() + " " + this.getCurrentUser().getLastName() + " ");
     message.append("(" + this.getCurrentUser().getEmail() + ") ");
