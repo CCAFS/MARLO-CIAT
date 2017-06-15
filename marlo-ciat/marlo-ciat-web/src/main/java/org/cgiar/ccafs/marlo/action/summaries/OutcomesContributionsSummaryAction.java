@@ -129,7 +129,10 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
 
       // Subreport Description
       this.fillSubreport((SubReport) hm.get("details"), "details");
+      // Sort allOutcomesProjects per count
+      allOutcomesProjects = this.sortByComparator(allOutcomesProjects);
       this.fillSubreport((SubReport) hm.get("outcomesProjects"), "outcomesProjects");
+      this.fillSubreport((SubReport) hm.get("graphic"), "graphic");
       ExcelReportUtil.createXLSX(masterReport, os);
       bytesExcel = os.toByteArray();
       os.close();
@@ -155,6 +158,9 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
         model = this.getOutcomesDetailsTableModel();
         break;
       case "outcomesProjects":
+        model = this.getOutcomesProjectsTableModel();
+        break;
+      case "graphic":
         model = this.getOutcomesProjectsTableModel();
         break;
     }
@@ -391,13 +397,16 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   }
 
   private TypedTableModel getOutcomesProjectsTableModel() {
-    TypedTableModel model =
-      new TypedTableModel(new String[] {"outcomeTitle", "projectCount"}, new Class[] {String.class, String.class});
-    // Sort allOutcomesProjects per count
-    allOutcomesProjects = this.sortByComparator(allOutcomesProjects);
+    TypedTableModel model = new TypedTableModel(new String[] {"outcomeID", "outcomeTitle", "projectCount"},
+      new Class[] {String.class, String.class, String.class});
 
     for (ResearchOutcome researchOutcome : allOutcomesProjects.keySet()) {
-      model.addRow(new Object[] {"OC" + researchOutcome.getId().toString(), allOutcomesProjects.get(researchOutcome)});
+      String researchOutcomeTitle = null;
+      researchOutcomeTitle = researchOutcome.getComposedName()
+        + (researchOutcome.getShortName() != null && !researchOutcome.getShortName().trim().isEmpty()
+          ? " (" + researchOutcome.getShortName() + ")" : "");
+      model.addRow(
+        new Object[] {"OC" + researchOutcome.getId(), researchOutcomeTitle, allOutcomesProjects.get(researchOutcome)});
     }
     return model;
   }
