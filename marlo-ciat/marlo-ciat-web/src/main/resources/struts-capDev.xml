@@ -8,7 +8,7 @@
 		<action name="{center}/capdev"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentAction"
 			method="list">
-			<result type="freemarker" name="success">/WEB-INF/views/capDev/trainings.ftl
+			<result type="freemarker" name="success">/WEB-INF/views/capDev/capdevList.ftl
 			</result>
 		</action>
 
@@ -42,7 +42,7 @@
 			<result type="freemarker" name="success">/WEB-INF/views/capDev/newDeliverable.ftl
 			</result>
 		</action>
-		
+
 		<action name="{center}/downloadFile"
 			class="org.cgiar.ccafs.marlo.action.capdev.ParticipantsAction"
 			method="dowmloadTemplate">
@@ -53,8 +53,17 @@
 				<param name="bufferSize">4096</param>
 			</result>
 		</action>
-		
-		
+
+		<action name="{center}/uploadFile"
+			class="org.cgiar.ccafs.marlo.action.capdev.ParticipantsAction"
+			method="uploadParticipantsFile">
+			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/uploadFile</param>
+			</result>
+		</action>
+
+
 	</package>
 
 </struts>
