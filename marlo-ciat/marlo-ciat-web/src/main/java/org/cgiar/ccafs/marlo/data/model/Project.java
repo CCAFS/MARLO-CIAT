@@ -200,6 +200,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     return activeSince;
   }
 
+  public String getComposedName() {
+    return "P" + this.id + "- " + (this.name != null ? this.name : "title not defined");
+  }
+
   public User getContactPerson() {
     return contactPerson;
   }
