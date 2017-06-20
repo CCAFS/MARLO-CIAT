@@ -14,52 +14,24 @@
 	<div class="container">
 		<div class="row titleContainer">
 			<div class="col-md-12">
-				<p>Capacity Development</p>
+				<p>Capacity Development Tracking Tool</p>
 			</div>
 			
 		
 		</div>
-		
-		<div class="row conventionContainer">
-			<div class="col-md-12 itemName">
-				<div class="col-md-6"> Items:</div>
-				<div class="col-md-6">Colors:</div>
-			</div>
-			<div class="col-md-12">
-				<div class="col-md-6 items">
-					<div class="row">
-						<div class="col-md-4">
-							<img src="${baseUrl}/images/global/participants.png" class="capDevIconConvention" />
-							Lista of participants
-						</div>
-						
-						<div class="col-md-4">
-							<img src="${baseUrl}/images/global/deliverable.png" class="capDevIconConvention" />
-							Deliverables
-						</div>
-						
-						<div class="col-md-4">
-							<img src="${baseUrl}/images/global/attachFiles.png" class="capDevIconConvention" />
-							Attachments
-						</div>
-						
 
-					</div>
-					
-				</div>
-				<div class="col-md-6">
-					<div class="row">
-
-						<div class="col-md-1 paintedDot">&nbsp</div>
-						<div class="col-md-5">Has the item</div>
-						<div class="col-md-1 notPaintedDot">&nbsp</div>
-						<div class="col-md-5">Does not has the item</div>
-					</div>
-					
-				</div>
-		
+		<div class="row">
+			<div class="col-md-12 capdevinfo">
+				introduction text
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-12 titleContainer">
+				Latest CAPDEV Interventions
+			</div>
+		</div>
+		
+		
 		<div class="row searchArea">
 			<div class="col-md-12">
 				<div class="pull-right">
@@ -79,8 +51,9 @@
 				    <th style="width: 7%">Type</th>
 				    <th style="width: 7%">Start date</th>
 				    <th style="width: 7%">End date</th>
-				    <th style="width: 7%">CRP</th>
-				    <th style="width: 7%">Items</th>
+				    <th style="width: 7%">Research Area</th>
+				    <th style="width: 7%">Research Program</th>
+				    <th style="width: 7%">Annexs</th>
 				  </tr>
 				  
 				  [#if capDevs?has_content]
@@ -89,20 +62,35 @@
 					    <td>${i.id}</td>
 					    <td><a  href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capDevID']${i.id?c}[/@s.param][/@s.url]">${i.title}</a></td> 
 					    <td>${i.capdevType.name}</td>
-					    <td>--</td>
-					    <td>--</td>
-					    <td>--</td>
+					    <td>${i.startDate}</td>
 					    <td>
-						    		<div class=" iconContentBox">
-						    			<img src="${baseUrl}/images/global/participants.png" class="capDevIcon" />
-						    		</div>
-						    		<div class=" iconContentBox">
-						    			<img src="${baseUrl}/images/global/deliverable.png" class="capDevIcon" />
-						    		</div>
-						    		<div class=" iconContentBox">
-						    			<img src="${baseUrl}/images/global/attachFiles.png" class="capDevIcon" />
-						    		</div>
-					    	
+					    [#if i.endDate??]
+					    	${i.endDate}
+					    [#else]
+					    	---
+					    [/#if]
+					    </td>
+					    <td>
+					    [#if i.researchArea??] 
+					    	${i.researchArea.name}
+					    [#else]
+					    	---
+					    [/#if]
+					    </td>
+					    <td>
+					    [#if i.researchProgram??]
+					    	${i.researchProgram.name}
+					    [#else]
+					    	---
+					    [/#if]
+					    </td>
+					    <td>
+				    		<div class=" iconContentBox">
+				    			<img src="${baseUrl}/images/global/participants.png" class="capDevIcon" />
+				    		</div>
+				    		<div class=" iconContentBox">
+				    			<img src="${baseUrl}/images/global/deliverable.png" class="capDevIcon" />
+				    		</div>
 					    </td>
 					  </tr>
 				  [/#list]
@@ -116,12 +104,30 @@
 				
 				<div class="buttons">
 		        	<div class="buttons-content">        
-			          	<a class="addButton" href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']-1[/@s.param][/@s.url]">[@s.text name="Add capacity development" /]</a>
+			          	<a class="addButton" href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']-1[/@s.param][/@s.url]">[@s.text name="Add item" /]</a>
 
 			          	
 			        	<div class="clearfix"></div>
 		        	</div>
     			</div>
+			</div>
+		</div>
+
+		<div class="row conventionContainer">
+			<div class="col-md-12 itemName">
+				<div class="col-md-2"> Annexs:</div>
+
+				<div class="col-md-2">
+					<img src="${baseUrl}/images/global/participants.png" class="capDevIconConvention" />
+					<div>Lista of participants</div>
+					
+				</div>
+
+				<div class="col-md-2">
+					<img src="${baseUrl}/images/global/deliverable.png" class="capDevIconConvention" />
+					<div>Supporting documents</div>
+				</div>
+				
 			</div>
 		</div>
 	 </div>

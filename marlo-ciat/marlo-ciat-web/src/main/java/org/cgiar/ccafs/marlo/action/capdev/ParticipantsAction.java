@@ -42,8 +42,6 @@ public class ParticipantsAction extends BaseAction {
   private InputStream inputStream;
 
 
-  private String fileName;
-
   @Inject
   public ParticipantsAction(APConfig config) {
     super(config);
@@ -59,16 +57,11 @@ public class ParticipantsAction extends BaseAction {
     for (int i = 0; i < HEAD_TEMPLATE.length; i++) {
       final Cell cell = row.createCell(i);
       cell.setCellValue(HEAD_TEMPLATE[i]);
-
-
     }
 
     for (int i = 0; i < HEAD_TEMPLATE.length; i++) {
       participants.autoSizeColumn(i);
-
-
     }
-
 
     try {
       final ByteArrayOutputStream fileOut = new ByteArrayOutputStream();
@@ -83,25 +76,12 @@ public class ParticipantsAction extends BaseAction {
       e.printStackTrace();
     }
 
-
     return SUCCESS;
-
-
-  }
-
-
-  public String getFileName() {
-    return fileName;
   }
 
 
   public InputStream getInputStream() {
     return inputStream;
-  }
-
-
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
   }
 
 

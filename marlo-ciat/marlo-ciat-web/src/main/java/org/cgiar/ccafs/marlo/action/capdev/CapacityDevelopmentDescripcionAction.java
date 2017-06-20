@@ -47,7 +47,9 @@ import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.ITargetGroupService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
+import org.cgiar.ccafs.marlo.utils.ReadExcelFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -84,6 +86,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private List<Long> capdevCountries;
   private List<Long> capdevRegions;
   private Participant participant;
+  private List<Participant> participantList;
+  private File uploadFile;
+  private String uploadFileName;
+  private String uploadFileContentType;
   private final ICapacityDevelopmentService capdevService;
   private final IResearchAreaService researchAreaService;
   private final IResearchProgramDAO researchProgramSercive;
@@ -97,9 +103,8 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   private final ICapdevDisciplineService capdevDisciplineService;
   private final ICapdevTargetgroupService capdevTargetgroupService;
   private final IParticipantService participantService;
-
-
   private final ICapdevParticipantService capdevParicipantService;
+  private final ReadExcelFile reader = new ReadExcelFile();
 
   final Session session = SecurityUtils.getSubject().getSession();
 
@@ -193,9 +198,13 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     return outcomes;
   }
 
-
   public Participant getParticipant() {
     return participant;
+  }
+
+
+  public List<Participant> getParticipantList() {
+    return participantList;
   }
 
   public List<Project> getProjects() {
@@ -206,13 +215,16 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     return regionsList;
   }
 
+
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
 
+
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
   }
+
 
   public List<TargetGroup> getTargetGroups() {
     return targetGroups;
@@ -221,6 +233,47 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public List<Long> getTargetGroupsSelected() {
     return targetGroupsSelected;
+  }
+
+
+  public File getUploadFile() {
+    return uploadFile;
+  }
+
+
+  public String getUploadFileContentType() {
+    return uploadFileContentType;
+  }
+
+
+  public String getUploadFileName() {
+    return uploadFileName;
+  }
+
+  public List<Participant> preloadParticipantsList(Object[][] data) {
+    participantList = new ArrayList<>();
+
+    for (int i = 0; i < reader.getTotalRows(); i++) {
+      final Participant participant = new Participant();
+      participant.setCode(Math.round((double) data[i][0]));
+      participant.setName((String) data[i][1]);
+      participant.setLastName((String) data[i][2]);
+      participant.setGender((int) (double) data[i][3]);
+      participant.setCitizenship((String) data[i][4]);
+      participant.setCountryOfResidence((String) data[i][5]);
+      participant.setHighestDegree((String) data[i][6]);
+      participant.setInstitution((String) data[i][7]);
+      participant.setEmail((String) data[i][8]);
+      participant.setReference((String) data[i][9]);
+      participant.setFellowship((String) data[i][10]);
+
+      participant.setActive(true);
+      participant.setUsersByCreatedBy(currentUser);
+
+      participantList.add(participant);
+    }
+
+    return participantList;
   }
 
 
@@ -283,6 +336,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   @Override
   public String save() {
 
+    final Object[][] data = reader.readExcelFile(uploadFile);
+    this.preloadParticipantsList(data);
+    System.out.println(participantList.size());
+
     System.out.println("category -->" + capdev.getCategory());
 
 
@@ -298,10 +355,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
     capdev.setActive(true);
     capdev.setUsersByCreatedBy(currentUser);
-    capdevService.saveCapacityDevelopment(capdev);
+    // capdevService.saveCapacityDevelopment(capdev);
 
-    this.saveParticipant(participant);
-    this.saveCapDevParticipan(participant, capdev);
+    // this.saveParticipant(participant);
+    // this.saveCapDevParticipan(participant, capdev);
 
     // this.saveCapDevCountries(capdevCountries, capdev);
     // this.saveCapDevRegions(capdevRegions, capdev);
@@ -421,7 +478,6 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     this.capdevRegions = capdevRegions;
   }
 
-
   public void setCapdevTypes(List<CapacityDevelopmentType> capdevTypes) {
     this.capdevTypes = capdevTypes;
   }
@@ -456,8 +512,14 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     this.outcomes = outcomes;
   }
 
+
   public void setParticipant(Participant participant) {
     this.participant = participant;
+  }
+
+
+  public void setParticipantList(List<Participant> participantList) {
+    this.participantList = participantList;
   }
 
 
@@ -488,6 +550,21 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setTargetGroupsSelected(List<Long> targetGroupsSelected) {
     this.targetGroupsSelected = targetGroupsSelected;
+  }
+
+
+  public void setUploadFile(File uploadFile) {
+    this.uploadFile = uploadFile;
+  }
+
+
+  public void setUploadFileContentType(String uploadFileContentType) {
+    this.uploadFileContentType = uploadFileContentType;
+  }
+
+
+  public void setUploadFileName(String uploadFileName) {
+    this.uploadFileName = uploadFileName;
   }
 
 

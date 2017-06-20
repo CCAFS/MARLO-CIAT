@@ -54,14 +54,7 @@
 			</result>
 		</action>
 
-		<action name="{center}/uploadFile"
-			class="org.cgiar.ccafs.marlo.action.capdev.ParticipantsAction"
-			method="uploadParticipantsFile">
-			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">${centerSession}/uploadFile</param>
-			</result>
-		</action>
+		
 
 
 	</package>

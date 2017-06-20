@@ -13,6 +13,7 @@
 
 <script src="${baseUrl}/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="${baseUrl}/js/capDev/capacityDevelopment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
 
 
 <div class="container"> 
@@ -356,7 +357,17 @@
 
 				<div class="row newCapdevField">
 					<div class="col-md-12 newCapdevField participantsBox">
-						[@customForm.inputFile name="" /]
+						
+							<!-- [@customForm.inputFile name="uploadFile" /] -->
+							[@s.file name="uploadFile" label="Select a File to upload" size="40" class="uploadParticipants"/]
+							<!-- <div class="col-md-6 ">
+								<div class="pull-right">
+									<button type="button" class="" aria-label="Left Align" >
+
+										<a class="addButton" href="[@s.url action='${centerSession}/uploadFile' /] ">[@s.text name="Download Template" /]</a> 
+									</button>
+								</div>
+							</div> -->
 					</div>
 				</div>
 			</div>

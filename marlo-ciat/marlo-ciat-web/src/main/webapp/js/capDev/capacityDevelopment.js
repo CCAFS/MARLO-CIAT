@@ -123,9 +123,15 @@ $(".dowmloadTemplate").on("click", function(){
 });
 
 
+//event to upload participants excel file
+$(".uploadParticipants").on("change",uploadFile);
 
 
-
+//
+function uploadFile(e){
+  var query = $(this).val();
+  console.log(query);
+}
 
 
 
