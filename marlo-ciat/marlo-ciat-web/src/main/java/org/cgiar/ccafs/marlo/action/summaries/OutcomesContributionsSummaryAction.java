@@ -310,24 +310,36 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   }
 
   private TypedTableModel getOutcomesDetailsTableModel() {
-    TypedTableModel model = new TypedTableModel(new String[] {"researchTopicTitle", "researchOutcomeTitle",
-      "researchImpactTitle", "projectOutputs", "projectDeliverables"},
-      new Class[] {String.class, String.class, String.class, String.class, String.class});
+    TypedTableModel model = new TypedTableModel(
+      new String[] {"researchTopicTitle", "researchOutcomeID", "researchOutcomeURL", "researchOutcomeTitle",
+        "researchImpactTitle", "projectOutputs", "projectDeliverables"},
+      new Class[] {String.class, Long.class, String.class, String.class, String.class, String.class, String.class});
 
     for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
       .collect(Collectors.toList())) {
       for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
 
+
         String researchTopicTitle = null;
         if (researchTopic.getResearchTopic() != null && !researchTopic.getResearchTopic().trim().isEmpty()) {
           researchTopicTitle = researchTopic.getResearchTopic();
         }
 
+        Long researchOutcomeID = null;
+        String researchOutcomeURL = null;
+        if (researchOutcome.getId() != null) {
+          researchOutcomeID = researchOutcome.getId();
+          // TODO: set outcome URL /impactPathway/CIAT/outcomes.do?outcomeID=9&edit=true
+          researchOutcomeURL =
+            config.getBaseUrl() + "/impactPathway/CIAT/outcomes.do?outcomeID=" + researchTopic.getId();
+        }
+
         String researchOutcomeTitle = null;
-        researchOutcomeTitle = researchOutcome.getComposedName()
-          + (researchOutcome.getShortName() != null && !researchOutcome.getShortName().trim().isEmpty()
-            ? " (" + researchOutcome.getShortName() + ")" : "");
+        researchOutcomeTitle =
+          (researchOutcome.getDescription() != null ? researchOutcome.getDescription() : "title not defined")
+            + (researchOutcome.getShortName() != null && !researchOutcome.getShortName().trim().isEmpty()
+              ? " (" + researchOutcome.getShortName() + ")" : "");
 
         String researchImpactTitle = null;
         if (researchOutcome.getResearchImpact() != null && researchOutcome.getResearchImpact().getDescription() != null
@@ -379,8 +391,8 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
           projectDeliverables = null;
         }
 
-        model.addRow(new Object[] {researchTopicTitle, researchOutcomeTitle, researchImpactTitle, projectOutputs,
-          projectDeliverables});
+        model.addRow(new Object[] {researchTopicTitle, researchOutcomeID, researchOutcomeURL, researchOutcomeTitle,
+          researchImpactTitle, projectOutputs, projectDeliverables});
 
         // Increment outcomes Projects count
         if (allOutcomesProjects.containsKey(researchOutcome)) {
@@ -411,9 +423,11 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
     return model;
   }
 
+
   public ResearchProgram getResearchProgram() {
     return researchProgram;
   }
+
 
   @Override
   public void prepare() {
