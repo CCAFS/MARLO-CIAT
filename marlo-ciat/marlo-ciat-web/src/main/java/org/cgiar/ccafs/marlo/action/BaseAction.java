@@ -21,6 +21,7 @@ import org.cgiar.ccafs.marlo.data.model.Deliverable;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
 import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
 import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
 import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
@@ -250,6 +251,21 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
         if (deliverables != null) {
           if (!deliverables.isEmpty()) {
+            return false;
+          }
+        }
+      }
+
+      // Verify Output Model
+      if (clazz == ResearchOutput.class) {
+
+        ResearchOutput output = outputService.getResearchOutputById(id);
+
+        List<ProjectOutput> projectOutputs =
+          new ArrayList<>(output.getProjectOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
+
+        if (projectOutputs != null) {
+          if (!projectOutputs.isEmpty()) {
             return false;
           }
         }
