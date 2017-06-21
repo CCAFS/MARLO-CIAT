@@ -18,10 +18,11 @@
 [#import "/WEB-INF/global/macros/usersPopup.ftl" as usersForm/]
 [#import "/WEB-INF/global/macros/utils.ftl" as utilities /]
 
+[#-- Help text --]
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
-    [#-- <div  class="removeHelp"><span class="glyphicon glyphicon-remove"></span></div> --]
-    <p class="col-md-10"> [@s.text name="projectDescription.help" /] </p>
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="projectDescription.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
 </div>
@@ -349,14 +350,14 @@
             </select>
           </div>
           <input type="hidden" name="programID" value="${(programID )!}"/> 
+          <input type="hidden" name="projectID" value="${(projectID )!}"/> 
         </form>
         
         <div class="messageBlock" style="display:none">
           <div class="notyMessage">
             <h1 class="text-center brand-success"><span class="glyphicon glyphicon-ok-sign"></span></h1>
             <p  class="text-center col-md-12">
-              Your request was sent to the Mile Support team <br />
-              You will receive a confirmation message as soon as it has been processed.
+              [@s.text name="output.request.message" /]
             </p>
             <br />
             [#-- Buttons --]

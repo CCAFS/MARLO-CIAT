@@ -3176,7 +3176,7 @@ button.ipGraph-btn{
   font-weight: bold !important;
 }
 
-.projectsList thead tr.header {
+.projectsList thead tr.header th {
   height:45px;
   background-color: #7B9074;
 }

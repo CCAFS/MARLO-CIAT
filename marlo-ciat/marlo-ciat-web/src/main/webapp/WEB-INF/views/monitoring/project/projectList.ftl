@@ -16,11 +16,11 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/global/macros/projectsListTemplate.ftl" as projectList /]
-
+[#-- Help text --]
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
-    [#--  <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />--]
-    <p class="col-md-10"> [@s.text name="projectsList.help"][/@s.text] </p>
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="projectList.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
 </div>
