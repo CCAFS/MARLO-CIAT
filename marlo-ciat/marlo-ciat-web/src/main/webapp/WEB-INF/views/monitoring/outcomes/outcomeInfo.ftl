@@ -16,14 +16,6 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
-
-<div class="container helpText viewMore-block">
-  <div class="helpMessage infoText">
-    [#--  <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />--]
-    <p class="col-md-10"> [@s.text name=""][/@s.text] </p>
-  </div> 
-  <div style="display:none" class="viewMore closed"></div>
-</div>
 <span id="programSelected" class="hidden">${selectedProgram.id}</span>
 
 <section class="container">

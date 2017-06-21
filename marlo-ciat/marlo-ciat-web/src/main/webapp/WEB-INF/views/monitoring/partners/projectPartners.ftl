@@ -15,7 +15,14 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
-
+[#-- Help text --]
+<div class="container helpText viewMore-block">
+  <div class="helpMessage infoText">
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="projectPartner.help"][/@s.text] </p>
+  </div> 
+  <div style="display:none" class="viewMore closed"></div>
+</div>
 
 [#--  marlo cluster of activities--]
 <section class="marlo-content">

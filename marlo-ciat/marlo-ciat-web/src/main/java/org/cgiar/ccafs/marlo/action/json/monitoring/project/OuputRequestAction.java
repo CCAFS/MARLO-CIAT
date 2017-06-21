@@ -17,9 +17,10 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
 import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
@@ -44,21 +45,22 @@ public class OuputRequestAction extends BaseAction {
   // Logger
   private static final Logger LOG = LoggerFactory.getLogger(OuputRequestAction.class);
 
+
   private SendMail sendMail;
   private IResearchOutcomeService outcomeService;
-  private IProgramService programService;
+  private IProjectService projectService;
   private List<TopicOutcomes> outcomes;
   private boolean messageSent;
   private Long outcomeID;
   private String outputName;
-
+  private Long projectID;
 
   @Inject
-  public OuputRequestAction(APConfig config, IResearchOutcomeService outcomeService, IProgramService programService,
+  public OuputRequestAction(APConfig config, IResearchOutcomeService outcomeService, IProjectService projectService,
     SendMail sendMail) {
     super(config);
     this.outcomeService = outcomeService;
-    this.programService = programService;
+    this.projectService = projectService;
     this.sendMail = sendMail;
   }
 
@@ -67,24 +69,39 @@ public class OuputRequestAction extends BaseAction {
     String subject;
     StringBuilder message = new StringBuilder();
 
+    Project project = projectService.getProjectById(projectID);
+
     ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     String outcomeName = outcome.getComposedName();
     String outputName = this.outputName;
 
     // message subject
-    subject = "[MiLE-" + this.getCenterSession().toUpperCase() + "] Output verification - ";
+    subject =
+      "[MARLO -" + this.getCenterSession().toUpperCase() + "] Output verification - " + project.getComposedName();
     // Message content
     message.append(this.getCurrentUser().getFirstName() + " " + this.getCurrentUser().getLastName() + " ");
     message.append("(" + this.getCurrentUser().getEmail() + ") ");
     message.append("is requesting to add the following ouput information:");
     message.append("</br></br>");
-    message.append("Output Name: ");
-    message.append(outputName);
-    message.append("</br>");
-    message.append("Outcome : ");
+    message.append("<b>Program: </b>");
+    message.append(project.getResearchProgram().getName());
+    message.append("</br></br>");
+    message.append("<b>Project: </b>");
+    message.append(project.getComposedName());
+    message.append("</br></br>");
+    message.append("<b>Outcome : </b>");
     message.append(outcomeName);
-    message.append(" </br>");
+    message.append("</br></br>");
+    message.append("<b>Output Name:</b> ");
+    message.append(outputName);
+    message.append("</br></br></br>");
+    message.append("Best regards,");
+    message.append("</br></br></br>");
+    message.append("<b> MARLO TEAM </b>");
+    message.append("</br></br>");
+    message.append("*** Please do not reply to this email as this is an automated notification ***");
+
 
     try {
       sendMail.send(config.getEmailNotification(), null, config.getEmailNotification(), subject, message.toString(),
@@ -101,19 +118,24 @@ public class OuputRequestAction extends BaseAction {
     return SUCCESS;
   }
 
+
   public Long getOutcomeID() {
     return outcomeID;
   }
-
 
   public List<TopicOutcomes> getOutcomes() {
     return outcomes;
   }
 
-
   public String getOutputName() {
     return outputName;
   }
+
+
+  public Long getProjectID() {
+    return projectID;
+  }
+
 
   public boolean isMessageSent() {
     return messageSent;
@@ -124,8 +146,14 @@ public class OuputRequestAction extends BaseAction {
 
     if (this.getRequest().getParameter(APConstants.OUTCOME_ID) != null) {
       outcomeID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.OUTCOME_ID)));
-      LOG.info("The user {} load the output request section related to the program {}.",
+      LOG.info("The user {} load the output request section related to the program (Outcome ID) {}.",
         this.getCurrentUser().getEmail(), outcomeID);
+    }
+
+    if (this.getRequest().getParameter(APConstants.PROJECT_ID) != null) {
+      projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
+      LOG.info("The user {} load the output request section related to the program (Project ID) {}.",
+        this.getCurrentUser().getEmail(), projectID);
     }
 
     if (this.getRequest().getParameter(APConstants.OUTPUT_NAME) != null) {
@@ -133,7 +161,6 @@ public class OuputRequestAction extends BaseAction {
       LOG.info("The user {} load the output request section related to the program {}.",
         this.getCurrentUser().getEmail(), outputName);
     }
-
 
   }
 
@@ -149,9 +176,13 @@ public class OuputRequestAction extends BaseAction {
     this.outcomes = outcomes;
   }
 
-
   public void setOutputName(String outputName) {
     this.outputName = outputName;
+  }
+
+
+  public void setProjectID(Long projectID) {
+    this.projectID = projectID;
   }
 
 

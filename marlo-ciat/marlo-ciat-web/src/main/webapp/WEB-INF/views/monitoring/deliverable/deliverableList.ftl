@@ -16,10 +16,10 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/global/macros/deliverableListTemplate.ftl" as deliverableList /]
-
+[#-- Help text --]
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
-    [#--  <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />--]
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
     <p class="col-md-10"> [@s.text name="deliverableList.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
