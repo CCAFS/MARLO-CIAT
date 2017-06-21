@@ -172,6 +172,7 @@
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDescripcionAction"
 			method="previewExcelFile">
 			<result type="json">
+				<param name="root">previewListHeader</param>
 				<param name="noCache">true</param>
 				<param name="excludeNullProperties">true</param>
 			</result>

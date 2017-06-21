@@ -54,12 +54,12 @@
 			</result>
 		</action>
 
-		<action name="uploadFile"
+		<!-- <action name="uploadFile"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDescripcionAction"
 			method="preLoadExcelFile">
 			<result type="freemarker" name="success">/WEB-INF/views/capDev/detailCapdev.ftl
 			</result>
-		</action>
+		</action> -->
 
 	</package>
 

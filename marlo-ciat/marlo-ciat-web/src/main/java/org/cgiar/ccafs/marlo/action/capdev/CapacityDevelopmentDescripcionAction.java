@@ -50,8 +50,6 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.ReadExcelFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -64,8 +62,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -301,42 +297,28 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
    * Este metodo hace la carga previa del archivo de participantes,
    * antes de enviar el formulario completo
    */
-  public String preLoadExcelFile() {
-    System.out.println("previewExcelFile");
-    request = ServletActionContext.getRequest();
-    System.out.println(request.getContentType());
-
-    try {
-      final InputStream input = request.getInputStream();
-
-      wb = WorkbookFactory.create(input);
-
-      input.close();
-      final Sheet sheet = wb.getSheetAt(0);
-      final Row firstRow = sheet.getRow(0);
-      final int totalRows = sheet.getLastRowNum();
-      final int totalColumns = firstRow.getLastCellNum();
-      System.out.println(totalRows);
-      System.out.println(totalColumns);
-
-
-      this.previewListHeader = new ArrayList<>();
-
-      for (int i = 0; i < totalColumns; i++) {
-        final Cell cell = firstRow.getCell(i);
-        previewListHeader.add(cell.getStringCellValue());
-      }
-
-      System.out.println(previewListHeader.size());
-
-
-    } catch (final IOException | EncryptedDocumentException | InvalidFormatException e) {
-      e.printStackTrace();
-    }
-
-
-    return SUCCESS;
-  }
+  /*
+   * public String preLoadExcelFile() {
+   * System.out.println("previewExcelFile");
+   * request = ServletActionContext.getRequest();
+   * System.out.println(request.getContentType());
+   * try {
+   * final InputStream input = request.getInputStream();
+   * wb = WorkbookFactory.create(input);
+   * System.out.println(wb.getNumberOfSheets());
+   * input.close();
+   * // final Sheet sheet = wb.getSheetAt(0);
+   * // final Row firstRow = sheet.getRow(0);
+   * // final int totalRows = sheet.getLastRowNum();
+   * // final int totalColumns = firstRow.getLastCellNum();
+   * // System.out.println(totalRows);
+   * // System.out.println(totalColumns);
+   * } catch (final IOException | EncryptedDocumentException | InvalidFormatException e) {
+   * e.printStackTrace();
+   * }
+   * return SUCCESS;
+   * }
+   */
 
 
   public List<Participant> preloadParticipantsList(Object[][] data) {
@@ -424,6 +406,28 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public String previewExcelFile() throws Exception {
     System.out.println("previewExcelFile");
+
+    final Map<String, Object> parameters = this.getParameters();
+    // final InputStream queryParameter = ((InputStream) parameters.get(APConstants.QUERY_PARAMETER));
+    request = ServletActionContext.getRequest();
+
+    this.previewListHeader = new ArrayList<>();
+    final Workbook wb = WorkbookFactory.create(request.getInputStream());
+    System.out.println(wb.getNumberOfSheets());
+    final Sheet sheet = wb.getSheetAt(0);
+    final Row firstRow = sheet.getRow(0);
+    final int totalRows = sheet.getLastRowNum();
+    final int totalColumns = firstRow.getLastCellNum();
+    System.out.println(totalRows);
+    System.out.println(totalColumns);
+
+    for (int i = 0; i < totalColumns; i++) {
+      final Cell cell = firstRow.getCell(i);
+      previewListHeader.add(cell.getStringCellValue());
+    }
+
+    System.out.println(previewListHeader.size());
+
     this.previewList = new ArrayList<>();
     for (int i = 0; i < 2; i++) {
       final Map<String, Object> userMap = new HashMap<>();
