@@ -332,7 +332,7 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
           researchOutcomeID = researchOutcome.getId();
           // TODO: set outcome URL /impactPathway/CIAT/outcomes.do?outcomeID=9&edit=true
           researchOutcomeURL =
-            config.getBaseUrl() + "/impactPathway/CIAT/outcomes.do?outcomeID=" + researchTopic.getId();
+            config.getBaseUrl() + "/monitoring/CIAT/monitoringOutcome.do?outcomeID=" + researchOutcomeID;
         }
 
         String researchOutcomeTitle = null;
@@ -409,16 +409,20 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   }
 
   private TypedTableModel getOutcomesProjectsTableModel() {
-    TypedTableModel model = new TypedTableModel(new String[] {"outcomeID", "outcomeTitle", "projectCount"},
-      new Class[] {String.class, String.class, String.class});
+    TypedTableModel model =
+      new TypedTableModel(new String[] {"outcomeID", "outcomeTitle", "projectCount", "researchOutcomeURL"},
+        new Class[] {String.class, String.class, String.class, String.class});
 
     for (ResearchOutcome researchOutcome : allOutcomesProjects.keySet()) {
       String researchOutcomeTitle = null;
       researchOutcomeTitle = researchOutcome.getComposedName()
         + (researchOutcome.getShortName() != null && !researchOutcome.getShortName().trim().isEmpty()
           ? " (" + researchOutcome.getShortName() + ")" : "");
-      model.addRow(
-        new Object[] {"OC" + researchOutcome.getId(), researchOutcomeTitle, allOutcomesProjects.get(researchOutcome)});
+      String researchOutcomeURL = null;
+      researchOutcomeURL =
+        config.getBaseUrl() + "/monitoring/CIAT/monitoringOutcome.do?outcomeID=" + researchOutcome.getId();
+      model.addRow(new Object[] {"OC" + researchOutcome.getId(), researchOutcomeTitle,
+        allOutcomesProjects.get(researchOutcome), researchOutcomeURL});
     }
     return model;
   }
