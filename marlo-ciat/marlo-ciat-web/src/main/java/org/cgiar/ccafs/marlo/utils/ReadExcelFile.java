@@ -13,6 +13,10 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
+
+/*
+ * @Author: Luis gonzalez
+ */
 package org.cgiar.ccafs.marlo.utils;
 
 import java.io.File;
@@ -74,7 +78,12 @@ public class ReadExcelFile {
     return totalRows;
   }
 
-
+  /*
+   * this method is used to read an excel file to return an array with the data, getting total rows and the total
+   * columns from the workbook sheet to create a Object array.
+   * @param file a File object containing the data
+   * @return the Object array containing the data read from the file
+   */
   public Object[][] readExcelFile(File file) {
     Object[][] data = null;
     try {
@@ -87,10 +96,8 @@ public class ReadExcelFile {
       data = new Object[totalRows][totalColumns];
       for (int fila = 1; fila <= totalRows; fila++) {
         final Row row = sheet.getRow(fila);
-        // System.out.println("columnas de la fila --> " + fila + " -- " + row.getLastCellNum());
         for (int col = 0; col < row.getLastCellNum(); col++) {
           final Cell cell = row.getCell(col);
-          // System.out.println(fila + "." + col + " " + this.getCellData(cell));
           data[fila - 1][col] = this.getCellData(cell);
         }
 
@@ -102,6 +109,18 @@ public class ReadExcelFile {
 
     return data;
 
+  }
+
+  public String[] readHeadersExcelFile(Workbook wb) {
+    final Sheet sheet = wb.getSheetAt(0);
+    final String[] headers = new String[sheet.getLastRowNum()];
+    final Row row = sheet.getRow(0);
+    for (int i = 0; i < headers.length; i++) {
+      final Cell cell = row.getCell(i);
+      headers[i] = cell.getStringCellValue();
+    }
+
+    return headers;
   }
 
 

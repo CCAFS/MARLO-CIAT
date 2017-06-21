@@ -23,15 +23,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.inject.Inject;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletRequestAware;
 
-public class ParticipantsAction extends BaseAction {
+public class ParticipantsAction extends BaseAction implements ServletRequestAware {
 
   private static final long serialVersionUID = 1L;
 
@@ -40,6 +51,9 @@ public class ParticipantsAction extends BaseAction {
 
 
   private InputStream inputStream;
+  private HttpServletRequest request;
+  private Workbook wb;
+  private List<Map<String, Object>> previewList;
 
 
   @Inject
@@ -85,8 +99,88 @@ public class ParticipantsAction extends BaseAction {
   }
 
 
+  public List<Map<String, Object>> getPreviewList() {
+    return previewList;
+  }
+
+
+  @Override
+  public HttpServletRequest getRequest() {
+    return request;
+  }
+
+
+  public Workbook getWb() {
+    return wb;
+  }
+
+
+  /*
+   * Este metodo hace la carga previa del archivo de participantes,
+   * antes de enviar el formulario completo
+   */
+  public String preLoadExcelFile() {
+    System.out.println("previewExcelFile");
+    request = ServletActionContext.getRequest();
+    System.out.println(request.getContentType());
+
+    try {
+      final InputStream input = request.getInputStream();
+
+      wb = WorkbookFactory.create(input);
+
+      final Sheet sheet = wb.getSheetAt(0);
+      final Row firstRow = sheet.getRow(0);
+      final int totalRows = sheet.getLastRowNum();
+      final int totalColumns = firstRow.getLastCellNum();
+      System.out.println(totalRows);
+      System.out.println(totalColumns);
+
+      input.close();
+
+
+    } catch (final IOException | EncryptedDocumentException | InvalidFormatException e) {
+      e.printStackTrace();
+    }
+
+
+    return SUCCESS;
+  }
+
+  public String previewExcelFile() {
+    this.previewList = new ArrayList<>();
+
+
+    for (int i = 0; i < 2; i++) {
+      final Map<String, Object> userMap = new HashMap<>();
+      userMap.put("idUser", i);
+      userMap.put("firstName", "algo");
+      userMap.put("lastName", "nuevo");
+      userMap.put("email", "@gmail");
+      this.previewList.add(userMap);
+    }
+
+    return SUCCESS;
+  }
+
+
   public void setInputStream(InputStream inputStream) {
     this.inputStream = inputStream;
+  }
+
+
+  public void setPreviewList(List<Map<String, Object>> previewList) {
+    this.previewList = previewList;
+  }
+
+
+  public void setRequest(HttpServletRequest request) {
+    this.request = request;
+  }
+
+
+  public void setWb(Workbook wb) {
+    this.wb = wb;
   }
 
 

@@ -96,6 +96,8 @@ $dialogContent.find(".searchcontact-content input").on("keyup", searchUsersEvent
 
 
 
+
+
 }
 
 
@@ -123,23 +125,64 @@ $(".dowmloadTemplate").on("click", function(){
 });
 
 
+
 //event to upload participants excel file
 $(".uploadParticipants").on("change",uploadFile);
 
-
 //
-function uploadFile(e){
-  var query = $(this).val();
-  console.log(query);
+function uploadFile(){
+  var file = document.getElementById('uploadFile').files[0];
+    if (file) {
+        console.log("hola");
+          $.ajax({
+                'url': baseURL + '/capdev/uploadFile.do',
+                //'url': baseURL + '/previewParticipants.do',
+                'data': file,
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                'dataType': "json",
+                contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                processData: false,
+                beforeSend: function() {
+                },
+                success: function(data) {
+                  console.log(data);
+                },
+                error: function() {
+                },
+                complete: function() {
+                }
+              });
+    }
 }
 
+//PREVIEW participants
+
+  $('#btnDisplay').click(function() {
+    console.log("holiss");
+    
+     $.ajax({
+      'url': baseURL + '/previewParticipants.do',
+      'data': {q:"dato fail"},
+      'dataType': "json",
+      beforeSend: function() {
+      },
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
+      },
+      complete: function() {
+      }
+    });
+
+
+
+});
 
 
 
 // CAPACITY DEVELOPMENT functions
-
- 
-
 
 //add Objective
 $(".addObjective").on("click", function (){

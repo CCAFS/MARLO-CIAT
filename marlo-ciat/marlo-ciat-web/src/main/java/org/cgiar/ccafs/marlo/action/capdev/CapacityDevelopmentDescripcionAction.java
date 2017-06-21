@@ -50,16 +50,30 @@ import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.ReadExcelFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
+import org.apache.struts2.ServletActionContext;
 
 public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
@@ -109,6 +123,12 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   final Session session = SecurityUtils.getSubject().getSession();
 
   final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
+
+  private HttpServletRequest request;
+  private Workbook wb;
+  private List<String> previewListHeader;
+  private Map<String, Object> previewListContent;
+  private List<Map<String, Object>> previewList;
 
 
   @Inject
@@ -193,10 +213,10 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     return disciplinesSelected;
   }
 
-
   public List<String> getOutcomes() {
     return outcomes;
   }
+
 
   public Participant getParticipant() {
     return participant;
@@ -207,12 +227,35 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     return participantList;
   }
 
+
+  public List<Map<String, Object>> getPreviewList() {
+    return previewList;
+  }
+
+
+  public Map<String, Object> getPreviewListContent() {
+    return previewListContent;
+  }
+
+
+  public List<String> getPreviewListHeader() {
+    return previewListHeader;
+  }
+
+
   public List<Project> getProjects() {
     return projects;
   }
 
+
   public List<LocElement> getRegionsList() {
     return regionsList;
+  }
+
+
+  @Override
+  public HttpServletRequest getRequest() {
+    return request;
   }
 
 
@@ -235,7 +278,6 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     return targetGroupsSelected;
   }
 
-
   public File getUploadFile() {
     return uploadFile;
   }
@@ -249,6 +291,53 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   public String getUploadFileName() {
     return uploadFileName;
   }
+
+  public Workbook getWb() {
+    return wb;
+  }
+
+
+  /*
+   * Este metodo hace la carga previa del archivo de participantes,
+   * antes de enviar el formulario completo
+   */
+  public String preLoadExcelFile() {
+    System.out.println("previewExcelFile");
+    request = ServletActionContext.getRequest();
+    System.out.println(request.getContentType());
+
+    try {
+      final InputStream input = request.getInputStream();
+
+      wb = WorkbookFactory.create(input);
+
+      input.close();
+      final Sheet sheet = wb.getSheetAt(0);
+      final Row firstRow = sheet.getRow(0);
+      final int totalRows = sheet.getLastRowNum();
+      final int totalColumns = firstRow.getLastCellNum();
+      System.out.println(totalRows);
+      System.out.println(totalColumns);
+
+
+      this.previewListHeader = new ArrayList<>();
+
+      for (int i = 0; i < totalColumns; i++) {
+        final Cell cell = firstRow.getCell(i);
+        previewListHeader.add(cell.getStringCellValue());
+      }
+
+      System.out.println(previewListHeader.size());
+
+
+    } catch (final IOException | EncryptedDocumentException | InvalidFormatException e) {
+      e.printStackTrace();
+    }
+
+
+    return SUCCESS;
+  }
+
 
   public List<Participant> preloadParticipantsList(Object[][] data) {
     participantList = new ArrayList<>();
@@ -279,7 +368,7 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-
+    System.out.println("soy el prepare");
 
     outcomes.add("outcome 1");
     outcomes.add("outcome 2");
@@ -333,6 +422,22 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public String previewExcelFile() throws Exception {
+    System.out.println("previewExcelFile");
+    this.previewList = new ArrayList<>();
+    for (int i = 0; i < 2; i++) {
+      final Map<String, Object> userMap = new HashMap<>();
+      userMap.put("idUser", i);
+      userMap.put("firstName", "algo");
+      userMap.put("lastName", "nuevo");
+      userMap.put("email", "@gmail");
+      this.previewList.add(userMap);
+    }
+
+    return SUCCESS;
+  }
+
+
   @Override
   public String save() {
 
@@ -368,7 +473,6 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
     return SUCCESS;
   }
-
 
   public void saveCapDevCountries(List<Long> capdevCountries, CapacityDevelopment capdev) {
     CapdevLocations capdevLocations = null;
@@ -478,6 +582,7 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
     this.capdevRegions = capdevRegions;
   }
 
+
   public void setCapdevTypes(List<CapacityDevelopmentType> capdevTypes) {
     this.capdevTypes = capdevTypes;
   }
@@ -523,6 +628,21 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
   }
 
 
+  public void setPreviewList(List<Map<String, Object>> previewList) {
+    this.previewList = previewList;
+  }
+
+
+  public void setPreviewListContent(Map<String, Object> previewListContent) {
+    this.previewListContent = previewListContent;
+  }
+
+
+  public void setPreviewListHeader(List<String> previewListHeader) {
+    this.previewListHeader = previewListHeader;
+  }
+
+
   public void setProjects(List<Project> projects) {
     this.projects = projects;
   }
@@ -530,6 +650,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setRegionsList(List<LocElement> regionsList) {
     this.regionsList = regionsList;
+  }
+
+
+  public void setRequest(HttpServletRequest request) {
+    this.request = request;
   }
 
 
@@ -565,6 +690,11 @@ public class CapacityDevelopmentDescripcionAction extends BaseAction {
 
   public void setUploadFileName(String uploadFileName) {
     this.uploadFileName = uploadFileName;
+  }
+
+
+  public void setWb(Workbook wb) {
+    this.wb = wb;
   }
 
 

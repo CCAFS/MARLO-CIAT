@@ -359,7 +359,11 @@
 					<div class="col-md-12 newCapdevField participantsBox">
 						
 							<!-- [@customForm.inputFile name="uploadFile" /] -->
-							[@s.file name="uploadFile" label="Select a File to upload" size="40" class="uploadParticipants"/]
+							[@s.file id="uploadFile" name="uploadFile" label="Select a File to upload" size="40" class="uploadParticipants"/]
+
+							<button type="button"  id="btnDisplay" class="" aria-label="Left Align" >
+								 preview
+							</button>
 							<!-- <div class="col-md-6 ">
 								<div class="pull-right">
 									<button type="button" class="" aria-label="Left Align" >
@@ -368,6 +372,16 @@
 									</button>
 								</div>
 							</div> -->
+					</div>
+					<div class="col-md-12">
+						
+						preview
+
+						[#if previewListHeader?has_content]
+							[#list previewListHeader as key]
+								<p>	${key} </p>
+							[/#list]
+						[/#if]
 					</div>
 				</div>
 			</div>
