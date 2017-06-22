@@ -39,23 +39,28 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
           'label': 'data(label)',
           'background-color': '#2388ae',
           'color': 'white',
+          'background-opacity': 0.2,
+          'text-opacity': 0.2,
           'text-outline-width': 1,
           'text-outline-color': '#888',
           'z-index': '5',
           'padding': 2
       }).selector('.eating').css({
-          'border-width': 2,
-          'background-color': '#163799'
-      }).selector('.eater').css({
-          'border-width': 9,
-          'color': 'white'
+          'background-opacity': 1,
+          'text-opacity': 1,
       }).selector('edge').css({
-          'width': 2,
+          'width': 1,
           'source-arrow-shape': 'triangle',
-          'line-color': '#bab6b6',
-          'source-arrow-color': '#bab6b6',
+          'line-color': '#aaa',
+          'source-arrow-color': '#aaa',
+          'arrow-resize': 15,
           'curve-style': 'bezier',
           'z-index': '1'
+      }).selector('.edgeStyle').css({
+          'line-color': '#000000',
+          'source-arrow-color': '#000000',
+          'curve-style': 'bezier',
+          'z-index': '99'
       }).selector('.center-center').css({
           'text-valign': 'center',
           'text-halign': 'center'
@@ -77,7 +82,15 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
   var nodesInit = cy.$('node');
   var colorFlagship;
   nodesInit.addClass('center-center');
+
   nodesInit.forEach(function(ele) {
+    var label = ele.data("label");
+    var shortLabel = label;
+    if(label.length > 7){
+      shortLabel=label.substr(0, 7) + ' ... ';
+    }
+    
+    ele.data("label", shortLabel);
     ele.css('background-color', ele.data('color'));
     if(ele.data('type') === 'F') {
       colorFlagship = ele.data('color');
@@ -137,6 +150,8 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
   });
 
+  cy.$('node').addClass('eating');
+
   if(inPopUp === true) {
     /*
      * cy.panzoom({ // options here... }); $(".cy-panzoom").css('position', 'absolute'); $(".cy-panzoom").css("right",
@@ -147,13 +162,6 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 // tap a node
   cy.on('tap', function(event) {
 
-    cy.$('node').css('background-opacity', '0.4');
-    cy.$('node').css('text-opacity', '0.4');
-    cy.$('edge').css('line-opacity', '0.4');
-    cy.$('edge').css('line-color', '#bab6b6');
-    cy.$('edge').css('source-arrow-color', '#bab6b6');
-    cy.$('edge').css('target-arrow-color', '#bab6b6');
-    cy.$('edge').css('z-index', '1');
     $(".panel-body ul").empty();
     so = [];
     areas = [];
@@ -165,23 +173,21 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
 
     if(event.cyTarget == cy) {
 
-      cy.$('node').removeClass('eating');
-      cy.$('node').css('background-opacity', '1');
-      cy.$('node').css('text-opacity', '1');
+      cy.$('node').addClass('eating');
+      cy.$('edge').removeClass('edgeStyle');
 
     } else if(event.cyTarget.isEdge()) {
 
-      cy.$('node').removeClass('eating');
-      cy.$('node').css('background-opacity', '1');
-      cy.$('node').css('text-opacity', '1');
-      cy.$('edge').css('line-color', '#999999');
-      cy.$('edge').css('source-arrow-color', '#999999');
-      cy.$('edge').css('target-arrow-color', '#999999');
+      cy.$('node').addClass('eating');
+      cy.$('edge').removeClass('edgeStyle');
 
     } else if(event.cyTarget.isNode()) {
 
       cy.$('node').removeClass('eating');
+      cy.$('edge').removeClass('edgeStyle');
       var $this = event.cyTarget;
+      $this.predecessors().addClass("edgeStyle");
+      $this.successors().addClass("edgeStyle");
 
       // IF NODE HAS CHILDRENS
       if($this.isParent()) {
@@ -241,20 +247,12 @@ function createGraphic(json,graphicContent,panningEnable,inPopUp,nameLayout,tool
     }
   });
   function nodeSelected(ele) {
+    ele.addClass('eating');
     var stop;
     if(ele.isChild()) {
       var parent = ele.parent();
       nodeSelected(parent);
     }
-
-    // change Styles
-    ele.addClass('eating');
-    ele.css('background-opacity', '1');
-    ele.css('text-opacity', '1');
-    ele.css('z-index', '9');
-    ele.css('line-color', '#999999');
-    ele.css('source-arrow-color', '#999999');
-    ele.css('target-arrow-color', '#999999');
 
     // Validate if the node exists in any array
 
@@ -466,6 +464,7 @@ $("#overlay .btn").on("click", function() {
   $("#impactGraphic-content").dialog({
       resizable: false,
       width: '90%',
+      closeText: "",
       modal: true,
       height: $(window).height() * 0.80,
       show: {
@@ -757,10 +756,10 @@ function ajaxService(url,data,contentGraph,panningEnable,inPopUp,nameLayout,tool
                 y: move.OP
             };
           }/*
-           * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; } else {
-           * move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = { x:
-           * move.KO, y: 400 }; }
-           */
+             * else if(nodes[i].data.type == "CoA") { if(nodes[i + 1] && nodes[i + 1].data.type == "KO") { move.KO; }
+             * else { move.KO = (move.KO + (nodeWidth + nodeMargin + 20)); } // console.log(move.KO); nodes[i].position = {
+             * x: move.KO, y: 400 }; }
+             */
         }
 
         createGraphic(m.elements, contentGraph, panningEnable, inPopUp, 'breadthfirst', tooltip, nodeWidth);

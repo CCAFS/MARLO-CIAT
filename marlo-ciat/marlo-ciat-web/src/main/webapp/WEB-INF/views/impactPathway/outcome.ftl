@@ -21,8 +21,8 @@
 [@utils.helpInfos hlpInfo="researchOutcomes.help" /]
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
-  <div class="container"> 
-    
+  <div class="container">
+  
     <div class="row">
       <div class="col-md-3">
         [#include "/WEB-INF/views/impactPathway/menu-impactPathway.ftl" /]
@@ -64,10 +64,10 @@
           </div>
           [#-- Outcome Statement --]
           <div class="form-group">
-            [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=true className="outcome-statement limitWords-100" editable=editable /]
+            [@customForm.textArea name="${outcomeCustomName}.description"  i18nkey="outcome.statement" required=false className="outcome-statement limitWords-50" editable=editable /]
           
             <div class="row">
-              <div class="col-sm-7">[@customForm.input name="${outcomeCustomName}.shortName" i18nkey="outcome.shortName" className="limitChar-30" required=true editable=editable /]</div>       
+              <div class="col-sm-7">[@customForm.input name="${outcomeCustomName}.shortName" i18nkey="outcome.shortName" className="limitChar-30" required=false editable=editable /]</div>       
             </div> 
           </div>
           <div class="row form-group target-block">            
@@ -85,7 +85,7 @@
             [#-- Target Year --]            
             <div class="col-md-4">
               [#if editable]
-                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected outcomeYear" header=false editable=editable/]
+                [@customForm.select name="${outcomeCustomName}.targetYear" value="${(outcome.targetYear)!'none'}" stringKey=false label=""  i18nkey="outcome.year" listName="allYears"  required=true  className="yearExpected outcomeYear" header=true placeholder="Select a Year..."  editable=editable/]
               [#else]
                 <div class="select">
                   <label for=""> [@s.text name="outcome.year" /]:  </label>
@@ -104,7 +104,7 @@
               [@milestoneMacro milestone=milestone name="${outcomeCustomName}.milestones" index=milestone_index /]
             [/#list]
           [#else]
-            <p class="message text-center">[@s.text name="outcome.milestones.emptyMessage"/]</p>
+            [@milestoneMacro milestone={} name="${outcomeCustomName}.milestones" index=0 /]          
           [/#if]
           </div>
           [#-- Add Milestone Button --]
@@ -166,7 +166,8 @@
       [#-- Target Year --]
       <div class="col-md-4">
         [#if editable]
-          [@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear" header=false  disabled=!editable/]
+          [#-- This select is changed by the Javascript --]
+          [@customForm.select name="${milestoneCustomName}.targetYear"  i18nkey="outcome.milestone.index.inputTargetYear" listName="allYears"  required=true  className=" targetYear milestoneYear" header=true placeholder="Select a Year..."  disabled=!editable/]
         [#else]
           <div class="select">
             <label for=""> [@s.text name="outcome.milestone.index.inputTargetYear" /]:  </label>

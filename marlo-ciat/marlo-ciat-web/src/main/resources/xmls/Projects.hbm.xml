@@ -9,6 +9,10 @@
 			<column name="id" />
 			<generator class="identity" />
 		</id>
+		<many-to-one name="projectType"
+			class="org.cgiar.ccafs.marlo.data.model.ProjectType" fetch="select">
+			<column name="project_type_id" />
+		</many-to-one>
 		<many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
 			fetch="select">
 			<column name="modified_by" />
@@ -33,12 +37,30 @@
 			class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" fetch="select">
 			<column name="program_id" />
 		</many-to-one>
+		<property name="ocsCode" type="string">
+			<column name="ocs_code" length="65535" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="65535" />
+		</property>
+		<property name="extensionDate" type="timestamp">
+			<column name="extension_date" length="19" />
+		</property>
+		<property name="originalDonor" type="string">
+			<column name="original_donor" length="65535" />
+		</property>
+		<property name="directDonor" type="string">
+			<column name="direct_donor" length="65535" />
+		</property>
+		<property name="totalAmount" type="java.lang.Double">
+			<column name="total_amount" precision="30" />
+		</property>
 		<property name="name" type="string">
 			<column name="name" length="65535" />
 		</property>
-		<property name="shortName" type="string">
-			<column name="short_name" length="65535" />
-		</property>
+		<property name="suggestedName" type="string">
+      <column name="suggested_name" length="65535" />
+    </property>
 		<property name="dateCreated" type="timestamp">
 			<column name="date_created" length="19" />
 		</property>
@@ -50,6 +72,12 @@
 		</property>
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
+		</property>
+		<property name="global" type="java.lang.Boolean">
+			<column name="is_global" />
+		</property>
+		<property name="region" type="java.lang.Boolean">
+			<column name="is_region" />
 		</property>
 		<property name="activeSince" type="timestamp">
 			<column name="active_since" length="19" />
@@ -94,13 +122,20 @@
 				<column name="project_id" not-null="true" />
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ProjectPartner" />
-		</set>		
-		<set name="submissions" table="submissions" inverse="true"
-      lazy="true" fetch="select">
-      <key>
-        <column name="project_id" not-null="true" />
-      </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
-    </set>
+		</set>
+		<set name="submissions" table="submissions" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="project_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.Submission" />
+		</set>
+		<set name="projectLocations" table="submissions" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="project_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ProjectLocation" />
+		</set>
 	</class>
 </hibernate-mapping>

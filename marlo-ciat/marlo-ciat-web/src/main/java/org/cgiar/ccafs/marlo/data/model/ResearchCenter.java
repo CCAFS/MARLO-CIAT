@@ -53,7 +53,6 @@ public class ResearchCenter implements Serializable, IAuditLog {
   @Expose
   private Date activeSince;
 
-
   @Expose
   private User createdBy;
 
@@ -73,6 +72,9 @@ public class ResearchCenter implements Serializable, IAuditLog {
 
 
   private Set<ResearchObjective> researchObjectives = new HashSet<ResearchObjective>(0);
+
+
+  private Set<CenterCustomParameter> centerCustomParameters = new HashSet<CenterCustomParameter>(0);
 
 
   public ResearchCenter() {
@@ -106,6 +108,7 @@ public class ResearchCenter implements Serializable, IAuditLog {
     this.centerUsers = centerUsers;
   }
 
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -136,6 +139,10 @@ public class ResearchCenter implements Serializable, IAuditLog {
     return activeSince;
   }
 
+  public Set<CenterCustomParameter> getCenterCustomParameters() {
+    return centerCustomParameters;
+  }
+
   /**
    * @return the centerUsers
    */
@@ -146,7 +153,6 @@ public class ResearchCenter implements Serializable, IAuditLog {
   public User getCreatedBy() {
     return createdBy;
   }
-
 
   @Override
   public Long getId() {
@@ -172,6 +178,7 @@ public class ResearchCenter implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
+
   public String getName() {
     return this.name;
   }
@@ -184,7 +191,6 @@ public class ResearchCenter implements Serializable, IAuditLog {
     return researchObjectives;
   }
 
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -192,6 +198,7 @@ public class ResearchCenter implements Serializable, IAuditLog {
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
+
 
   @Override
   public boolean isActive() {
@@ -206,9 +213,13 @@ public class ResearchCenter implements Serializable, IAuditLog {
     this.active = active;
   }
 
-
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
+  }
+
+
+  public void setCenterCustomParameters(Set<CenterCustomParameter> centerCustomParameters) {
+    this.centerCustomParameters = centerCustomParameters;
   }
 
 

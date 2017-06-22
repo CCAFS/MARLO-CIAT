@@ -94,6 +94,20 @@ function getInputElement(fieldName,message) {
       }
     }
   }
+  // For yesNo inputs
+  if(elementQuery.hasClass("onoffswitch-radio")) {
+    // Tag with message
+    var tagElement = $("#test").clone(true).removeAttr("id");
+    tagElement.attr("title", message);
+    $(elementQuery).parent().append(tagElement);
+    var left = $(elementQuery).parent().outerWidth();
+    var top = 0;
+    tagElement.offset({
+        top: (top / 2),
+        left: left
+    });
+    tagElement.fadeIn(2000);
+  }
   $(elementQuery).addClass("fieldError");
   $(elementQuery).attr("title", message);
 

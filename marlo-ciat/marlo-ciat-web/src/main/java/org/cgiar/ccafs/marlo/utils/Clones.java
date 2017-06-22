@@ -136,7 +136,7 @@ public class Clones {
      */
 
 
-    String[] model = {"ProjectPartner", "ProjectPartnerPerson"};
+    String[] model = {"ResearchImpactStatement"};
 
     for (int i = 0; i < model.length; i++) {
       generateDao(model[i]);

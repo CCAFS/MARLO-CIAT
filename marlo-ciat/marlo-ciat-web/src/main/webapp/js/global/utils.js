@@ -31,6 +31,16 @@ jQuery.fn.numericInput = function() {
   });
 };
 
+jQuery.fn.integerInput = function() {
+  var $inputs = $(this);
+  $inputs.on("keypress keyup blur", function(event) {
+    $(this).val($(this).val().replace(/[^\d].+/, ""));
+    if((event.which < 48 || event.which > 57)) {
+      event.preventDefault();
+    }
+  });
+}
+
 jQuery.fn.percentageInput = function() {
   var $inputs = $(this);
   $inputs.addClass('percentageInput');
@@ -298,6 +308,10 @@ function getClassParameter(selector,cssName) {
   });
   return((type.join(' ')) || 'none');
 }
+
+jQuery.fn.classParam = function(cssName) {
+  return getClassParameter(this, cssName)
+};
 
 function getSerializeForm() {
   var result = '';

@@ -92,29 +92,19 @@
     
     <input type="hidden" name="${customName}.id" value="${(element.id)!}"/>
     
-    [#-- Program Impact & Target Year--]
-    <div class="form-group"> 
-      
-      <div class="row">
-        <div class="col-sm-12">[@customForm.textArea name="${customName}.description" i18nkey="programImpact.name" className="limitWords-150" required=true editable=editable /]</div>
-        [#--] 
-        [#if editable]
-          [@customForm.select name="${customName}.targetYear" label=""  i18nkey="programImpact.targetYear" listName="allYears"   multiple=false required=true  className="yearExpected" editable=editable/]
-        [#else]
-          <div class="select">
-            <label for=""> [@s.text name="programImpact.targetYear" /]:  </label>
-            <div class="selectList"><p> [#if element.targetYear?has_content][#if element.targetYear == -1] Not Selected [#else]${(element.targetYear)!'none'}[/#if][#else]Not Selected[/#if] </p></div> 
-          </div>
-        [/#if].
-        --]  
-      </div>
-              
-      <div class="row">
-        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="programImpact.shortName" className="limitChar-30" required=true editable=editable /]</div>       
-      </div>
-            
+    [#-- SRF Ido --]
+    <div class="form-group">
+      [@customForm.select name="${customName}.researchImpactStatement.id"  i18nkey="programImpact.ido" listName="idos" keyFieldName="id"  displayFieldName="name" required=true  className="srfIdoSelect"  editable=editable/]
     </div>
+     <div class="form-group otherSrf" style="display: [#if element.researchImpactStatement??][#if element.researchImpactStatement.id==-1]block[#else]none[/#if][#else]block[/#if]">[@customForm.input name="${customName}.description" i18nkey="programImpact.otherIdo" className="limitChar-150" required=true editable=editable /]</div> 
     
+    [#-- Short name--]
+    <div class="form-group">           
+      <div class="row">
+        <div class="col-sm-7">[@customForm.input name="${customName}.shortName" i18nkey="programImpact.shortName" className="limitChar-30" required=false editable=editable /]</div>       
+      </div>            
+    </div>
+         
     [#-- Startegic Objectives --]
     <div class="form-group relVal" >
       <h5>[@customForm.text name="programImpact.objectiveValue" readText=!editable /]:[@customForm.req required=editable /]</h5>
@@ -138,7 +128,7 @@
           [@beneficiaryMacro beneficiary=beneficiary name="${customName}.beneficiaries" index=beneficiary_index /]
         [/#list]
       [#else]
-        <p class="message text-center">[@s.text name="No beneficiaries have been added."/]</p>
+        [@beneficiaryMacro beneficiary={} name="${customName}.beneficiaries" index=0 /]
       [/#if]
      
     </div>

@@ -16,11 +16,11 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/global/macros/projectsListTemplate.ftl" as projectList /]
-
+[#-- Help text --]
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
-    [#--  <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />--]
-    <p class="col-md-10"> [@s.text name="projectsList.help"][/@s.text] </p>
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="projectList.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
 </div>
@@ -32,9 +32,10 @@
       [#-- Projects List (My Projects) --]
       <h3 class="headTitle text-center">${selectedProgram.name}- Projects</h3>
       <div class="loadingBlock"></div>
-      <div style="display:none">[@projectList.projectsList projects=projects canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/projectDescription" /]</div>
+      <div style="display:none">[@projectList.projectsList projects=projects canValidate=true canEdit=editable namespace="/monitoring" defaultAction="${(centerSession)!}/projectDescription" /]</div>
   
       [#-- Section Buttons --]
+
       <div class="buttons">
         <div class="buttons-content">        
           <a class="addButton" href="[@s.url action='${(centerSession)!}/addNewProject'][@s.param name='programID']${selectedProgram.id?c}[/@s.param][/@s.url]">[@s.text name="Add project" /]</a>
@@ -42,13 +43,14 @@
         </div>
       </div>
 
+
       
       <div class="clearfix"></div>
     </div>
     
   </article>
 </section>
-[@customForm.confirmJustification action="deleteProject.do" namespace="/${currentSection}" title="Remove Project" /]
+[@customForm.confirmJustificationProject action="deleteProject.do" namespace="/${currentSection}" title="Remove Project" /]
 
 
 [#include "/WEB-INF/global/pages/footer.ftl"]

@@ -18,6 +18,7 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.DeliverableCrosscutingTheme;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
@@ -84,6 +85,27 @@ public class DeliverableListAction extends BaseAction {
     deliverable.setDateCreated(new Date());
     deliverable.setProject(project);
     deliverable.setProjectStatus(new ProjectStatus(new Long(2), true));
+
+
+    DeliverableCrosscutingTheme deliverableCrosscutingTheme = new DeliverableCrosscutingTheme();
+
+    deliverableCrosscutingTheme.setActive(true);
+    deliverableCrosscutingTheme.setActiveSince(new Date());
+    deliverableCrosscutingTheme.setCreatedBy(this.getCurrentUser());
+    deliverableCrosscutingTheme.setModifiedBy(this.getCurrentUser());
+    deliverableCrosscutingTheme.setModificationJustification("");
+
+    deliverableCrosscutingTheme.setClimateChange(false);
+    deliverableCrosscutingTheme.setGender(false);
+    deliverableCrosscutingTheme.setYouth(false);
+    deliverableCrosscutingTheme.setPoliciesInstitutions(false);
+    deliverableCrosscutingTheme.setCapacityDevelopment(false);
+    deliverableCrosscutingTheme.setBigData(false);
+    deliverableCrosscutingTheme.setImpactAssessment(false);
+    deliverableCrosscutingTheme.setNa(false);
+
+    deliverable.setDeliverableCrosscutingTheme(deliverableCrosscutingTheme);
+    deliverableCrosscutingTheme.setDeliverable(deliverable);
 
     deliverableID = deliverableService.saveDeliverable(deliverable);
 

@@ -43,6 +43,7 @@ public final class APConstants {
   public static final String CENTER_PARAMETERS = "center_parameters";
   public static final String CENTER_LANGUAGE = "center_language";
   public static final String CENTER_CUSTOM_FILE = "center_custom_file";
+  public static final String CENTER_COORD_ROLE = "center_coord_role";
 
   // Query parameter
   public static final String QUERY_PARAMETER = "q";
@@ -66,6 +67,8 @@ public final class APConstants {
   public static final String NEXT_USER_ID = "nextUserID";
   public static final String PROJECT_ID = "projectID";
   public static final String DELIVERABLE_ID = "deliverableID";
+  public static final String DELIVERABLE_TYPE_ID = "deliverableTypeId";
+  public static final String OUTPUT_NAME = "outputName";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";
@@ -117,10 +120,16 @@ public final class APConstants {
   public static final String PROJECT_OUTPUT_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectOutputs)";
 
+  public static final String PROJECT_LOCATION_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectLocations)";
+
   public static final String PROJECT_PARTNERS_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectPartners)";
 
   public static final String DELIVERABLE_DOCUMENT_RELATION =
     "java.util.Set(org.cgiar.ccafs.marlo.data.model.Deliverable.deliverableDocuments)";
+
+  public static final String DELIVERABLE_OUTPUTS_RELATION =
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Deliverable.deliverableOutputs)";
 
 }

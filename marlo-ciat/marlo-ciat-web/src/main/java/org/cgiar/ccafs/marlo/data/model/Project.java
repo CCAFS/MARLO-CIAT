@@ -24,7 +24,6 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private Long id;
 
-
   @Expose
   private User modifiedBy;
 
@@ -40,7 +39,6 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private User createdBy;
 
-
   @Expose
   private ProjectStatus projectStatus;
 
@@ -48,13 +46,8 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private String name;
 
-
-  @Expose
-  private String shortName;
-
   @Expose
   private Date startDate;
-
 
   @Expose
   private Date endDate;
@@ -71,7 +64,6 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private Date dateCreated;
 
-
   @Expose
   private String modificationJustification;
 
@@ -79,26 +71,82 @@ public class Project implements java.io.Serializable, IAuditLog {
   @Expose
   private ResearchProgram researchProgram;
 
+
   @Expose
   private ProjectCrosscutingTheme projectCrosscutingTheme;
+
+
+  @Expose
+  private Boolean global;
+
+  @Expose
+  private Boolean region;
+
+
+  private String sGlobal;
+
+
+  private String sRegion;
+
+
+  @Expose
+  private ProjectType projectType;
+
+
+  @Expose
+  private String ocsCode;
+
+
+  @Expose
+  private String description;
+
+
+  @Expose
+  private Date extensionDate;
+
+  @Expose
+  private String originalDonor;
+
+  @Expose
+  private String directDonor;
+
+
+  @Expose
+  private Double totalAmount;
+
+
+  @Expose
+  private String suggestedName;
+
 
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
   private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
 
+
   private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
+
 
   private Set<Deliverable> deliverables = new HashSet<Deliverable>(0);
 
   private Set<Submission> submissions = new HashSet<Submission>(0);
 
+
   private List<ProjectOutput> outputs;
 
   private List<ProjectFundingSource> fundingSources;
 
+
   private Set<ProjectPartner> projectPartners = new HashSet<ProjectPartner>(0);
 
   private List<ProjectPartner> partners;
+
+  private Set<ProjectLocation> projectLocations = new HashSet<ProjectLocation>(0);
+
+  private List<ProjectLocation> projectRegions;
+
+  private List<ProjectLocation> projectCountries;
+
 
   public Project() {
   }
@@ -110,15 +158,14 @@ public class Project implements java.io.Serializable, IAuditLog {
 
 
   public Project(User modifiedBy, User contactPerson, User projectLeader, User createdBy, ProjectStatus projectStatus,
-    String name, String shortName, Date startDate, Date endDate, boolean active, Date activeSince,
-    String modificationJustification, Set<ProjectOutput> projectOutputs) {
+    String name, Date startDate, Date endDate, boolean active, Date activeSince, String modificationJustification,
+    Set<ProjectOutput> projectOutputs) {
     this.modifiedBy = modifiedBy;
     this.contactPerson = contactPerson;
     this.projectLeader = projectLeader;
     this.createdBy = createdBy;
     this.projectStatus = projectStatus;
     this.name = name;
-    this.shortName = shortName;
     this.startDate = startDate;
     this.endDate = endDate;
     this.active = active;
@@ -153,6 +200,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     return activeSince;
   }
 
+  public String getComposedName() {
+    return "P" + this.id + "- " + (this.name != null ? this.name : "title not defined");
+  }
+
   public User getContactPerson() {
     return contactPerson;
   }
@@ -169,6 +220,14 @@ public class Project implements java.io.Serializable, IAuditLog {
     return deliverables;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
+  public String getDirectDonor() {
+    return directDonor;
+  }
+
   public Date getEndDate() {
     return endDate;
   }
@@ -177,14 +236,22 @@ public class Project implements java.io.Serializable, IAuditLog {
     String pattern = "yyyy-MM-dd";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
     String date = "";
-    if (this.startDate != null) {
-      date = simpleDateFormat.format(this.startDate);
+    if (this.endDate != null) {
+      date = simpleDateFormat.format(this.endDate);
     }
     return date;
   }
 
+  public Date getExtensionDate() {
+    return extensionDate;
+  }
+
   public List<ProjectFundingSource> getFundingSources() {
     return fundingSources;
+  }
+
+  public Boolean getGlobal() {
+    return global;
   }
 
   @Override
@@ -208,17 +275,35 @@ public class Project implements java.io.Serializable, IAuditLog {
     return modifiedBy;
   }
 
+
   public String getName() {
     return name;
   }
+
+  public String getOcsCode() {
+    return ocsCode;
+  }
+
+
+  public String getOriginalDonor() {
+    return originalDonor;
+  }
+
 
   public List<ProjectOutput> getOutputs() {
     return outputs;
   }
 
+
   public List<ProjectPartner> getPartners() {
     return partners;
   }
+
+
+  public List<ProjectLocation> getProjectCountries() {
+    return projectCountries;
+  }
+
 
   public ProjectCrosscutingTheme getProjectCrosscutingTheme() {
     return projectCrosscutingTheme;
@@ -232,6 +317,10 @@ public class Project implements java.io.Serializable, IAuditLog {
     return projectLeader;
   }
 
+  public Set<ProjectLocation> getProjectLocations() {
+    return projectLocations;
+  }
+
   public Set<ProjectOutput> getProjectOutputs() {
     return projectOutputs;
   }
@@ -240,24 +329,39 @@ public class Project implements java.io.Serializable, IAuditLog {
     return projectPartners;
   }
 
+  public List<ProjectLocation> getProjectRegions() {
+    return projectRegions;
+  }
+
   public ProjectStatus getProjectStatus() {
     return projectStatus;
   }
 
+  public ProjectType getProjectType() {
+    return projectType;
+  }
+
+  public Boolean getRegion() {
+    return region;
+  }
 
   public ResearchProgram getResearchProgram() {
     return researchProgram;
   }
 
-
   public Set<SectionStatus> getSectionStatuses() {
     return sectionStatuses;
   }
 
-
-  public String getShortName() {
-    return shortName;
+  public String getsGlobal() {
+    return sGlobal;
   }
+
+
+  public String getsRegion() {
+    return sRegion;
+  }
+
 
   public String getStarDateFormat() {
     String pattern = "yyyy-MM-dd";
@@ -269,16 +373,21 @@ public class Project implements java.io.Serializable, IAuditLog {
     return date;
   }
 
-
   public Date getStartDate() {
     return startDate;
   }
-
 
   public Set<Submission> getSubmissions() {
     return submissions;
   }
 
+  public String getSuggestedName() {
+    return suggestedName;
+  }
+
+  public Double getTotalAmount() {
+    return totalAmount;
+  }
 
   @Override
   public int hashCode() {
@@ -288,86 +397,119 @@ public class Project implements java.io.Serializable, IAuditLog {
     return result;
   }
 
-
   @Override
   public boolean isActive() {
     return active;
   }
 
-
   public void setActive(boolean active) {
     this.active = active;
   }
-
 
   public void setActiveSince(Date activeSince) {
     this.activeSince = activeSince;
   }
 
-
   public void setContactPerson(User contactPerson) {
     this.contactPerson = contactPerson;
   }
-
 
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
 
-
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
-
 
   public void setDeliverables(Set<Deliverable> deliverables) {
     this.deliverables = deliverables;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setDirectDonor(String directDonor) {
+    this.directDonor = directDonor;
+  }
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
+  }
+
+
+  public void setExtensionDate(Date extensionDate) {
+    this.extensionDate = extensionDate;
   }
 
   public void setFundingSources(List<ProjectFundingSource> fundingSources) {
     this.fundingSources = fundingSources;
   }
 
+  public void setGlobal(Boolean global) {
+    this.global = global;
+  }
+
+
   public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setModificationJustification(String modificationJustification) {
     this.modificationJustification = modificationJustification;
   }
 
+
   public void setModifiedBy(User modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
 
-
   public void setName(String name) {
     this.name = name;
+  }
+
+
+  public void setOcsCode(String ocsCode) {
+    this.ocsCode = ocsCode;
+  }
+
+  public void setOriginalDonor(String originalDonor) {
+    this.originalDonor = originalDonor;
   }
 
   public void setOutputs(List<ProjectOutput> outputs) {
     this.outputs = outputs;
   }
 
+
   public void setPartners(List<ProjectPartner> partners) {
     this.partners = partners;
   }
+
+
+  public void setProjectCountries(List<ProjectLocation> projectCountries) {
+    this.projectCountries = projectCountries;
+  }
+
 
   public void setProjectCrosscutingTheme(ProjectCrosscutingTheme projectCrosscutingTheme) {
     this.projectCrosscutingTheme = projectCrosscutingTheme;
   }
 
+
   public void setProjectFundingSources(Set<ProjectFundingSource> projectFundingSources) {
     this.projectFundingSources = projectFundingSources;
   }
 
+
   public void setProjectLeader(User projectLeader) {
     this.projectLeader = projectLeader;
+  }
+
+  public void setProjectLocations(Set<ProjectLocation> projectLocations) {
+    this.projectLocations = projectLocations;
   }
 
   public void setProjectOutputs(Set<ProjectOutput> projectOutputs) {
@@ -378,21 +520,38 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.projectPartners = projectPartners;
   }
 
+  public void setProjectRegions(List<ProjectLocation> projectRegions) {
+    this.projectRegions = projectRegions;
+  }
+
+
   public void setProjectStatus(ProjectStatus projectStatus) {
     this.projectStatus = projectStatus;
+  }
+
+  public void setProjectType(ProjectType projectType) {
+    this.projectType = projectType;
+  }
+
+  public void setRegion(Boolean region) {
+    this.region = region;
   }
 
   public void setResearchProgram(ResearchProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
 
-
   public void setSectionStatuses(Set<SectionStatus> sectionStatuses) {
     this.sectionStatuses = sectionStatuses;
   }
 
-  public void setShortName(String shortName) {
-    this.shortName = shortName;
+  public void setsGlobal(String sGlobal) {
+    this.sGlobal = sGlobal;
+  }
+
+
+  public void setsRegion(String sRegion) {
+    this.sRegion = sRegion;
   }
 
 
@@ -404,6 +563,19 @@ public class Project implements java.io.Serializable, IAuditLog {
     this.submissions = submissions;
   }
 
+
+  public void setSuggestedName(String suggestedName) {
+    this.suggestedName = suggestedName;
+  }
+
+  public void setTotalAmount(Double totalAmount) {
+    this.totalAmount = totalAmount;
+  }
+
+  @Override
+  public String toString() {
+    return id.toString();
+  }
 
 }
 

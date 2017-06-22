@@ -15,11 +15,11 @@
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/forms.ftl" as customForm /]
 [#import "/WEB-INF/views/impactPathway/outcomeListTemplate.ftl" as outcomesListMonitoring /]
-
+[#-- Help text --]
 <div class="container helpText viewMore-block">
   <div class="helpMessage infoText">
-    [#--  <img class="col-md-2" src="${baseUrl}/images/global/icon-help.jpg" />--]
-    <p class="col-md-10"> [@s.text name=""][/@s.text] </p>
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="monitoring.outcomeList.help"][/@s.text] </p>
   </div> 
   <div style="display:none" class="viewMore closed"></div>
 </div>
@@ -43,12 +43,14 @@
         </select>            
       </div>
       <div class="loadingBlock"></div>
-      <div style="display:none">[@outcomesListMonitoring.outcomesListMonitoring outcomes=outcomes canValidate=true canEdit=true namespace="/monitoring" defaultAction="${(centerSession)!}/monitoringOutcome" /]</div>
+      <div style="display:none">[@outcomesListMonitoring.outcomesListMonitoring outcomes=outcomes canValidate=true canEdit=editable namespace="/monitoring" defaultAction="${(centerSession)!}/monitoringOutcome" /]</div>
       <div class="clearfix"></div>
     </div>
     
   </article>
 </section>
 
+[#-- Outcome Projects Popup --]
+[#include "/WEB-INF/global/macros/outcomeProjectsPopup.ftl" /]
 
 [#include "/WEB-INF/global/pages/footer.ftl"]

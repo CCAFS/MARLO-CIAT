@@ -13,7 +13,7 @@ function init() {
   $('form select').select2();
 
   /* Numeric Inputs */
-  $('input.targetValue , input.targetYear').numericInput();
+  $('input.targetValue , input.targetYear').integerInput();
 
   /* Percentage Inputs */
   $('.outcomes-list input.contribution').percentageInput();
@@ -62,9 +62,10 @@ function attachEvents() {
       console.log(i);
       // Empty
       $(select).empty();
+      $(select).addOption(-1, "Select a year...")
       // New Years list
       while(startYear <= endYear) {
-        $(select).addOption(startYear, startYear)
+        $(select).addOption(startYear, startYear);
         startYear++;
       }
       // Set value

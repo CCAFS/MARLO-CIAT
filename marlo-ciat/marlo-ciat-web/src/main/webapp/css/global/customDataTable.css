@@ -50,7 +50,7 @@ table.dataTable {
 
 table.dataTable thead {
    
-  background-color: #8ea786;
+  /*background-color: #8ea786;*/
   color: #fff;
 }
 
@@ -180,6 +180,6 @@ table.dataTable a {
   /* left: 0; */
 }
 
-.subHeader {
+.subHeader th{
     background-color: #8ea786;
 }

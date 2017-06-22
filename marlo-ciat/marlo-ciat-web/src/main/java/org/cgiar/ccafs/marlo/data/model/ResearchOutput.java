@@ -48,12 +48,12 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private ResearchOutcome researchOutcome;
 
+
   @Expose
   private Date activeSince;
 
   @Expose
   private boolean active;
-
 
   @Expose
   private User createdBy;
@@ -68,21 +68,23 @@ public class ResearchOutput implements Serializable, IAuditLog {
   @Expose
   private String modificationJustification;
 
+
   private Set<ResearchOutputPartner> researchOutputPartners = new HashSet<ResearchOutputPartner>(0);
 
   private Set<SectionStatus> sectionStatuses = new HashSet<SectionStatus>(0);
 
   private Set<ResearchOutputsNextUser> researchOutputsNextUsers = new HashSet<ResearchOutputsNextUser>(0);
 
+  private Set<ProjectOutput> projectOutputs = new HashSet<ProjectOutput>(0);
 
   private List<ResearchOutputPartner> partners;
 
   private List<ResearchOutputsNextUser> nextUsers;
 
+
   public ResearchOutput() {
     super();
   }
-
 
   /**
    * @param output
@@ -124,6 +126,10 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return activeSince;
   }
 
+  public String getComposedName() {
+    return "O" + this.id + "- " + (this.title != null ? this.title : "title not defined");
+  }
+
 
   public User getCreatedBy() {
     return createdBy;
@@ -146,6 +152,7 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return id;
   }
 
+
   @Override
   public String getLogDeatil() {
     StringBuilder sb = new StringBuilder();
@@ -162,13 +169,17 @@ public class ResearchOutput implements Serializable, IAuditLog {
     return modifiedBy;
   }
 
-
   public List<ResearchOutputsNextUser> getNextUsers() {
     return nextUsers;
   }
 
+
   public List<ResearchOutputPartner> getPartners() {
     return partners;
+  }
+
+  public Set<ProjectOutput> getProjectOutputs() {
+    return projectOutputs;
   }
 
   /**
@@ -262,13 +273,17 @@ public class ResearchOutput implements Serializable, IAuditLog {
     this.partners = partners;
   }
 
+  public void setProjectOutputs(Set<ProjectOutput> projectOutputs) {
+    this.projectOutputs = projectOutputs;
+  }
+
+
   /**
    * @param researchOutcome the researchOutcome to set
    */
   public void setResearchOutcome(ResearchOutcome researchOutcome) {
     this.researchOutcome = researchOutcome;
   }
-
 
   public void setResearchOutputPartners(Set<ResearchOutputPartner> researchOutputPartners) {
     this.researchOutputPartners = researchOutputPartners;

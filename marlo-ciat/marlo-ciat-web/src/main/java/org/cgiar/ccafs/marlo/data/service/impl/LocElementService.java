@@ -67,6 +67,12 @@ public class LocElementService implements ILocElementService {
   }
 
   @Override
+  public LocElement getLocElementByISOCode(String ISOCode) {
+
+    return locElementDAO.findISOCode(ISOCode);
+  }
+
+  @Override
   public List<LocElement> getLocElementsByUserId(Long userId) {
     return locElementDAO.getLocElementsByUserId(userId);
   }

@@ -15,7 +15,14 @@
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
 [#import "/WEB-INF/global/macros/utils.ftl" as utils /]
-
+[#-- Help text --]
+<div class="container helpText viewMore-block">
+  <div class="helpMessage infoText">
+    <img class="col-md-2" src="${baseUrl}/images/global/icon-help.png" />
+    <p class="col-md-10"> [@s.text name="projectPartner.help"][/@s.text] </p>
+  </div> 
+  <div style="display:none" class="viewMore closed"></div>
+</div>
 
 [#--  marlo cluster of activities--]
 <section class="marlo-content">
@@ -27,6 +34,9 @@
       </div>
       <div class="col-md-9">
         [#-- Section Messages --]
+        [#-- Projects data information --]
+        [#include "/WEB-INF/views/monitoring/project/dataInfo-projects.ftl" /]
+        <br />
 
         <span id="programSelected" class="hidden">${(selectedProgram.id)!}</span>
         
@@ -100,7 +110,7 @@
     
     [#-- Partner Title --]    
     <div class="form-group">
-      <div class="pull-right">[@s.radio label="projectPartner.mode" name="${customName}.internal" list="partnerModes" value="${(element.internal?c)!}" /]</div>
+      <div class="pull-right">[#if editable][@s.radio label="projectPartner.mode" name="${customName}.internal" list="partnerModes" value="${(element.internal?c)!}" /][#else]${(element.internal?string("Internal","External"))!} Partner[/#if]</div>
       <h5 class="sectionSubTitle title">${(element.institution.composedName)!'Undefined'}</h5> 
       <div class="clearfix"></div>
     </div>

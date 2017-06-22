@@ -1,0 +1,14 @@
+{
+  "name": "jQuery-Timelinr",
+  "homepage": "https://github.com/juanbrujo/jQuery-Timelinr",
+  "version": "0.9.6",
+  "_release": "0.9.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.6",
+    "commit": "1311f8e486b6a9497c96cd6f6682152e7cfa2d25"
+  },
+  "_source": "https://github.com/juanbrujo/jQuery-Timelinr.git",
+  "_target": "^0.9.6",
+  "_originalSource": "https://github.com/juanbrujo/jQuery-Timelinr.git"
+}

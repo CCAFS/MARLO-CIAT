@@ -51,7 +51,7 @@
           
           [#-- Delete output--]
           <td class="text-center">
-            [#if canEdit]
+            [#if canEdit && action.canBeDeleted(output.id, output.class.name)!false]
               <a id="removeOutput-${output.id}" class="removeOutput" href="#" title="">
                 <img src="${baseUrl}/images/global/trash.png" title="[@s.text name="programImpact.outputList.removeOutcome" /]" /> 
               </a>

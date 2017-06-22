@@ -259,6 +259,21 @@
     </div>  
   </div>
 [/#macro]
+[#macro confirmJustificationProject action="" namespace="/" nameId="" title="" projectID=""]
+  <div id="dialog-justification" title="${title}" style="display:none"> 
+    <div class="dialog-content"> 
+      [@s.form action=action namespace="${namespace}" cssClass="pure-form"]
+        [@textArea name="justification" i18nkey="saving.justification.project" required=true className="justification"/]
+        [#if nameId != ""]
+          <input name="${nameId}" type="hidden" value="-1" />
+        [/#if]
+        <input name="projectID" type="hidden" value="${projectID}" />
+        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      [/@s.form]
+    </div>  
+  </div>
+[/#macro]
 
 [#macro rank name disabled=false editable=true]
   [#assign score][@s.property value="${name}"/][/#assign]
@@ -301,6 +316,7 @@
 [#macro yesNoInput name label="" disabled=false editable=true inverse=false value="" yesLabel="Yes" noLabel="No" cssClass=""]
   [#if value == ""]
     [#assign customValue][@s.property value="${name}"/][/#assign]
+   
   [#else]
     [#assign customValue=value /] 
   [/#if]
@@ -309,12 +325,14 @@
       <label for="${name}">[@s.text name=label/]</label>
     [/#if]
     [#if editable]
+    
       <div class="button-wrap">
         [#-- Yes Button --]
         <label for="yes-button-${name}" class="yes-button-label button-label [#if customValue == "true"]radio-checked[/#if]">${yesLabel}</label>
         [#-- No Button --]
         <label for="no-button-${name}" class="no-button-label button-label [#if customValue == "false"]radio-checked[/#if]">${noLabel}</label>
-        <input type="hidden" name="${name}" id="hasCoordinates-${name}" class="onoffswitch-radio"  [#if customValue == "false"]value="false"[#else]value="true"[/#if] />
+        
+        <input type="hidden" name="${name}" id="hasCoordinates-${name}" class="onoffswitch-radio"  [#if customValue?has_content][#if customValue == "false"]value="false"[#else]value="true"[/#if][#else]value=""[/#if] />
       </div>
       [#if disabled] <input type="hidden" name="${name}" value="true" />[/#if] 
     [#else]

@@ -29,6 +29,9 @@
 			class="org.cgiar.ccafs.marlo.data.model.DeliverableType" fetch="select">
 			<column name="type_id" />
 		</many-to-one>
+		<one-to-one name="deliverableCrosscutingTheme"
+      class="org.cgiar.ccafs.marlo.data.model.DeliverableCrosscutingTheme"
+      cascade="save-update"></one-to-one>
 		<property name="name" type="string">
 			<column name="name" length="65535" />
 		</property>
@@ -64,5 +67,12 @@
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.SectionStatus" />
 		</set>
+		<set name="deliverableOutputs" table="deliverable_outputs" inverse="true"
+      lazy="true" fetch="select">
+      <key>
+        <column name="deliverable_id" not-null="true" />
+      </key>
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.DeliverableOutput" />
+    </set>
 	</class>
 </hibernate-mapping>
