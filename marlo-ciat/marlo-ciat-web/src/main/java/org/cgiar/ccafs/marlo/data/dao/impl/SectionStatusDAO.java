@@ -41,13 +41,13 @@ public class SectionStatusDAO implements ISectionStatusDAO {
 
   @Override
   public List<Map<String, Object>> distinctSectionStatus(long programID) {
-    String query = "select DISTINCT section_name from section_statuses where research_program_id=" + programID;
+    String query = "select DISTINCT section_name from center_section_statuses where research_program_id=" + programID;
     return dao.findCustomQuery(query);
   }
 
   @Override
   public List<Map<String, Object>> distinctSectionStatusProject(long projectID) {
-    String query = "select DISTINCT section_name from section_statuses where project_id=" + projectID;
+    String query = "select DISTINCT section_name from center_section_statuses where project_id=" + projectID;
     return dao.findCustomQuery(query);
   }
 
