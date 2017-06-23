@@ -3,12 +3,12 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Mar 16, 2017 10:28:46 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.MonitoringMilestone" table="center_monitoring_milestones" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterMonitoringMilestone" table="center_monitoring_milestones" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="monitoringOutcome" class="org.cgiar.ccafs.marlo.data.model.MonitoringOutcome" fetch="select">
+        <many-to-one name="monitoringOutcome" class="org.cgiar.ccafs.marlo.data.model.CenterMonitoringOutcome" fetch="select">
             <column name="monitoring_outcome_id" not-null="true" />
         </many-to-one>
         <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
@@ -17,7 +17,7 @@
         <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="created_by" />
         </many-to-one>
-        <many-to-one name="researchMilestone" class="org.cgiar.ccafs.marlo.data.model.ResearchMilestone" fetch="select">
+        <many-to-one name="researchMilestone" class="org.cgiar.ccafs.marlo.data.model.CenterMilestone" fetch="select">
             <column name="milestone_id" not-null="true" />
         </many-to-one>
         <property name="achievedValue" type="big_decimal">

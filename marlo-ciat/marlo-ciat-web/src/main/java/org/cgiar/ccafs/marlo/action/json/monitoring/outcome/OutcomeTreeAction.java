@@ -17,12 +17,12 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.outcome;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutcomeService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -47,13 +47,13 @@ public class OutcomeTreeAction extends BaseAction {
   private long outcomeID;
 
 
-  private IResearchOutcomeService outcomeService;
+  private ICenterOutcomeService outcomeService;
 
 
   private List<Map<String, Object>> dataProjects;
 
   @Inject
-  public OutcomeTreeAction(APConfig config, IResearchOutcomeService outcomeService) {
+  public OutcomeTreeAction(APConfig config, ICenterOutcomeService outcomeService) {
     super(config);
     this.outcomeService = outcomeService;
   }
@@ -61,20 +61,20 @@ public class OutcomeTreeAction extends BaseAction {
   @Override
   public String execute() throws Exception {
 
-    List<Project> projects = new ArrayList<>();
+    List<CenterProject> projects = new ArrayList<>();
 
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    CenterOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
-    List<ResearchOutput> outputs =
+    List<CenterOutput> outputs =
       new ArrayList<>(outcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
     if (!outputs.isEmpty()) {
-      for (ResearchOutput researchOutput : outputs) {
-        List<ProjectOutput> projectOutputs = new ArrayList<>(
+      for (CenterOutput researchOutput : outputs) {
+        List<CenterProjectOutput> projectOutputs = new ArrayList<>(
           researchOutput.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
         if (!projectOutputs.isEmpty()) {
 
-          for (ProjectOutput projectOutput : projectOutputs) {
+          for (CenterProjectOutput projectOutput : projectOutputs) {
             if (projectOutput.getProject().isActive()) {
               projects.add(projectOutput.getProject());
             }
@@ -84,22 +84,22 @@ public class OutcomeTreeAction extends BaseAction {
       }
     }
 
-    HashSet<Project> hashProjects = new HashSet<>();
+    HashSet<CenterProject> hashProjects = new HashSet<>();
     hashProjects.addAll(projects);
     projects = new ArrayList<>(hashProjects);
 
 
     this.dataProjects = new ArrayList<>();
-    for (Project project : hashProjects) {
+    for (CenterProject project : hashProjects) {
       Map<String, Object> dataProject = new HashMap<>();
       dataProject.put("id", project.getId());
       dataProject.put("name", project.getName());
 
-      List<ProjectOutput> projectOutputs =
+      List<CenterProjectOutput> projectOutputs =
         new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
       List<Map<String, Object>> dataOutputs = new ArrayList<>();
       if (!projectOutputs.isEmpty()) {
-        for (ProjectOutput projectOutput : projectOutputs) {
+        for (CenterProjectOutput projectOutput : projectOutputs) {
           Map<String, Object> dataOutput = new HashMap<>();
           dataOutput.put("id", projectOutput.getResearchOutput().getId());
           dataOutput.put("name", projectOutput.getResearchOutput().getTitle());
@@ -111,11 +111,11 @@ public class OutcomeTreeAction extends BaseAction {
       }
       dataProject.put("outputs", dataOutputs);
 
-      List<Deliverable> deliverables =
+      List<CenterDeliverable> deliverables =
         new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
       List<Map<String, Object>> dataDeliverables = new ArrayList<>();
       if (!deliverables.isEmpty()) {
-        for (Deliverable deliverable : deliverables) {
+        for (CenterDeliverable deliverable : deliverables) {
           Map<String, Object> dataDeliverable = new HashMap<>();
           dataDeliverable.put("id", deliverable.getId());
           dataDeliverable.put("name", deliverable.getName());

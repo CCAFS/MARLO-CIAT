@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 30, 2016 9:52:32 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.NextuserType" table="center_nextuser_types" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterNextuserType" table="center_nextuser_types" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
@@ -14,7 +14,7 @@
         <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="created_by" />
         </many-to-one>
-        <many-to-one name="nextuserType" class="org.cgiar.ccafs.marlo.data.model.NextuserType" fetch="select">
+        <many-to-one name="nextuserType" class="org.cgiar.ccafs.marlo.data.model.CenterNextuserType" fetch="select">
             <column name="parent_type_id" />
         </many-to-one>
         <property name="name" type="string">
@@ -33,13 +33,13 @@
             <key>
                 <column name="parent_type_id" />
             </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.NextuserType" />
+            <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterNextuserType" />
         </set>
         <set name="researchOutputsNextUsers" table="center_outputs_next_users" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="nextuser_type_id" not-null="true" />
             </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchOutputsNextUser" />
+            <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterOutputsNextUser" />
         </set>
     </class>
 </hibernate-mapping>

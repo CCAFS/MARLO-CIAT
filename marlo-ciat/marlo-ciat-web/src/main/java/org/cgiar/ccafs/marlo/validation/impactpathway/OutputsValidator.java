@@ -17,10 +17,10 @@ package org.cgiar.ccafs.marlo.validation.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutputsNextUser;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterOutputsNextUser;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -45,8 +45,8 @@ public class OutputsValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(ResearchOutput output, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterOutput output, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = output.getClass().getSimpleName();
     String actionFile = ImpactPathwaySectionsEnum.OUTPUT.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -55,7 +55,7 @@ public class OutputsValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, ResearchOutput output, ResearchProgram selectedProgram, boolean saving) {
+  public void validate(BaseAction baseAction, CenterOutput output, CenterProgram selectedProgram, boolean saving) {
     baseAction.setInvalidFields(new HashMap<>());
 
     if (!saving) {
@@ -75,7 +75,7 @@ public class OutputsValidator extends BaseValidator {
     this.saveMissingFields(selectedProgram, output, "outputsList");
   }
 
-  public void validateNextUser(BaseAction baseAction, ResearchOutputsNextUser nextUser, int i) {
+  public void validateNextUser(BaseAction baseAction, CenterOutputsNextUser nextUser, int i) {
 
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
@@ -94,7 +94,7 @@ public class OutputsValidator extends BaseValidator {
 
   }
 
-  public void validateOutput(BaseAction baseAction, ResearchOutput output) {
+  public void validateOutput(BaseAction baseAction, CenterOutput output) {
 
     if (output.getTitle() != null) {
       if (!this.isValidString(output.getTitle()) && this.wordCount(output.getTitle()) <= 50) {
@@ -115,7 +115,7 @@ public class OutputsValidator extends BaseValidator {
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"nextUsers"}));
       } else {
         for (int i = 0; i < output.getNextUsers().size(); i++) {
-          ResearchOutputsNextUser nextuser = output.getNextUsers().get(i);
+          CenterOutputsNextUser nextuser = output.getNextUsers().get(i);
           this.validateNextUser(baseAction, nextuser, i);
         }
       }

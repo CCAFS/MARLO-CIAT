@@ -18,19 +18,19 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.action.impactpathway.IPSubmissionAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterCycle;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterSubmission;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.Submission;
+import org.cgiar.ccafs.marlo.data.service.ICenterCycleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
-import org.cgiar.ccafs.marlo.data.service.ISubmissionService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSubmissionService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
@@ -57,25 +57,25 @@ public class ProjectSubmissionAction extends BaseAction {
   private static Logger LOG = LoggerFactory.getLogger(IPSubmissionAction.class);
 
   // Managers
-  private ISubmissionService submissionService;
-  private IProjectService projectService;
-  private ISectionStatusService sectionStatusService;
-  private IResearchCycleService cycleService;
+  private ICenterSubmissionService submissionService;
+  private ICenterProjectService projectService;
+  private ICenterSectionStatusService sectionStatusService;
+  private ICenterCycleService cycleService;
   private ICenterService centerService;
 
   // Parameters
   private SendMail sendMail;
-  private Project project;
-  private ResearchCycle cycle;
-  private ResearchCenter loggedCenter;
+  private CenterProject project;
+  private CenterCycle cycle;
+  private Center loggedCenter;
 
   private long projectID;
   private boolean isSubmited = false;
 
   @Inject
-  public ProjectSubmissionAction(APConfig config, ISubmissionService submissionService, IProjectService projectService,
-    ISectionStatusService sectionStatusService, IResearchCycleService cycleService, ICenterService centerService,
-    SendMail sendMail) {
+  public ProjectSubmissionAction(APConfig config, ICenterSubmissionService submissionService,
+    ICenterProjectService projectService, ICenterSectionStatusService sectionStatusService,
+    ICenterCycleService cycleService, ICenterService centerService, SendMail sendMail) {
     super(config);
     this.submissionService = submissionService;
     this.projectService = projectService;
@@ -90,9 +90,9 @@ public class ProjectSubmissionAction extends BaseAction {
     if (this.hasPermission("*")) {
       if (this.isCompleteProject(projectID)) {
         if (submissionService.findAll() != null) {
-          project = projectService.getProjectById(projectID);
+          project = projectService.getCenterProjectById(projectID);
 
-          List<Submission> submissions = new ArrayList<>(project.getSubmissions().stream()
+          List<CenterSubmission> submissions = new ArrayList<>(project.getSubmissions().stream()
             .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
             .collect(Collectors.toList()));
 
@@ -104,7 +104,7 @@ public class ProjectSubmissionAction extends BaseAction {
 
         if (!isSubmited) {
 
-          Submission submission = new Submission();
+          CenterSubmission submission = new CenterSubmission();
           submission.setProject(project);
           submission.setDateTime(new Date());
           submission.setUser(this.getCurrentUser());
@@ -127,7 +127,7 @@ public class ProjectSubmissionAction extends BaseAction {
 
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -138,7 +138,7 @@ public class ProjectSubmissionAction extends BaseAction {
   @Override
   public void prepare() throws Exception {
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     try {
@@ -148,7 +148,7 @@ public class ProjectSubmissionAction extends BaseAction {
       return; // Stop here and go to execute method.
     }
 
-    project = projectService.getProjectById(projectID);
+    project = projectService.getCenterProjectById(projectID);
 
     String params[] = {loggedCenter.getAcronym(), project.getResearchProgram().getResearchArea().getId() + "",
       project.getResearchProgram().getId() + "", project.getId() + ""};
@@ -184,26 +184,26 @@ public class ProjectSubmissionAction extends BaseAction {
     StringBuilder ccEmails = new StringBuilder();
 
     // CC
-    ResearchArea area = project.getResearchProgram().getResearchArea();
+    CenterArea area = project.getResearchProgram().getResearchArea();
 
-    List<ResearchLeader> areaLeaders =
+    List<CenterLeader> areaLeaders =
       new ArrayList<>(area.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
 
     if (!areaLeaders.isEmpty()) {
-      for (ResearchLeader leader : areaLeaders) {
+      for (CenterLeader leader : areaLeaders) {
         ccEmails.append(leader.getUser().getEmail());
         ccEmails.append(", ");
       }
     }
 
-    ResearchProgram program = project.getResearchProgram();
+    CenterProgram program = project.getResearchProgram();
 
-    List<ResearchLeader> programLeaders =
+    List<CenterLeader> programLeaders =
       new ArrayList<>(program.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
     if (!programLeaders.isEmpty()) {
-      for (ResearchLeader leader : programLeaders) {
+      for (CenterLeader leader : programLeaders) {
         ccEmails.append(leader.getUser().getEmail());
         ccEmails.append(", ");
       }
@@ -221,12 +221,12 @@ public class ProjectSubmissionAction extends BaseAction {
     String bbcEmails = this.config.getEmailNotification();
 
     // Send pdf
-    // Get the PDF from the Project report url.
+    // Get the PDF from the CenterProject report url.
     ByteBuffer buffer = null;
     String fileName = null;
     String contentType = null;
 
-    // TODO Add the Project PDF
+    // TODO Add the CenterProject PDF
     // try {
     // project = projectService.getProjectById(projectID);
     // impactSubmissionSummaryAction.setResearchProgram(program);
@@ -250,7 +250,7 @@ public class ProjectSubmissionAction extends BaseAction {
 
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 

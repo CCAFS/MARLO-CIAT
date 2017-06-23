@@ -17,11 +17,11 @@ package org.cgiar.ccafs.marlo.action.admin;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterAreaService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -37,32 +37,32 @@ public class ResearchManagementAction extends BaseAction {
   private static final long serialVersionUID = -8241378443798479147L;
 
   private ICenterService centerService;
-  private IResearchAreaService areaService;
-  private IProgramService programService;
-  private ResearchCenter loggedCenter;
-  private List<ResearchArea> areas;
+  private ICenterAreaService areaService;
+  private ICenterProgramService programService;
+  private Center loggedCenter;
+  private List<CenterArea> areas;
 
   @Inject
-  public ResearchManagementAction(APConfig config, ICenterService centerService, IResearchAreaService areaService,
-    IProgramService programService) {
+  public ResearchManagementAction(APConfig config, ICenterService centerService, ICenterAreaService areaService,
+    ICenterProgramService programService) {
     super(config);
     this.centerService = centerService;
     this.areaService = areaService;
     this.programService = programService;
   }
 
-  public List<ResearchArea> getAreas() {
+  public List<CenterArea> getAreas() {
     return areas;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     String params[] = {loggedCenter.getAcronym() + ""};
@@ -70,11 +70,11 @@ public class ResearchManagementAction extends BaseAction {
   }
 
 
-  public void setAreas(List<ResearchArea> areas) {
+  public void setAreas(List<CenterArea> areas) {
     this.areas = areas;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 }

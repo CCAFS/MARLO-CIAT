@@ -36,7 +36,7 @@
             <key>
                 <column name="crp_id" />
             </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.ProjectFundingSource" />
+            <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterProjectFundingSource" />
         </set>
     </class>
 </hibernate-mapping>

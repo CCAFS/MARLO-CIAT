@@ -67,9 +67,9 @@ public class User implements IAuditLog {
 
   private boolean active;
   private Date lastLogin;
-  private Set<UserRole> userRoles = new HashSet<UserRole>(0);
+  private Set<CenterUserRole> userRoles = new HashSet<CenterUserRole>(0);
   private Set<CenterUser> centerUsers = new HashSet<CenterUser>(0);
-  private Set<ResearchLeader> researchLeaders = new HashSet<ResearchLeader>(0);
+  private Set<CenterLeader> researchLeaders = new HashSet<CenterLeader>(0);
 
   public User() {
   }
@@ -82,8 +82,8 @@ public class User implements IAuditLog {
   }
 
   public User(String firstName, String lastName, String username, String email, String password, boolean cgiarUser,
-    User createdBy, boolean active, Date lastLogin, Set<UserRole> userRoles, Set<CenterUser> centerUsers,
-    Set<ResearchLeader> researchLeaders) {
+    User createdBy, boolean active, Date lastLogin, Set<CenterUserRole> userRoles, Set<CenterUser> centerUsers,
+    Set<CenterLeader> researchLeaders) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
@@ -202,7 +202,7 @@ public class User implements IAuditLog {
   /**
    * @return the researchLeaders
    */
-  public Set<ResearchLeader> getResearchLeaders() {
+  public Set<CenterLeader> getResearchLeaders() {
     return researchLeaders;
   }
 
@@ -210,7 +210,7 @@ public class User implements IAuditLog {
     return this.username;
   }
 
-  public Set<UserRole> getUserRoles() {
+  public Set<CenterUserRole> getUserRoles() {
     return this.userRoles;
   }
 
@@ -294,7 +294,7 @@ public class User implements IAuditLog {
   /**
    * @param researchLeaders the researchLeaders to set
    */
-  public void setResearchLeaders(Set<ResearchLeader> researchLeaders) {
+  public void setResearchLeaders(Set<CenterLeader> researchLeaders) {
     this.researchLeaders = researchLeaders;
   }
 
@@ -302,7 +302,7 @@ public class User implements IAuditLog {
     this.username = username;
   }
 
-  public void setUserRoles(Set<UserRole> userRoles) {
+  public void setUserRoles(Set<CenterUserRole> userRoles) {
     this.userRoles = userRoles;
   }
 

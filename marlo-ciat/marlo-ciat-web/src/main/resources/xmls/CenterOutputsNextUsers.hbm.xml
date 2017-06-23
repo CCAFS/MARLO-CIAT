@@ -3,15 +3,15 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 30, 2016 9:52:32 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.ResearchOutputsNextUser" table="center_outputs_next_users" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterOutputsNextUser" table="center_outputs_next_users" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" fetch="select">
+        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.CenterOutput" fetch="select">
             <column name="research_output_id" not-null="false" />
         </many-to-one>
-        <many-to-one name="nextuserType" class="org.cgiar.ccafs.marlo.data.model.NextuserType" fetch="select">
+        <many-to-one name="nextuserType" class="org.cgiar.ccafs.marlo.data.model.CenterNextuserType" fetch="select">
             <column name="nextuser_type_id" not-null="false" />
         </many-to-one>
         <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.cgiar.ccafs.marlo.data.model.ResearchCenter" table="centers"
+	<class name="org.cgiar.ccafs.marlo.data.model.Center" table="centers"
 		optimistic-lock="version">
 		<id name="id" type="java.lang.Long">
 			<column name="id" />
@@ -44,14 +44,14 @@
       <key>
         <column name="research_center_id" not-null="true" />
       </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchArea" />
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterArea" />
     </set>
     <set lazy="true" name="researchObjectives" table="center_objectives" inverse="true"
       fetch="select">
       <key>
         <column name="research_center_id" not-null="true" />
       </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchObjective" />
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterObjective" />
     </set>
     <set lazy="true" name="centerCustomParameters" table="center_custom_parameters" inverse="true"
       fetch="select">

@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Mar 16, 2017 9:21:01 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-	<class name="org.cgiar.ccafs.marlo.data.model.MonitoringOutcome"
+	<class name="org.cgiar.ccafs.marlo.data.model.CenterMonitoringOutcome"
 		table="center_monitoring_outcomes" optimistic-lock="version">
 		<id name="id" type="java.lang.Long">
 			<column name="id" />
@@ -18,7 +18,7 @@
 			<column name="created_by" />
 		</many-to-one>
 		<many-to-one name="researchOutcome"
-			class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterOutcome" fetch="select">
 			<column name="outcome_id" not-null="true" />
 		</many-to-one>
 		<property name="year" type="int">
@@ -41,7 +41,7 @@
 			<key>
 				<column name="monitoring_outcome_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.MonitoringMilestone" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterMonitoringMilestone" />
 		</set>
 		<set name="monitorignOutcomeEvidences" table="center_monitoring_outcome_evidences"
 			inverse="true" lazy="true" fetch="select">
@@ -49,7 +49,7 @@
 				<column name="monitoring_outcome_id" not-null="true" />
 			</key>
 			<one-to-many
-				class="org.cgiar.ccafs.marlo.data.model.MonitorignOutcomeEvidence" />
+				class="org.cgiar.ccafs.marlo.data.model.CenterMonitoringOutcomeEvidence" />
 		</set>
 	</class>
 </hibernate-mapping>

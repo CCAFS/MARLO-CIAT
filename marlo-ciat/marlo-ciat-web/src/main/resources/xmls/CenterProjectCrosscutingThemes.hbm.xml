@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Mar 2, 2017 3:32:46 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme" table="center_project_crosscuting_themes" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterProjectCrosscutingTheme" table="center_project_crosscuting_themes" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="foreign">
@@ -13,7 +13,7 @@
         <many-to-one name="modifiedBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="modified_by" />
         </many-to-one>
-        <one-to-one name="project" class="org.cgiar.ccafs.marlo.data.model.Project" constrained="true"></one-to-one>
+        <one-to-one name="project" class="org.cgiar.ccafs.marlo.data.model.CenterProject" constrained="true"></one-to-one>
         <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="created_by" />
         </many-to-one>

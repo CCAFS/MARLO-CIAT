@@ -17,32 +17,32 @@ package org.cgiar.ccafs.marlo.action;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.IAuditLog;
 import org.cgiar.ccafs.marlo.data.model.Auditlog;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterCycle;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterSectionStatus;
+import org.cgiar.ccafs.marlo.data.model.CenterSubmission;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
-import org.cgiar.ccafs.marlo.data.model.Submission;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
-import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
-import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
+import org.cgiar.ccafs.marlo.data.service.ICenterCycleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableService;
+import org.cgiar.ccafs.marlo.data.service.ICenterImpactService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSectionStatusService;
+import org.cgiar.ccafs.marlo.data.service.ICenterTopicService;
 import org.cgiar.ccafs.marlo.security.APCustomRealm;
 import org.cgiar.ccafs.marlo.security.BaseSecurityContext;
 import org.cgiar.ccafs.marlo.security.Permission;
@@ -100,25 +100,25 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   @Inject
   private IAuditLogService auditLogManager;
   @Inject
-  private IResearchTopicService topicService;
+  private ICenterTopicService topicService;
   @Inject
-  private IResearchImpactService impactService;
+  private ICenterImpactService impactService;
   @Inject
-  private IResearchOutcomeService outcomeService;
+  private ICenterOutcomeService outcomeService;
   @Inject
-  private IResearchOutputService outputService;
+  private ICenterOutputService outputService;
   @Inject
-  private ISectionStatusService secctionStatusService;
+  private ICenterSectionStatusService secctionStatusService;
   @Inject
-  private IResearchCycleService cycleService;
+  private ICenterCycleService cycleService;
   @Inject
-  private IProgramService programService;
+  private ICenterProgramService programService;
   @Inject
-  private IProjectService projectService;
+  private ICenterProjectService projectService;
   @Inject
-  private IDeliverableService deliverableService;
+  private ICenterDeliverableService deliverableService;
   @Inject
-  private ISectionStatusService sectionStatusService;
+  private ICenterSectionStatusService sectionStatusService;
 
   protected boolean add;
   private String basePermission;
@@ -128,7 +128,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   protected APConfig config;
   private Long centerID;
   private String centerSession;
-  private ResearchCenter currentCenter;
+  private Center currentCenter;
   protected boolean dataSaved;
   protected boolean delete;
   private boolean draft;
@@ -148,7 +148,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   private Map<String, Object> session;
   protected boolean submit;
-  private Submission submission;
+  private CenterSubmission submission;
 
   @Inject
   public BaseAction(APConfig config) {
@@ -200,11 +200,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
       clazz = Class.forName(className);
 
-      // Verify ResearchTopic Model
-      if (clazz == ResearchTopic.class) {
-        ResearchTopic topic = topicService.getResearchTopicById(id);
+      // Verify CenterTopic Model
+      if (clazz == CenterTopic.class) {
+        CenterTopic topic = topicService.getResearchTopicById(id);
 
-        List<ResearchOutcome> outcomes = new ArrayList<>(
+        List<CenterOutcome> outcomes = new ArrayList<>(
           topic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
         if (outcomes != null) {
@@ -214,11 +214,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         }
       }
 
-      // Verify ResearchImpact Model
-      if (clazz == ResearchImpact.class) {
-        ResearchImpact impact = impactService.getResearchImpactById(id);
+      // Verify CenterImpact Model
+      if (clazz == CenterImpact.class) {
+        CenterImpact impact = impactService.getResearchImpactById(id);
 
-        List<ResearchOutcome> outcomes = new ArrayList<>(
+        List<CenterOutcome> outcomes = new ArrayList<>(
           impact.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
         if (outcomes != null) {
@@ -228,11 +228,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         }
       }
 
-      // Verify ResearchOutcome Model
-      if (clazz == ResearchOutcome.class) {
-        ResearchOutcome outcome = outcomeService.getResearchOutcomeById(id);
+      // Verify CenterOutcome Model
+      if (clazz == CenterOutcome.class) {
+        CenterOutcome outcome = outcomeService.getResearchOutcomeById(id);
 
-        List<ResearchOutput> outputs = new ArrayList<>(
+        List<CenterOutput> outputs = new ArrayList<>(
           outcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
         if (outputs != null) {
@@ -242,11 +242,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
         }
       }
 
-      // Verify Project Model
-      if (clazz == Project.class) {
-        Project project = projectService.getProjectById(id);
+      // Verify CenterProject Model
+      if (clazz == CenterProject.class) {
+        CenterProject project = projectService.getCenterProjectById(id);
 
-        List<Deliverable> deliverables =
+        List<CenterDeliverable> deliverables =
           new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
 
         if (deliverables != null) {
@@ -257,11 +257,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       }
 
       // Verify Output Model
-      if (clazz == ResearchOutput.class) {
+      if (clazz == CenterOutput.class) {
 
-        ResearchOutput output = outputService.getResearchOutputById(id);
+        CenterOutput output = outputService.getResearchOutputById(id);
 
-        List<ProjectOutput> projectOutputs =
+        List<CenterProjectOutput> projectOutputs =
           new ArrayList<>(output.getProjectOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
         if (projectOutputs != null) {
@@ -372,8 +372,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public String getCenterSession() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null
-          ? (ResearchCenter) session.get(APConstants.SESSION_CENTER) : null;
+        Center center = (Center) session.get(APConstants.SESSION_CENTER) != null
+          ? (Center) session.get(APConstants.SESSION_CENTER) : null;
         // Assumed there is only one center in the system, the default one.
         this.centerSession = center.getAcronym();
       } catch (Exception e) {
@@ -401,8 +401,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   public Long getCrpID() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null
-          ? (ResearchCenter) session.get(APConstants.SESSION_CENTER) : null;
+        Center center = (Center) session.get(APConstants.SESSION_CENTER) != null
+          ? (Center) session.get(APConstants.SESSION_CENTER) : null;
         this.centerID = center.getId();
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user center in the session.");
@@ -415,11 +415,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return this.centerID;
   }
 
-  public ResearchCenter getCurrentCenter() {
+  public Center getCurrentCenter() {
     if (session != null && !session.isEmpty()) {
       try {
-        ResearchCenter center = (ResearchCenter) session.get(APConstants.SESSION_CENTER) != null
-          ? (ResearchCenter) session.get(APConstants.SESSION_CENTER) : null;
+        Center center = (Center) session.get(APConstants.SESSION_CENTER) != null
+          ? (Center) session.get(APConstants.SESSION_CENTER) : null;
         this.currentCenter = center;
       } catch (Exception e) {
         LOG.warn("There was a problem trying to find the user center in the session.");
@@ -450,16 +450,16 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   /**
-   * This method gets the specific section status from the sectionStatuses array for a Deliverable.
+   * This method gets the specific section status from the sectionStatuses array for a CenterDeliverable.
    * 
    * @param deliverableID is the deliverable ID to be identified.
    * @param section is the name of some section.
-   * @return a SectionStatus object with the information requested.
+   * @return a CenterSectionStatus object with the information requested.
    */
-  public SectionStatus getDeliverableStatus(long deliverableID) {
+  public CenterSectionStatus getDeliverableStatus(long deliverableID) {
 
-    Deliverable deliverable = deliverableService.getDeliverableById(deliverableID);
-    List<SectionStatus> sectionStatuses;
+    CenterDeliverable deliverable = deliverableService.getDeliverableById(deliverableID);
+    List<CenterSectionStatus> sectionStatuses;
 
     if (deliverable.getSectionStatuses() != null) {
       sectionStatuses = new ArrayList<>(deliverable.getSectionStatuses().stream()
@@ -517,12 +517,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
    * 
    * @param deliverableID is the deliverable ID to be identified.
    * @param section is the name of some section.
-   * @return a SectionStatus object with the information requested.
+   * @return a CenterSectionStatus object with the information requested.
    */
-  public SectionStatus getOutcomeStatus(long outcomeID) {
+  public CenterSectionStatus getOutcomeStatus(long outcomeID) {
 
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
-    List<SectionStatus> sectionStatuses;
+    CenterOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    List<CenterSectionStatus> sectionStatuses;
     if (outcome.getSectionStatuses() != null) {
       sectionStatuses = new ArrayList<>(
         outcome.getSectionStatuses().stream().filter(c -> c.getYear() == this.getYear()).collect(Collectors.toList()));
@@ -565,12 +565,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
    * 
    * @param deliverableID is the deliverable ID to be identified.
    * @param section is the name of some section.
-   * @return a SectionStatus object with the information requested.
+   * @return a CenterSectionStatus object with the information requested.
    */
-  public SectionStatus getOutputStatus(long outputID) {
+  public CenterSectionStatus getOutputStatus(long outputID) {
 
-    ResearchOutput output = outputService.getResearchOutputById(outputID);
-    List<SectionStatus> sectionStatuses;
+    CenterOutput output = outputService.getResearchOutputById(outputID);
+    List<CenterSectionStatus> sectionStatuses;
 
     if (output.getSectionStatuses() != null) {
       sectionStatuses = new ArrayList<>(
@@ -603,7 +603,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean getSectionStatusIP(String section, long programID) {
-    ResearchProgram program = programService.getProgramById(programID);
+    CenterProgram program = programService.getProgramById(programID);
 
     if (ImpactPathwaySectionsEnum.getValue(section) == null) {
       return false;
@@ -625,7 +625,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean getSectionStatusProject(String section, long projectID) {
 
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     if (ProjectSectionsEnum.getValue(section) == null) {
       return false;
@@ -651,7 +651,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return session;
   }
 
-  public Submission getSubmission() {
+  public CenterSubmission getSubmission() {
     return submission;
   }
 
@@ -703,7 +703,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean hasPersmissionSubmitIP(long programID) {
-    ResearchProgram program = programService.getProgramById(programID);
+    CenterProgram program = programService.getProgramById(programID);
     String permission =
       this.generatePermission(Permission.RESEARCH_PROGRAM_SUBMISSION_PERMISSION, this.getCurrentCenter().getAcronym(),
         String.valueOf(program.getResearchArea().getId()), String.valueOf(programID));
@@ -712,8 +712,8 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
   }
 
   public boolean hasPersmissionSubmitProject(long projectID) {
-    Project project = projectService.getProjectById(projectID);
-    ResearchProgram program = project.getResearchProgram();;
+    CenterProject project = projectService.getCenterProjectById(projectID);
+    CenterProgram program = project.getResearchProgram();;
     String permission =
       this.generatePermission(Permission.PROJECT_SUBMISSION_PERMISSION, this.getCurrentCenter().getAcronym(),
         String.valueOf(program.getResearchArea().getId()), String.valueOf(program.getId()), String.valueOf(projectID));
@@ -739,7 +739,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return false;
     }
 
-    ResearchProgram researchProgram = programService.getProgramById(programID);
+    CenterProgram researchProgram = programService.getProgramById(programID);
 
     List<String> statuses = secctionStatusService.distinctSectionStatus(programID);
 
@@ -756,11 +756,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return false;
     }
 
-    List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
+    List<CenterSectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
       .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
 
     if (sectionStatuses != null && sectionStatuses.size() > 0) {
-      for (SectionStatus sectionStatus : sectionStatuses) {
+      for (CenterSectionStatus sectionStatus : sectionStatuses) {
         if (sectionStatus.getMissingFields().length() > 0) {
           return false;
         }
@@ -777,7 +777,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return false;
     }
 
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     List<String> statuses = secctionStatusService.distinctSectionStatusProject(projectID);
 
@@ -785,11 +785,11 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
       return false;
     }
 
-    List<SectionStatus> sectionStatuses = new ArrayList<>(project.getSectionStatuses().stream()
+    List<CenterSectionStatus> sectionStatuses = new ArrayList<>(project.getSectionStatuses().stream()
       .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
 
     if (sectionStatuses != null && sectionStatuses.size() > 0) {
-      for (SectionStatus sectionStatus : sectionStatuses) {
+      for (CenterSectionStatus sectionStatus : sectionStatuses) {
         if (sectionStatus.getMissingFields().length() > 0) {
           return false;
         }
@@ -830,12 +830,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean isSubmitIP(long programID) {
 
-    ResearchProgram program = programService.getProgramById(programID);
+    CenterProgram program = programService.getProgramById(programID);
     if (program != null) {
 
-      ResearchCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.IMPACT_PATHWAY.getId());
+      CenterCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.IMPACT_PATHWAY.getId());
 
-      List<Submission> submissions = new ArrayList<>(program.getSubmissions().stream()
+      List<CenterSubmission> submissions = new ArrayList<>(program.getSubmissions().stream()
         .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
         .collect(Collectors.toList()));
 
@@ -849,12 +849,12 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   public boolean isSubmitProject(long projectID) {
 
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
     if (project != null) {
 
-      ResearchCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.MONITORING.getId());
+      CenterCycle cycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.MONITORING.getId());
 
-      List<Submission> submissions = new ArrayList<>(project.getSubmissions().stream()
+      List<CenterSubmission> submissions = new ArrayList<>(project.getSubmissions().stream()
         .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
         .collect(Collectors.toList()));
 
@@ -961,7 +961,7 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     this.session = session;
   }
 
-  public void setSubmission(Submission submission) {
+  public void setSubmission(CenterSubmission submission) {
     this.submission = submission;
   }
 
@@ -973,14 +973,14 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return SUCCESS;
   }
 
-  public boolean validateDeliverable(Project project) {
+  public boolean validateDeliverable(CenterProject project) {
     if (project != null) {
-      List<Deliverable> deliverables =
+      List<CenterDeliverable> deliverables =
         new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
 
       if (deliverables != null && !deliverables.isEmpty()) {
-        for (Deliverable deliverable : deliverables) {
-          SectionStatus sectionStatus = this.getDeliverableStatus(deliverable.getId());
+        for (CenterDeliverable deliverable : deliverables) {
+          CenterSectionStatus sectionStatus = this.getDeliverableStatus(deliverable.getId());
           if (sectionStatus == null) {
             return false;
           } else {
@@ -997,9 +997,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return true;
   }
 
-  public boolean validateImpact(ResearchProgram program, String sectionName) {
+  public boolean validateImpact(CenterProgram program, String sectionName) {
 
-    SectionStatus sectionStatus =
+    CenterSectionStatus sectionStatus =
       secctionStatusService.getSectionStatusByProgram(program.getId(), sectionName, this.getYear());
 
     if (sectionStatus == null) {
@@ -1012,17 +1012,17 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return true;
   }
 
-  public boolean validateOutcome(ResearchProgram program) {
+  public boolean validateOutcome(CenterProgram program) {
     if (program != null) {
-      List<ResearchTopic> topics =
+      List<CenterTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
       if (topics != null && !topics.isEmpty()) {
-        for (ResearchTopic researchTopic : topics) {
-          List<ResearchOutcome> outcomes = new ArrayList<>(
+        for (CenterTopic researchTopic : topics) {
+          List<CenterOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
           if (outcomes != null && !outcomes.isEmpty()) {
-            for (ResearchOutcome researchOutcome : outcomes) {
-              SectionStatus sectionStatus = this.getOutcomeStatus(researchOutcome.getId());
+            for (CenterOutcome researchOutcome : outcomes) {
+              CenterSectionStatus sectionStatus = this.getOutcomeStatus(researchOutcome.getId());
               if (sectionStatus == null) {
                 return false;
               } else {
@@ -1045,25 +1045,25 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return true;
   }
 
-  public boolean validateOutput(ResearchProgram program) {
+  public boolean validateOutput(CenterProgram program) {
 
     if (program != null) {
-      List<ResearchTopic> topics =
+      List<CenterTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
       if (topics != null && !topics.isEmpty()) {
-        for (ResearchTopic researchTopic : topics) {
-          List<ResearchOutcome> outcomes = new ArrayList<>(
+        for (CenterTopic researchTopic : topics) {
+          List<CenterOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
           if (outcomes != null && !outcomes.isEmpty()) {
-            for (ResearchOutcome researchOutcome : outcomes) {
+            for (CenterOutcome researchOutcome : outcomes) {
               researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
                 .filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
-              List<ResearchOutput> outputs = new ArrayList<>(
+              List<CenterOutput> outputs = new ArrayList<>(
                 researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
               if (outputs != null && !outputs.isEmpty()) {
-                for (ResearchOutput researchOutput : outputs) {
-                  SectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
+                for (CenterOutput researchOutput : outputs) {
+                  CenterSectionStatus sectionStatus = this.getOutputStatus(researchOutput.getId());
                   if (sectionStatus == null) {
                     return false;
                   } else {
@@ -1091,9 +1091,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
 
   }
 
-  public boolean validateProject(Project project, String sectionName) {
-    SectionStatus sectionStatus = secctionStatusService.getSectionStatusByProject(project.getResearchProgram().getId(),
-      project.getId(), sectionName, this.getYear());
+  public boolean validateProject(CenterProject project, String sectionName) {
+    CenterSectionStatus sectionStatus = secctionStatusService
+      .getSectionStatusByProject(project.getResearchProgram().getId(), project.getId(), sectionName, this.getYear());
 
     if (sectionStatus == null) {
       return false;
@@ -1105,9 +1105,9 @@ public class BaseAction extends ActionSupport implements Preparable, SessionAwar
     return true;
   }
 
-  public boolean validateTopic(ResearchProgram program, String sectionName) {
+  public boolean validateTopic(CenterProgram program, String sectionName) {
 
-    SectionStatus sectionStatus =
+    CenterSectionStatus sectionStatus =
       secctionStatusService.getSectionStatusByProgram(program.getId(), sectionName, this.getYear());
 
     if (sectionStatus == null) {

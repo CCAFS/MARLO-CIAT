@@ -15,8 +15,8 @@
 
 package org.cgiar.ccafs.marlo.data.service.impl;
 
-import org.cgiar.ccafs.marlo.data.dao.IResearchCenterDAO;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.dao.ICenterDAO;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 
 import java.util.List;
@@ -29,10 +29,10 @@ import com.google.inject.Inject;
  */
 public class CenterService implements ICenterService {
 
-  private IResearchCenterDAO crpDAO;
+  private ICenterDAO crpDAO;
 
   @Inject
-  public CenterService(IResearchCenterDAO crpDAO) {
+  public CenterService(ICenterDAO crpDAO) {
     this.crpDAO = crpDAO;
   }
 
@@ -49,25 +49,25 @@ public class CenterService implements ICenterService {
   }
 
   @Override
-  public List<ResearchCenter> findAll() {
+  public List<Center> findAll() {
 
     return crpDAO.findAll();
 
   }
 
   @Override
-  public ResearchCenter findCrpByAcronym(String acronym) {
+  public Center findCrpByAcronym(String acronym) {
     return crpDAO.findCrpByAcronym(acronym);
   }
 
   @Override
-  public ResearchCenter getCrpById(long crpID) {
+  public Center getCrpById(long crpID) {
 
     return crpDAO.find(crpID);
   }
 
   @Override
-  public long saveCrp(ResearchCenter crp) {
+  public long saveCrp(Center crp) {
 
     return crpDAO.save(crp);
   }

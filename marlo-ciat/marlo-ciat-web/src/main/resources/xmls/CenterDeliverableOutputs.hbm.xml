@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated May 22, 2017 8:52:04 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.DeliverableOutput" table="center_deliverable_outputs" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterDeliverableOutput" table="center_deliverable_outputs" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
@@ -14,10 +14,10 @@
         <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="created_by" />
         </many-to-one>
-        <many-to-one name="deliverable" class="org.cgiar.ccafs.marlo.data.model.Deliverable" fetch="select">
+        <many-to-one name="deliverable" class="org.cgiar.ccafs.marlo.data.model.CenterDeliverable" fetch="select">
             <column name="deliverable_id" />
         </many-to-one>
-        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" fetch="select">
+        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.CenterOutput" fetch="select">
             <column name="output_id" />
         </many-to-one>
         <property name="active" type="boolean">

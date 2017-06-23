@@ -17,21 +17,21 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
-import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterLeaderTypeEnum;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectCrosscutingTheme;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectStatus;
 import org.cgiar.ccafs.marlo.data.model.User;
+import org.cgiar.ccafs.marlo.data.service.ICenterAreaService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectCrosscutingThemeService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
-import org.cgiar.ccafs.marlo.data.service.impl.ProjectService;
+import org.cgiar.ccafs.marlo.data.service.impl.CenterProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -59,27 +59,27 @@ public class ProjectListAction extends BaseAction {
   private ICenterService centerService;
 
 
-  private IProjectCrosscutingThemeService projectCrosscutingService;
+  private ICenterProjectCrosscutingThemeService projectCrosscutingService;
 
-  private ResearchCenter loggedCenter;
+  private Center loggedCenter;
   private long programID;
-  private IProgramService programService;
+  private ICenterProgramService programService;
   private long projectID;
-  private List<Project> projects;
-  private ProjectService projectService;
-  private List<ResearchArea> researchAreas;
+  private List<CenterProject> projects;
+  private CenterProjectService projectService;
+  private List<CenterArea> researchAreas;
 
-  private IResearchAreaService researchAreaService;
-  private List<ResearchProgram> researchPrograms;
-  private ResearchProgram selectedProgram;
-  private ResearchArea selectedResearchArea;
+  private ICenterAreaService researchAreaService;
+  private List<CenterProgram> researchPrograms;
+  private CenterProgram selectedProgram;
+  private CenterArea selectedResearchArea;
   private IUserService userService;
   private String justification;
 
   @Inject
-  public ProjectListAction(APConfig config, ICenterService centerService, IProgramService programService,
-    ProjectService projectService, IUserService userService, IResearchAreaService researchAreaService,
-    IProjectCrosscutingThemeService projectCrosscutingService) {
+  public ProjectListAction(APConfig config, ICenterService centerService, ICenterProgramService programService,
+    CenterProjectService projectService, IUserService userService, ICenterAreaService researchAreaService,
+    ICenterProjectCrosscutingThemeService projectCrosscutingService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -92,7 +92,7 @@ public class ProjectListAction extends BaseAction {
   @Override
   public String add() {
 
-    Project project = new Project();
+    CenterProject project = new CenterProject();
     project.setActive(true);
     project.setActiveSince(new Date());
     project.setCreatedBy(this.getCurrentUser());
@@ -100,10 +100,10 @@ public class ProjectListAction extends BaseAction {
     project.setStartDate(new Date());
     project.setDateCreated(new Date());
     project.setResearchProgram(selectedProgram);
-    project.setProjectStatus(new ProjectStatus(new Long(2), true));
+    project.setProjectStatus(new CenterProjectStatus(new Long(2), true));
 
 
-    ProjectCrosscutingTheme projectCrosscutingTheme = new ProjectCrosscutingTheme();
+    CenterProjectCrosscutingTheme projectCrosscutingTheme = new CenterProjectCrosscutingTheme();
 
 
     projectCrosscutingTheme.setActive(true);
@@ -124,7 +124,7 @@ public class ProjectListAction extends BaseAction {
     project.setProjectCrosscutingTheme(projectCrosscutingTheme);
     projectCrosscutingTheme.setProject(project);
 
-    projectID = projectService.saveProject(project);
+    projectID = projectService.saveCenterProject(project);
 
 
     if (projectID > 0) {
@@ -141,17 +141,17 @@ public class ProjectListAction extends BaseAction {
     Map<String, Object> parameters = this.getParameters();
     projectID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.PROJECT_ID))[0]));
 
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     if (project != null) {
       programID = project.getResearchProgram().getId();
-      project
-        .setModificationJustification(this.getJustification() == null ? "Project deleted" : this.getJustification());
+      project.setModificationJustification(
+        this.getJustification() == null ? "CenterProject deleted" : this.getJustification());
       project.setModifiedBy(this.getCurrentUser());
 
-      projectService.saveProject(project);
+      projectService.saveCenterProject(project);
 
-      projectService.deleteProject(project.getId());
+      projectService.deleteCenterProject(project.getId());
 
       this.addActionMessage("message:" + this.getText("deleting.success"));
     }
@@ -167,7 +167,7 @@ public class ProjectListAction extends BaseAction {
     return justification;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -182,23 +182,23 @@ public class ProjectListAction extends BaseAction {
   }
 
 
-  public List<Project> getProjects() {
+  public List<CenterProject> getProjects() {
     return projects;
   }
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
@@ -210,7 +210,7 @@ public class ProjectListAction extends BaseAction {
     areaID = -1;
     programID = -1;
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -228,24 +228,25 @@ public class ProjectListAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          List<ResearchLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
-            .filter(rl -> rl.isActive()
-              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
-            .collect(Collectors.toList()));
+          List<CenterLeader> userAreaLeads =
+            new ArrayList<>(user.getResearchLeaders().stream()
+              .filter(rl -> rl.isActive()
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+              .collect(Collectors.toList()));
           if (!userAreaLeads.isEmpty()) {
             areaID = userAreaLeads.get(0).getResearchArea().getId();
           } else {
-            List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
             if (!userProgramLeads.isEmpty()) {
               programID = userProgramLeads.get(0).getResearchProgram().getId();
             } else {
-              List<ResearchProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+              List<CenterProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
                 .collect(Collectors.toList());
               Collections.sort(rps, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-              ResearchProgram rp = rps.get(0);
+              CenterProgram rp = rps.get(0);
               programID = rp.getId();
               areaID = rp.getResearchArea().getId();
             }
@@ -263,9 +264,9 @@ public class ProjectListAction extends BaseAction {
             programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
           } catch (Exception e) {
             User user = userService.getUser(this.getCurrentUser().getId());
-            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
 
             if (!userLeads.isEmpty()) {
@@ -312,7 +313,7 @@ public class ProjectListAction extends BaseAction {
     this.justification = justification;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -324,23 +325,23 @@ public class ProjectListAction extends BaseAction {
     this.projectID = projectID;
   }
 
-  public void setProjects(List<Project> projects) {
+  public void setProjects(List<CenterProject> projects) {
     this.projects = projects;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 

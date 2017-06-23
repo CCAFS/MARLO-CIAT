@@ -17,10 +17,10 @@ package org.cgiar.ccafs.marlo.action.json.autosave;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -125,16 +125,16 @@ public class AutoSaveWriterAction extends BaseAction {
 
       String jSon = gson.toJson(result);
 
-      if (nameClass.equals(ResearchOutcome.class.getName())) {
+      if (nameClass.equals(CenterOutcome.class.getName())) {
         jSon = jSon.replaceAll("outcome\\.", "");
       }
-      if (nameClass.equals(ResearchOutput.class.getName())) {
+      if (nameClass.equals(CenterOutput.class.getName())) {
         jSon = jSon.replaceAll("output\\.", "");
       }
-      if (nameClass.equals(Project.class.getName())) {
+      if (nameClass.equals(CenterProject.class.getName())) {
         jSon = jSon.replaceAll("project\\.", "");
       }
-      if (nameClass.equals(Deliverable.class.getName())) {
+      if (nameClass.equals(CenterDeliverable.class.getName())) {
         jSon = jSon.replaceAll("deliverable\\.", "");
       }
 

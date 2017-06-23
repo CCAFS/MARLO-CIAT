@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Mar 13, 2017 1:43:12 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-	<class name="org.cgiar.ccafs.marlo.data.model.Deliverable" table="center_deliverables"
+	<class name="org.cgiar.ccafs.marlo.data.model.CenterDeliverable" table="center_deliverables"
 		optimistic-lock="version">
 		<id name="id" type="java.lang.Long">
 			<column name="id" />
@@ -18,19 +18,19 @@
 			<column name="created_by" />
 		</many-to-one>
 		<many-to-one name="projectStatus"
-			class="org.cgiar.ccafs.marlo.data.model.ProjectStatus" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterProjectStatus" fetch="select">
 			<column name="status_id" />
 		</many-to-one>
 		<many-to-one name="project"
-			class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterProject" fetch="select">
 			<column name="project_id" not-null="true" />
 		</many-to-one>
 		<many-to-one name="deliverableType"
-			class="org.cgiar.ccafs.marlo.data.model.DeliverableType" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterDeliverableType" fetch="select">
 			<column name="type_id" />
 		</many-to-one>
 		<one-to-one name="deliverableCrosscutingTheme"
-      class="org.cgiar.ccafs.marlo.data.model.DeliverableCrosscutingTheme"
+      class="org.cgiar.ccafs.marlo.data.model.CenterDeliverableCrosscutingTheme"
       cascade="save-update"></one-to-one>
 		<property name="name" type="string">
 			<column name="name" length="65535" />
@@ -58,21 +58,21 @@
 			<key>
 				<column name="deliverable_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.DeliverableDocument" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterDeliverableDocument" />
 		</set>
 		<set name="sectionStatuses" table="center_section_statuses" inverse="true"
 			lazy="true" fetch="select">
 			<key>
 				<column name="deliverable_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.SectionStatus" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterSectionStatus" />
 		</set>
 		<set name="deliverableOutputs" table="center_deliverable_outputs" inverse="true"
       lazy="true" fetch="select">
       <key>
         <column name="deliverable_id" not-null="true" />
       </key>
-      <one-to-many class="org.cgiar.ccafs.marlo.data.model.DeliverableOutput" />
+      <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterDeliverableOutput" />
     </set>
 	</class>
 </hibernate-mapping>

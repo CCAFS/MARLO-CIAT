@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 24, 2016 11:37:14 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.ResearchImpactBeneficiary" table="center_impact_beneficiaries" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterImpactBeneficiary" table="center_impact_beneficiaries" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
@@ -14,13 +14,13 @@
         <many-to-one name="createdBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="created_by" />
         </many-to-one>
-        <many-to-one name="researchImpact" class="org.cgiar.ccafs.marlo.data.model.ResearchImpact" fetch="select">
+        <many-to-one name="researchImpact" class="org.cgiar.ccafs.marlo.data.model.CenterImpact" fetch="select">
             <column name="impact_id" />
         </many-to-one>
-        <many-to-one name="beneficiary" class="org.cgiar.ccafs.marlo.data.model.Beneficiary" fetch="select">
+        <many-to-one name="beneficiary" class="org.cgiar.ccafs.marlo.data.model.CenterBeneficiary" fetch="select">
             <column name="beneficiary_id" not-null="false" />
         </many-to-one>
-        <many-to-one name="researchRegion" class="org.cgiar.ccafs.marlo.data.model.ResearchRegion" fetch="select">
+        <many-to-one name="researchRegion" class="org.cgiar.ccafs.marlo.data.model.CenterRegion" fetch="select">
             <column name="research_region_id" not-null="false" />
         </many-to-one>
         <property name="active" type="boolean">

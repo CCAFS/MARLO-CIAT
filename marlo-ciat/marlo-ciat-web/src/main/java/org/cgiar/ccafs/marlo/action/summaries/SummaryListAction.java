@@ -19,11 +19,11 @@ package org.cgiar.ccafs.marlo.action.summaries;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -41,37 +41,37 @@ public class SummaryListAction extends BaseAction {
   private static final long serialVersionUID = -4099604925246954828L;
 
 
-  private List<Project> allProjects;
+  private List<CenterProject> allProjects;
 
-  private List<ResearchProgram> programs;
+  private List<CenterProgram> programs;
 
-  private ResearchCenter loggedCenter;
+  private Center loggedCenter;
   private ICenterService centerService;
 
-  private IProgramService programService;
+  private ICenterProgramService programService;
 
   @Inject
-  public SummaryListAction(APConfig config, ICenterService centerService, IProgramService programService) {
+  public SummaryListAction(APConfig config, ICenterService centerService, ICenterProgramService programService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
   }
 
-  public List<Project> getAllProjects() {
+  public List<CenterProject> getAllProjects() {
     return allProjects;
   }
 
 
-  public List<ResearchProgram> getPrograms() {
+  public List<CenterProgram> getPrograms() {
     return programs;
   }
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
-    allProjects = new ArrayList<Project>();
+    allProjects = new ArrayList<CenterProject>();
 
     programs =
       new ArrayList<>(programService.findAll().stream().filter(p -> p.isActive()).collect(Collectors.toList()));
@@ -80,11 +80,11 @@ public class SummaryListAction extends BaseAction {
   }
 
 
-  public void setAllProjects(List<Project> allProjects) {
+  public void setAllProjects(List<CenterProject> allProjects) {
     this.allProjects = allProjects;
   }
 
-  public void setPrograms(List<ResearchProgram> programs) {
+  public void setPrograms(List<CenterProgram> programs) {
     this.programs = programs;
   }
 

@@ -3,24 +3,24 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 1, 2016 8:40:22 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.SectionStatus" table="center_section_statuses" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterSectionStatus" table="center_section_statuses" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="researchProgram" class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" fetch="select">
+        <many-to-one name="researchProgram" class="org.cgiar.ccafs.marlo.data.model.CenterProgram" fetch="select">
             <column name="research_program_id" />
         </many-to-one>
-        <many-to-one name="researchOutcome" class="org.cgiar.ccafs.marlo.data.model.ResearchOutcome" fetch="select">
+        <many-to-one name="researchOutcome" class="org.cgiar.ccafs.marlo.data.model.CenterOutcome" fetch="select">
             <column name="research_outcome_id" />
         </many-to-one>
-        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" fetch="select">
+        <many-to-one name="researchOutput" class="org.cgiar.ccafs.marlo.data.model.CenterOutput" fetch="select">
             <column name="research_output_id" />
         </many-to-one>
-        <many-to-one name="project" class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select">
+        <many-to-one name="project" class="org.cgiar.ccafs.marlo.data.model.CenterProject" fetch="select">
             <column name="project_id" />
         </many-to-one>
-        <many-to-one name="deliverable" class="org.cgiar.ccafs.marlo.data.model.Deliverable" fetch="select">
+        <many-to-one name="deliverable" class="org.cgiar.ccafs.marlo.data.model.CenterDeliverable" fetch="select">
             <column name="deliverable_id" />
         </many-to-one>
         <property name="sectionName" type="string">

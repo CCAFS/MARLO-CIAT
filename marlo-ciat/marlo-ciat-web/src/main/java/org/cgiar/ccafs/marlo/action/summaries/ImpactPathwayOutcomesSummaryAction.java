@@ -17,8 +17,8 @@ package org.cgiar.ccafs.marlo.action.summaries;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.ByteArrayInputStream;
@@ -62,13 +62,13 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
   // PDF bytes
   private byte[] bytesPDF;
   // Services
-  private IProgramService programService;
+  private ICenterProgramService programService;
   // Params
-  private ResearchProgram researchProgram;
+  private CenterProgram researchProgram;
   private long startTime;
 
   @Inject
-  public ImpactPathwayOutcomesSummaryAction(APConfig config, IProgramService programService) {
+  public ImpactPathwayOutcomesSummaryAction(APConfig config, ICenterProgramService programService) {
     super(config);
     this.programService = programService;
   }
@@ -265,7 +265,7 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     return model;
   }
 
-  public ResearchProgram getResearchProgram() {
+  public CenterProgram getResearchProgram() {
     return researchProgram;
   }
 
@@ -288,7 +288,7 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     this.bytesPDF = bytesPDF;
   }
 
-  public void setResearchProgram(ResearchProgram researchProgram) {
+  public void setResearchProgram(CenterProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
 

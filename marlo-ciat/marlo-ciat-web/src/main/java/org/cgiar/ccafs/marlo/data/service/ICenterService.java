@@ -15,7 +15,7 @@
 
 package org.cgiar.ccafs.marlo.data.service;
 
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.service.impl.CenterService;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public interface ICenterService {
    * 
    * @return a list from Crp null if no exist records
    */
-  public List<ResearchCenter> findAll();
+  public List<Center> findAll();
 
   /**
    * This method get a crp by it acronym
@@ -60,7 +60,7 @@ public interface ICenterService {
    * @param acronym
    * @return a Crp object or null if the input acronym is invalid.
    */
-  public ResearchCenter findCrpByAcronym(String acronym);
+  public Center findCrpByAcronym(String acronym);
 
   /**
    * This method gets a crp object by a given crp identifier.
@@ -68,7 +68,7 @@ public interface ICenterService {
    * @param crpID is the crp identifier.
    * @return a Crp object.
    */
-  public ResearchCenter getCrpById(long crpID);
+  public Center getCrpById(long crpID);
 
   /**
    * This method saves the information of the given crp
@@ -78,6 +78,6 @@ public interface ICenterService {
    *         updated
    *         or -1 is some error occurred.
    */
-  public long saveCrp(ResearchCenter crp);
+  public long saveCrp(Center crp);
 
 }

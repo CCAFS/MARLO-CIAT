@@ -60,9 +60,9 @@ public class Clones {
   public static void generateDao(String nome) {
     File target = new File(pathdao + "\\I" + nome + "DAO.java");
     try {
-      copy(new File(pathdao + "\\IProjectDAO.java"), target);
+      copy(new File(pathdao + "\\ICenterProjectDAO.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("CenterProject", nome);
       content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
@@ -76,9 +76,9 @@ public class Clones {
   public static void generateManager(String nome) {
     File target = new File(pathmanager + "\\I" + nome + "Service.java");
     try {
-      copy(new File(pathmanager + "\\IProjectService.java"), target);
+      copy(new File(pathmanager + "\\ICenterProjectService.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("CenterProject", nome);
       content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
@@ -93,9 +93,9 @@ public class Clones {
   public static void generateManagerImpl(String nome) {
     File target = new File(pathmanagerimpl + "\\" + nome + "Service.java");
     try {
-      copy(new File(pathmanagerimpl + "\\ProjectService.java"), target);
+      copy(new File(pathmanagerimpl + "\\CenterProjectService.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("CenterProject", nome);
       content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
@@ -109,9 +109,9 @@ public class Clones {
   public static void generateMysqlDao(String nome) {
     File target = new File(pathmysqldao + "\\" + nome + "DAO.java");
     try {
-      copy(new File(pathmysqldao + "\\ProjectDAO.java"), target);
+      copy(new File(pathmysqldao + "\\CenterProjectDAO.java"), target);
       String content = IOUtils.toString(new FileInputStream(target));
-      content = content.replaceAll("Project", nome);
+      content = content.replaceAll("CenterProject", nome);
       content = content.replaceAll("project", miniscula(nome));
       IOUtils.write(content, new FileOutputStream(target));
       System.out.println();
@@ -136,7 +136,7 @@ public class Clones {
      */
 
 
-    String[] model = {"ResearchImpactStatement"};
+    String[] model = {"CenterMilestone"};
 
     for (int i = 0; i < model.length; i++) {
       generateDao(model[i]);

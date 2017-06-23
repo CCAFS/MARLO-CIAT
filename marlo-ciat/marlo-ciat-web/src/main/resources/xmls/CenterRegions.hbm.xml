@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 24, 2016 11:37:14 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.cgiar.ccafs.marlo.data.model.ResearchRegion" table="center_regions" optimistic-lock="version">
+    <class name="org.cgiar.ccafs.marlo.data.model.CenterRegion" table="center_regions" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
@@ -30,7 +30,7 @@
             <key>
                 <column name="research_region_id" not-null="true" />
             </key>
-            <one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchImpactBeneficiary" />
+            <one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterImpactBeneficiary" />
         </set>
     </class>
 </hibernate-mapping>

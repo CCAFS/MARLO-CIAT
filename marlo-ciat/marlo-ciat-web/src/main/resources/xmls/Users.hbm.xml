@@ -56,7 +56,7 @@
 			<key>
 				<column name="user_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.UserRole" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterUserRole" />
 		</set>
 		<set lazy="true" name="centerUsers" table="center_users" inverse="true"
 			fetch="select">
@@ -70,7 +70,7 @@
 			<key>
 				<column name="user_id" not-null="true" />
 			</key>
-			<one-to-many class="org.cgiar.ccafs.marlo.data.model.ResearchLeader" />
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CenterLeader" />
 		</set>
 	</class>
 </hibernate-mapping>

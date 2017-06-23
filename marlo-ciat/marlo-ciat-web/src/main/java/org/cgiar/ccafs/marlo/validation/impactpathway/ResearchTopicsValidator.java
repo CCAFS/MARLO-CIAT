@@ -17,9 +17,9 @@ package org.cgiar.ccafs.marlo.validation.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -44,8 +44,8 @@ public class ResearchTopicsValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(ResearchProgram program, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterProgram program, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = program.getClass().getSimpleName();
     String actionFile = ImpactPathwaySectionsEnum.TOPIC.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -54,7 +54,7 @@ public class ResearchTopicsValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, List<ResearchTopic> researchTopics, ResearchProgram selectedProgram,
+  public void validate(BaseAction baseAction, List<CenterTopic> researchTopics, CenterProgram selectedProgram,
     boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
@@ -78,7 +78,7 @@ public class ResearchTopicsValidator extends BaseValidator {
     }
 
     for (int i = 0; i < researchTopics.size(); i++) {
-      ResearchTopic researchTopic = researchTopics.get(i);
+      CenterTopic researchTopic = researchTopics.get(i);
       this.validateResearchTopic(baseAction, researchTopic, i);
     }
 
@@ -86,7 +86,7 @@ public class ResearchTopicsValidator extends BaseValidator {
 
   }
 
-  public void validateResearchTopic(BaseAction baseAction, ResearchTopic researchTopic, int i) {
+  public void validateResearchTopic(BaseAction baseAction, CenterTopic researchTopic, int i) {
 
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));

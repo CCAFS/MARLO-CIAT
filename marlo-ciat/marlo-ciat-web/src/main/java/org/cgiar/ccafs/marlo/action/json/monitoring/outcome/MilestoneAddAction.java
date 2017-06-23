@@ -17,15 +17,15 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.outcome;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.MonitoringMilestone;
-import org.cgiar.ccafs.marlo.data.model.MonitoringOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchMilestone;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.TargetUnit;
-import org.cgiar.ccafs.marlo.data.service.IMonitoringMilestoneService;
-import org.cgiar.ccafs.marlo.data.service.IResearchMilestoneService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
-import org.cgiar.ccafs.marlo.data.service.ITargetUnitService;
+import org.cgiar.ccafs.marlo.data.model.CenterMilestone;
+import org.cgiar.ccafs.marlo.data.model.CenterMonitoringMilestone;
+import org.cgiar.ccafs.marlo.data.model.CenterMonitoringOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterTargetUnit;
+import org.cgiar.ccafs.marlo.data.service.ICenterMilestoneService;
+import org.cgiar.ccafs.marlo.data.service.ICenterMonitoringMilestoneService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterTargetUnitService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -55,17 +55,17 @@ public class MilestoneAddAction extends BaseAction {
   private static String OUTCOME_ID = "outcomeID";
 
   private long outcomeID;
-  private IMonitoringMilestoneService monitoringMilestoneService;
+  private ICenterMonitoringMilestoneService monitoringMilestoneService;
 
-  private IResearchMilestoneService milestoneService;
-  private IResearchOutcomeService outcomeService;
-  private ITargetUnitService targetUnitService;
+  private ICenterMilestoneService milestoneService;
+  private ICenterOutcomeService outcomeService;
+  private ICenterTargetUnitService targetUnitService;
   private List<Map<String, Object>> newMilestone;
 
   @Inject
-  public MilestoneAddAction(APConfig config, IMonitoringMilestoneService monitoringMilestoneService,
-    IResearchMilestoneService milestoneService, ITargetUnitService targetUnitService,
-    IResearchOutcomeService outcomeService) {
+  public MilestoneAddAction(APConfig config, ICenterMonitoringMilestoneService monitoringMilestoneService,
+    ICenterMilestoneService milestoneService, ICenterTargetUnitService targetUnitService,
+    ICenterOutcomeService outcomeService) {
     super(config);
     this.monitoringMilestoneService = monitoringMilestoneService;
     this.milestoneService = milestoneService;
@@ -80,10 +80,10 @@ public class MilestoneAddAction extends BaseAction {
 
     outcomeID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(OUTCOME_ID))[0]));
 
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    CenterOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     Map<String, Object> milestoneData = new HashMap<>();
-    ResearchMilestone milestone = new ResearchMilestone();
+    CenterMilestone milestone = new CenterMilestone();
     milestone.setResearchOutcome(outcome);
     milestone.setActive(true);
     milestone.setActiveSince(new Date());
@@ -91,7 +91,7 @@ public class MilestoneAddAction extends BaseAction {
     milestone.setModifiedBy(this.getCurrentUser());
     milestone.setImpactPathway(false);
 
-    TargetUnit targetUnit = targetUnitService
+    CenterTargetUnit targetUnit = targetUnitService
       .getTargetUnitById(Long.parseLong(StringUtils.trim(((String[]) parameters.get(TARGET_UNIT))[0])));
     milestone.setTargetUnit(targetUnit);
     milestoneData.put("targetUnitId", targetUnit.getId());
@@ -108,13 +108,13 @@ public class MilestoneAddAction extends BaseAction {
     milestone.setTitle(StringUtils.trim(((String[]) parameters.get(TITLE))[0]));
     milestoneData.put("title", milestone.getTitle());
 
-    long milestoneID = milestoneService.saveResearchMilestone(milestone);
+    long milestoneID = milestoneService.saveCenterMilestone(milestone);
     milestoneData.put("id", milestoneID);
 
-    milestone = milestoneService.getResearchMilestoneById(milestoneID);
+    milestone = milestoneService.getCenterMilestoneById(milestoneID);
 
 
-    List<MonitoringOutcome> monitoringOutcomes = new ArrayList<>(
+    List<CenterMonitoringOutcome> monitoringOutcomes = new ArrayList<>(
       outcome.getMonitoringOutcomes().stream().filter(mo -> mo.isActive()).collect(Collectors.toList()));
     Collections.sort(monitoringOutcomes,
       (mon1, mon2) -> (new Integer(mon1.getYear())).compareTo(new Integer(mon2.getYear())));
@@ -122,13 +122,13 @@ public class MilestoneAddAction extends BaseAction {
     List<Map<String, Object>> monitoringDatas = new ArrayList<>();
 
     int i = 0;
-    for (MonitoringOutcome monitoringOutcome : monitoringOutcomes) {
+    for (CenterMonitoringOutcome monitoringOutcome : monitoringOutcomes) {
 
       Map<String, Object> monitoringData = new HashMap<>();
       if (milestone.getTargetYear() >= monitoringOutcome.getYear()) {
         monitoringData.put("index", i);
 
-        MonitoringMilestone monitoringMilestone = new MonitoringMilestone();
+        CenterMonitoringMilestone monitoringMilestone = new CenterMonitoringMilestone();
         monitoringMilestone.setActive(true);
         monitoringMilestone.setActiveSince(new Date());
         monitoringMilestone.setCreatedBy(this.getCurrentUser());

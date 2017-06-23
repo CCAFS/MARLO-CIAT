@@ -16,11 +16,11 @@
 package org.cgiar.ccafs.marlo.validation.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectFundingSource;
 import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -50,8 +50,8 @@ public class ProjectDescriptionValidator extends BaseValidator {
     return Boolean.valueOf(value);
   }
 
-  private Path getAutoSaveFilePath(Project project, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterProject project, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = project.getClass().getSimpleName();
     String actionFile = ProjectSectionsEnum.DESCRIPTION.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -60,7 +60,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, Project project, ResearchProgram selectedProgram, boolean saving) {
+  public void validate(BaseAction baseAction, CenterProject project, CenterProgram selectedProgram, boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
 
@@ -83,7 +83,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
   }
 
 
-  public void validateFundingSource(BaseAction baseAction, ProjectFundingSource fundingSource, int i) {
+  public void validateFundingSource(BaseAction baseAction, CenterProjectFundingSource fundingSource, int i) {
     if (fundingSource.getFundingSourceType() == null) {
       this.addMessage(
         baseAction.getText("projectDescription.action.fundingSources.fundingSourceType.id", String.valueOf(i + 1)));
@@ -100,7 +100,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
 
   }
 
-  public void validateProjectDescription(BaseAction baseAction, Project project) {
+  public void validateProjectDescription(BaseAction baseAction, CenterProject project) {
 
     if (!this.isValidString(project.getOcsCode()) && this.wordCount(project.getOcsCode()) <= 15) {
       this.addMessage(baseAction.getText("projectDescription.action.ocsCode"));
@@ -129,7 +129,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
           if (project.getProjectCountries() == null || project.getProjectCountries().isEmpty()) {
             this.addMessage(baseAction.getText("projectDescription.action.countries"));
             baseAction.getInvalidFields().put("list-project.countries",
-              baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Countries"}));
+              baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"CenterProject Countries"}));
           }
         }
       } else {
@@ -147,7 +147,7 @@ public class ProjectDescriptionValidator extends BaseValidator {
           if (project.getProjectRegions() == null || project.getProjectRegions().isEmpty()) {
             this.addMessage(baseAction.getText("projectDescription.action.regions"));
             baseAction.getInvalidFields().put("list-project.regions",
-              baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"Project Regions"}));
+              baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"CenterProject Regions"}));
           }
         }
       } else {

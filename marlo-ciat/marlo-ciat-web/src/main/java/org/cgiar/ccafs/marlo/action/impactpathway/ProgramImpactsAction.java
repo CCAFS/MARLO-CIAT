@@ -20,33 +20,33 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Beneficiary;
-import org.cgiar.ccafs.marlo.data.model.BeneficiaryType;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactBeneficiary;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactStatement;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchRegion;
+import org.cgiar.ccafs.marlo.data.model.CenterBeneficiary;
+import org.cgiar.ccafs.marlo.data.model.CenterBeneficiaryType;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactBeneficiary;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactStatement;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterLeaderTypeEnum;
+import org.cgiar.ccafs.marlo.data.model.CenterObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterRegion;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
-import org.cgiar.ccafs.marlo.data.service.IBeneficiaryService;
-import org.cgiar.ccafs.marlo.data.service.IBeneficiaryTypeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterBeneficiaryService;
+import org.cgiar.ccafs.marlo.data.service.ICenterBeneficiaryTypeService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
-import org.cgiar.ccafs.marlo.data.service.IResearchImpactBeneficiaryService;
-import org.cgiar.ccafs.marlo.data.service.IResearchImpactObjectiveService;
-import org.cgiar.ccafs.marlo.data.service.IResearchImpactService;
-import org.cgiar.ccafs.marlo.data.service.IResearchImpactStatementService;
-import org.cgiar.ccafs.marlo.data.service.IResearchLeaderService;
-import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
-import org.cgiar.ccafs.marlo.data.service.IResearchRegionService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterAreaService;
+import org.cgiar.ccafs.marlo.data.service.ICenterImpactBeneficiaryService;
+import org.cgiar.ccafs.marlo.data.service.ICenterImpactObjectiveService;
+import org.cgiar.ccafs.marlo.data.service.ICenterImpactService;
+import org.cgiar.ccafs.marlo.data.service.ICenterImpactStatementService;
+import org.cgiar.ccafs.marlo.data.service.ICenterLeaderService;
+import org.cgiar.ccafs.marlo.data.service.ICenterObjectiveService;
+import org.cgiar.ccafs.marlo.data.service.ICenterRegionService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -83,45 +83,45 @@ public class ProgramImpactsAction extends BaseAction {
 
   private ICenterService centerService;
 
-  private IProgramService programService;
+  private ICenterProgramService programService;
 
 
-  private IResearchRegionService regionService;
+  private ICenterRegionService regionService;
 
-  private IResearchImpactStatementService statementService;
-  private IBeneficiaryTypeService beneficiaryTypeService;
-  private IResearchImpactBeneficiaryService impactBeneficiaryService;
-  private IResearchAreaService researchAreaService;
+  private ICenterImpactStatementService statementService;
+  private ICenterBeneficiaryTypeService beneficiaryTypeService;
+  private ICenterImpactBeneficiaryService impactBeneficiaryService;
+  private ICenterAreaService researchAreaService;
   private IUserService userService;
-  private IResearchObjectiveService objectiveService;
-  private IResearchImpactService impactService;
-  private IResearchImpactObjectiveService impactObjectiveService;
+  private ICenterObjectiveService objectiveService;
+  private ICenterImpactService impactService;
+  private ICenterImpactObjectiveService impactObjectiveService;
   private IAuditLogService auditLogService;
-  private IBeneficiaryService beneficiaryService;
-  private ResearchCenter loggedCenter;
-  private List<ResearchArea> researchAreas;
-  private List<ResearchImpactStatement> idos;
-  private List<ResearchRegion> regions;
-  private List<BeneficiaryType> beneficiaryTypes;
-  private ResearchArea selectedResearchArea;
-  private List<ResearchProgram> researchPrograms;
+  private ICenterBeneficiaryService beneficiaryService;
+  private Center loggedCenter;
+  private List<CenterArea> researchAreas;
+  private List<CenterImpactStatement> idos;
+  private List<CenterRegion> regions;
+  private List<CenterBeneficiaryType> beneficiaryTypes;
+  private CenterArea selectedResearchArea;
+  private List<CenterProgram> researchPrograms;
 
-  private List<ResearchObjective> researchObjectives;
-  private ResearchProgram selectedProgram;
-  private List<ResearchImpact> impacts;
+  private List<CenterObjective> researchObjectives;
+  private CenterProgram selectedProgram;
+  private List<CenterImpact> impacts;
   private long programID;
   private long areaID;
   private String transaction;
   private ProgramImpactsValidator validator;
 
   @Inject
-  public ProgramImpactsAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchLeaderService researchLeaderService, IUserService userService,
-    IResearchObjectiveService objectiveService, IResearchImpactService impactService,
-    IResearchImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator,
-    IAuditLogService auditLogService, IResearchRegionService regionService,
-    IBeneficiaryTypeService beneficiaryTypeService, IResearchImpactBeneficiaryService impactBeneficiaryService,
-    IBeneficiaryService beneficiaryService, IResearchImpactStatementService statementService) {
+  public ProgramImpactsAction(APConfig config, ICenterService centerService, ICenterProgramService programService,
+    ICenterAreaService researchAreaService, ICenterLeaderService researchLeaderService, IUserService userService,
+    ICenterObjectiveService objectiveService, ICenterImpactService impactService,
+    ICenterImpactObjectiveService impactObjectiveService, ProgramImpactsValidator validator,
+    IAuditLogService auditLogService, ICenterRegionService regionService,
+    ICenterBeneficiaryTypeService beneficiaryTypeService, ICenterImpactBeneficiaryService impactBeneficiaryService,
+    ICenterBeneficiaryService beneficiaryService, ICenterImpactStatementService statementService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -178,22 +178,22 @@ public class ProgramImpactsAction extends BaseAction {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public List<BeneficiaryType> getBeneficiaryTypes() {
+  public List<CenterBeneficiaryType> getBeneficiaryTypes() {
     return beneficiaryTypes;
   }
 
-  public List<ResearchImpactStatement> getIdos() {
+  public List<CenterImpactStatement> getIdos() {
     return idos;
   }
 
-  public List<ResearchImpact> getImpacts() {
+  public List<CenterImpact> getImpacts() {
     return impacts;
   }
 
   /**
    * @return the loggedCenter
    */
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -204,36 +204,36 @@ public class ProgramImpactsAction extends BaseAction {
     return programID;
   }
 
-  public List<ResearchRegion> getRegions() {
+  public List<CenterRegion> getRegions() {
     return regions;
   }
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
-  public List<ResearchObjective> getResearchObjectives() {
+  public List<CenterObjective> getResearchObjectives() {
     return researchObjectives;
   }
 
   /**
    * @return the researchPrograms
    */
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
   /**
    * @return the selectedProgram
    */
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
   /**
    * @return the selectedResearchArea
    */
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
@@ -247,7 +247,7 @@ public class ProgramImpactsAction extends BaseAction {
     areaID = -1;
     programID = -1;
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -265,24 +265,24 @@ public class ProgramImpactsAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          List<ResearchLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
+          List<CenterLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
             .filter(rl -> rl.isActive()
-              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+              && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
             .collect(Collectors.toList()));
           if (!userAreaLeads.isEmpty()) {
             areaID = userAreaLeads.get(0).getResearchArea().getId();
           } else {
-            List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
             if (!userProgramLeads.isEmpty()) {
               programID = userProgramLeads.get(0).getResearchProgram().getId();
             } else {
-              List<ResearchProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+              List<CenterProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
                 .collect(Collectors.toList());
               Collections.sort(rps, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-              ResearchProgram rp = rps.get(0);
+              CenterProgram rp = rps.get(0);
               programID = rp.getId();
               areaID = rp.getResearchArea().getId();
             }
@@ -300,9 +300,9 @@ public class ProgramImpactsAction extends BaseAction {
             programID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CENTER_PROGRAM_ID)));
           } catch (Exception e) {
             User user = userService.getUser(this.getCurrentUser().getId());
-            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
 
             if (!userLeads.isEmpty()) {
@@ -318,7 +318,7 @@ public class ProgramImpactsAction extends BaseAction {
         if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
           transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+          CenterProgram history = (CenterProgram) auditLogService.getHistory(transaction);
 
           if (history != null) {
             selectedProgram = history;
@@ -339,7 +339,7 @@ public class ProgramImpactsAction extends BaseAction {
         if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
           transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+          CenterProgram history = (CenterProgram) auditLogService.getHistory(transaction);
 
           if (history != null) {
             selectedProgram = history;
@@ -370,26 +370,26 @@ public class ProgramImpactsAction extends BaseAction {
           JsonObject jReader = gson.fromJson(reader, JsonObject.class);
           AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-          selectedProgram = (ResearchProgram) autoSaveReader.readFromJson(jReader);
+          selectedProgram = (CenterProgram) autoSaveReader.readFromJson(jReader);
 
           impacts = new ArrayList<>(selectedProgram.getImpacts());
 
           if (impacts != null || !impacts.isEmpty()) {
 
-            for (ResearchImpact impact : impacts) {
+            for (CenterImpact impact : impacts) {
               if (impact.getBeneficiaries() != null) {
 
-                List<ResearchImpactBeneficiary> impactBeneficiaries = new ArrayList<>(impact.getBeneficiaries());
-                List<ResearchImpactBeneficiary> autoSaveIBeneficiaies = new ArrayList<>();
-                for (ResearchImpactBeneficiary impactBeneficiary : impactBeneficiaries) {
+                List<CenterImpactBeneficiary> impactBeneficiaries = new ArrayList<>(impact.getBeneficiaries());
+                List<CenterImpactBeneficiary> autoSaveIBeneficiaies = new ArrayList<>();
+                for (CenterImpactBeneficiary impactBeneficiary : impactBeneficiaries) {
 
-                  ResearchRegion region =
+                  CenterRegion region =
                     regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
 
-                  Beneficiary beneficiary =
+                  CenterBeneficiary beneficiary =
                     beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
 
-                  ResearchImpactBeneficiary autoSaveIBeneficiay = new ResearchImpactBeneficiary();
+                  CenterImpactBeneficiary autoSaveIBeneficiay = new CenterImpactBeneficiary();
 
                   autoSaveIBeneficiay.setResearchRegion(region);
                   autoSaveIBeneficiay.setBeneficiary(beneficiary);
@@ -409,7 +409,7 @@ public class ProgramImpactsAction extends BaseAction {
                 impact.setObjectives(new ArrayList<>());
 
                 for (int i = 0; i < objectiveValues.length; i++) {
-                  ResearchObjective objective =
+                  CenterObjective objective =
                     objectiveService.getResearchObjectiveById(Long.parseLong(objectiveValues[i]));
                   impact.getObjectives().add(objective);
                 }
@@ -424,10 +424,10 @@ public class ProgramImpactsAction extends BaseAction {
             selectedProgram.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList());
 
           if (impacts != null) {
-            for (ResearchImpact researchImpact : impacts) {
+            for (CenterImpact researchImpact : impacts) {
               researchImpact.setObjectives(new ArrayList<>());
               if (researchImpact.getResearchImpactObjectives() != null) {
-                for (ResearchImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
+                for (CenterImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
                   .filter(ro -> ro.isActive()).collect(Collectors.toList())) {
                   researchImpact.getObjectives().add(impactObjective.getResearchObjective());
                 }
@@ -483,14 +483,14 @@ public class ProgramImpactsAction extends BaseAction {
   public String save() {
     if (this.hasPermission("*")) {
 
-      ResearchProgram programDb = programService.getProgramById(selectedProgram.getId());
+      CenterProgram programDb = programService.getProgramById(selectedProgram.getId());
 
-      for (ResearchImpact researchImpact : programDb.getResearchImpacts().stream().filter(ri -> ri.isActive())
+      for (CenterImpact researchImpact : programDb.getResearchImpacts().stream().filter(ri -> ri.isActive())
         .collect(Collectors.toList())) {
         if (!impacts.contains(researchImpact)) {
 
           if (impactObjectiveService.findAll() != null) {
-            for (ResearchImpactObjective impactObjective : impactObjectiveService.findAll().stream()
+            for (CenterImpactObjective impactObjective : impactObjectiveService.findAll().stream()
               .filter(io -> io.isActive() && io.getResearchImpact().getId() == researchImpact.getId())
               .collect(Collectors.toList())) {
               impactObjectiveService.deleteResearchImpactObjective(impactObjective.getId());
@@ -501,9 +501,9 @@ public class ProgramImpactsAction extends BaseAction {
         }
       }
 
-      for (ResearchImpact researchImpact : impacts) {
+      for (CenterImpact researchImpact : impacts) {
         if (researchImpact.getId() == null || researchImpact.getId() == -1) {
-          ResearchImpact researchImpactNew = new ResearchImpact();
+          CenterImpact researchImpactNew = new CenterImpact();
           researchImpactNew.setActive(true);
           researchImpactNew.setActiveSince(new Date());
           researchImpactNew.setCreatedBy(this.getCurrentUser());
@@ -514,7 +514,7 @@ public class ProgramImpactsAction extends BaseAction {
           researchImpactNew.setModifiedBy(this.getCurrentUser());
 
 
-          ResearchImpactStatement impactStatement =
+          CenterImpactStatement impactStatement =
             statementService.getResearchImpactStatementById(researchImpact.getResearchImpactStatement().getId());
 
           if (impactStatement != null) {
@@ -532,9 +532,9 @@ public class ProgramImpactsAction extends BaseAction {
 
           if (researchImpact.getObjectiveValue() != null && researchImpact.getObjectiveValue().length() > 0) {
             for (String objectiveId : researchImpact.getObjectiveValue().trim().split(",")) {
-              ResearchObjective researchObjective =
+              CenterObjective researchObjective =
                 objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId.trim()));
-              ResearchImpactObjective impactObjectiveNew = new ResearchImpactObjective();
+              CenterImpactObjective impactObjectiveNew = new CenterImpactObjective();
               impactObjectiveNew.setActive(true);
               impactObjectiveNew.setActiveSince(new Date());
               impactObjectiveNew.setCreatedBy(this.getCurrentUser());
@@ -550,10 +550,10 @@ public class ProgramImpactsAction extends BaseAction {
 
         } else {
           boolean hasChanges = false;
-          ResearchImpact researchImpactRew = impactService.getResearchImpactById(researchImpact.getId());
+          CenterImpact researchImpactRew = impactService.getResearchImpactById(researchImpact.getId());
 
 
-          ResearchImpactStatement impactStatement =
+          CenterImpactStatement impactStatement =
             statementService.getResearchImpactStatementById(researchImpact.getResearchImpactStatement().getId());
 
           if (impactStatement != null) {
@@ -588,7 +588,7 @@ public class ProgramImpactsAction extends BaseAction {
           }
 
           if (researchImpact.getObjectiveValue() != null && researchImpact.getObjectiveValue().length() > 0) {
-            for (ResearchImpactObjective impactObjective : researchImpactRew.getResearchImpactObjectives().stream()
+            for (CenterImpactObjective impactObjective : researchImpactRew.getResearchImpactObjectives().stream()
               .filter(rio -> rio.isActive()).collect(Collectors.toList())) {
               if (!researchImpact.getObjectiveValue()
                 .contains(impactObjective.getResearchObjective().getId().toString())) {
@@ -597,13 +597,13 @@ public class ProgramImpactsAction extends BaseAction {
             }
 
             for (String objectiveId : researchImpact.getObjectiveValue().trim().split(",")) {
-              ResearchObjective researchObjective =
+              CenterObjective researchObjective =
                 objectiveService.getResearchObjectiveById(Long.parseLong(objectiveId.trim()));
-              ResearchImpactObjective impactObjectiveNew = new ResearchImpactObjective();
+              CenterImpactObjective impactObjectiveNew = new CenterImpactObjective();
               impactObjectiveNew.setResearchObjective(researchObjective);
               impactObjectiveNew.setResearchImpact(researchImpactRew);
 
-              List<ResearchImpactObjective> impactObjectives = researchImpactRew.getResearchImpactObjectives().stream()
+              List<CenterImpactObjective> impactObjectives = researchImpactRew.getResearchImpactObjectives().stream()
                 .filter(rio -> rio.isActive()).collect(Collectors.toList());
 
               if (!impactObjectives.contains(impactObjectiveNew)) {
@@ -616,7 +616,7 @@ public class ProgramImpactsAction extends BaseAction {
 
             }
           } else {
-            for (ResearchImpactObjective impactObjective : researchImpactRew.getResearchImpactObjectives().stream()
+            for (CenterImpactObjective impactObjective : researchImpactRew.getResearchImpactObjectives().stream()
               .filter(rio -> rio.isActive()).collect(Collectors.toList())) {
               if (!researchImpact.getObjectiveValue()
                 .contains(impactObjective.getResearchObjective().getId().toString())) {
@@ -667,31 +667,31 @@ public class ProgramImpactsAction extends BaseAction {
   }
 
 
-  public void saveBeneficiary(ResearchImpact researchImpact, ResearchImpact researchImpactSave) {
+  public void saveBeneficiary(CenterImpact researchImpact, CenterImpact researchImpactSave) {
 
     if (researchImpactSave.getResearchImpactBeneficiaries() != null
       && researchImpactSave.getResearchImpactBeneficiaries().size() > 0) {
 
-      List<ResearchImpactBeneficiary> beneficiariesPrew = researchImpactSave.getResearchImpactBeneficiaries().stream()
+      List<CenterImpactBeneficiary> beneficiariesPrew = researchImpactSave.getResearchImpactBeneficiaries().stream()
         .filter(rb -> rb.isActive()).collect(Collectors.toList());
 
       if (researchImpact.getBeneficiaries() != null) {
-        for (ResearchImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
+        for (CenterImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
           if (!researchImpact.getBeneficiaries().contains(impactBeneficiary)) {
             impactBeneficiaryService.deleteResearchImpactBeneficiary(impactBeneficiary.getId());
           }
         }
       } else {
-        for (ResearchImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
+        for (CenterImpactBeneficiary impactBeneficiary : beneficiariesPrew) {
           impactBeneficiaryService.deleteResearchImpactBeneficiary(impactBeneficiary.getId());
         }
       }
     }
 
     if (researchImpact.getBeneficiaries() != null) {
-      for (ResearchImpactBeneficiary impactBeneficiary : researchImpact.getBeneficiaries()) {
+      for (CenterImpactBeneficiary impactBeneficiary : researchImpact.getBeneficiaries()) {
         if (impactBeneficiary.getId() == null) {
-          ResearchImpactBeneficiary impactBeneficiaryNew = new ResearchImpactBeneficiary();
+          CenterImpactBeneficiary impactBeneficiaryNew = new CenterImpactBeneficiary();
           impactBeneficiaryNew.setActive(true);
           impactBeneficiaryNew.setActiveSince(new Date());
           impactBeneficiaryNew.setCreatedBy(this.getCurrentUser());
@@ -700,11 +700,11 @@ public class ProgramImpactsAction extends BaseAction {
 
           impactBeneficiaryNew.setResearchImpact(researchImpactSave);
 
-          ResearchRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
+          CenterRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
 
           impactBeneficiaryNew.setResearchRegion(region);
 
-          Beneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
+          CenterBeneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
 
           impactBeneficiaryNew.setBeneficiary(beneficiary);
 
@@ -714,11 +714,11 @@ public class ProgramImpactsAction extends BaseAction {
 
           boolean hasChanges = false;
 
-          ResearchImpactBeneficiary impactBeneficiaryPrew =
+          CenterImpactBeneficiary impactBeneficiaryPrew =
             impactBeneficiaryService.getResearchImpactBeneficiaryById(impactBeneficiary.getId());
 
-          ResearchRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
-          Beneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
+          CenterRegion region = regionService.getResearchRegionById(impactBeneficiary.getResearchRegion().getId());
+          CenterBeneficiary beneficiary = beneficiaryService.getBeneficiaryById(impactBeneficiary.getBeneficiary().getId());
 
           if (impactBeneficiaryPrew.getResearchRegion() != null) {
             if (!impactBeneficiaryPrew.getResearchRegion().equals(region)) {
@@ -771,17 +771,17 @@ public class ProgramImpactsAction extends BaseAction {
   }
 
 
-  public void setBeneficiaryTypes(List<BeneficiaryType> beneficiaryTypes) {
+  public void setBeneficiaryTypes(List<CenterBeneficiaryType> beneficiaryTypes) {
     this.beneficiaryTypes = beneficiaryTypes;
   }
 
 
-  public void setIdos(List<ResearchImpactStatement> idos) {
+  public void setIdos(List<CenterImpactStatement> idos) {
     this.idos = idos;
   }
 
 
-  public void setImpacts(List<ResearchImpact> impacts) {
+  public void setImpacts(List<CenterImpact> impacts) {
     this.impacts = impacts;
   }
 
@@ -789,7 +789,7 @@ public class ProgramImpactsAction extends BaseAction {
   /**
    * @param loggedCenter the loggedCenter to set
    */
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -808,16 +808,16 @@ public class ProgramImpactsAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setRegions(List<ResearchRegion> regions) {
+  public void setRegions(List<CenterRegion> regions) {
     this.regions = regions;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
 
-  public void setResearchObjectives(List<ResearchObjective> researchObjectives) {
+  public void setResearchObjectives(List<CenterObjective> researchObjectives) {
     this.researchObjectives = researchObjectives;
   }
 
@@ -825,21 +825,21 @@ public class ProgramImpactsAction extends BaseAction {
   /**
    * @param researchPrograms the researchPrograms to set
    */
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
   /**
    * @param selectedProgram the selectedProgram to set
    */
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
   /**
    * @param selectedResearchArea the selectedResearchArea to set
    */
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 

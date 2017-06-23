@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated May 24, 2017 8:20:55 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-	<class name="org.cgiar.ccafs.marlo.data.model.ProjectFundingSource"
+	<class name="org.cgiar.ccafs.marlo.data.model.CenterProjectFundingSource"
 		table="center_project_funding_sources" optimistic-lock="version">
 		<id name="id" type="java.lang.Long">
 			<column name="id" />
@@ -22,14 +22,14 @@
 			<column name="crp_id" />
 		</many-to-one>
 		<many-to-one name="project"
-			class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterProject" fetch="select">
 			<column name="project_id" not-null="true" />
 		</many-to-one>
 		<property name="title" type="string">
 			<column name="title" length="65535" />
 		</property>
 		<many-to-one name="fundingSourceType"
-			class="org.cgiar.ccafs.marlo.data.model.FundingSourceType" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterFundingSourceType" fetch="select">
 			<column name="funding_source_type_id" not-null="true" />
 		</many-to-one>
 		<property name="active" type="boolean">
