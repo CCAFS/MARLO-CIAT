@@ -38,6 +38,8 @@
 		<javax-mail.version>1.5.5</javax-mail.version>
 		<com.sun.mail.version>1.5.5</com.sun.mail.version>
 		<pentaho-report.version>6.1.0.1-196</pentaho-report.version>
+		<org-apache-axis.version>1.4</org-apache-axis.version>
+		<javax-xml.version>1.1</javax-xml.version>
 	</properties>
 	<issueManagement>
 		<system>Github issue tracker</system>
@@ -426,6 +428,32 @@
 			<groupId>jfree</groupId>
 			<artifactId>jcommon</artifactId>
 			<version>1.0.16</version>
+		</dependency>
+
+
+		<!-- library to ws client -->
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>${org-apache-axis.version}</version>
+		</dependency>
+		<!-- library to cast xml to object -->
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>jaxrpc-api</artifactId>
+			<version>${javax-xml.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-discovery/commons-discovery -->
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/wsdl4j/wsdl4j -->
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.2</version>
 		</dependency>
 	</dependencies>
 
