@@ -1,7 +1,8 @@
 [#ftl]
 [#assign objs= [
-  { 'slug': 'Capacity Development',           'name': 'capdev.menu.hrefCapdev',  'action': '',           'active': true  },
-  { 'slug': 'Statistics',  'name': 'capdev.menu.hrefStatistics',       'action': '',  'active': true }
+  { 'slug': 'New Capdev Intervention',      'name': 'capdev.menu.hrefCapdev',           'action': 'detailCapdev',           'active': true  },
+  { 'slug': 'Capdev Description',           'name': 'capdev.menu.hrefDescription',      'action': 'descriptionCapdev',           'active': true  },
+  { 'slug': 'Supporting Documents',         'name': 'capdev.menu.hrefSuppotingDocs',    'action': 'supportingDocs',           'active': true  }
   
 ]/]
 
@@ -10,25 +11,18 @@
 
 
 <nav id="secondaryMenu" class="">
-  <p>[@s.text name="capdev.menu.title"/]</p>
-  <ul>
-    <li>
-      <ul>
-          
-          <li>
-            <a href="#">
-              [@s.text name="capdev.menu.hrefCapdev" /]
-            </a>
-            
-          </li>
-          <li>
-            <a href="#">
-              [@s.text name="capdev.menu.hrefStatistics" /]
-            </a>
-            
-          </li>
-          
-      </ul>
-    </li>
+  <p>Capdev Menu</p>
+   <ul>
+    [#list objs as item]
+      <li>
+        <ul>
+              <li id="menu-${item.action}" ">
+                <a href="[@s.url action="${centerSession}/${item.action}"][/@s.url]"  class="action-${centerSession}/${item.action}">
+                  [@s.text name=item.name/]
+                </a>
+              </li>
+        </ul>
+      </li>
+    [/#list]
   </ul> 
 </nav>

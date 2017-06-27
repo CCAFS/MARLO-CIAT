@@ -19,27 +19,19 @@
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">${centerSession}/detailCapdev</param>
+				<param name="capdevID">${capdevID}</param>
+				<!-- <param name="capdevCategory">${capdevCategory}</param> -->
 			</result>
 		</action>
 
-
 		<action name="{center}/detailCapdev"
-			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDescripcionAction">
+			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDetailAction">
 			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl
 			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">${centerSession}/capdev</param>
-				<param name="capDevID">${capDevID}</param>
-				<param name="edit">true</param>
-			</result>
-		</action>
-
-
-		<action name="{center}/addDeliverable"
-			class="org.cgiar.ccafs.marlo.action.capdev.CapDevDeliverablesAction">
-			<result name="input">/WEB-INF/views/capDev/newDeliverable.ftl
-			</result>
-			<result type="freemarker" name="success">/WEB-INF/views/capDev/newDeliverable.ftl
+				<param name="actionName">${centerSession}/detailCapdev</param>
+				<param name="capdevID">${capdevID}</param>
+				<param name="capdevCategory">${capdevCategory}</param>
 			</result>
 		</action>
 
@@ -54,12 +46,17 @@
 			</result>
 		</action>
 
-		<!-- <action name="uploadFile"
-			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDescripcionAction"
-			method="preLoadExcelFile">
-			<result type="freemarker" name="success">/WEB-INF/views/capDev/detailCapdev.ftl
+		<action name="{center}/descriptionCapdev"
+			class="org.cgiar.ccafs.marlo.action.capdev.CapdevDescriptionAction">
+			<result name="input">/WEB-INF/views/capDev/capdevDescription.ftl
 			</result>
-		</action> -->
+		</action>
+
+		<action name="{center}/supportingDocs"
+			class="org.cgiar.ccafs.marlo.action.capdev.CapdevSupportingDocsAction">
+			<result name="input">/WEB-INF/views/capDev/supportingDocs.ftl
+			</result>
+		</action>
 
 	</package>
 
