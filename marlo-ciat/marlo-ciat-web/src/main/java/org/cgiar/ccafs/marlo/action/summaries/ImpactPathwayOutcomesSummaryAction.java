@@ -17,6 +17,8 @@ package org.cgiar.ccafs.marlo.action.summaries;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactObjective;
 import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -30,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -73,6 +76,29 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     this.programService = programService;
   }
 
+  /**
+   * Method to add i8n parameters to masterReport in Pentaho
+   * 
+   * @param masterReport
+   * @return masterReport with i8n parameters added
+   */
+  private MasterReport addi8nParameters(MasterReport masterReport) {
+    /**
+     * Program Impacts
+     */
+    masterReport.getParameterValues().put("i8nPiTitle", this.getText("impactPathway.menu.hrefProgramImpacts"));
+    masterReport.getParameterValues().put("i8nPiStatement", this.getText("impactPathway.statement") + ":");
+    masterReport.getParameterValues().put("i8nPiObjetives", this.getText("programImpact.objectives.readText") + ":");
+    masterReport.getParameterValues().put("i8nPiIntendedBeneficiaries",
+      this.getText("impactPathway.intendedBeneficiaries") + ":");
+    masterReport.getParameterValues().put("i8nPiType", this.getText("impactPathway.type"));
+    masterReport.getParameterValues().put("i8nPiFocus", this.getText("impactPathway.focus"));
+    masterReport.getParameterValues().put("i8nPiRegion", this.getText("impactPathway.region"));
+    masterReport.getParameterValues().put("i8nPiNoData", this.getText("impactPathway.noData"));
+
+    return masterReport;
+  }
+
   @Override
   public String execute() throws Exception {
 
@@ -88,10 +114,6 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
 
       // Get main report
       MasterReport masterReport = (MasterReport) reportResource.getResource();
-
-      // Get program from DB
-      // project = projectManager.getProjectById(projectID);
-
 
       // Get details band
       ItemBand masteritemBand = masterReport.getItemBand();
@@ -109,6 +131,12 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
       TypedTableModel model = this.getMasterTableModel();
       sdf.addTable(masterQueryName, model);
       masterReport.setDataFactory(cdf);
+      // Set i8n for pentaho
+      masterReport = this.addi8nParameters(masterReport);
+
+      // Subreport Program Impacts
+      this.fillSubreport((SubReport) hm.get("programImpacts"), "programImpacts");
+
 
       PdfReportUtil.createPDF(masterReport, os);
       bytesPDF = os.toByteArray();
@@ -124,6 +152,20 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
       + this.getCurrentUser().getComposedCompleteName() + ". Time to generate: " + stopTime + "ms.");
     return SUCCESS;
 
+  }
+
+  private void fillSubreport(SubReport subReport, String query) {
+    CompoundDataFactory cdf = CompoundDataFactory.normalize(subReport.getDataFactory());
+    TableDataFactory sdf = (TableDataFactory) cdf.getDataFactoryForQuery(query);
+    TypedTableModel model = null;
+    switch (query) {
+      case "programImpacts":
+        model = this.getProgramImpactTableModel();
+        break;
+
+    }
+    sdf.addTable(query, model);
+    subReport.setDataFactory(cdf);
   }
 
   /**
@@ -193,6 +235,7 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     return "application/pdf";
   }
 
+  @SuppressWarnings("unused")
   private File getFile(String fileName) {
     // Get file from resources folder
     ClassLoader classLoader = this.getClass().getClassLoader();
@@ -211,7 +254,6 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
   }
 
   private void getFooterSubreports(HashMap<String, Element> hm, ReportFooter reportFooter) {
-
     int elementCount = reportFooter.getElementCount();
     for (int i = 0; i < elementCount; i++) {
       Element e = reportFooter.getElement(i);
@@ -250,7 +292,8 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     String currentDate = "";
 
     // Get title
-    title = "";
+    title = researchProgram.getResearchArea().getAcronym() + ", " + researchProgram.getComposedName()
+      + ", Organized by Impact";
 
     // Get datetime
     ZonedDateTime timezone = ZonedDateTime.now();
@@ -262,6 +305,43 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
 
 
     model.addRow(new Object[] {title, currentDate, imageUrl, researchProgram.getId()});
+    return model;
+  }
+
+  private TypedTableModel getProgramImpactTableModel() {
+    // Initialization of Model
+    TypedTableModel model =
+      new TypedTableModel(new String[] {"impactStatement", "impactObjetives", "program_id", "research_impact_id"},
+        new Class[] {String.class, String.class, Long.class, Long.class});
+    for (CenterImpact researchImpact : researchProgram.getResearchImpacts().stream().filter(rp -> rp.isActive())
+      .collect(Collectors.toList())) {
+      String impactStatement = "";
+      String impactObjetives = "";
+      long programId = 0;
+      if (researchImpact.getDescription() == null || researchImpact.getDescription().isEmpty()) {
+        impactStatement = "&lt;Not Defined&gt;";
+      } else {
+        impactStatement = researchImpact.getDescription();
+      }
+
+      if (researchImpact.getResearchImpactObjectives() != null
+        && researchImpact.getResearchImpactObjectives().size() > 0) {
+        for (CenterImpactObjective researchImpactObjective : researchImpact.getResearchImpactObjectives().stream()
+          .filter(rio -> rio.isActive() && rio.getResearchObjective() != null).collect(Collectors.toList())) {
+          impactObjetives += "<br>&#9679    " + researchImpactObjective.getResearchObjective().getObjective();
+        }
+      } else {
+        impactObjetives = "<br>&#9679    &lt;Not Defined&gt;";
+      }
+      if (impactObjetives.isEmpty()) {
+        impactObjetives = null;
+      }
+      if (researchProgram != null) {
+        programId = researchProgram.getId();
+      }
+
+      model.addRow(new Object[] {impactStatement, impactObjetives, programId, researchImpact.getId()});
+    }
     return model;
   }
 
