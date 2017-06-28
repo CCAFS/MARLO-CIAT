@@ -12,7 +12,7 @@
 		<many-to-one name="capdevType"
 			class="org.cgiar.ccafs.marlo.data.model.CapacityDevelopmentType"
 			fetch="select">
-			<column name="capdev_type" not-null="true" />
+			<column name="capdev_type" />
 		</many-to-one>
 		<many-to-one name="project"
 			class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select">
@@ -39,10 +39,10 @@
 			<column name="research_program" />
 		</many-to-one>
 		<property name="title" type="string">
-			<column name="title" length="200" not-null="true" />
+			<column name="title" length="200"  />
 		</property>
 		<property name="category" type="int">
-			<column name="category" not-null="true" />
+			<column name="category"  />
 		</property>
 		<property name="active" type="boolean">
 			<column name="is_active" not-null="true" />
@@ -60,7 +60,7 @@
 			<column name="ct_email" length="200"  />
 		</property>
 		<property name="startDate" type="date">
-			<column name="start_date" length="10" not-null="true" />
+			<column name="start_date" length="10"  />
 		</property>
 		<property name="endDate" type="date">
 			<column name="end_date" length="10" />

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
 
 public class CapacityDevelopmentAction extends BaseAction {
 
@@ -38,8 +39,8 @@ public class CapacityDevelopmentAction extends BaseAction {
 
   private final ICapacityDevelopmentService capdevService;
 
-  private int capDevID;
-  private String capdevCategory;
+  private long capdevID;
+  private int capdevCategory;
 
   @Inject
   public CapacityDevelopmentAction(APConfig config, ICapacityDevelopmentService capdevService) {
@@ -52,8 +53,21 @@ public class CapacityDevelopmentAction extends BaseAction {
   @Override
   public String add() {
 
-    System.out.println("esta es la categoria del CapacityDevelopmentAction-->" + capdevCategory);
-    return SUCCESS;
+    capdevCategory = Integer.parseInt(StringUtils.trim(this.getRequest().getParameter("capdevCategory")));
+    System.out.println("capdevCategory del add-->" + capdevCategory);
+    capdev = new CapacityDevelopment();
+    capdev.setCategory(capdevCategory);
+    capdev.setActive(true);
+    capdev.setUsersByCreatedBy(this.getCurrentUser());
+    capdevID = capdevService.saveCapacityDevelopment(capdev);
+    System.out.println("capDevID -->" + capdevID);
+    if (capdevID > 0) {
+      return SUCCESS;
+    } else {
+      return NOT_FOUND;
+    }
+
+
   }
 
 
@@ -62,13 +76,13 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
-  public String getCapdevCategory() {
+  public int getCapdevCategory() {
     return capdevCategory;
   }
 
 
-  public int getCapDevID() {
-    return capDevID;
+  public long getCapdevID() {
+    return capdevID;
   }
 
 
@@ -85,7 +99,6 @@ public class CapacityDevelopmentAction extends BaseAction {
   @Override
   public void prepare() throws Exception {
     capDevs = capdevService.findAll();
-
   }
 
 
@@ -100,13 +113,13 @@ public class CapacityDevelopmentAction extends BaseAction {
   }
 
 
-  public void setCapdevCategory(String capdevCategory) {
+  public void setCapdevCategory(int capdevCategory) {
     this.capdevCategory = capdevCategory;
   }
 
 
-  public void setCapDevID(int capDevID) {
-    this.capDevID = capDevID;
+  public void setCapdevID(long capdevID) {
+    this.capdevID = capdevID;
   }
 
 

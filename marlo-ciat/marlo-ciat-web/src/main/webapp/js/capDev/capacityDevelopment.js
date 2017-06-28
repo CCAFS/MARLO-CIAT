@@ -90,15 +90,52 @@ $dialogContent.find(".searchcontact-content input").on("keyup", searchUsersEvent
 
   $('.close-dialog').on('click', function() {
   capDevDialog.dialog("close");
-  //$dialogCapDevCategory.find(".panel-body ul").empty();
 
 });
 
 
+//display individual or group intervention form
+(function () {
+  var value = $(".radioButton").val();
+  
+  if (value == 1) {
+  $(".fullForm").show();
+  $(".individualparticipantForm").show();
+  $(".grupsParticipantsForm ").hide();
+  $(".individual ").show();
+  $(".group").hide();
+}
+else if (value == 2) {
+  $(".fullForm").show();
+  $(".grupsParticipantsForm ").show();
+  $(".individualparticipantForm").hide();
+  $(".group").show();
+}
+})();
 
 
 
 }
+
+//Event to display individual or group intervention form
+/*$(".radioButton").on('change',function(){
+   var value = $('input[name="capdev.category"]:checked').val();
+   console.log(value)
+  
+  if (value == 1) {
+  $(".fullForm").show();
+  $(".individualparticipantForm").show();
+  $(".grupsParticipantsForm ").hide();
+  $(".individual ").show();
+  $(".group").hide();
+}
+else if (value == 2) {
+  $(".fullForm").show();
+  $(".grupsParticipantsForm ").show();
+  $(".individualparticipantForm").hide();
+  $(".group").show();
+}
+})*/
 
 
 //event to download participants template 
@@ -127,7 +164,7 @@ $(".dowmloadTemplate").on("click", function(){
 
 
 //event to upload participants excel file
-$(".uploadParticipants").on("change",uploadFile);
+//$(".uploadParticipants").on("change",uploadFile);
 
 //
 function uploadFile(){
@@ -135,24 +172,23 @@ function uploadFile(){
     if (file) {
         console.log("hola");
           $.ajax({
-                'url': baseURL + '/capdev/uploadFile.do',
-                //'url': baseURL + '/previewParticipants.do',
-                'data': file,
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                'dataType': "json",
-                contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                processData: false,
-                beforeSend: function() {
-                },
-                success: function(data) {
-                  console.log(data);
-                },
-                error: function() {
-                },
-                complete: function() {
-                }
-              });
+      'url': baseURL + '/previewParticipants.do',
+      'data':file,
+       type: 'POST',
+       enctype: 'multipart/form-data',
+       'dataType': "json",
+       contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+       processData: false,
+      beforeSend: function() {
+      },
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
+      },
+      complete: function() {
+      }
+    });
     }
 }
 
@@ -160,15 +196,24 @@ function uploadFile(){
 
   $('#btnDisplay').click(function() {
     console.log("holiss");
+    var file = document.getElementById('uploadFile').files[0];
     
      $.ajax({
       'url': baseURL + '/previewParticipants.do',
-      'data': {q:"dato fail"},
-      'dataType': "json",
+      'data':file,
+       type: 'POST',
+       enctype: 'multipart/form-data',
+       'dataType': "json",
+       contentType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+       processData: false,
       beforeSend: function() {
       },
       success: function(data) {
-        console.log(data);
+        var usersFound = (data).length;
+        console.log(usersFound);
+        $.each(data, function(i,preview){
+          console.log("esto en el each");
+        });
       },
       error: function() {
       },
@@ -448,25 +493,9 @@ function updateOutComesList(block){
 
 
 
-//display individual or group intervention form
-$( ".radioButton" ).change(function() {
- 
- if (this.value == 1) {
-  $(".fullForm").show();
-  $(".individualparticipantForm").show();
-  $(".grupsParticipantsForm ").hide();
-  $(".individual ").show();
-  $(".group").hide();
 
-}
-else if (this.value == 2) {
-  $(".fullForm").show();
-  $(".grupsParticipantsForm ").show();
-  $(".individualparticipantForm").hide();
-  $(".group").show();
-}
 
-});
+
 
 
 

@@ -69,6 +69,7 @@ public final class APConstants {
   public static final String DELIVERABLE_ID = "deliverableID";
   public static final String DELIVERABLE_TYPE_ID = "deliverableTypeId";
   public static final String OUTPUT_NAME = "outputName";
+  public static final String CAPDEV_ID = "capdevID";
 
   // login messages and status
   public static final String LOGIN_STATUS = "loginStatus";

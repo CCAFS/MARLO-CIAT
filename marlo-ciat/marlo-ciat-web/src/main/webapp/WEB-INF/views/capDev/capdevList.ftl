@@ -59,29 +59,39 @@
 				  [#if capDevs?has_content]
 				  [#list capDevs as i]
 					  <tr>
-					    <td>${i.id}</td>
-					    <td><a  href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capDevID']${i.id?c}[/@s.param][/@s.url]">${i.title}</a></td> 
+					    <td>C${i.id}</td>
+					    [#if i.title??]
+					    <td>
+					    	<a href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capdevID']${i.id?c}[/@s.param][/@s.url]">${i.title}</a>
+					    </td> 
 					    <td>${i.capdevType.name}</td>
 					    <td>${i.startDate}</td>
+					    [#else]
+					    <td>
+					    	<a href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capdevID']${i.id?c}[/@s.param][/@s.url]">Not defined</a>
+					    </td> 
+					    <td>Not defined</td>
+					    <td>Not defined</td>
+					    [/#if]
 					    <td>
 					    [#if i.endDate??]
 					    	${i.endDate}
 					    [#else]
-					    	---
+					    	Not defined
 					    [/#if]
 					    </td>
 					    <td>
 					    [#if i.researchArea??] 
 					    	${i.researchArea.name}
 					    [#else]
-					    	---
+					    	Not defined
 					    [/#if]
 					    </td>
 					    <td>
 					    [#if i.researchProgram??]
 					    	${i.researchProgram.name}
 					    [#else]
-					    	---
+					    	Not defined
 					    [/#if]
 					    </td>
 					    <td>
@@ -100,16 +110,21 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
-				
-				<div class="buttons">
-		        	<div class="buttons-content">        
-			          	<a class="addButton" href="[@s.url action='${centerSession}/detailCapdev' ][@s.param name='capDevID']-1[/@s.param][/@s.url]">[@s.text name="Add item" /]</a>
+			<div class="pull-right">
+				<div class="col-md-12">
+					<div class="buttons">	
+			        	<div class="buttons-content">        
+				          	<!-- <a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a> -->
+				          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev'][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a>
+				        	<!-- <div class="clearfix"></div> -->
+			        	</div>
+			        	<div class="buttons-content">        
+				          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']1[/@s.param][/@s.url]">[@s.text name="capdev.addindividualItem" /]</a>
+				        	<div class="clearfix"></div>
+			        	</div>
 
-			          	
-			        	<div class="clearfix"></div>
-		        	</div>
-    			</div>
+    				</div>
+	    		</div>
 			</div>
 		</div>
 
@@ -135,57 +150,7 @@
 
 
 
-	 <!-- <div id="dialog-capdevCategory" style="display: none" class="capdevCategoryModal">
-	 	<form class="pure-form">
-	 		<div class="row newCapdevField"> 
-	 		<span class="glyphicon glyphicon-remove-circle close-dialog"></span>
-	 			<div class="col-md-12 newCapdevField">
-	 				[@s.text name="Category" ][/@s.text] 
-	 			</div>
-	 			<div class="col-md-12">
-	 				<div class="col-md-3">
-	 					<div class="radio">
-	 						<label><input  id="individual" class="radioButton" type="radio"  name="capdevCategory" value="1">Individual</label>
-	 					</div>
-	 				</div>
-	 				<div class="col-md-3">
-	 					<div class="radio">
-	 						<label><input id="groups" class="radioButton" type="radio" name="capdevCategory" value="2">Groups</label>
-	 					</div>
-	 				</div>
-
-
-
-	 			</div>
-
-	 			<div class="col-md-12">
-	 				<div class="col-md-6">
-				
-				<div class="buttons">
-		        	<div class="buttons-content">        
-			          	 <a class="addButton" href="[@s.url action='${centerSession}/detailCapdev'][@s.param name='capDevID']-1[/@s.param] [/@s.url]">[@s.text name="Accept" /]</a> 
-
-			          	 
-
-			          	  
-			        	<div class="clearfix"></div>
-		        	</div>
-    			</div>
-			</div>
-			<div class="col-md-6">
-				
-				<div class="buttons">
-		        	<div class="buttons-content">        
-			          	<div id="" class="addButton addCapDevButton" >[@s.text name="Cancel" /]</div>
-			        	<div class="clearfix"></div>
-		        	</div>
-    			</div>
-			</div>
-	 			</div>
-	 		</div>
-
-	 	</form>
-	 </div> -->
+	 
 
 
 

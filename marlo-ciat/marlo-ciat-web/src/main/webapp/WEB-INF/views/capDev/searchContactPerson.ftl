@@ -15,10 +15,10 @@
 			<div class="col-md-12 searchFields">
 				<div class="searchcontact-content clearfix">
 					<div class="col-md- searchcontact-input">
-						[@customForm.input name="" showTitle=false type="text" i18nkey="" className='contact' placeholder="First name, last name or email"/]
+						[@customForm.input name="" showTitle=false type="text"  className='contact' placeholder="capdev.adUsersplaceHolder"/]
 						<div class="col-md- search-loader" style="display:none;"><img src="${baseUrl}/images/global/loading_2.gif"></div>
 					</div>  
-					<div class="col-md- search-button">[@s.text name="Search" /]</div>
+					<div class="col-md- search-button">[@s.text name="capdev.search" /]</div>
 				</div>
 				
 			</div>
@@ -26,7 +26,7 @@
 
 			<div class="col-md-12">
 				<div class="contactList panel secondary">
-					<div class="panel-head"> [@s.text name="AD users List" /]</div>
+					<div class="panel-head"> [@s.text name="capdev.adUsersList" /]</div>
 					<div class="panel-body"> 
 						<p class="userMessage">
 							no se encontraron resultados para la entrada ingresada
