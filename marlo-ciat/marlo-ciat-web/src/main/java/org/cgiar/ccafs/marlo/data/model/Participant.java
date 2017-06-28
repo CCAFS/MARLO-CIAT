@@ -25,7 +25,7 @@ public class Participant implements java.io.Serializable {
   private String lastName;
   private int gender;
   private String citizenship;
-  private String countryOfResidence;
+  private String countryOfInstitucion;
   private String highestDegree;
   private String institution;
   private String email;
@@ -54,7 +54,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Participant(User usersByModifiedBy, User usersByCreatedBy, long code, String name, String lastName, int gender,
-    String citizenship, String countryOfResidence, String highestDegree, String institution, String email,
+    String citizenship, String countryOfInstitucion, String highestDegree, String institution, String email,
     String reference, String supervisor, String fellowship, boolean active, Date aciveSince,
     String modificationJustification, Set<CapdevParticipant> capdevParticipants) {
     this.usersByModifiedBy = usersByModifiedBy;
@@ -64,7 +64,7 @@ public class Participant implements java.io.Serializable {
     this.lastName = lastName;
     this.gender = gender;
     this.citizenship = citizenship;
-    this.countryOfResidence = countryOfResidence;
+    this.countryOfInstitucion = countryOfInstitucion;
     this.highestDegree = highestDegree;
     this.institution = institution;
     this.email = email;
@@ -93,8 +93,9 @@ public class Participant implements java.io.Serializable {
     return this.code;
   }
 
-  public String getCountryOfResidence() {
-    return this.countryOfResidence;
+
+  public String getCountryOfInstitucion() {
+    return countryOfInstitucion;
   }
 
   public String getEmail() {
@@ -169,13 +170,16 @@ public class Participant implements java.io.Serializable {
     this.citizenship = citizenship;
   }
 
+
   public void setCode(long code) {
     this.code = code;
   }
 
-  public void setCountryOfResidence(String countryOfResidence) {
-    this.countryOfResidence = countryOfResidence;
+
+  public void setCountryOfInstitucion(String countryOfInstitucion) {
+    this.countryOfInstitucion = countryOfInstitucion;
   }
+
 
   public void setEmail(String email) {
     this.email = email;

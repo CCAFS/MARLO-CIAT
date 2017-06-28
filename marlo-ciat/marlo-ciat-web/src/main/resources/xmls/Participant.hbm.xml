@@ -32,8 +32,8 @@
 		<property name="citizenship" type="string">
 			<column name="citizenship" length="200" not-null="true" />
 		</property>
-		<property name="countryOfResidence" type="string">
-			<column name="country_of_residence" length="200" />
+		<property name="countryOfInstitucion" type="string">
+			<column name="country_of_institucion" length="200" />
 		</property>
 		<property name="highestDegree" type="string">
 			<column name="highest_degree" length="200" />
