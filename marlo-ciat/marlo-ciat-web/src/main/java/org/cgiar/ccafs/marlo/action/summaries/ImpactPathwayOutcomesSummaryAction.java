@@ -19,7 +19,9 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
 import org.cgiar.ccafs.marlo.data.model.CenterImpact;
 import org.cgiar.ccafs.marlo.data.model.CenterImpactObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
 import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
 import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -96,6 +98,34 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     masterReport.getParameterValues().put("i8nPiRegion", this.getText("impactPathway.region"));
     masterReport.getParameterValues().put("i8nPiNoData", this.getText("impactPathway.noData"));
 
+    /**
+     * Program Outcomes and Outputs
+     */
+    masterReport.getParameterValues().put("i8nPooTitle", this.getText("outcomeOutput.title"));
+    masterReport.getParameterValues().put("i8nPooNoData", this.getText("outcomeOutput.noData"));
+    masterReport.getParameterValues().put("i8nPooResearchStatement",
+      this.getText("outcomeOutput.researchStatement") + ":");
+    masterReport.getParameterValues().put("i8nPooOutcomeStatement", this.getText("outcome.statement.readText") + ":");
+    masterReport.getParameterValues().put("i8nPooOutcomeTargetUnit", this.getText("outcome.selectTargetUnit"));
+    masterReport.getParameterValues().put("i8nPooOutcomeTargetValue", this.getText("outcome.targetValue"));
+    masterReport.getParameterValues().put("i8nPooOutcomeTargetYear", this.getText("outcome.year"));
+    masterReport.getParameterValues().put("i8nPooMilestones", this.getText("outcome.action.milestones") + ":");
+    masterReport.getParameterValues().put("i8nPooMilestonesStatement",
+      this.getText("outcome.milestone.index.statement"));
+    masterReport.getParameterValues().put("i8nPooMilestonesTargetUnit",
+      this.getText("outcome.milestone.index.selectTargetUnit"));
+    masterReport.getParameterValues().put("i8nPooMilestonesTargetValue",
+      this.getText("outcome.milestone.index.inputTargetValue"));
+    masterReport.getParameterValues().put("i8nPooMilestonesTargetYear",
+      this.getText("outcome.milestone.index.inputTargetYear"));
+    masterReport.getParameterValues().put("i8nPooOutputsNoData", this.getText("outcomeOutput.outputNoData"));
+    masterReport.getParameterValues().put("i8nPooOutputsNextUser", this.getText("outcomeOutput.outputNextUser"));
+    masterReport.getParameterValues().put("i8nPooOutputsType", this.getText("outcomeOutput.outputNextUserType"));
+    masterReport.getParameterValues().put("i8nPooOutputsSubType", this.getText("outcomeOutput.outputNextUserSubType"));
+    masterReport.getParameterValues().put("i8nPooOutputsNextUserNoData",
+      this.getText("outcomeOutput.outputNextUserNoData"));
+    masterReport.getParameterValues().put("i8nPooOutputStatement", this.getText("outcomeOutput.outputStatement") + ":");
+
     return masterReport;
   }
 
@@ -136,6 +166,7 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
 
       // Subreport Program Impacts
       this.fillSubreport((SubReport) hm.get("programImpacts"), "programImpacts");
+      this.fillSubreport((SubReport) hm.get("outcomesOutputs"), "outcomesOutputs");
 
 
       PdfReportUtil.createPDF(masterReport, os);
@@ -161,6 +192,9 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     switch (query) {
       case "programImpacts":
         model = this.getProgramImpactTableModel();
+        break;
+      case "outcomesOutputs":
+        model = this.getOutcomesTableModel();
         break;
 
     }
@@ -292,8 +326,7 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
     String currentDate = "";
 
     // Get title
-    title = researchProgram.getResearchArea().getAcronym() + ", " + researchProgram.getComposedName()
-      + ", Organized by Impact";
+    title = researchProgram.getResearchArea().getAcronym() + ", " + researchProgram.getName() + ", Organized by Impact";
 
     // Get datetime
     ZonedDateTime timezone = ZonedDateTime.now();
@@ -305,6 +338,76 @@ public class ImpactPathwayOutcomesSummaryAction extends BaseAction implements Su
 
 
     model.addRow(new Object[] {title, currentDate, imageUrl, researchProgram.getId()});
+    return model;
+  }
+
+  /**
+   * get Outcomes table model
+   * 
+   * @return TypedTableModel: filled with outcomes
+   */
+  private TypedTableModel getOutcomesTableModel() {
+    // Initialization of Model
+    TypedTableModel model = new TypedTableModel(
+      new String[] {"outcomeStatement", "researchStatement", "outcomeTargetUnit", "outcomeTargetValue",
+        "outcomeTargetYear", "researchOutcomeID"},
+      new Class[] {String.class, String.class, String.class, String.class, String.class, Long.class});
+
+    // Get research topics and then outcomes
+    for (CenterTopic researchTopic : researchProgram.getResearchTopics().stream()
+      .filter(rt -> rt.isActive() && rt.getResearchOutcomes().size() > 0).collect(Collectors.toList())) {
+      String researchStatement = "";
+      for (CenterOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
+        .collect(Collectors.toList())) {
+        if (researchTopic.getResearchTopic() != null) {
+          researchStatement = researchTopic.getResearchTopic();
+        }
+        if (researchStatement.isEmpty()) {
+          researchStatement = "&lt;Not Defined&gt;";
+        }
+
+        String outcomeStatement = "";
+        String outcomeTargetUnit = "";
+        String outcomeTargetValue = "";
+        String outcomeTargetYear = "";
+        Long researchOutcomeID = researchOutcome.getId();
+
+        if (researchOutcome.getDescription() != null) {
+          outcomeStatement = researchOutcome.getDescription();
+        }
+        if (outcomeStatement.isEmpty()) {
+          outcomeStatement = "&lt;Not Defined&gt;";
+        }
+
+        if (researchOutcome.getTargetUnit() != null) {
+          outcomeTargetUnit = researchOutcome.getTargetUnit().getName();
+        }
+        if (outcomeTargetUnit.isEmpty()) {
+          outcomeTargetUnit = "&lt;Not Defined&gt;";
+        }
+
+        if (outcomeTargetUnit.equals("Not Applicable")) {
+          outcomeTargetValue = "Not Applicable";
+        } else {
+          if (researchOutcome.getValue() != null) {
+            outcomeTargetValue = researchOutcome.getValue().toString();
+          }
+        }
+
+        if (outcomeTargetValue == null || outcomeTargetValue.isEmpty()) {
+          outcomeTargetValue = "&lt;Not Defined&gt;";
+        }
+        if (researchOutcome.getTargetYear() != null && researchOutcome.getTargetYear() != -1) {
+          outcomeTargetYear = researchOutcome.getTargetYear().toString();
+        }
+        if (outcomeTargetYear.isEmpty()) {
+          outcomeTargetYear = "&lt;Not Defined&gt;";
+        }
+
+        model.addRow(new Object[] {outcomeStatement, researchStatement, outcomeTargetUnit, outcomeTargetValue,
+          outcomeTargetYear, researchOutcomeID});
+      }
+    }
     return model;
   }
 
