@@ -13,30 +13,25 @@
  * along with MARLO. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************/
 
-package org.cgiar.ccafs.marlo.action.capdev;
+package org.cgiar.ccafs.marlo.validation.capdev;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
+import org.cgiar.ccafs.marlo.data.model.Participant;
+import org.cgiar.ccafs.marlo.validation.BaseValidator;
 
 import com.google.inject.Inject;
 
-public class CapDevDeliverablesAction extends BaseAction {
+public class CapacityDevelopmentValidator extends BaseValidator {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
 
   @Inject
-  public CapDevDeliverablesAction(APConfig config) {
-    super(config);
+  public CapacityDevelopmentValidator() {
+    // TODO Auto-generated constructor stub
   }
 
-  @Override
-  public void prepare() throws Exception {
-    // TODO Auto-generated method stub
-    super.prepare();
-  }
+  public void validate(BaseAction baseAction, CapacityDevelopment capdev, Participant participant, boolean saving) {
 
+  }
 
 }

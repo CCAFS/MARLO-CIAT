@@ -36,6 +36,8 @@ public class CapacityDevelopment implements java.io.Serializable {
   private Date startDate;
   private Date endDate;
   private Integer numParticipants;
+  private Integer numMen;
+  private Integer numWomen;
   private Set<CapdevLocations> capdevLocations = new HashSet<CapdevLocations>(0);
   private List<CapdevLocations> capDevCountries;
   private List<CapdevLocations> capDevRegions;
@@ -50,9 +52,9 @@ public class CapacityDevelopment implements java.io.Serializable {
   public CapacityDevelopment(Project project, User usersByModifiedBy, User usersByCreatedBy, ResearchArea researchArea,
     Crp crp, ResearchProgram researchProgram, String title, CapacityDevelopmentType capdevType, int category,
     boolean active, String modificationJustification, String ctFirstName, String ctLastName, String ctEmail,
-    Date startDate, Date endDate, Integer numParticipants, Set<CapdevLocations> capdevLocations,
-    Set<CapdevDiscipline> capdevDisciplines, Set<CapdevTargetgroup> capdevTargetgroups,
-    Set<CapdevParticipant> capdevParticipants) {
+    Date startDate, Date endDate, Integer numParticipants, Integer numMen, Integer numWomen,
+    Set<CapdevLocations> capdevLocations, Set<CapdevDiscipline> capdevDisciplines,
+    Set<CapdevTargetgroup> capdevTargetgroups, Set<CapdevParticipant> capdevParticipants) {
     this.project = project;
     this.usersByModifiedBy = usersByModifiedBy;
     this.usersByCreatedBy = usersByCreatedBy;
@@ -74,6 +76,8 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.capdevDisciplines = capdevDisciplines;
     this.capdevTargetgroups = capdevTargetgroups;
     this.capdevParticipants = capdevParticipants;
+    this.numMen = numMen;
+    this.numWomen = numWomen;
   }
 
   public CapacityDevelopment(String title, CapacityDevelopmentType capdevType, int category, boolean active,
@@ -148,8 +152,16 @@ public class CapacityDevelopment implements java.io.Serializable {
     return this.modificationJustification;
   }
 
+  public Integer getNumMen() {
+    return numMen;
+  }
+
   public Integer getNumParticipants() {
     return this.numParticipants;
+  }
+
+  public Integer getNumWomen() {
+    return numWomen;
   }
 
   public Project getProject() {
@@ -224,9 +236,11 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.crp = crp;
   }
 
+
   public void setCtEmail(String ctEmail) {
     this.ctEmail = ctEmail;
   }
+
 
   public void setCtFirstName(String ctFirstName) {
     this.ctFirstName = ctFirstName;
@@ -253,8 +267,18 @@ public class CapacityDevelopment implements java.io.Serializable {
   }
 
 
+  public void setNumMen(Integer numMen) {
+    this.numMen = numMen;
+  }
+
+
   public void setNumParticipants(Integer numParticipants) {
     this.numParticipants = numParticipants;
+  }
+
+
+  public void setNumWomen(Integer numWomen) {
+    this.numWomen = numWomen;
   }
 
 

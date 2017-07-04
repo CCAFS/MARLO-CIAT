@@ -23,7 +23,7 @@ public class Participant implements java.io.Serializable {
   private long code;
   private String name;
   private String lastName;
-  private int gender;
+  private String gender;
   private String citizenship;
   private String countryOfInstitucion;
   private String highestDegree;
@@ -41,7 +41,7 @@ public class Participant implements java.io.Serializable {
   }
 
 
-  public Participant(User usersByCreatedBy, long code, String name, String lastName, int gender, String citizenship,
+  public Participant(User usersByCreatedBy, long code, String name, String lastName, String gender, String citizenship,
     String email, boolean active) {
     this.usersByCreatedBy = usersByCreatedBy;
     this.code = code;
@@ -53,9 +53,9 @@ public class Participant implements java.io.Serializable {
     this.active = active;
   }
 
-  public Participant(User usersByModifiedBy, User usersByCreatedBy, long code, String name, String lastName, int gender,
-    String citizenship, String countryOfInstitucion, String highestDegree, String institution, String email,
-    String reference, String supervisor, String fellowship, boolean active, Date aciveSince,
+  public Participant(User usersByModifiedBy, User usersByCreatedBy, long code, String name, String lastName,
+    String gender, String citizenship, String countryOfInstitucion, String highestDegree, String institution,
+    String email, String reference, String supervisor, String fellowship, boolean active, Date aciveSince,
     String modificationJustification, Set<CapdevParticipant> capdevParticipants) {
     this.usersByModifiedBy = usersByModifiedBy;
     this.usersByCreatedBy = usersByCreatedBy;
@@ -106,7 +106,7 @@ public class Participant implements java.io.Serializable {
     return this.fellowship;
   }
 
-  public int getGender() {
+  public String getGender() {
     return this.gender;
   }
 
@@ -189,7 +189,7 @@ public class Participant implements java.io.Serializable {
     this.fellowship = fellowship;
   }
 
-  public void setGender(int gender) {
+  public void setGender(String gender) {
     this.gender = gender;
   }
 

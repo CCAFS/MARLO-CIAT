@@ -19,21 +19,28 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
+import org.cgiar.ccafs.marlo.data.model.CapdevDiscipline;
+import org.cgiar.ccafs.marlo.data.model.CapdevTargetgroup;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.Discipline;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.TargetGroup;
+import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
 import org.cgiar.ccafs.marlo.data.service.ITargetGroupService;
+import org.cgiar.ccafs.marlo.utils.APConstants;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.inject.Inject;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 
 public class CapdevDescriptionAction extends BaseAction {
 
@@ -123,6 +130,46 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
+  public void saveCapDevDisciplines(List<Long> disciplines, CapacityDevelopment capdev) {
+    CapdevDiscipline capdevDiscipline = null;
+    final Session session = SecurityUtils.getSubject().getSession();
+
+    final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
+    if (!disciplines.isEmpty()) {
+      for (final Long iterator : disciplines) {
+        final Discipline discipline = disciplineService.getDisciplineById(iterator);
+        capdevDiscipline = new CapdevDiscipline();
+        capdevDiscipline.setCapacityDevelopment(capdev);
+        capdevDiscipline.setDisciplines(discipline);
+        capdevDiscipline.setActive(true);
+        capdevDiscipline.setActiveSince(new Date());
+        capdevDiscipline.setUsersByCreatedBy(currentUser);
+        // capdevDisciplineService.saveCapdevDiscipline(capdevDiscipline);
+      }
+    }
+  }
+
+
+  public void saveCapdevTargetGroups(List<Long> targetGroups, CapacityDevelopment capdev) {
+    CapdevTargetgroup capdevTargetgroup = null;
+    final Session session = SecurityUtils.getSubject().getSession();
+
+    final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
+    if (!targetGroups.isEmpty()) {
+      for (final Long iterator : targetGroups) {
+        final TargetGroup targetGroup = targetGroupService.getTargetGroupById(iterator);
+        capdevTargetgroup = new CapdevTargetgroup();
+        capdevTargetgroup.setCapacityDevelopment(capdev);
+        capdevTargetgroup.setTargetGroups(targetGroup);
+        capdevTargetgroup.setActive(true);
+        capdevTargetgroup.setActiveSince(new Date());
+        capdevTargetgroup.setUsersByCreatedBy(currentUser);
+        // capdevTargetgroupService.saveCapdevTargetgroup(capdevTargetgroup);
+      }
+    }
+  }
+
+
   public void setCapdev(CapacityDevelopment capdev) {
     this.capdev = capdev;
   }
@@ -147,11 +194,9 @@ public class CapdevDescriptionAction extends BaseAction {
     this.researchAreas = researchAreas;
   }
 
-
   public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
-
 
   public void setTargetGroups(List<TargetGroup> targetGroups) {
     this.targetGroups = targetGroups;

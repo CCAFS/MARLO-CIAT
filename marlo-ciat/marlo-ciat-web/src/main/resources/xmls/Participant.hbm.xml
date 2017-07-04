@@ -26,7 +26,7 @@
 		<property name="lastName" type="string">
 			<column name="last_name" length="200" not-null="true" />
 		</property>
-		<property name="gender" type="int">
+		<property name="gender" type="string">
 			<column name="gender" not-null="true" />
 		</property>
 		<property name="citizenship" type="string">

@@ -23,8 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +44,8 @@ public class ParticipantsAction extends BaseAction implements ServletRequestAwar
 
   private static final long serialVersionUID = 1L;
 
-  private static final String[] HEAD_TEMPLATE = {"Code", "Name", "Last Name", "Gender", "Citizenship",
-    "Country of residence", "Highest degree", "Institution", "email", "Reference", "Fellowship"};
+  private static final String[] HEAD_TEMPLATE = {"Code", "Name", "Last Name", "Gender", "Citizenship", "Highest degree",
+    "Institution", "Country of institucion", "email", "Reference", "Fellowship"};
 
 
   private InputStream inputStream;
@@ -143,22 +141,6 @@ public class ParticipantsAction extends BaseAction implements ServletRequestAwar
       e.printStackTrace();
     }
 
-
-    return SUCCESS;
-  }
-
-  public String previewExcelFile() {
-    this.previewList = new ArrayList<>();
-
-
-    for (int i = 0; i < 2; i++) {
-      final Map<String, Object> userMap = new HashMap<>();
-      userMap.put("idUser", i);
-      userMap.put("firstName", "algo");
-      userMap.put("lastName", "nuevo");
-      userMap.put("email", "@gmail");
-      this.previewList.add(userMap);
-    }
 
     return SUCCESS;
   }

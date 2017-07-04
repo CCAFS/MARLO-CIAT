@@ -76,7 +76,7 @@
 
 					<!-- Contact person -->
 					<div class="col-md-6 contactField group individual">
-						[@customForm.input name="" i18nkey="capdev.form.contactPerson" type="text" className='contact'  required=true  /]
+						[@customForm.input name="contact" i18nkey="capdev.form.contactPerson" type="text" className='contact'  required=true  /]
 						<input class="ctFirsName" type="hidden" name="capdev.ctFirstName" value="${(capdev.ctFirstName)!}" /> 
 						<input class="ctLastName" type="hidden" name="capdev.ctLastName" value="${(capdev.ctLastName)!}" /> 
 						<input class="ctEmail" type="hidden" name="capdev.ctEmail" value="${(capdev.ctEmail)!}" /> 
@@ -98,26 +98,32 @@
 				</div>
 			</div>
 
-			<!-- num participants -->
+			<!-- num participants, num men and num women -->
 			<div class="row">
 				<div class="col-md-12 newCapdevField">
 					<div class="col-md-6 group individual">
 						[@customForm.input name="capdev.numParticipants" i18nkey="capdev.form.numParticipants" type="text"  editable=true  /]
 					</div>
+					<div class="col-md-3 group individual">
+						[@customForm.input name="capdev.numMen" i18nkey="capdev.form.numMen" type="text"  /]
+					</div>
+					<div class="col-md-3 group individual">
+						[@customForm.input name="capdev.numWomen" i18nkey="capdev.form.numWomen" type="text"  /]
+					</div>
 				</div>
 			</div>
 
+
 			<!-- groups participants-->
 			<div class="row grupsParticipantsForm">
-				<div class="col-md-12 newCapdevField">
+				<div class="col-md-12 newCapdevField participantsheader">
 					<div class="col-md-6  participantsTitle">
-						[@s.text name="capdev.form.participants"][/@s.text]
+						[@s.label key="capdev.form.participants" /]
 					</div>
 					<div class="col-md-6 ">
 						<div class="pull-right">
-							<button type="button" class="" aria-label="Left Align" >
-								
-								<a class="addButton" href="[@s.url action='${centerSession}/downloadFile' /] ">[@s.text name="capdev.downloadTemplate" /]</a> 
+							<button type="button" class="capdevButtons" aria-label="Left Align" >
+								<a class="downloadButton" href="[@s.url action='${centerSession}/downloadFile' /] ">[@s.text name="capdev.downloadTemplate" /]</a> 
 							</button>
 						</div>
 					</div>
@@ -125,25 +131,47 @@
 
 				<div class="row newCapdevField">
 					<div class="col-md-12 newCapdevField participantsBox">
-						
-							<!-- [@customForm.inputFile name="uploadFile" /] -->
+						<div class="col-md-12">
 							[@s.file id="uploadFile" name="uploadFile" label="Select a File to upload" size="40" class="uploadParticipants"/]
+						</div>
+						
 
-							<button type="button"  id="btnDisplay" class="" aria-label="Left Align" >
-								 preview
+						<div class="col-md-12" style="margin-top: 10px;">
+						<div class="btnPreview">
+							<button type="button"  id="btnDisplay" class="capdevButtons" aria-label="Left Align" data-toggle="modal" data-target="#myModa">
+								preview
 							</button>
-							
-					</div>
-					<div class="col-md-12">
+						</div>
 						
-						preview
 
-						
+						<div id="filewarning" class="warning" style="display: none; margin-top: 10px;">
+						</div>
+						<div class="loader" style="display:none;"><img src="${baseUrl}/images/global/loading_2.gif" width="80" height="30"></div>
+
+						<div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog modal-lg" role="document">
+						    <div class="modal-content highlight">
+						      <div class="modal-header">
+						      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						        <h5 class="modal-title" id="exampleModalLabel">Preview participants file</h5>
+						        
+						      </div>
+						      <div id="participantsTable"  class="modal-body">
+						        
+						      </div>
+						     
+						    </div>
+						  </div>
+						</div>
 					</div>
+					</div>
+					
 				</div>
 
-				<div>
-					<p>If you don’t have a participants list, please enter the number of participants</p>
+				<div class="note participantMessage">
+					<p>If you don’t have a participants list please enter the number of participants, number of men and number of women</p>
 				</div>
 			</div>
 
@@ -173,8 +201,8 @@
 						</div>
 						<select class="selectpicker" name="participant.gender" required="true">
 							<option value="-1" >select an option ...</option>
-							<option value="1" >Male</option>
-						  	<option value="2">Female</option>
+							<option value="M" >Male</option>
+						  	<option value="F">Female</option>
 						</select>
 
 						
@@ -302,15 +330,12 @@
 
 			<!-- buttons -->
 			<div class="col-md-12">
-				<div class="col-md-6">
-					<div class="pull-right">
-						[@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="form.buttons.save" /] [/@s.submit]
-
-					</div>
-				</div>
-
-				
-
+					<div class="buttons">	
+			        	<div class="buttons-content">        
+				          	[@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="form.buttons.save" /] [/@s.submit]
+				        	<div class="clearfix"></div>
+			        	</div>
+    				</div>
 			</div>
 
 		</div>

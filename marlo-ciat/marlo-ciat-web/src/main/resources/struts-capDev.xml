@@ -26,6 +26,12 @@
 
 		<action name="{center}/detailCapdev"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDetailAction">
+<!-- 			<interceptor-ref name="basicStack" /> -->
+<!-- 			<interceptor-ref name="fileUpload"> -->
+<!-- 				<param name="allowedTypes">application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param> -->
+<!-- 			</interceptor-ref> -->
+<!-- 			<interceptor-ref name="validation" /> -->
+<!-- 			<interceptor-ref name="workflow" /> -->
 			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl
 			</result>
 			<result name="success" type="redirectAction">
