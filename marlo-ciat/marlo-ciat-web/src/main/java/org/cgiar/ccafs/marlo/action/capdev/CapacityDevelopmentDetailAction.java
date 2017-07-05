@@ -149,6 +149,33 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  public int getNumMenParticipants(Object[][] data) {
+    int numMen = 0;
+    for (final Object[] element : data) {
+      if (((String) element[3]).equalsIgnoreCase("M")) {
+        System.out.println("genero male -->" + element[3]);
+        numMen++;
+        System.out.println("genero male -->" + numMen);
+      }
+    }
+    return numMen;
+  }
+
+
+  public int getNumWomenParticipants(Object[][] data) {
+    int numWomen = 0;
+    for (final Object[] element : data) {
+      if (((String) element[3]).equalsIgnoreCase("F")) {
+        System.out.println("genero female -->" + element[3]);
+        numWomen++;
+        System.out.println("genero female -->" + numWomen);
+
+      }
+    }
+    return numWomen;
+  }
+
+
   public Participant getParticipant() {
     return participant;
   }
@@ -187,7 +214,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public String getUploadFileContentType() {
     return uploadFileContentType;
   }
-
 
   public String getUploadFileName() {
     return uploadFileName;
@@ -246,6 +272,8 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
 
     participantList = new ArrayList<>();
+    capdevCountries = new ArrayList<>();
+    capdevRegions = new ArrayList<>();
 
     try {
       capdevID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CAPDEV_ID)));
@@ -256,6 +284,28 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     capdev = capdevService.getCapacityDevelopmentById(capdevID);
 
     if (capdev != null) {
+      final List<CapdevParticipant> participants = new ArrayList<>(capdev.getCapdevParticipants());
+      if (capdev.getCategory() == 1) {
+        if (!participants.isEmpty()) {
+          participant = participants.get(0).getParticipant();
+        }
+      }
+
+      System.out.println("CApdev Location " + capdev.getCapdevLocations());
+      if (!capdev.getCapdevLocations().isEmpty()) {
+        final List<CapdevLocations> regions = new ArrayList<>(capdev.getCapdevLocations().stream()
+          .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 1))
+          .collect(Collectors.toList()));
+        capdev.setCapDevRegions(regions);
+
+        final List<CapdevLocations> countries = new ArrayList<>(capdev.getCapdevLocations().stream()
+          .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 2))
+          .collect(Collectors.toList()));
+        capdev.setCapDevCountries(countries);
+
+
+      }
+
 
     }
 
@@ -290,8 +340,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   @Override
   public String save() {
     System.out.println("en el save");
-    capdevCountries = new ArrayList<>();
-    capdevRegions = new ArrayList<>();
+
 
     final Session session = SecurityUtils.getSubject().getSession();
 
@@ -312,6 +361,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
       if (uploadFile != null) {
         final Object[][] data = reader.readExcelFile(uploadFile);
         this.preloadParticipantsList(data);
+        capdev.setNumParticipants(participantList.size());
+        final int numMen = this.getNumMenParticipants(data);
+        final int numWomen = this.getNumWomenParticipants(data);
+        capdev.setNumMen(numMen);
+        capdev.setNumWomen(numWomen);
 
       }
       System.out.println("Lista de participantes-->" + participantList.size());
@@ -323,8 +377,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
     }
 
-    this.saveCapDevCountries(capdevCountries, capdev);
+    System.out.println("Lista de regiones -->" + capdevRegions.size());
+    System.out.println("Lista de paises -->" + capdevCountries.size());
+
     this.saveCapDevRegions(capdevRegions, capdev);
+    this.saveCapDevCountries(capdevCountries, capdev);
 
 
     return SUCCESS;
@@ -373,11 +430,12 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
       final Session session = SecurityUtils.getSubject().getSession();
 
       final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
-      for (final Long iterator : capdevCountries) {
-        final LocElement country = locElementService.getLocElementById(iterator);
+      for (final Long iterator : capdevRegions) {
+        System.out.println("id Locelement-->" + iterator);
+        final LocElement region = locElementService.getLocElementById(iterator);
         capdevLocations = new CapdevLocations();
         capdevLocations.setCapacityDevelopment(capdev);
-        capdevLocations.setLocElement(country);
+        capdevLocations.setLocElement(region);
         capdevLocations.setActive(true);
         capdevLocations.setActiveSince(new Date());
         capdevLocations.setUsersByCreatedBy(currentUser);

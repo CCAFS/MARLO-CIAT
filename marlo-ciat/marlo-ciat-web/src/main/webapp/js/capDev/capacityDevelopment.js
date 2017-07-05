@@ -439,9 +439,11 @@
       var option = $(this).find("option:selected");
       if(option.val() != "-1") {
         addRegion(option);
-        option.prop('disabled', true);
-        $('.capdevRegionsSelect').select2();
       }
+
+      // Remove option from select
+      option.remove();
+      $(this).trigger("change.select2");
 
     });
 
@@ -798,6 +800,8 @@
       canAdd = false;
     }
     var optionValue = option.val().split("-")[0];
+    console.log("holaaaa");
+    console.log(optionValue);
     var optionScope = option.val().split("-")[1];
 
     var $list = $("#capdevRegionsList").find(".list");

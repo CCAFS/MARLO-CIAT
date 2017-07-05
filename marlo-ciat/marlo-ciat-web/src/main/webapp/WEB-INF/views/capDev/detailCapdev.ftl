@@ -238,7 +238,7 @@
 			</div>
 
 			<!-- Regions and countries titles -->
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-5 newCapdevField listContainerTitle">
 					[@s.text name="capdev.form.region"][/@s.text] 
 				</div>
@@ -246,7 +246,7 @@
 				<div class="col-md-5 newCapdevField listContainerTitle">
 					[@s.text name="capdev.form.country"][/@s.text] 
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Regions and countries lists -->
 			<div class="row">
@@ -254,7 +254,7 @@
 					<!-- regions-->
 					<div class="col-md-5 listContainer panel ">
 						<div class="newCapdevField ">
-							[@customForm.select name="" listName="regionsList" keyFieldName="id" displayFieldName="name"  i18nkey="" className="capdevRegionsSelect" multiple=false placeholder="capdev.select"  /]
+							[@customForm.select name="capdevRegions" listName="regionsList" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.region" className="capdevRegionsSelect" multiple=false placeholder="capdev.select"  /]
 						</div>
 
 						<div id="capdevRegionsList" class="newCapdevField regionsList">
@@ -264,13 +264,11 @@
 									<ul class="list">
 										[#if capdev.capDevRegions?has_content]
 										[#list capdev.capDevRegions as region]
-											<li id="" class="capdevRegion  ">
-												[#if editable ]
+											<li id="" class="capdevRegion  clearfix col-md-3">
 												<div class="removeRegion removeIcon" title="Remove region"></div>
-												[/#if]
 												<input class="id" type="hidden" name="capdev.capDevRegions[${region_index}].id" value="${(region.id)!-1}" />
-												<input class="cId" type="hidden" name="capdev.capDevRegions[${country_index}].locElement.id" value="${(region.locElement.id)!}" />
-												<span class="name"><span> <i class="flag-sm flag-sm-${(region.locElement.isoAlpha2)!}"></i> [@utilities.wordCutter string=(region.locElement.name)! maxPos=20 /]</span></span>
+												<input class="cId" type="hidden" name="capdev.capDevRegions[${region_index}].locElement.id" value="${(region.locElement.id)!}" />
+												${region.locElement.name}
 												<div class="clearfix"></div>
 											</li>
 											[/#list] 
@@ -288,7 +286,7 @@
 					<div class="col-md-5 listContainer panel">
 
 						<div class="newCapdevField">
-							[@customForm.select name="" listName="countryList" keyFieldName="id" displayFieldName="name"  i18nkey="" className="capdevCountriesSelect" multiple=false placeholder="capdev.select"  /]
+							[@customForm.select name="capdevCountries" listName="countryList" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.country" className="capdevCountriesSelect" multiple=false placeholder="capdev.select"  /]
 						</div>
 						<div id="capdevCountriesList" class="newCapdevField countriesList">
 							<div class="row">
@@ -297,12 +295,10 @@
 										[#if capdev.capDevCountries?has_content]
 										[#list capdev.capDevCountries as country]
 										<li id="" class="capdevCountry clearfix col-md-3">
-											[#if editable ]
 											<div class="removeCountry removeIcon" title="Remove country"></div>
-											[/#if]
 											<input class="id" type="hidden" name="capdev.capDevCountries[${country_index}].id" value="${(country.id)!-1}" />
 											<input class="cId" type="hidden" name="capdev.capDevCountries[${country_index}].locElement.id" value="${(country.locElement.id)!}" />
-											<span class="name"><span> <i class="flag-sm flag-sm-${(country.locElement.isoAlpha2)!}"></i> [@utilities.wordCutter string=(country.locElement.name)! maxPos=20 /]</span></span>
+											${country.locElement.name}
 											<div class="clearfix"></div>
 										</li>
 										[/#list]
@@ -368,7 +364,7 @@
   <li id="capdevRegionTemplate" class="capdevRegion clearfix col-md-4">
       <div class="removeRegion removeIcon" title="Remove region"></div>
       <input class="id" type="hidden" name="" value="" />
-      <input class="cId" type="hidden" name="capdevRegions[-1]" value="" />
+      <input class="rId" type="hidden" name="capdevRegions[-1]" value="" />
       <span class="name"></span>
       <div class="clearfix"></div>
     </li>
