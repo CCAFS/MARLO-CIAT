@@ -53,7 +53,7 @@
 				    <th style="width: 7%">End date</th>
 				    <th style="width: 7%">Research Area</th>
 				    <th style="width: 7%">Research Program</th>
-				    <th style="width: 7%">Annexs</th>
+				    <th style="width: 7%">Annexes</th>
 				  </tr>
 				  
 				  [#if capDevs?has_content]
@@ -116,7 +116,7 @@
 			        	<div class="buttons-content">        
 				          	<!-- <a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a> -->
 				          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev'][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a>
-				        	<!-- <div class="clearfix"></div> -->
+				        	<div class="clearfix"></div>
 			        	</div>
 			        	<div class="buttons-content">        
 				          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']1[/@s.param][/@s.url]">[@s.text name="capdev.addindividualItem" /]</a>
@@ -130,7 +130,7 @@
 
 		<div class="row conventionContainer">
 			<div class="col-md-12 itemName">
-				<div class="col-md-2"> Annexs:</div>
+				<div class="col-md-2"> Annexes:</div>
 
 				<div class="col-md-2">
 					<img src="${baseUrl}/images/global/participants.png" class="capDevIconConvention" />

@@ -115,7 +115,7 @@ function init() {
     }
   });
   
-// Is this project has a global dimension
+  // Is this project has a global dimension
   $(".isGlobal .button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
     var isChecekd = $(this).hasClass('radio-checked');
@@ -126,7 +126,7 @@ function init() {
     }
   });
 
-// Is this project has a regional dimension
+  // Is this project has a regional dimension
   $(".isRegional .button-label").on("click", function() {
     var valueSelected = $(this).hasClass('yes-button-label');
     var isChecekd = $(this).hasClass('radio-checked');
@@ -152,7 +152,12 @@ function init() {
       $(this).find(".errorTag").fadeIn(2000);
     });
   });
+
+
 }
+
+
+
 
 /** FUNCTIONS Funding Sources * */
 
@@ -510,3 +515,5 @@ function formatState(state) {
   }
   return $state;
 };
+
+

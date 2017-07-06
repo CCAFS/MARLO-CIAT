@@ -39,7 +39,7 @@
 			<column name="research_program" />
 		</many-to-one>
 		<property name="title" type="string">
-			<column name="title" length="200" />
+			<column name="title" length="500" />
 		</property>
 		<property name="category" type="int">
 			<column name="category" />

@@ -168,6 +168,9 @@ public class ReadExcelFile {
     this.totalRows = totalRows;
   }
 
+  /*
+   * this method validate if excel file correspond with template
+   */
   public boolean validarExcelFile(File file) {
     InputStream fip;
     boolean equal = true;
@@ -192,6 +195,9 @@ public class ReadExcelFile {
     return equal;
   }
 
+  /*
+   * this method validate if excel file correspond with template
+   */
   public boolean validarExcelFile(Workbook wb) {
     boolean equal = true;
     try {

@@ -18,6 +18,7 @@ public class CapacityDevelopmentType implements java.io.Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
   private String name;
+  private String category;
   private Set capacityDevelopments = new HashSet(0);
 
   public CapacityDevelopmentType() {
@@ -28,13 +29,18 @@ public class CapacityDevelopmentType implements java.io.Serializable {
     this.name = name;
   }
 
-  public CapacityDevelopmentType(String name, Set capacityDevelopments) {
+  public CapacityDevelopmentType(String name, Set capacityDevelopments, String category) {
     this.name = name;
     this.capacityDevelopments = capacityDevelopments;
+    this.category = category;
   }
 
   public Set getCapacityDevelopments() {
     return this.capacityDevelopments;
+  }
+
+  public String getCategory() {
+    return category;
   }
 
   public Long getId() {
@@ -49,9 +55,15 @@ public class CapacityDevelopmentType implements java.io.Serializable {
     this.capacityDevelopments = capacityDevelopments;
   }
 
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+
   public void setId(Long id) {
     this.id = id;
   }
+
 
   public void setName(String name) {
     this.name = name;

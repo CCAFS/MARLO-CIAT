@@ -12,6 +12,11 @@
 		<property name="name" type="string">
 			<column name="name" length="45" not-null="true" />
 		</property>
+		<property name="category" type="string">
+            <column name="category" length="45">
+                <comment>1=individual training; 2= group training</comment>
+            </column>
+        </property>
 		<set name="capacityDevelopments" table="capacity_development"
 			inverse="true" lazy="true" fetch="select">
 			<key>

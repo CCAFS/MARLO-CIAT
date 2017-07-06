@@ -71,6 +71,8 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   private File uploadFile;
   private String uploadFileName;
   private String uploadFileContentType;
+  private boolean hasParticipantList = false;
+  private boolean hasSupportingDocs = false;
   private final CapacityDevelopmentValidator validator;
   private final ICapacityDevelopmentService capdevService;
   private final ICapacityDevelopmentTypeDAO capdevTypeService;
@@ -149,6 +151,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  /*
+   * this method is used to get the number of men in the participant list excel file.
+   * @param data an object array containing the data of participants
+   * @return number of men
+   */
   public int getNumMenParticipants(Object[][] data) {
     int numMen = 0;
     for (final Object[] element : data) {
@@ -162,6 +169,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  /*
+   * this method is used to get the number of women in the list of participants.
+   * @param data an object array containing the data of participants
+   * @return number of women
+   */
   public int getNumWomenParticipants(Object[][] data) {
     int numWomen = 0;
     for (final Object[] element : data) {
@@ -220,11 +232,22 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  public boolean isHasParticipantList() {
+    return hasParticipantList;
+  }
+
+
+  public boolean isHasSupportingDocs() {
+    return hasSupportingDocs;
+  }
+
+
   /*
-   * Este metodo hace la carga previa del archivo de participantes,
-   * antes de enviar el formulario completo
+   * This method create a participant list from data got from excel file
+   * @param data an object array that contain data from excel file
+   * @return the participant list
    */
-  public List<Participant> preloadParticipantsList(Object[][] data) {
+  public List<Participant> loadParticipantsList(Object[][] data) {
     participantList = new ArrayList<>();
     final Session session = SecurityUtils.getSubject().getSession();
 
@@ -256,7 +279,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    capdevTypes = capdevTypeService.findAll();
+
 
     // Regions List
     regionsList = new ArrayList<>(locElementService.findAll().stream()
@@ -283,15 +306,25 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
     capdev = capdevService.getCapacityDevelopmentById(capdevID);
 
+    capdevTypes = new ArrayList<>(capdevTypeService.findAll().stream()
+      .filter(le -> le.getCategory().equals("" + capdev.getCategory())).collect(Collectors.toList()));
+
+
     if (capdev != null) {
       final List<CapdevParticipant> participants = new ArrayList<>(capdev.getCapdevParticipants());
       if (capdev.getCategory() == 1) {
         if (!participants.isEmpty()) {
           participant = participants.get(0).getParticipant();
         }
+
       }
 
-      System.out.println("CApdev Location " + capdev.getCapdevLocations());
+      if (participants.size() > 1) {
+        hasParticipantList = true;
+      }
+      hasSupportingDocs = true;
+
+
       if (!capdev.getCapdevLocations().isEmpty()) {
         final List<CapdevLocations> regions = new ArrayList<>(capdev.getCapdevLocations().stream()
           .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 1))
@@ -312,7 +345,10 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
   }
 
-
+  /*
+   * This method is used to do a preview of excel file uploaded
+   * @return previewList is a JSON Object containing the data from excel file
+   */
   public String previewExcelFile() throws Exception {
     System.out.println("previewExcelFile");
 
@@ -360,7 +396,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     if (capdev.getCategory() == 2) {
       if (uploadFile != null) {
         final Object[][] data = reader.readExcelFile(uploadFile);
-        this.preloadParticipantsList(data);
+        this.loadParticipantsList(data);
         capdev.setNumParticipants(participantList.size());
         final int numMen = this.getNumMenParticipants(data);
         final int numWomen = this.getNumWomenParticipants(data);
@@ -495,6 +531,16 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  public void setHasParticipantList(boolean hasParticipantList) {
+    this.hasParticipantList = hasParticipantList;
+  }
+
+
+  public void setHasSupportingDocs(boolean hasSupportingDocs) {
+    this.hasSupportingDocs = hasSupportingDocs;
+  }
+
+
   public void setParticipant(Participant participant) {
     this.participant = participant;
   }
@@ -508,7 +554,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public void setPreviewList(List<Map<String, Object>> previewList) {
     this.previewList = previewList;
   }
-
 
   public void setPreviewListContent(List<Map<String, Object>> previewListContent) {
     this.previewListContent = previewListContent;
@@ -528,6 +573,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public void setUploadFile(File uploadFile) {
     this.uploadFile = uploadFile;
   }
+
 
   public void setUploadFileContentType(String uploadFileContentType) {
     this.uploadFileContentType = uploadFileContentType;

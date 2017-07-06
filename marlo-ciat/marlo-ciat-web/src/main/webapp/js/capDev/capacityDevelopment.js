@@ -742,7 +742,7 @@
     var $state = $('<span> <i class="flag-sm flag-sm-' + option.val() + '"></i>  ' + v + '</span>');
     $item.find(".name").html($state);
     $item.find(".cId").val(option.val());
-    $item.find(".id").val(-1);
+    //$item.find(".id").val(-1);
     $list.append($item);
     $item.show('slow');
     updateCountryList($list);
@@ -823,7 +823,7 @@
     $item.find(".name").attr("title", $(option).text());
     $item.find(".name").html(v);
     $item.find(".rId").val(optionValue);
-    $item.find(".id").val(-1);
+    //$item.find(".id").val(-1);
     $list.append($item);
     $item.show('slow');
     updateRegionList($list);
