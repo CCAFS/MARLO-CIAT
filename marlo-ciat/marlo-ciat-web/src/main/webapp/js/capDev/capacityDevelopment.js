@@ -127,28 +127,26 @@
   })();
 
 
-
-  }
-
-  //Event to display individual or group intervention form
-  /*$(".radioButton").on('change',function(){
-     var value = $('input[name="capdev.category"]:checked').val();
-     console.log(value)
     
-    if (value == 1) {
-    $(".fullForm").show();
-    $(".individualparticipantForm").show();
-    $(".grupsParticipantsForm ").hide();
-    $(".individual ").show();
-    $(".group").hide();
+    //set value to gender field
+
+    (function(){
+      var gender = $(".genderInput").val();
+     $(".genderSelect select option").each(function() {
+      if($(this).val() == gender){
+        $(this).attr( "selected" , "selected");
+      }
+
+      
+      });
+
+      
+    })();
+    
+
   }
-  else if (value == 2) {
-    $(".fullForm").show();
-    $(".grupsParticipantsForm ").show();
-    $(".individualparticipantForm").hide();
-    $(".group").show();
-  }
-  })*/
+
+  
 
 
   //event to download participants template 
@@ -176,8 +174,7 @@
 
 
 
-  //event to upload participants excel file
-  //$(".uploadParticipants").on("change",uploadFile);
+  
 
   //
   function uploadFile(){
@@ -380,19 +377,8 @@
   });
 
 
-  /*//add country
-  $( ".countries" ).change(function() {
-    console.log("cambio");
-    var $list = $(".countriesList");
-    var $item = $("#country-template").clone(true).removeAttr("id");
-    $list.append($item);
-    $item.show('slow', function() {
-     width: "50%"
-   });
-
-    updateCountryList($list);
-
-  });*/
+ //add country
+ 
 
   $(".capdevCountriesSelect").change(function() {
       var option = $(this).find("option:selected");
@@ -406,33 +392,13 @@
     });
 
   //remove country
-  /*$(".removeCountry").on("click", function () {
-    var $list = $(this).parents('.countriesList');
-    var $item = $(this).parents('.country');
-    $item.hide(1000, function() {
-      $item.remove();
-      updateCountryList($list);
-      //updateFundingSource();
-    });
-
-  });*/
+  
 
   $(".removeCountry").on("click", removeCountry);
 
 
   //add region
-  /*$( ".regions" ).change(function() {
-    console.log("cambio");
-    var $list = $(".regionsList");
-    var $item = $("#country-template").clone(true).removeAttr("id");
-    $list.append($item);
-    $item.show('slow', function() {
-     width: "50%"
-   });
-
-    updateRegionList($list);
-
-  });*/
+  
 
   // REGION item
     $(".capdevRegionsSelect").on("change", function() {
@@ -450,16 +416,7 @@
 
 
   //remove region
-  /*$(".removeRegion").on("click", function () {
-    var $list = $(this).parents('.regionsList');
-    var $item = $(this).parents('.region');
-    $item.hide(1000, function() {
-      $item.remove();
-      updateRegionList($list);
-      //updateFundingSource();
-    });
-
-  });*/
+  
   $(".removeRegion").on("click", removeRegion);
 
 
@@ -468,8 +425,7 @@
       var option = $(this).find("option:selected");
       if(option.val() != "-1") {
         addDiscipline(option);
-        //option.prop('disabled', true);
-        //$('.targetGroupsSelect').select2();
+       
       }
 
        option.remove();
@@ -486,8 +442,7 @@
       var option = $(this).find("option:selected");
       if(option.val() != "-1") {
         addTargetGroup(option);
-        //option.prop('disabled', true);
-        //$('.targetGroupsSelect').select2();
+       
       }
 
        option.remove();
@@ -622,7 +577,7 @@
   openSearchDialog = function(target) {
     $elementSelected = $(target);
     dialog.dialog("open");
-          //$dialogContent.find(".search-loader").fadeOut("slow");
+          
         }
 
 
@@ -637,7 +592,7 @@
         getData(query);
       }, 400);
     } else {
-     // getData('');
+     
     }
 
   }
@@ -1024,7 +979,4 @@
   }
 
 
-  // draw a table of participants to previzualice the participant list
-  function drawParticipantTable(){
-
-  }
+ 

@@ -33,7 +33,6 @@ import org.cgiar.ccafs.marlo.data.service.IParticipantService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.utils.ReadExcelFile;
-import org.cgiar.ccafs.marlo.validation.capdev.CapacityDevelopmentValidator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -67,13 +66,13 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   private List<Long> capdevRegions;
   private Participant participant;
   private List<Participant> participantList;
+  private List<Map<String, Object>> genders;
   private String contact;
   private File uploadFile;
   private String uploadFileName;
   private String uploadFileContentType;
   private boolean hasParticipantList = false;
   private boolean hasSupportingDocs = false;
-  private final CapacityDevelopmentValidator validator;
   private final ICapacityDevelopmentService capdevService;
   private final ICapacityDevelopmentTypeDAO capdevTypeService;
   private final ILocElementService locElementService;
@@ -92,7 +91,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public CapacityDevelopmentDetailAction(APConfig config, ICapacityDevelopmentService capdevService,
     ICapacityDevelopmentTypeDAO capdevTypeService, ILocElementService locElementService,
     ICapdevLocationsService capdevLocationService, IParticipantService participantService,
-    ICapdevParticipantService capdevParicipantService, CapacityDevelopmentValidator validator) {
+    ICapdevParticipantService capdevParicipantService) {
     super(config);
     this.capdevService = capdevService;
     this.capdevTypeService = capdevTypeService;
@@ -100,7 +99,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     this.capdevLocationService = capdevLocationService;
     this.participantService = participantService;
     this.capdevParicipantService = capdevParicipantService;
-    this.validator = validator;
   }
 
 
@@ -148,6 +146,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
   public List<LocElement> getCountryList() {
     return countryList;
+  }
+
+
+  public List<Map<String, Object>> getGenders() {
+    return genders;
   }
 
 
@@ -222,10 +225,10 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     return uploadFile;
   }
 
-
   public String getUploadFileContentType() {
     return uploadFileContentType;
   }
+
 
   public String getUploadFileName() {
     return uploadFileName;
@@ -276,9 +279,21 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     return participantList;
   }
 
-
   @Override
   public void prepare() throws Exception {
+
+
+    // genders
+    genders = new ArrayList<>();
+    final Map<String, Object> genderM = new HashMap<>();
+    genderM.put("displayName", "Male");
+    genderM.put("value", "M");
+    final Map<String, Object> genderF = new HashMap<>();
+    genderF.put("displayName", "Female");
+    genderF.put("value", "F");
+
+    genders.add(genderM);
+    genders.add(genderF);
 
 
     // Regions List
@@ -336,14 +351,12 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
           .collect(Collectors.toList()));
         capdev.setCapDevCountries(countries);
 
-
       }
-
 
     }
 
-
   }
+
 
   /*
    * This method is used to do a preview of excel file uploaded
@@ -404,7 +417,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
         capdev.setNumWomen(numWomen);
 
       }
-      System.out.println("Lista de participantes-->" + participantList.size());
       capdevService.saveCapacityDevelopment(capdev);
       for (final Participant participant : participantList) {
         this.saveParticipant(participant);
@@ -413,8 +425,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
     }
 
-    System.out.println("Lista de regiones -->" + capdevRegions.size());
-    System.out.println("Lista de paises -->" + capdevCountries.size());
 
     this.saveCapDevRegions(capdevRegions, capdev);
     this.saveCapDevCountries(capdevCountries, capdev);
@@ -432,13 +442,16 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     if (!capdevCountries.isEmpty()) {
       for (final Long iterator : capdevCountries) {
         final LocElement country = locElementService.getLocElementById(iterator);
-        capdevLocations = new CapdevLocations();
-        capdevLocations.setCapacityDevelopment(capdev);
-        capdevLocations.setLocElement(country);
-        capdevLocations.setActive(true);
-        capdevLocations.setActiveSince(new Date());
-        capdevLocations.setUsersByCreatedBy(currentUser);
-        capdevLocationService.saveCapdevLocations(capdevLocations);
+        if (country != null) {
+          capdevLocations = new CapdevLocations();
+          capdevLocations.setCapacityDevelopment(capdev);
+          capdevLocations.setLocElement(country);
+          capdevLocations.setActive(true);
+          capdevLocations.setActiveSince(new Date());
+          capdevLocations.setUsersByCreatedBy(currentUser);
+          capdevLocationService.saveCapdevLocations(capdevLocations);
+        }
+
       }
     }
   }
@@ -469,13 +482,16 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
       for (final Long iterator : capdevRegions) {
         System.out.println("id Locelement-->" + iterator);
         final LocElement region = locElementService.getLocElementById(iterator);
-        capdevLocations = new CapdevLocations();
-        capdevLocations.setCapacityDevelopment(capdev);
-        capdevLocations.setLocElement(region);
-        capdevLocations.setActive(true);
-        capdevLocations.setActiveSince(new Date());
-        capdevLocations.setUsersByCreatedBy(currentUser);
-        capdevLocationService.saveCapdevLocations(capdevLocations);
+        if (region != null) {
+          capdevLocations = new CapdevLocations();
+          capdevLocations.setCapacityDevelopment(capdev);
+          capdevLocations.setLocElement(region);
+          capdevLocations.setActive(true);
+          capdevLocations.setActiveSince(new Date());
+          capdevLocations.setUsersByCreatedBy(currentUser);
+          capdevLocationService.saveCapdevLocations(capdevLocations);
+        }
+
       }
     }
   }
@@ -531,6 +547,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  public void setGenders(List<Map<String, Object>> genders) {
+    this.genders = genders;
+  }
+
+
   public void setHasParticipantList(boolean hasParticipantList) {
     this.hasParticipantList = hasParticipantList;
   }
@@ -545,7 +566,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     this.participant = participant;
   }
 
-
   public void setParticipantList(List<Participant> participantList) {
     this.participantList = participantList;
   }
@@ -554,6 +574,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public void setPreviewList(List<Map<String, Object>> previewList) {
     this.previewList = previewList;
   }
+
 
   public void setPreviewListContent(List<Map<String, Object>> previewListContent) {
     this.previewListContent = previewListContent;
@@ -587,10 +608,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
   @Override
   public void validate() {
-    System.out.println("Validate");
+    System.out.println(" Validate");
     this.setInvalidFields(new HashMap<>());
 
     if (save) {
+      System.out.println("entro al if save");
       if (capdev.getCapdevType().getId() == -1) {
         this.addFieldError("capdev.capdevType.id", "Type is required.");
         this.getInvalidFields().put("capdev.capdevType.id", InvalidFieldsMessages.EMPTYFIELD);

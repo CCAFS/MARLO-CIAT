@@ -17,7 +17,7 @@
       <li>
         <ul>
               <li id="menu-${item.action}" ">
-                <a href="[@s.url action="${centerSession}/${item.action}"][/@s.url]"  class="action-${centerSession}/${item.action}">
+                <a href="[@s.url action="${centerSession}/${item.action}"][@s.param name='capdevID']${capdevID}[/@s.param][/@s.url]"  class="action-${centerSession}/${item.action}">
                   [@s.text name=item.name/]
                 </a>
               </li>

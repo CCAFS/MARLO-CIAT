@@ -20,18 +20,11 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">${centerSession}/detailCapdev</param>
 				<param name="capdevID">${capdevID}</param>
-				<!-- <param name="capdevCategory">${capdevCategory}</param> -->
 			</result>
 		</action>
 
 		<action name="{center}/detailCapdev"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapacityDevelopmentDetailAction">
-<!-- 			<interceptor-ref name="basicStack" /> -->
-<!-- 			<interceptor-ref name="fileUpload"> -->
-<!-- 				<param name="allowedTypes">application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param> -->
-<!-- 			</interceptor-ref> -->
-<!-- 			<interceptor-ref name="validation" /> -->
-<!-- 			<interceptor-ref name="workflow" /> -->
 			<result name="input">/WEB-INF/views/capDev/detailCapdev.ftl
 			</result>
 			<result name="success" type="redirectAction">
@@ -55,6 +48,10 @@
 		<action name="{center}/descriptionCapdev"
 			class="org.cgiar.ccafs.marlo.action.capdev.CapdevDescriptionAction">
 			<result name="input">/WEB-INF/views/capDev/capdevDescription.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">${centerSession}/descriptionCapdev</param>
+				<param name="capdevID">${capdevID}</param>
 			</result>
 		</action>
 

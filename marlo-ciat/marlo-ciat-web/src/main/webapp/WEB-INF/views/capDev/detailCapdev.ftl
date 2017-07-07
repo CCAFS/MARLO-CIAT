@@ -4,7 +4,7 @@
 [#assign customCSS = ["${baseUrl}/css/capDev/capacityDevelopment.css"] /]
 [#assign customJS = ["${baseUrl}/js/capDev/capacityDevelopment.js"] /]
 
-[#assign genders = ["Male", "Female"] /]
+
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
@@ -109,7 +109,7 @@
 				<div class="row">
 					<div class="col-md-12 newCapdevField">
 						<div class="col-md-6 group individual">
-							[@customForm.input name="capdev.numParticipants" i18nkey="capdev.form.numParticipants" type="text" help="capdev.help.numparticiapants"  editable=true  /]
+							[@customForm.input name="capdev.numParticipants" i18nkey="capdev.form.numParticipants" type="text" help="capdev.help.numParticipants"  editable=true  /]
 						</div>
 						<div class="col-md-3 group individual">
 							[@customForm.input name="capdev.numMen" i18nkey="capdev.form.numMen" help="capdev.help.numMen" type="text"  /]
@@ -201,18 +201,9 @@
 						</div>
 					</div>
 					<div class="col-md-12 newCapdevField">
-						<div class="col-md-6">
-							<div>
-								[@s.label key="capdev.participant.gender" required=true /]
-								<span class="red">*</span>
-							</div>
-							<select class="selectpicker" name="participant.gender" required="true">
-								<option value="-1" >select an option ...</option>
-								<option value="M" >Male</option>
-							  	<option value="F">Female</option>
-							</select>
-
-							
+						<div class="col-md-6 genderSelect">
+							 <input type="hidden" name="" value="${participant.gender}" class="genderInput"/>
+							[@customForm.select name="participant.gender" listName="genders" keyFieldName="value" displayFieldName="displayName" help="" i18nkey="capdev.participant.gender"  placeholder="capdev.select" required=true editable=true className=""/]
 						</div>
 						<div class="col-md-6">
 							[@customForm.input name="participant.citizenship" i18nkey="capdev.participant.citizenship" type="text" required=true /]
@@ -315,8 +306,8 @@
 
 
 				<div style="display: none;">
-					[@customForm.input name="capdevID" value="${capdev.id}"  type="text"  /]
-					[@customForm.input name="capdevCategory" value="${capdev.category}"  type="text"  /]
+					[@customForm.input name="capdevID" i18nkey="capdev.id" value="${capdev.id}"  type="text"  /]
+					[@customForm.input name="capdevCategory" i18nkey="capdev.category" value="${capdev.category}"  type="text"  /]
 				</div>
 
 

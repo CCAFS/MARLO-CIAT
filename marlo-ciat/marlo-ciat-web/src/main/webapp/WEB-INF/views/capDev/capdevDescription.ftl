@@ -37,71 +37,6 @@
 		
 
 		<div  class="fullForm" >
-			
-			<!-- research Area-->
-			<div class="row">
-				<div class="col-md-12 newCapdevField">
-					<div class="col-md-6 ">
-						<!-- [@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.researchArea" placeholder="capdev.select"  /] -->
-						[@s.label key="capdev.form.researchArea" /]
-						<select class="selectpicker" name="capdev.researchArea">
-							<option value="" >select an option...</option>
-						[#list researchAreas as researchArea]
-						  	<option value="${researchArea}">${researchArea.name}</option>
-						[/#list]
-						  
-						</select>
-
-					</div>
-
-					<!-- research program-->
-					<div class="col-md-6 ">
-						<!-- [@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="capdev.select"  /] -->
-						[@s.label key="capdev.form.researchProgram" /]
-						<select class="selectpicker" name="capdev.researchProgram" >
-							<option value="" >select an option...</option>
-						[#list researchPrograms as researchprogram]
-						  	<option value="${researchprogram}">${researchprogram.name}</option>
-						[/#list]
-						</select>
-					</div>
-				</div>
-			</div>
-			
-			<!-- project-->
-			<div class="row newCapdevField">
-				<div class="col-md-12 ">
-					<!-- [@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="capdev.select"  /] -->
-					[@s.label key="capdev.form.project" /]
-					<select class="selectpicker" name="capdev.project" >
-							<option value="" >select an option...</option>
-						[#list projects as proj]
-							[#if proj.name??]
-							<option value="${proj}">${proj.name}</option>
-							[#else]
-							<option value="" hidden="true"></option>
-							[/#if]
-						[/#list]
-					</select>
-				</div>
-			</div>
-			
-			<!-- CRP -->
-			<div class="row">
-				<div class="col-md-12 newCapdevField">
-					<div class="col-md-6 ">
-						<!-- [@customForm.select name="capdev.crp.id" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="capdev.select"  /] -->
-						[@s.label key="capdev.form.crp" /]
-						<select class="selectpicker" name="capdev.crp" >
-							<option value="" >select an option...</option>
-						[#list crps as crp]
-							<option value="${crp}">${crp.name}</option>
-						[/#list]
-					</select>
-					</div>
-					
-				</div>
-			</div>
 
 			<!-- Disciplines-->
 			<div class="row ">
@@ -111,19 +46,17 @@
 			</div>
 			<div class="row approachesListContainer">
 				<div class="col-md-12 newCapdevField">
-					[@customForm.select name="" listName="disciplines" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.selectApproach" className="disciplinesSelect" multiple=false placeholder="capdev.select"  /]
+					[@customForm.select name="capdevDisciplines" listName="disciplines" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.selectApproach" className="disciplinesSelect" multiple=false placeholder="capdev.select"  /]
 				</div>
 				<div id="disciplinesList" class="col-md-12 newCapdevField approachesList">
 					<ul class="list">
-						[#if capdev.disciplines?has_content]
-						[#list capdev.disciplines as discipline]
+						[#if capdev.capdevDisciplines?has_content]
+						[#list capdev.capdevDisciplines as discipline]
 						<li id="" class="discipline clearfix col-md-3">
-							[#if editable ]
 							<div class="removeDiscipline removeIcon" title="Remove discipline"></div>
-							[/#if]
 							<input class="id" type="hidden" name="" value="" />
-							<input class="disciplineId" type="hidden" name="disciplinesSelected[-1]" value="" />
-							<span class="name"></span>
+							<input class="disciplineId" type="hidden" name="capdevDisciplines[-1]" value="" />
+							<span class="name"> ${discipline.disciplines.name}</span>
 							<div class="clearfix"></div>
 						</li>
 						[/#list]
@@ -142,20 +75,18 @@
 			</div>
 			<div class="row borderContainer">
 				<div class="col-md-12 newCapdevField ">
-					[@customForm.select name="" listName="targetGroups" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.targetgroupselect" className="targetGroupsSelect" multiple=false placeholder="capdev.select"  /]
+					[@customForm.select name="capdevTargetGroup" listName="targetGroups" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.targetgroupselect" className="targetGroupsSelect" multiple=false placeholder="capdev.select"  /]
 				</div>
 
 				<div id="targetGroupsList" class="col-md-12 newCapdevField ">
 					<ul class="list">
-						[#if capdev.TargetGroups?has_content]
-						[#list capdev.TargetGroups as targetGroup]
+						[#if capdev.capdevTargetgroups?has_content]
+						[#list capdev.capdevTargetgroups as targetGroup]
 						<li id="" class="targetGroup clearfix col-md-3">
-							[#if editable ]
 							<div class="removeTargetGroup removeIcon" title="Remove targetGroup"></div>
-							[/#if]
 							<input class="id" type="hidden" name="" value="" />
-							<input class="tgId" type="hidden" name="targetGroupsSelected[-1]" value="" />
-							<span class="name"></span>
+							<input class="tgId" type="hidden" name="capdevTargetGroups[-1]" value="" />
+							<span class="name">${targetGroup.targetGroups.name}</span>
 							<div class="clearfix"></div>
 						</li>
 						[/#list]
@@ -165,6 +96,74 @@
 					</ul>
 				</div>
 			</div>
+
+			
+			<!-- research Area-->
+			<div class="row">
+				<div class="col-md-12 newCapdevField">
+					<div class="col-md-6 ">
+						[@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.researchArea" placeholder="capdev.select"  /]
+						<!-- [@s.label key="capdev.form.researchArea" /]
+						<select class="selectpicker" name="capdev.researchArea">
+							<option value="" >select an option...</option>
+						[#list researchAreas as researchArea]
+						  	<option value="${researchArea}">${researchArea.name}</option>
+						[/#list]
+						  
+						</select> -->
+
+					</div>
+
+					<!-- research program-->
+					<div class="col-md-6 ">
+						[@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="capdev.select"  /]
+						<!-- [@s.label key="capdev.form.researchProgram" /]
+						<select class="selectpicker" name="capdev.researchProgram" >
+							<option value="" >select an option...</option>
+						[#list researchPrograms as researchprogram]
+						  	<option value="${researchprogram}">${researchprogram.name}</option>
+						[/#list]
+						</select> -->
+					</div>
+				</div>
+			</div>
+			
+			<!-- project-->
+			<div class="row newCapdevField">
+				<div class="col-md-12 ">
+					[@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="capdev.select"  /]
+					<!-- [@s.label key="capdev.form.project" /]
+					<select class="selectpicker" name="capdev.project" >
+							<option value="" >select an option...</option>
+						[#list projects as proj]
+							[#if proj.name??]
+							<option value="${proj}">${proj.name}</option>
+							[#else]
+							<option value="" hidden="true"></option>
+							[/#if]
+						[/#list]
+					</select> -->
+				</div>
+			</div>
+			
+			<!-- CRP -->
+			<div class="row">
+				<div class="col-md-12 newCapdevField">
+					<div class="col-md-6 ">
+						[@customForm.select name="capdev.crp.id" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="capdev.select"  /]
+						<!-- [@s.label key="capdev.form.crp" /]
+						<select class="selectpicker" name="capdev.crp" >
+							<option value="" >select an option...</option>
+						[#list crps as crp]
+							<option value="${crp}">${crp.name}</option>
+						[/#list]
+					</select> -->
+					</div>
+					
+				</div>
+			</div>
+
+			
 
 			<!-- Partners-->
 			<div class="row">
@@ -211,27 +210,19 @@
 			</div>
 
 
-			
-
-			
-
-
-			
-
-
+			<div style="display: none;">
+					[@customForm.input name="capdevID" i18nkey="capdev.id" value="${capdev.id}"  type="text"  /]
+			</div>
 
 
 			<!-- buttons -->
 			<div class="col-md-12">
-				<div class="col-md-6">
-					<div class="pull-right">
-						[@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="form.buttons.save" /] [/@s.submit]
-
-					</div>
+				<div class="buttons">	
+		        	<div class="buttons-content">        
+			          	[@s.submit type="button" name="save" cssClass="button-save"]<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> [@s.text name="form.buttons.save" /] [/@s.submit]
+			        	<div class="clearfix"></div>
+		        	</div>
 				</div>
-
-				
-
 			</div>
 
 		</div>
@@ -255,7 +246,7 @@
   <li id="disciplineTemplate" class="discipline clearfix col-md-4">
       <div class="removeDiscipline removeIcon" title="Remove discipline"></div>
       <input class="id" type="hidden" name="" value="" />
-      <input class="disciplineId" type="hidden" name="disciplinesSelected[-1]" value="" />
+      <input class="disciplineId" type="hidden" name="capdevDisciplines[-1]" value="" />
       <span class="name"></span>
       <div class="clearfix"></div>
     </li>
@@ -266,7 +257,7 @@
   <li id="targetGroupTemplate" class="targetGroup clearfix col-md-4">
       <div class="removetargetGroup removeIcon" title="Remove targetGroup"></div>
       <input class="id" type="hidden" name="" value="" />
-      <input class="tgId" type="hidden" name="targetGroupsSelected[-1]" value="" />
+      <input class="tgId" type="hidden" name="capdevTargetGroups[-1]" value="" />
       <span class="name"></span>
       <div class="clearfix"></div>
     </li>

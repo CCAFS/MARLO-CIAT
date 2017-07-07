@@ -112,18 +112,17 @@
 		<div class="row">
 			<div class="pull-right">
 				<div class="col-md-12">
-					<div class="buttons">	
-			        	<div class="buttons-content">        
-				          	<!-- <a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a> -->
-				          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev'][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a>
-				        	<div class="clearfix"></div>
-			        	</div>
-			        	<div class="buttons-content">        
-				          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']1[/@s.param][/@s.url]">[@s.text name="capdev.addindividualItem" /]</a>
-				        	<div class="clearfix"></div>
-			        	</div>
-
-    				</div>
+						<div class="buttons">	
+				        	<div class="buttons-content ">        
+					          	<!-- <a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdeID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a> -->
+					          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev'][@s.param name='capdevID']${capdevID}[/@s.param][@s.param name='capdevCategory']2[/@s.param][/@s.url]">[@s.text name="capdev.addgroupItem" /]</a>
+					        	<!-- <div class="clearfix"></div> -->
+				        	</div>
+				        	<div class="buttons-content ">        
+					          	<a class="addButton" href="[@s.url action='${centerSession}/addCapdev' ][@s.param name='capdevID']${capdevID}[/@s.param][@s.param name='capdevCategory']1[/@s.param][/@s.url]">[@s.text name="capdev.addindividualItem" /]</a>
+					        	<!-- <div class="clearfix"></div> -->
+				        	</div>
+	    				</div>
 	    		</div>
 			</div>
 		</div>

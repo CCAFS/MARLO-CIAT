@@ -96,6 +96,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     return capDevCountries;
   }
 
+
   public Set<CapdevDiscipline> getCapdevDisciplines() {
     return capdevDisciplines;
   }
@@ -204,6 +205,7 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.capDevCountries = capDevCountries;
   }
 
+
   public void setCapdevDisciplines(Set<CapdevDiscipline> capdevDisciplines) {
     this.capdevDisciplines = capdevDisciplines;
   }
@@ -228,9 +230,11 @@ public class CapacityDevelopment implements java.io.Serializable {
     this.capdevType = capdevType;
   }
 
+
   public void setCategory(int category) {
     this.category = category;
   }
+
 
   public void setCrp(Crp crp) {
     this.crp = crp;
