@@ -23,8 +23,10 @@ import org.cgiar.ccafs.marlo.data.model.CapdevDiscipline;
 import org.cgiar.ccafs.marlo.data.model.CapdevTargetgroup;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.Discipline;
+import org.cgiar.ccafs.marlo.data.model.Institution;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ResearchArea;
+import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.TargetGroup;
 import org.cgiar.ccafs.marlo.data.model.User;
@@ -33,14 +35,17 @@ import org.cgiar.ccafs.marlo.data.service.ICapdevDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevTargetgroupService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
+import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
 import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
+import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.ITargetGroupService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -56,19 +61,26 @@ public class CapdevDescriptionAction extends BaseAction {
 
   private CapacityDevelopment capdev;
   private long capdevID;
+  private List<Discipline> disciplines;
+  private List<TargetGroup> targetGroups;
   private List<ResearchArea> researchAreas;
   private List<ResearchProgram> researchPrograms;
   private List<Project> projects;
+  private List<Map<String, Object>> jsonProjects;
   private List<Crp> crps;
-  private List<Discipline> disciplines;
-  private List<TargetGroup> targetGroups;
+  private List<Institution> partners;
+  private List<ResearchOutput> outputs;
   private List<Long> capdevDisciplines;
   private List<Long> capdevTargetGroup;
+  private List<Long> capdevPartners;
+  private List<Long> capdevOutputs;
   private final ICapacityDevelopmentService capdevService;
   private final IResearchAreaService researchAreaService;
   private final IResearchProgramDAO researchProgramSercive;
   private final IProjectService projectService;
   private final ICrpService crpService;
+  private final IInstitutionService institutionService;
+  private final IResearchOutputService researchOutputService;
   private final IDisciplineService disciplineService;
   private final ITargetGroupService targetGroupService;
   private final ICapdevDisciplineService capdevDisciplineService;
@@ -79,7 +91,8 @@ public class CapdevDescriptionAction extends BaseAction {
     IResearchProgramDAO researchProgramSercive, IProjectService projectService, ICrpService crpService,
     IDisciplineService disciplineService, ITargetGroupService targetGroupService,
     ICapacityDevelopmentService capdevService, ICapdevDisciplineService capdevDisciplineService,
-    ICapdevTargetgroupService capdevTargetgroupService) {
+    ICapdevTargetgroupService capdevTargetgroupService, IInstitutionService institutionService,
+    IResearchOutputService researchOutputService) {
     super(config);
     this.researchAreaService = researchAreaService;
     this.researchProgramSercive = researchProgramSercive;
@@ -90,7 +103,10 @@ public class CapdevDescriptionAction extends BaseAction {
     this.capdevService = capdevService;
     this.capdevDisciplineService = capdevDisciplineService;
     this.capdevTargetgroupService = capdevTargetgroupService;
+    this.institutionService = institutionService;
+    this.researchOutputService = researchOutputService;
   }
+
 
   public CapacityDevelopment getCapdev() {
     return capdev;
@@ -104,6 +120,16 @@ public class CapdevDescriptionAction extends BaseAction {
 
   public long getCapdevID() {
     return capdevID;
+  }
+
+
+  public List<Long> getCapdevOutputs() {
+    return capdevOutputs;
+  }
+
+
+  public List<Long> getCapdevPartners() {
+    return capdevPartners;
   }
 
 
@@ -122,6 +148,20 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
+  public List<Map<String, Object>> getJsonProjects() {
+    return jsonProjects;
+  }
+
+
+  public List<ResearchOutput> getOutputs() {
+    return outputs;
+  }
+
+  public List<Institution> getPartners() {
+    return partners;
+  }
+
+
   public List<Project> getProjects() {
     return projects;
   }
@@ -130,7 +170,6 @@ public class CapdevDescriptionAction extends BaseAction {
   public List<ResearchArea> getResearchAreas() {
     return researchAreas;
   }
-
 
   public List<ResearchProgram> getResearchPrograms() {
     return researchPrograms;
@@ -149,6 +188,8 @@ public class CapdevDescriptionAction extends BaseAction {
     researchPrograms = researchProgramSercive.findAll();
     projects = projectService.findAll();
     crps = crpService.findAll();
+    partners = institutionService.findAll();
+    outputs = researchOutputService.findAll();
 
     // Disciplines List
     disciplines = disciplineService.findAll();
@@ -225,7 +266,6 @@ public class CapdevDescriptionAction extends BaseAction {
     }
   }
 
-
   public void setCapdev(CapacityDevelopment capdev) {
     this.capdev = capdev;
   }
@@ -241,16 +281,43 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
+  public void setCapdevOutputs(List<Long> capdevOutputs) {
+    this.capdevOutputs = capdevOutputs;
+  }
+
+
+  public void setCapdevPartners(List<Long> capdevPartners) {
+    this.capdevPartners = capdevPartners;
+  }
+
+
   public void setCapdevTargetGroup(List<Long> capdevTargetGroup) {
     this.capdevTargetGroup = capdevTargetGroup;
   }
+
 
   public void setCrps(List<Crp> crps) {
     this.crps = crps;
   }
 
+
   public void setDisciplines(List<Discipline> disciplines) {
     this.disciplines = disciplines;
+  }
+
+
+  public void setJsonProjects(List<Map<String, Object>> jsonProjects) {
+    this.jsonProjects = jsonProjects;
+  }
+
+
+  public void setOutputs(List<ResearchOutput> outputs) {
+    this.outputs = outputs;
+  }
+
+
+  public void setPartners(List<Institution> partners) {
+    this.partners = partners;
   }
 
 

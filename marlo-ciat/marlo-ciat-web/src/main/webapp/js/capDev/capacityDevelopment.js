@@ -75,8 +75,6 @@
   })
 
 
-
-
     // capdev category dialog
 
     $dialogCapDevCategory = $("#dialog-capdevCategory");
@@ -136,13 +134,8 @@
       if($(this).val() == gender){
         $(this).attr( "selected" , "selected");
       }
-
-      
       });
-
-      
     })();
-    
 
   }
 
@@ -378,8 +371,6 @@
 
 
  //add country
- 
-
   $(".capdevCountriesSelect").change(function() {
       var option = $(this).find("option:selected");
       
@@ -392,14 +383,11 @@
     });
 
   //remove country
-  
-
   $(".removeCountry").on("click", removeCountry);
 
 
-  //add region
   
-
+  //add region
   // REGION item
     $(".capdevRegionsSelect").on("change", function() {
       var option = $(this).find("option:selected");
@@ -851,7 +839,7 @@
       return;
     }
 
-  // Set country parameters
+  // Set discipline parameters
     $item.find(".name").attr("title", $(option).text());
     $item.find(".name").html(v);
     $item.find(".disciplineId").val(option.val());
@@ -928,7 +916,7 @@
       return;
     }
 
-  // Set country parameters
+  // Set target group parameters
     $item.find(".name").attr("title", $(option).text());
     $item.find(".name").html(v);
     $item.find(".tgId").val(option.val());
@@ -977,6 +965,3 @@
       $(block).parent().find('p.emptyText').fadeOut();
     }
   }
-
-
- 

@@ -202,7 +202,7 @@
 					</div>
 					<div class="col-md-12 newCapdevField">
 						<div class="col-md-6 genderSelect">
-							 <input type="hidden" name="" value="${participant.gender}" class="genderInput"/>
+							<input type="hidden" name="" value="${(participant.gender)!}" class="genderInput"/>
 							[@customForm.select name="participant.gender" listName="genders" keyFieldName="value" displayFieldName="displayName" help="" i18nkey="capdev.participant.gender"  placeholder="capdev.select" required=true editable=true className=""/]
 						</div>
 						<div class="col-md-6">

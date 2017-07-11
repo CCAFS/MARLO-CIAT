@@ -3,6 +3,7 @@
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css"] /]
 [#assign customCSS = ["${baseUrl}/css/capDev/capacityDevelopment.css"] /]
 [#assign customJS = ["${baseUrl}/js/capDev/capacityDevelopment.js"] /]
+[#assign customJS = ["${baseUrl}/js/capDev/capdevDescription.js"] /]
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
@@ -102,7 +103,7 @@
 			<div class="row">
 				<div class="col-md-12 newCapdevField">
 					<div class="col-md-6 ">
-						[@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.researchArea" placeholder="capdev.select"  /]
+						[@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name"  className="capdevResearchArea" i18nkey="capdev.form.researchArea" placeholder="capdev.select"  /]
 						<!-- [@s.label key="capdev.form.researchArea" /]
 						<select class="selectpicker" name="capdev.researchArea">
 							<option value="" >select an option...</option>
@@ -115,8 +116,8 @@
 					</div>
 
 					<!-- research program-->
-					<div class="col-md-6 ">
-						[@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="capdev.select"  /]
+					<div class="col-md-6 researchProgram ">
+						[@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="capdev.select" className="capdevResearchProgram" /]
 						<!-- [@s.label key="capdev.form.researchProgram" /]
 						<select class="selectpicker" name="capdev.researchProgram" >
 							<option value="" >select an option...</option>
@@ -129,9 +130,9 @@
 			</div>
 			
 			<!-- project-->
-			<div class="row newCapdevField">
-				<div class="col-md-12 ">
-					[@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="capdev.select"  /]
+			<div class="row newCapdevField ">
+				<div class="col-md-12 project">
+					[@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="capdev.select" className="capdevProject" /]
 					<!-- [@s.label key="capdev.form.project" /]
 					<select class="selectpicker" name="capdev.project" >
 							<option value="" >select an option...</option>
@@ -173,17 +174,27 @@
 			</div>
 			<div class="row borderContainer">
 				<div class="col-md-12 newCapdevField ">
-					[@customForm.select name="" listName="partners" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.partnertSelect" className="partners" multiple=false placeholder="capdev.select"  /]
+					[@customForm.select name="capdevPartners" listName="partners" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.partnertSelect" className="capdevPartnerSelect" multiple=false placeholder="capdev.select"  /]
 				</div>
-
-				<div class="col-md-12 newCapdevField ">
-					[#if capdevPartners?has_content]
-					[#list capdevPartners as partner]
-
-					[/#list]
-					[/#if]
-					<p class="text-center inf" style="display:${(capdevPartners?has_content)?string('none','block')}">[@s.text name="capdev.notPartners" /]</p>
+				
+				<div id="capdevPartnersList" class=" partnersList">
+					<ul class="list">
+						[#if Partner?has_content]
+						[#list Partner as partner]
+							<li id="" class="capdevPartner clearfix col-md-3">
+								<div class="removepartner removeIcon" title="Remove partner"></div>
+								<input class="id" type="hidden" name="capdev.capdevTargetgroups[${partner_index}].id" value="${(partner.id)!-1}" />
+								<input class="partnerId" type="hidden" name="capdev.capdevTargetgroups[${partner_index}].id" value="${(partner.id)!}" />
+								${(partner.name)!}
+								<div class="clearfix"></div>
+							</li>
+							[/#list] 
+							[#else]
+							<p class="emptyText"> [@s.text name="capdev.notPartners" /]</p> 
+						[/#if]
+					</ul>
 				</div>
+				
 			</div>
 
 			<!-- OutPuts-->
@@ -194,18 +205,25 @@
 			</div>
 			<div class="row outComesContainer">
 				<div class="col-md-12 newCapdevField">
-					[@customForm.select name="" listName="outcomes" i18nkey="capdev.form.selectOutcome" className="outComes" multiple=false placeholder="capdev.select"  /]
+					[@customForm.select name="capdevOutputs" listName="outputs" keyFieldName="id" displayFieldName="title" i18nkey="capdev.form.selectOutcome" className="capdevOutputSelect" multiple=false placeholder="capdev.select"  /]
 				</div>
 
-				<div class="col-md-12 newCapdevField outComesList">
-
-					[#if capDevOutcomes?has_content]
-					[#list capDevOutcomes as outcome]
-					[@outComeMacro outcome /]  
-					[/#list]
-					[/#if]
-
-					<p class="text-center inf" style="display:${(capDevOutcomes?has_content)?string('none','block')}">[@s.text name="capdev.notObjectives" /]</p>
+				<div id="capdevOutputsList" class="outputsList">
+					<ul class="list">
+						[#if Output?has_content]
+						[#list Output as output]
+							<li id="" class="capdevOutput clearfix col-md-3">
+								<div class="removeOutput removeIcon" title="Remove output"></div>
+								<input class="id" type="hidden" name="capdev.capdevTargetgroups[${output_index}].id" value="${(output.id)!-1}" />
+								<input class="outputId" type="hidden" name="capdev.capdevTargetgroups[${output_index}].id" value="${(output.id)!}" />
+								${(output.name)!}
+								<div class="clearfix"></div>
+							</li>
+							[/#list] 
+							[#else]
+							<p class="emptyText"> [@s.text name="capdev.notOutput" /]</p> 
+						[/#if]
+					</ul>
 				</div>
 			</div>
 
@@ -264,6 +282,29 @@
 </ul>
 
 
+<!-- partners template -->
+<ul style="display:none">
+  <li id="capdevPartnerTemplate" class="capdevPartner clearfix col-md-12">
+      <div class="removepartner removeIcon" title="Remove partner"></div>
+      <input class="id" type="hidden" name="" value="" />
+      <input class="partnerId" type="hidden" name="capdevPartners[-1]" value="" />
+      <span class="name"></span>
+      <div class="clearfix"></div>
+    </li>
+</ul>
+
+<!-- output template -->
+<ul style="display:none">
+  <li id="capdevOutputTemplate" class="capdevOutput clearfix col-md-12">
+      <div class="removeOutput removeIcon" title="Remove output"></div>
+      <input class="id" type="hidden" name="" value="" />
+      <input class="outputId" type="hidden" name="capdevOutputs[-1]" value="" />
+      <span class="name"></span>
+      <div class="clearfix"></div>
+    </li>
+</ul>
+
+
 
 
 
@@ -285,14 +326,7 @@
 [/#macro]
 
 
-<!-- [#macro disciplineMacro element isTemplate=false]
-	<div id="approach-${isTemplate?string('template',(element)!)}" class="approach  borderBox col-md-4 " style="display:${isTemplate?string('none','block')}" >
-		<div class="removeDiscipline removeIcon" title="Remove approach"></div>
-		<div class="col-md-4">
-			 [@s.text name="element" /]
-		</div>
-	</div>
-[/#macro] -->
+
 
 
 [#macro outComeMacro element isTemplate=false]
