@@ -102,5 +102,19 @@
 			</key>
 			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CapdevParticipant" />
 		</set>
+		<set name="capdevOutputses" table="capdev_outputs" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="capdev_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CapdevOutputs" />
+		</set>
+		<set name="capdevPartnerses" table="capdev_partners" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="capdev_id" not-null="true" />
+			</key>
+			<one-to-many class="org.cgiar.ccafs.marlo.data.model.CapdevPartners" />
+		</set>
 	</class>
 </hibernate-mapping>

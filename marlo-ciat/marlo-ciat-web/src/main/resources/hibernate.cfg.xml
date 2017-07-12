@@ -101,6 +101,8 @@
 		<mapping resource="xmls/CapdevTargetgroup.hbm.xml" />
 		<mapping resource="xmls/CapdevParticipant.hbm.xml" />
 		<mapping resource="xmls/Participant.hbm.xml" />
+		<mapping resource="xmls/CapdevOutputs.hbm.xml" />
+		<mapping resource="xmls/CapdevPartners.hbm.xml" />
 
 	</session-factory>
 

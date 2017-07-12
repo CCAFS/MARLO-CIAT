@@ -69,15 +69,15 @@ public class ProjectPartnersAction extends BaseAction {
 
 
   // Services - Managers
-  private ICenterService centerService;
+  private final ICenterService centerService;
 
 
-  private IProjectService projectService;
-  private IAuditLogService auditLogService;
-  private IProjectPartnerService partnerService;
-  private IProjectPartnerPersonService partnerPersonService;
-  private IInstitutionService institutionService;
-  private IUserService userService;
+  private final IProjectService projectService;
+  private final IAuditLogService auditLogService;
+  private final IProjectPartnerService partnerService;
+  private final IProjectPartnerPersonService partnerPersonService;
+  private final IInstitutionService institutionService;
+  private final IUserService userService;
 
   // Front Variables
   private ResearchCenter loggedCenter;
@@ -97,7 +97,7 @@ public class ProjectPartnersAction extends BaseAction {
   private String transaction;
 
   // Validator
-  private ProjectPartnerValidator validator;
+  private final ProjectPartnerValidator validator;
 
   @Inject
   public ProjectPartnersAction(APConfig config, ICenterService centerService, IProjectService projectService,
@@ -118,17 +118,17 @@ public class ProjectPartnersAction extends BaseAction {
   @Override
   public String cancel() {
 
-    Path path = this.getAutoSaveFilePath();
+    final Path path = this.getAutoSaveFilePath();
 
     if (path.toFile().exists()) {
 
-      boolean fileDeleted = path.toFile().delete();
+      final boolean fileDeleted = path.toFile().delete();
     }
 
     this.setDraft(false);
     Collection<String> messages = this.getActionMessages();
     if (!messages.isEmpty()) {
-      String validationMessage = messages.iterator().next();
+      final String validationMessage = messages.iterator().next();
       this.setActionMessages(null);
       this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
     } else {
@@ -144,9 +144,9 @@ public class ProjectPartnersAction extends BaseAction {
   }
 
   private Path getAutoSaveFilePath() {
-    String composedClassName = project.getClass().getSimpleName();
-    String actionFile = this.getActionName().replace("/", "_");
-    String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+    final String composedClassName = project.getClass().getSimpleName();
+    final String actionFile = this.getActionName().replace("/", "_");
+    final String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
@@ -211,14 +211,14 @@ public class ProjectPartnersAction extends BaseAction {
 
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
-    } catch (Exception e) {
+    } catch (final Exception e) {
       projectID = -1;
     }
 
     if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
       transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-      Project history = (Project) auditLogService.getHistory(transaction);
+      final Project history = (Project) auditLogService.getHistory(transaction);
 
       if (history != null) {
         project = history;
@@ -237,7 +237,7 @@ public class ProjectPartnersAction extends BaseAction {
 
     if (project != null) {
 
-      Project ProjectDB = projectService.getProjectById(projectID);
+      final Project ProjectDB = projectService.getProjectById(projectID);
       selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
@@ -249,28 +249,28 @@ public class ProjectPartnersAction extends BaseAction {
         institutions = new ArrayList<>(institutionService.findAll());
       }
 
-      Path path = this.getAutoSaveFilePath();
+      final Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
-        Gson gson = new GsonBuilder().create();
-        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
-        AutoSaveReader autoSaveReader = new AutoSaveReader();
+        final Gson gson = new GsonBuilder().create();
+        final JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        final AutoSaveReader autoSaveReader = new AutoSaveReader();
 
         project = (Project) autoSaveReader.readFromJson(jReader);
-        Project projectDB = projectService.getProjectById(project.getId());
+        final Project projectDB = projectService.getProjectById(project.getId());
 
         if (project.getPartners() != null) {
 
-          List<ProjectPartner> partners = new ArrayList<>();
+          final List<ProjectPartner> partners = new ArrayList<>();
 
-          for (ProjectPartner partner : project.getPartners()) {
-            Institution institution = institutionService.getInstitutionById(partner.getInstitution().getId());
+          for (final ProjectPartner partner : project.getPartners()) {
+            final Institution institution = institutionService.getInstitutionById(partner.getInstitution().getId());
             partner.setInstitution(institution);
             if (partner.getUsers() != null) {
-              for (ProjectPartnerPerson person : partner.getUsers()) {
-                User user = userService.getUser(person.getUser().getId());
+              for (final ProjectPartnerPerson person : partner.getUsers()) {
+                final User user = userService.getUser(person.getUser().getId());
                 person.setUser(user);
               }
             }
@@ -290,15 +290,15 @@ public class ProjectPartnersAction extends BaseAction {
         project.setPartners(new ArrayList<>(
           project.getProjectPartners().stream().filter(pp -> pp.isActive()).collect(Collectors.toList())));
 
-        if (project.getPartners() != null || !project.getPartners().isEmpty()) {
-          for (ProjectPartner partner : project.getPartners()) {
+        if ((project.getPartners() != null) || !project.getPartners().isEmpty()) {
+          for (final ProjectPartner partner : project.getPartners()) {
             partner.setUsers(new ArrayList<>(
               partner.getProjectPartnerPersons().stream().filter(ppp -> ppp.isActive()).collect(Collectors.toList())));
           }
         }
       }
 
-      String params[] =
+      final String params[] =
         {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
       this.setBasePermission(this.getText(Permission.PROJECT_PARTNERS_BASE_PERMISSION, params));
 
@@ -320,18 +320,18 @@ public class ProjectPartnersAction extends BaseAction {
   @Override
   public String save() {
     if (this.hasPermission("*")) {
-      Project projectDB = projectService.getProjectById(projectID);
+      final Project projectDB = projectService.getProjectById(projectID);
 
       this.savePartners(projectDB);
 
-      List<String> relationsName = new ArrayList<>();
+      final List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.PROJECT_PARTNERS_RELATION);
       project = projectService.getProjectById(projectID);
       project.setActiveSince(new Date());
       project.setModifiedBy(this.getCurrentUser());
       projectService.saveProject(project, this.getActionName(), relationsName);
 
-      Path path = this.getAutoSaveFilePath();
+      final Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
         path.toFile().delete();
@@ -340,8 +340,8 @@ public class ProjectPartnersAction extends BaseAction {
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
 
-        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
-        for (String key : keys) {
+        final List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (final String key : keys) {
           this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
         }
 
@@ -360,28 +360,28 @@ public class ProjectPartnersAction extends BaseAction {
 
   public void savePartners(Project projectSave) {
 
-    if (projectSave.getProjectPartners() != null && projectSave.getProjectPartners().size() > 0) {
+    if ((projectSave.getProjectPartners() != null) && (projectSave.getProjectPartners().size() > 0)) {
 
-      List<ProjectPartner> partnersPrew =
+      final List<ProjectPartner> partnersPrew =
         projectSave.getProjectPartners().stream().filter(pp -> pp.isActive()).collect(Collectors.toList());
 
-      for (ProjectPartner projectPartner : partnersPrew) {
+      for (final ProjectPartner projectPartner : partnersPrew) {
         if (!project.getPartners().contains(projectPartner)) {
-          for (ProjectPartnerPerson partnerPerson : projectPartner.getProjectPartnerPersons().stream()
+          for (final ProjectPartnerPerson partnerPerson : projectPartner.getProjectPartnerPersons().stream()
             .filter(ppp -> ppp.isActive()).collect(Collectors.toList())) {
             partnerPersonService.deleteProjectPartnerPerson(partnerPerson.getId());
           }
           partnerService.deleteProjectPartner(projectPartner.getId());
         } else {
-          for (ProjectPartner projectPartnerPrew : project.getPartners()) {
+          for (final ProjectPartner projectPartnerPrew : project.getPartners()) {
             if (projectPartnerPrew.equals(projectPartner)) {
-              if (projectPartner.getProjectPartnerPersons() != null
-                && projectPartner.getProjectPartnerPersons().size() > 0) {
+              if ((projectPartner.getProjectPartnerPersons() != null)
+                && (projectPartner.getProjectPartnerPersons().size() > 0)) {
 
-                List<ProjectPartnerPerson> personsPrew = projectPartner.getProjectPartnerPersons().stream()
+                final List<ProjectPartnerPerson> personsPrew = projectPartner.getProjectPartnerPersons().stream()
                   .filter(pp -> pp.isActive()).collect(Collectors.toList());
 
-                for (ProjectPartnerPerson projectPartnerPerson : personsPrew) {
+                for (final ProjectPartnerPerson projectPartnerPerson : personsPrew) {
                   if (projectPartnerPrew.getUsers() != null) {
                     if (!projectPartnerPrew.getUsers().contains(projectPartnerPerson)) {
                       partnerPersonService.deleteProjectPartnerPerson(projectPartnerPerson.getId());
@@ -397,7 +397,7 @@ public class ProjectPartnersAction extends BaseAction {
 
 
     if (project.getPartners() != null) {
-      for (ProjectPartner projectPartner : project.getPartners()) {
+      for (final ProjectPartner projectPartner : project.getPartners()) {
         if (projectPartner.getId() == null) {
 
           ProjectPartner partnerNew = new ProjectPartner();
@@ -410,17 +410,18 @@ public class ProjectPartnersAction extends BaseAction {
           partnerNew.setInternal(projectPartner.isInternal());
           partnerNew.setProject(projectSave);
 
-          Institution institution = institutionService.getInstitutionById(projectPartner.getInstitution().getId());
+          final Institution institution =
+            institutionService.getInstitutionById(projectPartner.getInstitution().getId());
           partnerNew.setInstitution(institution);
 
-          long partnerNewId = partnerService.saveProjectPartner(partnerNew);
+          final long partnerNewId = partnerService.saveProjectPartner(partnerNew);
 
           partnerNew = partnerService.getProjectPartnerById(partnerNewId);
 
           if (projectPartner.getUsers() != null) {
-            for (ProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
+            for (final ProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
 
-              ProjectPartnerPerson partnerPersonNew = new ProjectPartnerPerson();
+              final ProjectPartnerPerson partnerPersonNew = new ProjectPartnerPerson();
               partnerPersonNew.setActive(true);
               partnerPersonNew.setActiveSince(new Date());
               partnerPersonNew.setCreatedBy(this.getCurrentUser());
@@ -429,7 +430,7 @@ public class ProjectPartnersAction extends BaseAction {
 
               partnerPersonNew.setProjectPartner(partnerNew);
 
-              User user = userService.getUser(partnerPerson.getUser().getId());
+              final User user = userService.getUser(partnerPerson.getUser().getId());
               partnerPersonNew.setUser(user);
 
               partnerPersonService.saveProjectPartnerPerson(partnerPersonNew);
@@ -438,7 +439,7 @@ public class ProjectPartnersAction extends BaseAction {
           }
         } else {
 
-          ProjectPartner partnerNew = partnerService.getProjectPartnerById(projectPartner.getId());
+          final ProjectPartner partnerNew = partnerService.getProjectPartnerById(projectPartner.getId());
 
           if (partnerNew.isInternal() != projectPartner.isInternal()) {
             partnerNew.setInternal(projectPartner.isInternal());
@@ -446,10 +447,10 @@ public class ProjectPartnersAction extends BaseAction {
           }
 
           if (projectPartner.getUsers() != null) {
-            for (ProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
+            for (final ProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
               if (partnerPerson.getId() == null) {
 
-                ProjectPartnerPerson partnerPersonNew = new ProjectPartnerPerson();
+                final ProjectPartnerPerson partnerPersonNew = new ProjectPartnerPerson();
                 partnerPersonNew.setActive(true);
                 partnerPersonNew.setActiveSince(new Date());
                 partnerPersonNew.setCreatedBy(this.getCurrentUser());
@@ -459,7 +460,7 @@ public class ProjectPartnersAction extends BaseAction {
 
                 partnerPersonNew.setProjectPartner(partnerNew);
 
-                User user = userService.getUser(partnerPerson.getUser().getId());
+                final User user = userService.getUser(partnerPerson.getUser().getId());
                 partnerPersonNew.setUser(user);
 
                 partnerPersonService.saveProjectPartnerPerson(partnerPersonNew);

@@ -11,7 +11,7 @@ function init(){
       }
     })();
 
-   
+   //filter project list 
     (function(){
       var researchProgramID = $(".capdevResearchProgram").val();
       //filterProject(researchProgramID);
@@ -19,6 +19,10 @@ function init(){
       	var projectSelected = $(".capdevProject").val()
       	filterProject(researchProgramID, projectSelected);
       }
+    })();
+
+    //filter partners list
+    (function(){
 
     })();
 }
@@ -108,6 +112,53 @@ function filterProject(researchProgramID,projectSelected){
       	});
       }
     })
+}
+
+//event to filter partners according to project selected
+$(".capdevProject").on("change", ajaxFilterPartners_outputs);
+
+function ajaxFilterPartners_outputs(){
+	 var projectID = $(this).val();
+  filterPartners_outputs(projectID);
+}
+
+function filterPartners_outputs(projectID){
+	console.log("projectID "+projectID)
+	$.ajax({
+      'url': baseURL + '/filterPartners_outputs.do',
+      'data': {
+        q: projectID
+      },
+      'dataType': "json",
+      beforeSend: function() {
+      },
+      success: function(data) {
+      	//set  partners List
+        var partnersLength = data[0]['partners'].length;
+        $('.capdevPartnerSelect').empty();
+        $('.capdevPartnerSelect').append('<option value= -1>select option... </option>');
+        for (var i = 0; i < partnersLength; i++) {
+          $('.capdevPartnerSelect').append('<option value=' + data[0]['partners'][i]['idPartner'] + '>' + data[0]['partners'][i]['partnerName']  + '</option>');
+        }
+
+        //set  output list
+        var outputsLength = data[1]['outputs'].length;
+        $('.capdevOutputSelect').empty();
+        $('.capdevOutputSelect').append('<option value= -1>select option... </option>');
+        for (var i = 0; i < outputsLength; i++) {
+          $('.capdevOutputSelect').append('<option value=' + data[1]['outputs'][i]['idOutput'] + '>' + data[1]['outputs'][i]['outputTitle']  + '</option>');
+        }
+      },
+      error: function() {
+      },
+      complete: function() {
+      	/*$(".project select option").each(function() {
+	      if($(this).val() == projectSelected){
+	        $(this).attr( "selected" , "selected");
+	      }
+      	});*/
+      }
+    })	
 }
 
 
@@ -256,7 +307,7 @@ function removeOutput() {
 	var value = $item.find(".outputId").val();
 	var name = $item.find(".name").attr("title");
 
-	var $select = $(".capdevPartnerSelect");
+	var $select = $(".capdevOutputSelect");
 	$item.hide(300, function() {
 	  $item.remove();
 	updateOutputList($list);

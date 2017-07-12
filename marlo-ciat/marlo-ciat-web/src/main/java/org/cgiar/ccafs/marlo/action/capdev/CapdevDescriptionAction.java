@@ -20,6 +20,8 @@ import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 import org.cgiar.ccafs.marlo.data.model.CapdevDiscipline;
+import org.cgiar.ccafs.marlo.data.model.CapdevOutputs;
+import org.cgiar.ccafs.marlo.data.model.CapdevPartners;
 import org.cgiar.ccafs.marlo.data.model.CapdevTargetgroup;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.Discipline;
@@ -32,6 +34,8 @@ import org.cgiar.ccafs.marlo.data.model.TargetGroup;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevDisciplineService;
+import org.cgiar.ccafs.marlo.data.service.ICapdevOutputsService;
+import org.cgiar.ccafs.marlo.data.service.ICapdevPartnersService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevTargetgroupService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
@@ -85,6 +89,8 @@ public class CapdevDescriptionAction extends BaseAction {
   private final ITargetGroupService targetGroupService;
   private final ICapdevDisciplineService capdevDisciplineService;
   private final ICapdevTargetgroupService capdevTargetgroupService;
+  private final ICapdevPartnersService capdevPartnerService;
+  private final ICapdevOutputsService capdevOutputService;
 
   @Inject
   public CapdevDescriptionAction(APConfig config, IResearchAreaService researchAreaService,
@@ -92,7 +98,8 @@ public class CapdevDescriptionAction extends BaseAction {
     IDisciplineService disciplineService, ITargetGroupService targetGroupService,
     ICapacityDevelopmentService capdevService, ICapdevDisciplineService capdevDisciplineService,
     ICapdevTargetgroupService capdevTargetgroupService, IInstitutionService institutionService,
-    IResearchOutputService researchOutputService) {
+    IResearchOutputService researchOutputService, ICapdevPartnersService capdevPartnerService,
+    ICapdevOutputsService capdevOutputService) {
     super(config);
     this.researchAreaService = researchAreaService;
     this.researchProgramSercive = researchProgramSercive;
@@ -105,6 +112,8 @@ public class CapdevDescriptionAction extends BaseAction {
     this.capdevTargetgroupService = capdevTargetgroupService;
     this.institutionService = institutionService;
     this.researchOutputService = researchOutputService;
+    this.capdevPartnerService = capdevPartnerService;
+    this.capdevOutputService = capdevOutputService;
   }
 
 
@@ -199,6 +208,8 @@ public class CapdevDescriptionAction extends BaseAction {
 
     capdevDisciplines = new ArrayList<>();
     capdevTargetGroup = new ArrayList<>();
+    capdevPartners = new ArrayList<>();
+    capdevOutputs = new ArrayList<>();
 
     try {
       capdevID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.CAPDEV_ID)));
@@ -215,12 +226,17 @@ public class CapdevDescriptionAction extends BaseAction {
   public String save() {
 
     capdevService.saveCapacityDevelopment(capdev);
-    this.saveCapDevDisciplines(capdevDisciplines, capdev);
-    this.saveCapdevTargetGroups(capdevTargetGroup, capdev);
+    // this.saveCapDevDisciplines(capdevDisciplines, capdev);
+    // this.saveCapdevTargetGroups(capdevTargetGroup, capdev);
+    this.saveCapdevPartners(capdevPartners, capdev);
+    this.saveCapdevOutputs(capdevOutputs, capdev);
+
+    System.out.println("capdevPartners.size() " + capdevPartners.size());
+    System.out.println("capdevOutputs.size() " + capdevOutputs.size());
+
 
     return SUCCESS;
   }
-
 
   public void saveCapDevDisciplines(List<Long> disciplines, CapacityDevelopment capdev) {
     CapdevDiscipline capdevDiscipline = null;
@@ -240,6 +256,47 @@ public class CapdevDescriptionAction extends BaseAction {
           capdevDisciplineService.saveCapdevDiscipline(capdevDiscipline);
         }
 
+      }
+    }
+  }
+
+  public void saveCapdevOutputs(List<Long> outputs, CapacityDevelopment capdev) {
+    CapdevOutputs capdevOutput = null;
+    final Session session = SecurityUtils.getSubject().getSession();
+    final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
+    if (!outputs.isEmpty()) {
+      for (final Long iterator : outputs) {
+        final ResearchOutput output = researchOutputService.getResearchOutputById(iterator);
+        if (output != null) {
+          capdevOutput = new CapdevOutputs();
+          capdevOutput.setCapacityDevelopment(capdev);
+          capdevOutput.setResearchOutputs(output);
+          capdevOutput.setActive(true);
+          capdevOutput.setActiveSince(new Date());
+          capdevOutput.setUsersByCreatedBy(currentUser);
+          capdevOutputService.saveCapdevOutputs(capdevOutput);
+        }
+      }
+    }
+  }
+
+
+  public void saveCapdevPartners(List<Long> partners, CapacityDevelopment capdev) {
+    CapdevPartners capdevPartner = null;
+    final Session session = SecurityUtils.getSubject().getSession();
+    final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
+    if (!partners.isEmpty()) {
+      for (final Long iterator : partners) {
+        final Institution institution = institutionService.getInstitutionById(iterator);
+        if (institution != null) {
+          capdevPartner = new CapdevPartners();
+          capdevPartner.setCapacityDevelopment(capdev);
+          capdevPartner.setInstitutions(institution);;
+          capdevPartner.setActive(true);
+          capdevPartner.setActiveSince(new Date());
+          capdevPartner.setUsersByCreatedBy(currentUser);
+          capdevPartnerService.saveCapdevPartners(capdevPartner);
+        }
       }
     }
   }

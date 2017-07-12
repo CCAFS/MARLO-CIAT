@@ -179,13 +179,13 @@
 				
 				<div id="capdevPartnersList" class=" partnersList">
 					<ul class="list">
-						[#if Partner?has_content]
-						[#list Partner as partner]
-							<li id="" class="capdevPartner clearfix col-md-3">
+						[#if capdev.capdevPartnerses?has_content]
+						[#list capdev.capdevPartnerses as partner]
+							<li id="" class="capdevPartner clearfix col-md-12">
 								<div class="removepartner removeIcon" title="Remove partner"></div>
-								<input class="id" type="hidden" name="capdev.capdevTargetgroups[${partner_index}].id" value="${(partner.id)!-1}" />
-								<input class="partnerId" type="hidden" name="capdev.capdevTargetgroups[${partner_index}].id" value="${(partner.id)!}" />
-								${(partner.name)!}
+								<input class="id" type="hidden" name="capdev.capdevPartnerses[${partner_index}].id" value="${(partner.id)!-1}" />
+								<input class="partnerId" type="hidden" name="capdev.capdevPartnerses[${partner_index}].id" value="${(partner.id)!}" />
+								${(partner.institutions.name)!}
 								<div class="clearfix"></div>
 							</li>
 							[/#list] 
@@ -210,13 +210,13 @@
 
 				<div id="capdevOutputsList" class="outputsList">
 					<ul class="list">
-						[#if Output?has_content]
-						[#list Output as output]
-							<li id="" class="capdevOutput clearfix col-md-3">
+						[#if capdev.capdevOutputses?has_content]
+						[#list capdev.capdevOutputses as output]
+							<li id="" class="capdevOutput clearfix col-md-12">
 								<div class="removeOutput removeIcon" title="Remove output"></div>
-								<input class="id" type="hidden" name="capdev.capdevTargetgroups[${output_index}].id" value="${(output.id)!-1}" />
-								<input class="outputId" type="hidden" name="capdev.capdevTargetgroups[${output_index}].id" value="${(output.id)!}" />
-								${(output.name)!}
+								<input class="id" type="hidden" name="capdev.capdevOutputses[${output_index}].id" value="${(output.id)!-1}" />
+								<input class="outputId" type="hidden" name="capdev.capdevOutputses[${output_index}].id" value="${(output.id)!}" />
+								${(output.researchOutputs.title)!}
 								<div class="clearfix"></div>
 							</li>
 							[/#list] 
