@@ -18,6 +18,8 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
 import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableDocument;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableOutput;
 import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.model.CenterProject;
 import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
@@ -236,19 +238,138 @@ public class DeliverablesSummaryAction extends BaseAction implements Summary {
     return "application/xlsx";
   }
 
+  private String getCrossCuttingTheme(CenterDeliverable centerDeliverable) {
+    String crossCutting = "";
+    if (centerDeliverable.getDeliverableCrosscutingTheme() != null) {
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getClimateChange() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getClimateChange()) {
+          crossCutting += "●    " + this.getText("deliverable.climateChange") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getGender() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getGender()) {
+          crossCutting += "●    " + this.getText("deliverable.gender") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getYouth() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getYouth()) {
+          crossCutting += "●    " + this.getText("deliverable.youth") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getCapacityDevelopment() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getCapacityDevelopment()) {
+          crossCutting += "●    " + this.getText("deliverable.capacityDevelopment") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getBigData() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getBigData()) {
+          crossCutting += "●    " + this.getText("deliverable.bigData") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getImpactAssessment() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getImpactAssessment()) {
+          crossCutting += "●    " + this.getText("deliverable.impactAssessment") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getPoliciesInstitutions() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getPoliciesInstitutions()) {
+          crossCutting += "●    " + this.getText("deliverable.policiesInstitutions") + "\n";
+        }
+      }
+
+      if (centerDeliverable.getDeliverableCrosscutingTheme().getNa() != null) {
+        if (centerDeliverable.getDeliverableCrosscutingTheme().getNa()) {
+          crossCutting += "●    " + this.getText("deliverable.na") + "\n";
+        }
+      }
+    }
+    return crossCutting;
+  }
+
   private TypedTableModel getDeliverablesTableModel() {
     // Initialization of Model
-    TypedTableModel model =
-      new TypedTableModel(new String[] {"impactStatement", "impactObjetives", "program_id", "research_impact_id"},
-        new Class[] {String.class, String.class, Long.class, Long.class});
+    TypedTableModel model = new TypedTableModel(
+      new String[] {"deliverableId", "title", "type", "subType", "startDate", "endDate", "crossCutting",
+        "deliverableOutputs", "supportingDocuments", "projectId", "projectTitle"},
+      new Class[] {String.class, String.class, String.class, String.class, String.class, String.class, String.class,
+        String.class, String.class, String.class, String.class});
 
     for (CenterProject centerProject : researchProgram.getProjects().stream().filter(p -> p.isActive())
       .collect(Collectors.toList())) {
       for (CenterDeliverable centerDeliverable : centerProject.getDeliverables().stream().filter(d -> d.isActive())
         .collect(Collectors.toList())) {
         String deliverableId = centerDeliverable.getId().toString();
+        String title = null;
+        if (centerDeliverable.getName() != null && !centerDeliverable.getName().trim().isEmpty()) {
+          title = centerDeliverable.getName();
+        }
+        String type = null;
+        String subType = null;
+        if (centerDeliverable.getDeliverableType() != null
+          && centerDeliverable.getDeliverableType().getName() != null) {
+          type = centerDeliverable.getDeliverableType().getName();
 
-        model.addRow(new Object[] {deliverableId});
+          if (centerDeliverable.getDeliverableType().getDeliverableType() != null
+            && centerDeliverable.getDeliverableType().getDeliverableType().getName() != null) {
+            subType = centerDeliverable.getDeliverableType().getDeliverableType().getName();
+          }
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM yyyy");
+        String startDate = null;
+        if (centerDeliverable.getStartDate() != null) {
+          startDate = formatter.format(centerDeliverable.getStartDate());
+        }
+
+        String endDate = null;
+        if (centerDeliverable.getEndDate() != null) {
+          endDate = formatter.format(centerDeliverable.getEndDate());
+        }
+
+        String crossCutting = this.getCrossCuttingTheme(centerDeliverable);
+
+        if (crossCutting.trim().isEmpty()) {
+          crossCutting = null;
+        }
+
+        String deliverableOutputs = "";
+        for (CenterDeliverableOutput centerDeliverableOutput : centerDeliverable.getDeliverableOutputs().stream()
+          .filter(devo -> devo.isActive()).collect(Collectors.toList())) {
+          deliverableOutputs += "●    " + centerDeliverableOutput.getResearchOutput().getComposedName() + "\n";
+        }
+
+        if (deliverableOutputs.trim().isEmpty()) {
+          deliverableOutputs = null;
+        }
+
+        String supportingDocuments = "";
+        for (CenterDeliverableDocument centerDeliverableDocument : centerDeliverable.getDeliverableDocuments().stream()
+          .filter(dd -> dd.isActive()).collect(Collectors.toList())) {
+          supportingDocuments += "●    " + centerDeliverableDocument.getLink() + "\n";
+        }
+        if (supportingDocuments.trim().isEmpty()) {
+          supportingDocuments = null;
+        }
+
+        String projectId = null;
+        if (centerDeliverable.getProject() != null && centerDeliverable.getProject().getId() != null) {
+          projectId = centerDeliverable.getProject().getId().toString();
+        }
+
+        String projectTitle = null;
+        if (centerDeliverable.getProject() != null && centerDeliverable.getProject().getName() != null
+          && !centerDeliverable.getProject().getName().trim().isEmpty()) {
+          projectTitle = centerDeliverable.getProject().getName();
+        }
+
+        model.addRow(new Object[] {deliverableId, title, type, subType, startDate, endDate, crossCutting,
+          deliverableOutputs, supportingDocuments, projectId, projectTitle});
       }
     }
     return model;
@@ -304,8 +425,8 @@ public class DeliverablesSummaryAction extends BaseAction implements Summary {
    */
   private TypedTableModel getMasterTableModel() {
     // Initialization of Model
-    TypedTableModel model = new TypedTableModel(new String[] {"currentDate", "imageUrl", "researchProgramId"},
-      new Class[] {String.class, String.class, Long.class});
+    TypedTableModel model = new TypedTableModel(new String[] {"currentDate", "imageUrl", "researchProgram"},
+      new Class[] {String.class, String.class, String.class});
     String currentDate = "";
 
     // Get datetime
@@ -316,7 +437,7 @@ public class DeliverablesSummaryAction extends BaseAction implements Summary {
     // Get CIAT imgage URL from repo
     String imageUrl = this.getBaseUrl() + "/images/global/centers/CIAT.png";
 
-    model.addRow(new Object[] {currentDate, imageUrl, researchProgram.getId()});
+    model.addRow(new Object[] {currentDate, imageUrl, researchProgram.getName()});
     return model;
   }
 
