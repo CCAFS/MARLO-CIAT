@@ -42,7 +42,7 @@
             [#-- Deliverable title --]
             <div class="form-group ">  
                
-                [@customForm.input name="deliverable.name" i18nkey="Title" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="deliverable.name" i18nkey="deliverable.title" type="text" disabled=!editable  required=true editable=editable /]
                
             </div>
             [#-- Deliverable Type--]
@@ -59,10 +59,10 @@
             [#-- Start Date & End Date --]
             <div class="form-group row">  
               <div class="col-md-6">
-                [@customForm.input name="deliverable.startDate" i18nkey="Start date" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="deliverable.startDate" i18nkey="deliverable.startDate" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               <div class="col-md-6">
-                [@customForm.input name="deliverable.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
+                [@customForm.input name="deliverable.endDate" i18nkey="deliverable.endDate" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
             
@@ -130,7 +130,7 @@
                 </div> 
               </div> 
               
-          <label for="">Supporting document(s):<span class="red">*</span></label>
+          <label for="">[@customForm.text name="deliverable.supportingDocuments" readText=!editable /]:<span class="red">*</span></label>
           <div class="borderBox documentList" listname="deliverable.documents">
             [#if deliverable.documents?has_content]
               [#list deliverable.documents as document]
