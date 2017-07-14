@@ -2,7 +2,7 @@
 
 [#assign customCSS = ["${baseUrl}/css/global/customDataTable.css"] /]
 [#assign customCSS = ["${baseUrl}/css/capDev/capacityDevelopment.css"] /]
-[#assign customJS = ["${baseUrl}/js/capDev/capacityDevelopment.js"] /]
+[#assign customJS = ["${baseUrl}/js/capDev/capacityDevelopment.js", "${baseUrl}/js/capDev/capdevList.js"] /]
 
 [#include "/WEB-INF/global/pages/header.ftl" /]
 [#include "/WEB-INF/global/pages/main-menu.ftl" /]
@@ -38,7 +38,7 @@
 	  				<img src="${baseUrl}/images/global/search.png" class="searchIcon" />
 				</div>
 				<div class="pull-right ">
-						<input type="text" name="search" class="searchInput"><br>
+						<input id="capdevSearchInput" type="text" name="search" class="searchInput"><br>
 				</div> 
 			</div>
 		</div>
@@ -95,11 +95,18 @@
 					    [/#if]
 					    </td>
 					    <td>
+					    [#if i.capdevParticipants?has_content]
+					    [#if i.capdevParticipants?size  > 1 ]
 				    		<div class=" iconContentBox">
-				    			<img src="${baseUrl}/images/global/participants.png" class="capDevIcon" />
+				    			<img src="${baseUrl}/images/global/participants.png" class="capDevIcon" title="List of participants" />
 				    		</div>
+				    	[#else]
+				    	[/#if]
+				    	[#else]
+				    	[/#if]
+
 				    		<div class=" iconContentBox">
-				    			<img src="${baseUrl}/images/global/deliverable.png" class="capDevIcon" />
+				    			<img src="${baseUrl}/images/global/deliverable.png" class="capDevIcon" title="Supporting documents" />
 				    		</div>
 					    </td>
 					  </tr>

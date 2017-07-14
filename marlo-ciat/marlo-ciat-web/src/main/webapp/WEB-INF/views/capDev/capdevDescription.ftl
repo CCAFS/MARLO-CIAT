@@ -29,10 +29,6 @@
 		[#include "/WEB-INF/views/capDev/menu-capdev.ftl" /]
 	</div>
 	
-	
-	
-	
-	
 	<div class="col-md-9 ">
 		<div class="col-md-12">
 			<div class="pull-right">
@@ -45,10 +41,7 @@
 		</div>
 		
 		<div class="col-md-12 form-group newCapdevForm"> 
-
 			[@s.form action=actionName method="POST" enctype="multipart/form-data" cssClass=""]
-			
-
 			<div  class="fullForm" >
 
 				<!-- Disciplines-->
@@ -59,7 +52,7 @@
 				</div>
 				<div class="row approachesListContainer">
 					<div class="col-md-12 newCapdevField">
-						[@customForm.select name="capdevDisciplines" listName="disciplines" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.selectApproach" className="disciplinesSelect" multiple=false placeholder="capdev.select"  /]
+						[@customForm.select name="capdevDisciplines" listName="disciplines" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.selectApproach" className="disciplinesSelect" multiple=false placeholder="capdev.select" help="capdev.help.discipline" /]
 					</div>
 					<div id="disciplinesList" class="col-md-12 newCapdevField approachesList">
 						<ul class="list">
@@ -88,7 +81,7 @@
 				</div>
 				<div class="row borderContainer">
 					<div class="col-md-12 newCapdevField ">
-						[@customForm.select name="capdevTargetGroup" listName="targetGroups" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.targetgroupselect" className="targetGroupsSelect" multiple=false placeholder="capdev.select"  /]
+						[@customForm.select name="capdevTargetGroup" listName="targetGroups" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.targetgroupselect" className="targetGroupsSelect" multiple=false placeholder="capdev.select" help="capdev.help.targetgroup" /]
 					</div>
 
 					<div id="targetGroupsList" class="col-md-12 newCapdevField ">
@@ -115,28 +108,12 @@
 				<div class="row">
 					<div class="col-md-12 newCapdevField">
 						<div class="col-md-6 ">
-							[@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name"  className="capdevResearchArea" i18nkey="capdev.form.researchArea" placeholder="capdev.select"  /]
-							<!-- [@s.label key="capdev.form.researchArea" /]
-							<select class="selectpicker" name="capdev.researchArea">
-								<option value="" >select an option...</option>
-							[#list researchAreas as researchArea]
-							  	<option value="${researchArea}">${researchArea.name}</option>
-							[/#list]
-							  
-							</select> -->
-
+							[@customForm.select name="capdev.researchArea.id" listName="researchAreas" keyFieldName="id" displayFieldName="name"  className="capdevResearchArea" i18nkey="capdev.form.researchArea" placeholder="capdev.select" help="capdev.help.researchArea" /]
 						</div>
 
 						<!-- research program-->
 						<div class="col-md-6 researchProgram ">
-							[@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="capdev.select" className="capdevResearchProgram" /]
-							<!-- [@s.label key="capdev.form.researchProgram" /]
-							<select class="selectpicker" name="capdev.researchProgram" >
-								<option value="" >select an option...</option>
-							[#list researchPrograms as researchprogram]
-							  	<option value="${researchprogram}">${researchprogram.name}</option>
-							[/#list]
-							</select> -->
+							[@customForm.select name="capdev.researchProgram.id" listName="researchPrograms" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.form.researchProgram" placeholder="capdev.select" className="capdevResearchProgram" help="capdev.help.researchProgram" /]
 						</div>
 					</div>
 				</div>
@@ -144,18 +121,7 @@
 				<!-- project-->
 				<div class="row newCapdevField ">
 					<div class="col-md-12 project">
-						[@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="capdev.select" className="capdevProject" /]
-						<!-- [@s.label key="capdev.form.project" /]
-						<select class="selectpicker" name="capdev.project" >
-								<option value="" >select an option...</option>
-							[#list projects as proj]
-								[#if proj.name??]
-								<option value="${proj}">${proj.name}</option>
-								[#else]
-								<option value="" hidden="true"></option>
-								[/#if]
-							[/#list]
-						</select> -->
+						[@customForm.select name="capdev.project.id" listName="projects" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.project" placeholder="capdev.select" className="capdevProject" help="capdev.help.project" /]
 					</div>
 				</div>
 				
@@ -163,20 +129,11 @@
 				<div class="row">
 					<div class="col-md-12 newCapdevField">
 						<div class="col-md-6 ">
-							[@customForm.select name="capdev.crp.id" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="capdev.select"  /]
-							<!-- [@s.label key="capdev.form.crp" /]
-							<select class="selectpicker" name="capdev.crp" >
-								<option value="" >select an option...</option>
-							[#list crps as crp]
-								<option value="${crp}">${crp.name}</option>
-							[/#list]
-						</select> -->
+							[@customForm.select name="capdev.crp.id" listName="crps" keyFieldName="id" displayFieldName="name" i18nkey="capdev.form.crp" placeholder="capdev.select" help="capdev.help.crp" /]
 						</div>
 						
 					</div>
 				</div>
-
-				
 
 				<!-- Partners-->
 				<div class="row">
@@ -186,7 +143,7 @@
 				</div>
 				<div class="row borderContainer">
 					<div class="col-md-12 newCapdevField ">
-						[@customForm.select name="capdevPartners" listName="partners" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.partnertSelect" className="capdevPartnerSelect" multiple=false placeholder="capdev.select"  /]
+						[@customForm.select name="capdevPartners" listName="partners" keyFieldName="id" displayFieldName="name"  i18nkey="capdev.partnertSelect" className="capdevPartnerSelect" multiple=false placeholder="capdev.select" help="capdev.help.partner" /]
 					</div>
 					
 					<div id="capdevPartnersList" class=" partnersList">
@@ -206,7 +163,6 @@
 							[/#if]
 						</ul>
 					</div>
-					
 				</div>
 
 				<!-- OutPuts-->
@@ -217,7 +173,7 @@
 				</div>
 				<div class="row outComesContainer">
 					<div class="col-md-12 newCapdevField">
-						[@customForm.select name="capdevOutputs" listName="outputs" keyFieldName="id" displayFieldName="title" i18nkey="capdev.form.selectOutcome" className="capdevOutputSelect" multiple=false placeholder="capdev.select"  /]
+						[@customForm.select name="capdevOutputs" listName="outputs" keyFieldName="id" displayFieldName="title" i18nkey="capdev.form.selectOutcome" className="capdevOutputSelect" multiple=false placeholder="capdev.select" help="capdev.help.partner" /]
 					</div>
 
 					<div id="capdevOutputsList" class="outputsList">

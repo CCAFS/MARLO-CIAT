@@ -18,12 +18,14 @@ package org.cgiar.ccafs.marlo.action.json.capdev;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
+import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 import org.cgiar.ccafs.marlo.data.model.Institution;
 import org.cgiar.ccafs.marlo.data.model.Project;
 import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
 import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
 import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
 import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
 import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
 import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
 import org.cgiar.ccafs.marlo.data.service.IProjectPartnerService;
@@ -50,17 +52,20 @@ public class FilterListsAction extends BaseAction {
   private List<Map<String, Object>> jsonResearchPrograms;
   private List<Map<String, Object>> jsonProjects;
   private List<Map<String, Object>> jsonPartners_output;
+  private List<Map<String, Object>> jsonCapdevList;
   private final IResearchProgramDAO researchProgramSercive;
   private final IProjectService projectService;
   private final IProjectPartnerService projectPartnerService;
   private final IProjectOutputService projectOutputService;
   private final IInstitutionService institutionService;
   private final IResearchOutputService researchOutputService;
+  private final ICapacityDevelopmentService capdevService;
 
   @Inject
   public FilterListsAction(APConfig config, IResearchProgramDAO researchProgramSercive, IProjectService projectService,
     IProjectPartnerService projectPartnerService, IProjectOutputService projectOutputService,
-    IInstitutionService institutionService, IResearchOutputService researchOutputService) {
+    IInstitutionService institutionService, IResearchOutputService researchOutputService,
+    ICapacityDevelopmentService capdevService) {
     super(config);
     this.researchProgramSercive = researchProgramSercive;
     this.projectService = projectService;
@@ -68,10 +73,25 @@ public class FilterListsAction extends BaseAction {
     this.projectOutputService = projectOutputService;
     this.institutionService = institutionService;
     this.researchOutputService = researchOutputService;
+    this.capdevService = capdevService;
   }
 
   @Override
   public String execute() throws Exception {
+    return SUCCESS;
+  }
+
+  public String filterCapDevList() throws Exception {
+    final Map<String, Object> parameters = this.getParameters();
+    final String query = StringUtils.trim(((String[]) parameters.get(APConstants.QUERY_PARAMETER))[0]);
+
+    final String cadena = "sdg asdf";
+
+    final CharSequence secuence = "df";
+
+    System.out.println("Conteniene ---> " + cadena.contains(secuence));
+    final List<CapacityDevelopment> capdevList = new ArrayList<>(capdevService.findAll());
+    System.out.println("capdevList.size() --> " + capdevList.size());
     return SUCCESS;
   }
 
@@ -193,6 +213,7 @@ public class FilterListsAction extends BaseAction {
     return SUCCESS;
   }
 
+
   public String filterResearchProgram() throws Exception {
     final Map<String, Object> parameters = this.getParameters();
     final long researchAreaID =
@@ -217,24 +238,33 @@ public class FilterListsAction extends BaseAction {
     return SUCCESS;
   }
 
+  public List<Map<String, Object>> getJsonCapdevList() {
+    return jsonCapdevList;
+  }
+
 
   public List<Map<String, Object>> getJsonPartners_output() {
     return jsonPartners_output;
   }
 
+
   public List<Map<String, Object>> getJsonProjects() {
     return jsonProjects;
   }
-
 
   public List<Map<String, Object>> getJsonResearchPrograms() {
     return jsonResearchPrograms;
   }
 
 
+  public void setJsonCapdevList(List<Map<String, Object>> jsonCapdevList) {
+    this.jsonCapdevList = jsonCapdevList;
+  }
+
   public void setJsonPartners_output(List<Map<String, Object>> jsonPartners_output) {
     this.jsonPartners_output = jsonPartners_output;
   }
+
 
   public void setJsonProjects(List<Map<String, Object>> jsonProjects) {
     this.jsonProjects = jsonProjects;

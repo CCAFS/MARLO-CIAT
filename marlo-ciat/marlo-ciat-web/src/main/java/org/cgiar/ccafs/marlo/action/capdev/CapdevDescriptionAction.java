@@ -226,13 +226,15 @@ public class CapdevDescriptionAction extends BaseAction {
   public String save() {
 
     capdevService.saveCapacityDevelopment(capdev);
-    // this.saveCapDevDisciplines(capdevDisciplines, capdev);
-    // this.saveCapdevTargetGroups(capdevTargetGroup, capdev);
+    this.saveCapDevDisciplines(capdevDisciplines, capdev);
+    this.saveCapdevTargetGroups(capdevTargetGroup, capdev);
     this.saveCapdevPartners(capdevPartners, capdev);
     this.saveCapdevOutputs(capdevOutputs, capdev);
 
     System.out.println("capdevPartners.size() " + capdevPartners.size());
     System.out.println("capdevOutputs.size() " + capdevOutputs.size());
+
+    this.addActionMessage("message: Information was correctly saved.</br>");
 
 
     return SUCCESS;

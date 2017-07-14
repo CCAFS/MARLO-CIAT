@@ -208,6 +208,16 @@
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
+		
+		<action name="filtercapdevlist"
+			class="org.cgiar.ccafs.marlo.action.json.capdev.FilterListsAction"
+			method="filterCapDevList">
+			<result type="json">
+				<param name="root">jsonCapdevList</param>
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
 
 	</package>
 </struts>

@@ -115,6 +115,14 @@
 				<interceptor-ref name="keepRedirectMessages" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
+			
+			<interceptor-stack name="capdevStack">
+				<interceptor-ref name="i18nFile" />
+				<interceptor-ref name="requireUser" />
+				<interceptor-ref name="keepRedirectMessages" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+			
 
 		</interceptors>
 
