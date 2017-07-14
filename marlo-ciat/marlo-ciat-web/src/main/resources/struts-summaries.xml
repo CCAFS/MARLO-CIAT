@@ -48,5 +48,14 @@
       <result name="input">/WEB-INF/views/summaries/boardSummaries.ftl</result>
     </action>
     
+    <action name="deliverables"
+      class="org.cgiar.ccafs.marlo.action.summaries.DeliverablesSummaryAction">
+      <result name="success" type="stream">
+        <param name="inputName">inputStream</param>
+        <param name="contentType">${contentType}</param>
+        <param name="contentDisposition">filename="${fileName}"</param>
+      </result>
+    </action>
+    
 	</package>
 </struts>

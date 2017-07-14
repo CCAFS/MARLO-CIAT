@@ -42,7 +42,7 @@
             [#-- Deliverable title --]
             <div class="form-group ">  
                
-                [@customForm.input name="deliverable.name" i18nkey="Title" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="deliverable.name" i18nkey="deliverable.title" type="text" disabled=!editable  required=true editable=editable /]
                
             </div>
             [#-- Deliverable Type--]
@@ -59,10 +59,10 @@
             [#-- Start Date & End Date --]
             <div class="form-group row">  
               <div class="col-md-6">
-                [@customForm.input name="deliverable.startDate" i18nkey="Start date" type="text" disabled=!editable  required=true editable=editable /]
+                [@customForm.input name="deliverable.startDate" i18nkey="deliverable.startDate" type="text" disabled=!editable  required=true editable=editable /]
               </div> 
               <div class="col-md-6">
-                [@customForm.input name="deliverable.endDate" i18nkey="End date" type="text" disabled=!editable required=false editable=editable /]
+                [@customForm.input name="deliverable.endDate" i18nkey="deliverable.endDate" type="text" disabled=!editable required=false editable=editable /]
               </div>
             </div>
             
@@ -72,38 +72,38 @@
               <div class="row">
                 <div class="col-md-3">
                   [#if editable]
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > Climate Change</label>
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > Capacity Development</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.climateChange"   id="climate"   value="true" [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.climateChange" readText=!editable/]</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.capacityDevelopment" id="capacity" value="true" [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.capacityDevelopment" readText=!editable/]</label>
                   [#else]
-                    [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]<p class="checked"> Climate Change</p>[/#if]
-                    [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> Capacity Development</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.climateChange)!false ]<p class="checked"> [@customForm.text name="deliverable.climateChange" readText=!editable/]</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.capacityDevelopment)!false ]<p class="checked"> [@customForm.text name="deliverable.capacityDevelopment" readText=!editable/]</p>[/#if]
                   [/#if]
                 </div>
                 <div class="col-md-3">
                   [#if editable]
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.gender"    id="gender"    value="true" [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]checked="checked"[/#if] > Gender</label>
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.bigData" id="bigData" value="true" [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > Big Data</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.gender"    id="gender"    value="true" [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.gender" readText=!editable/]</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.bigData" id="bigData" value="true" [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.bigData" readText=!editable/]</label>
                   [#else]
-                    [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]<p class="checked"> Gender</p>[/#if]
-                    [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]<p class="checked"> Big Data</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.gender)!false ]<p class="checked"> [@customForm.text name="deliverable.gender" readText=!editable/]</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.bigData)!false ]<p class="checked"> [@customForm.text name="deliverable.bigData" readText=!editable/]</p>[/#if]
                    [/#if]
                 </div>
                 <div class="col-md-3">
                   [#if editable]
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.youth"    id="youth"    value="true" [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]checked="checked"[/#if] > Youth</label>
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > Impact Assessment</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.youth"    id="youth"    value="true" [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.youth" readText=!editable/]</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.impactAssessment" id="impactAssessment" value="true" [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.impactAssessment" readText=!editable/]</label>
                   [#else]
-                    [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]<p class="checked"> Youth</p>[/#if]
-                    [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]<p class="checked"> Impact Assessment</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.youth)!false ]<p class="checked"> [@customForm.text name="deliverable.youth" readText=!editable/]</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.impactAssessment)!false ]<p class="checked"> [@customForm.text name="deliverable.impactAssessment" readText=!editable/]</p>[/#if]
                   [/#if]
                 </div>
                 <div class="col-md-3">
                   [#if editable]
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.na"       id="na"       value="true" [#if (deliverable.deliverableCrosscutingTheme.na)!false ]checked="checked"[/#if] > N/A</label>
-                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > Policies and Institutions</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.na"       id="na"       value="true" [#if (deliverable.deliverableCrosscutingTheme.na)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.na" readText=!editable/]</label>
+                    <label class="checkbox"><input type="checkbox" name="deliverable.deliverableCrosscutingTheme.policiesInstitutions"    id="policies"    value="true" [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]checked="checked"[/#if] > [@customForm.text name="deliverable.policiesInstitutions" readText=!editable/]</label>
                   [#else]
-                    [#if (deliverable.deliverableCrosscutingTheme.na)!false ]<p class="checked"> N/A</p>[/#if]
-                    [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> Policies and Institutions</p>[/#if]                     
+                    [#if (deliverable.deliverableCrosscutingTheme.na)!false ]<p class="checked"> [@customForm.text name="deliverable.na" readText=!editable/]</p>[/#if]
+                    [#if (deliverable.deliverableCrosscutingTheme.policiesInstitutions)!false ]<p class="checked"> [@customForm.text name="deliverable.policiesInstitutions" readText=!editable/]</p>[/#if]                     
                   [/#if]
                 </div> 
               </div>
@@ -130,7 +130,7 @@
                 </div> 
               </div> 
               
-          <label for="">Supporting document(s):<span class="red">*</span></label>
+          <label for="">[@customForm.text name="deliverable.supportingDocuments" readText=!editable /]:<span class="red">*</span></label>
           <div class="borderBox documentList" listname="deliverable.documents">
             [#if deliverable.documents?has_content]
               [#list deliverable.documents as document]
