@@ -17,16 +17,16 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.DeliverableCrosscutingTheme;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectStatus;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableCrosscutingTheme;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectStatus;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -46,25 +46,25 @@ public class DeliverableListAction extends BaseAction {
   private static final long serialVersionUID = 2828289817791232470L;
 
   private ICenterService centerService;
-  private IProjectService projectService;
-  private IDeliverableService deliverableService;
+  private ICenterProjectService projectService;
+  private ICenterDeliverableService deliverableService;
 
 
-  private ResearchArea selectedResearchArea;
-  private ResearchProgram selectedProgram;
-  private ResearchCenter loggedCenter;
-  private Project project;
-  private List<Deliverable> deliverables;
-  private List<ResearchArea> researchAreas;
-  private List<ResearchProgram> researchPrograms;
+  private CenterArea selectedResearchArea;
+  private CenterProgram selectedProgram;
+  private Center loggedCenter;
+  private CenterProject project;
+  private List<CenterDeliverable> deliverables;
+  private List<CenterArea> researchAreas;
+  private List<CenterProgram> researchPrograms;
   private long programID;
   private long areaID;
   private long projectID;
   private long deliverableID;
 
   @Inject
-  public DeliverableListAction(APConfig config, ICenterService centerService, IProjectService projectService,
-    IDeliverableService deliverableService) {
+  public DeliverableListAction(APConfig config, ICenterService centerService, ICenterProjectService projectService,
+    ICenterDeliverableService deliverableService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -74,7 +74,7 @@ public class DeliverableListAction extends BaseAction {
   @Override
   public String add() {
 
-    Deliverable deliverable = new Deliverable();
+    CenterDeliverable deliverable = new CenterDeliverable();
 
 
     deliverable.setActive(true);
@@ -84,10 +84,10 @@ public class DeliverableListAction extends BaseAction {
     deliverable.setStartDate(new Date());
     deliverable.setDateCreated(new Date());
     deliverable.setProject(project);
-    deliverable.setProjectStatus(new ProjectStatus(new Long(2), true));
+    deliverable.setProjectStatus(new CenterProjectStatus(new Long(2), true));
 
 
-    DeliverableCrosscutingTheme deliverableCrosscutingTheme = new DeliverableCrosscutingTheme();
+    CenterDeliverableCrosscutingTheme deliverableCrosscutingTheme = new CenterDeliverableCrosscutingTheme();
 
     deliverableCrosscutingTheme.setActive(true);
     deliverableCrosscutingTheme.setActiveSince(new Date());
@@ -124,11 +124,11 @@ public class DeliverableListAction extends BaseAction {
     return deliverableID;
   }
 
-  public List<Deliverable> getDeliverables() {
+  public List<CenterDeliverable> getDeliverables() {
     return deliverables;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -137,7 +137,7 @@ public class DeliverableListAction extends BaseAction {
   }
 
 
-  public Project getProject() {
+  public CenterProject getProject() {
     return project;
   }
 
@@ -147,26 +147,26 @@ public class DeliverableListAction extends BaseAction {
   }
 
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -178,7 +178,7 @@ public class DeliverableListAction extends BaseAction {
       projectID = -1;
     }
 
-    project = projectService.getProjectById(projectID);
+    project = projectService.getCenterProjectById(projectID);
 
     if (project != null) {
 
@@ -207,11 +207,11 @@ public class DeliverableListAction extends BaseAction {
     this.deliverableID = deliverableID;
   }
 
-  public void setDeliverables(List<Deliverable> deliverables) {
+  public void setDeliverables(List<CenterDeliverable> deliverables) {
     this.deliverables = deliverables;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -219,7 +219,7 @@ public class DeliverableListAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setProject(Project project) {
+  public void setProject(CenterProject project) {
     this.project = project;
   }
 
@@ -227,19 +227,19 @@ public class DeliverableListAction extends BaseAction {
     this.projectID = projectID;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 

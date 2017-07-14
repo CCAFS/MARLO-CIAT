@@ -16,7 +16,7 @@
 package org.cgiar.ccafs.marlo.interceptor;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.ICenterUserService;
@@ -41,7 +41,7 @@ public class ValidSessionInterceptor extends AbstractInterceptor {
 
   private ICenterService centerService;
   private ICenterUserService userService;
-  private ResearchCenter looggedCenter;
+  private Center looggedCenter;
 
 
   @Inject
@@ -67,13 +67,13 @@ public class ValidSessionInterceptor extends AbstractInterceptor {
   public String intercept(ActionInvocation invocation) throws Exception {
     Map<String, Object> session = invocation.getInvocationContext().getSession();
 
-    looggedCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+    looggedCenter = (Center) session.get(APConstants.SESSION_CENTER);
     looggedCenter = centerService.getCrpById(looggedCenter.getId());
 
     String[] actionMap = ActionContext.getContext().getName().split("/");
     if (actionMap.length > 1) {
       String enteredCrp = actionMap[0];
-      ResearchCenter crp = centerService.findCrpByAcronym(enteredCrp);
+      Center crp = centerService.findCrpByAcronym(enteredCrp);
       if (crp != null) {
         if (crp.equals(looggedCenter)) {
           this.changeSessionSection(session);

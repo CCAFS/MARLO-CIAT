@@ -18,16 +18,16 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.model.Submission;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
+import org.cgiar.ccafs.marlo.data.model.CenterCycle;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
+import org.cgiar.ccafs.marlo.data.model.CenterSubmission;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterCycleService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.ByteArrayInputStream;
@@ -74,16 +74,16 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
   // PDF bytes
   private byte[] bytesPDF;
   // Services
-  private IProgramService programService;
-  private IResearchCycleService cycleService;
+  private ICenterProgramService programService;
+  private ICenterCycleService cycleService;
   // Params
-  private ResearchProgram researchProgram;
-  private ResearchCycle researchCycle;
+  private CenterProgram researchProgram;
+  private CenterCycle researchCycle;
   private long startTime;
 
   @Inject
-  public ImpactSubmissionSummaryAction(APConfig config, IProgramService programService,
-    IResearchCycleService cycleService) {
+  public ImpactSubmissionSummaryAction(APConfig config, ICenterProgramService programService,
+    ICenterCycleService cycleService) {
     super(config);
     this.programService = programService;
     this.cycleService = cycleService;
@@ -320,8 +320,8 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     researchCycle = cycleService.getResearchCycleById(ImpactPathwayCyclesEnum.IMPACT_PATHWAY.getId());
 
     // Filling submission
-    List<Submission> submissions = new ArrayList<>();
-    for (Submission submission : researchProgram.getSubmissions().stream()
+    List<CenterSubmission> submissions = new ArrayList<>();
+    for (CenterSubmission submission : researchProgram.getSubmissions().stream()
       .filter(s -> s.getResearchCycle().getId() == researchCycle.getId() && s.getYear() == this.getYear())
       .collect(Collectors.toList())) {
       submissions.add(submission);
@@ -332,13 +332,13 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       if (submissions.size() > 1) {
         LOG.error("More than one submission was found, the report will retrieve the first one");
       }
-      Submission fisrtSubmission = submissions.get(0);
+      CenterSubmission fisrtSubmission = submissions.get(0);
       String submissionDate = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm").format(fisrtSubmission.getDateTime());
 
       impactSubmission = "Submitted on " + submissionDate + " (" + fisrtSubmission.getResearchCycle().getName()
         + " cycle " + fisrtSubmission.getYear() + ")";
     } else {
-      impactSubmission = "Submission for " + researchCycle.getName() + " cycle " + this.getYear() + ": &lt;pending&gt;";
+      impactSubmission = "CenterSubmission for " + researchCycle.getName() + " cycle " + this.getYear() + ": &lt;pending&gt;";
     }
 
     // Get CIAT imgage URL from repo
@@ -358,12 +358,12 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
 
     // Get research topics and then outcomes
-    for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream()
+    for (CenterTopic researchTopic : researchProgram.getResearchTopics().stream()
       .filter(rt -> rt.isActive() && rt.getResearchOutcomes().size() > 0).collect(Collectors.toList())) {
       String researchTopicTitle = "";
       Boolean showResearchTopic;
       int countOutcome = 0;
-      for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
+      for (CenterOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
         if (countOutcome == 0) {
           if (researchTopic.getResearchTopic() != null) {
@@ -449,14 +449,14 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
       new TypedTableModel(new String[] {"shortName", "title", "research_topic", "outcome", "showResearchTopic", "id"},
         new Class[] {String.class, String.class, String.class, String.class, Boolean.class, Long.class});
 
-    for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
+    for (CenterTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
       .collect(Collectors.toList())) {
       String researchTopicTitle = "";
       Boolean showResearchTopic;
       int countOutcome = 0;
-      for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
+      for (CenterOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
-        for (ResearchOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
+        for (CenterOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
           .collect(Collectors.toList())) {
           Long id = researchOutput.getId();
           if (countOutcome == 0) {
@@ -516,7 +516,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     TypedTableModel model =
       new TypedTableModel(new String[] {"title", "objectives", "program_id", "research_impact_id", "shortName"},
         new Class[] {String.class, String.class, Long.class, Long.class, String.class});
-    for (ResearchImpact researchImpact : researchProgram.getResearchImpacts().stream().filter(rp -> rp.isActive())
+    for (CenterImpact researchImpact : researchProgram.getResearchImpacts().stream().filter(rp -> rp.isActive())
       .collect(Collectors.toList())) {
       String title = "";
       String objectives = "";
@@ -529,7 +529,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
 
       if (researchImpact.getResearchImpactObjectives() != null
         && researchImpact.getResearchImpactObjectives().size() > 0) {
-        for (ResearchImpactObjective researchImpactObjective : researchImpact.getResearchImpactObjectives().stream()
+        for (CenterImpactObjective researchImpactObjective : researchImpact.getResearchImpactObjectives().stream()
           .filter(rio -> rio.isActive() && rio.getResearchObjective() != null).collect(Collectors.toList())) {
           objectives += "&#9679" + researchImpactObjective.getResearchObjective().getObjective() + "<br>";
         }
@@ -556,7 +556,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     return model;
   }
 
-  public ResearchProgram getResearchProgram() {
+  public CenterProgram getResearchProgram() {
     return researchProgram;
   }
 
@@ -566,7 +566,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     String name = "";
     String id = "";
 
-    for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream()
+    for (CenterTopic researchTopic : researchProgram.getResearchTopics().stream()
       .filter(rt -> rt.isActive() && rt.getResearchTopic() != null).collect(Collectors.toList())) {
       name = researchTopic.getResearchTopic();
       id = researchTopic.getId().toString();
@@ -595,7 +595,7 @@ public class ImpactSubmissionSummaryAction extends BaseAction implements Summary
     this.bytesPDF = bytesPDF;
   }
 
-  public void setResearchProgram(ResearchProgram researchProgram) {
+  public void setResearchProgram(CenterProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
 

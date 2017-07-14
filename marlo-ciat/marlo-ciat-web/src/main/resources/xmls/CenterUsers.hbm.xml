@@ -23,7 +23,7 @@
 			fetch="select">
 			<column name="modified_by" not-null="true" />
 		</many-to-one>
-		 <many-to-one name="researchCenter" class="org.cgiar.ccafs.marlo.data.model.ResearchCenter"
+		 <many-to-one name="researchCenter" class="org.cgiar.ccafs.marlo.data.model.Center"
 			fetch="select">
 			<column name="center_id" not-null="true" />
 		</many-to-one>

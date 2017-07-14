@@ -17,20 +17,20 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectPartner;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectPartnerPerson;
 import org.cgiar.ccafs.marlo.data.model.Institution;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
-import org.cgiar.ccafs.marlo.data.model.ProjectPartnerPerson;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectPartnerPersonService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectPartnerService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
-import org.cgiar.ccafs.marlo.data.service.IProjectPartnerPersonService;
-import org.cgiar.ccafs.marlo.data.service.IProjectPartnerService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -69,26 +69,26 @@ public class ProjectPartnersAction extends BaseAction {
 
 
   // Services - Managers
-  private final ICenterService centerService;
+  private ICenterService centerService;
 
 
-  private final IProjectService projectService;
-  private final IAuditLogService auditLogService;
-  private final IProjectPartnerService partnerService;
-  private final IProjectPartnerPersonService partnerPersonService;
-  private final IInstitutionService institutionService;
-  private final IUserService userService;
+  private ICenterProjectService projectService;
+  private IAuditLogService auditLogService;
+  private ICenterProjectPartnerService partnerService;
+  private ICenterProjectPartnerPersonService partnerPersonService;
+  private IInstitutionService institutionService;
+  private IUserService userService;
 
   // Front Variables
-  private ResearchCenter loggedCenter;
-  private ResearchArea selectedResearchArea;
-  private ResearchProgram selectedProgram;
-  private List<ResearchArea> researchAreas;
-  private List<ResearchProgram> researchPrograms;
+  private Center loggedCenter;
+  private CenterArea selectedResearchArea;
+  private CenterProgram selectedProgram;
+  private List<CenterArea> researchAreas;
+  private List<CenterProgram> researchPrograms;
   private List<Institution> institutions;
-  private List<ProjectPartner> projectPartners;
+  private List<CenterProjectPartner> projectPartners;
   private HashMap<Boolean, String> partnerModes;
-  private Project project;
+  private CenterProject project;
 
   // Parameter Variables
   private long programID;
@@ -97,11 +97,11 @@ public class ProjectPartnersAction extends BaseAction {
   private String transaction;
 
   // Validator
-  private final ProjectPartnerValidator validator;
+  private ProjectPartnerValidator validator;
 
   @Inject
-  public ProjectPartnersAction(APConfig config, ICenterService centerService, IProjectService projectService,
-    IProjectPartnerService partnerService, IProjectPartnerPersonService partnerPersonService,
+  public ProjectPartnersAction(APConfig config, ICenterService centerService, ICenterProjectService projectService,
+    ICenterProjectPartnerService partnerService, ICenterProjectPartnerPersonService partnerPersonService,
     IInstitutionService institutionService, IUserService userService, ProjectPartnerValidator validator,
     IAuditLogService auditLogService) {
     super(config);
@@ -118,17 +118,17 @@ public class ProjectPartnersAction extends BaseAction {
   @Override
   public String cancel() {
 
-    final Path path = this.getAutoSaveFilePath();
+    Path path = this.getAutoSaveFilePath();
 
     if (path.toFile().exists()) {
 
-      final boolean fileDeleted = path.toFile().delete();
+      boolean fileDeleted = path.toFile().delete();
     }
 
     this.setDraft(false);
     Collection<String> messages = this.getActionMessages();
     if (!messages.isEmpty()) {
-      final String validationMessage = messages.iterator().next();
+      String validationMessage = messages.iterator().next();
       this.setActionMessages(null);
       this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
     } else {
@@ -144,9 +144,9 @@ public class ProjectPartnersAction extends BaseAction {
   }
 
   private Path getAutoSaveFilePath() {
-    final String composedClassName = project.getClass().getSimpleName();
-    final String actionFile = this.getActionName().replace("/", "_");
-    final String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+    String composedClassName = project.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
@@ -156,7 +156,7 @@ public class ProjectPartnersAction extends BaseAction {
     return institutions;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -169,7 +169,7 @@ public class ProjectPartnersAction extends BaseAction {
     return programID;
   }
 
-  public Project getProject() {
+  public CenterProject getProject() {
     return project;
   }
 
@@ -177,23 +177,23 @@ public class ProjectPartnersAction extends BaseAction {
     return projectID;
   }
 
-  public List<ProjectPartner> getProjectPartners() {
+  public List<CenterProjectPartner> getProjectPartners() {
     return projectPartners;
   }
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
@@ -203,7 +203,7 @@ public class ProjectPartnersAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -211,14 +211,14 @@ public class ProjectPartnersAction extends BaseAction {
 
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
-    } catch (final Exception e) {
+    } catch (Exception e) {
       projectID = -1;
     }
 
     if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
       transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-      final Project history = (Project) auditLogService.getHistory(transaction);
+      CenterProject history = (CenterProject) auditLogService.getHistory(transaction);
 
       if (history != null) {
         project = history;
@@ -228,7 +228,7 @@ public class ProjectPartnersAction extends BaseAction {
       }
 
     } else {
-      project = projectService.getProjectById(projectID);
+      project = projectService.getCenterProjectById(projectID);
     }
 
     partnerModes = new HashMap<Boolean, String>();
@@ -237,7 +237,7 @@ public class ProjectPartnersAction extends BaseAction {
 
     if (project != null) {
 
-      final Project ProjectDB = projectService.getProjectById(projectID);
+      CenterProject ProjectDB = projectService.getCenterProjectById(projectID);
       selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
@@ -249,28 +249,28 @@ public class ProjectPartnersAction extends BaseAction {
         institutions = new ArrayList<>(institutionService.findAll());
       }
 
-      final Path path = this.getAutoSaveFilePath();
+      Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
-        final Gson gson = new GsonBuilder().create();
-        final JsonObject jReader = gson.fromJson(reader, JsonObject.class);
-        final AutoSaveReader autoSaveReader = new AutoSaveReader();
+        Gson gson = new GsonBuilder().create();
+        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-        project = (Project) autoSaveReader.readFromJson(jReader);
-        final Project projectDB = projectService.getProjectById(project.getId());
+        project = (CenterProject) autoSaveReader.readFromJson(jReader);
+        CenterProject projectDB = projectService.getCenterProjectById(project.getId());
 
         if (project.getPartners() != null) {
 
-          final List<ProjectPartner> partners = new ArrayList<>();
+          List<CenterProjectPartner> partners = new ArrayList<>();
 
-          for (final ProjectPartner partner : project.getPartners()) {
-            final Institution institution = institutionService.getInstitutionById(partner.getInstitution().getId());
+          for (CenterProjectPartner partner : project.getPartners()) {
+            Institution institution = institutionService.getInstitutionById(partner.getInstitution().getId());
             partner.setInstitution(institution);
             if (partner.getUsers() != null) {
-              for (final ProjectPartnerPerson person : partner.getUsers()) {
-                final User user = userService.getUser(person.getUser().getId());
+              for (CenterProjectPartnerPerson person : partner.getUsers()) {
+                User user = userService.getUser(person.getUser().getId());
                 person.setUser(user);
               }
             }
@@ -290,15 +290,15 @@ public class ProjectPartnersAction extends BaseAction {
         project.setPartners(new ArrayList<>(
           project.getProjectPartners().stream().filter(pp -> pp.isActive()).collect(Collectors.toList())));
 
-        if ((project.getPartners() != null) || !project.getPartners().isEmpty()) {
-          for (final ProjectPartner partner : project.getPartners()) {
+        if (project.getPartners() != null || !project.getPartners().isEmpty()) {
+          for (CenterProjectPartner partner : project.getPartners()) {
             partner.setUsers(new ArrayList<>(
               partner.getProjectPartnerPersons().stream().filter(ppp -> ppp.isActive()).collect(Collectors.toList())));
           }
         }
       }
 
-      final String params[] =
+      String params[] =
         {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
       this.setBasePermission(this.getText(Permission.PROJECT_PARTNERS_BASE_PERMISSION, params));
 
@@ -320,18 +320,18 @@ public class ProjectPartnersAction extends BaseAction {
   @Override
   public String save() {
     if (this.hasPermission("*")) {
-      final Project projectDB = projectService.getProjectById(projectID);
+      CenterProject projectDB = projectService.getCenterProjectById(projectID);
 
       this.savePartners(projectDB);
 
-      final List<String> relationsName = new ArrayList<>();
+      List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.PROJECT_PARTNERS_RELATION);
-      project = projectService.getProjectById(projectID);
+      project = projectService.getCenterProjectById(projectID);
       project.setActiveSince(new Date());
       project.setModifiedBy(this.getCurrentUser());
-      projectService.saveProject(project, this.getActionName(), relationsName);
+      projectService.saveCenterProject(project, this.getActionName(), relationsName);
 
-      final Path path = this.getAutoSaveFilePath();
+      Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
         path.toFile().delete();
@@ -340,8 +340,8 @@ public class ProjectPartnersAction extends BaseAction {
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
 
-        final List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
-        for (final String key : keys) {
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
           this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
         }
 
@@ -358,30 +358,30 @@ public class ProjectPartnersAction extends BaseAction {
     }
   }
 
-  public void savePartners(Project projectSave) {
+  public void savePartners(CenterProject projectSave) {
 
-    if ((projectSave.getProjectPartners() != null) && (projectSave.getProjectPartners().size() > 0)) {
+    if (projectSave.getProjectPartners() != null && projectSave.getProjectPartners().size() > 0) {
 
-      final List<ProjectPartner> partnersPrew =
+      List<CenterProjectPartner> partnersPrew =
         projectSave.getProjectPartners().stream().filter(pp -> pp.isActive()).collect(Collectors.toList());
 
-      for (final ProjectPartner projectPartner : partnersPrew) {
+      for (CenterProjectPartner projectPartner : partnersPrew) {
         if (!project.getPartners().contains(projectPartner)) {
-          for (final ProjectPartnerPerson partnerPerson : projectPartner.getProjectPartnerPersons().stream()
+          for (CenterProjectPartnerPerson partnerPerson : projectPartner.getProjectPartnerPersons().stream()
             .filter(ppp -> ppp.isActive()).collect(Collectors.toList())) {
             partnerPersonService.deleteProjectPartnerPerson(partnerPerson.getId());
           }
           partnerService.deleteProjectPartner(projectPartner.getId());
         } else {
-          for (final ProjectPartner projectPartnerPrew : project.getPartners()) {
+          for (CenterProjectPartner projectPartnerPrew : project.getPartners()) {
             if (projectPartnerPrew.equals(projectPartner)) {
-              if ((projectPartner.getProjectPartnerPersons() != null)
-                && (projectPartner.getProjectPartnerPersons().size() > 0)) {
+              if (projectPartner.getProjectPartnerPersons() != null
+                && projectPartner.getProjectPartnerPersons().size() > 0) {
 
-                final List<ProjectPartnerPerson> personsPrew = projectPartner.getProjectPartnerPersons().stream()
+                List<CenterProjectPartnerPerson> personsPrew = projectPartner.getProjectPartnerPersons().stream()
                   .filter(pp -> pp.isActive()).collect(Collectors.toList());
 
-                for (final ProjectPartnerPerson projectPartnerPerson : personsPrew) {
+                for (CenterProjectPartnerPerson projectPartnerPerson : personsPrew) {
                   if (projectPartnerPrew.getUsers() != null) {
                     if (!projectPartnerPrew.getUsers().contains(projectPartnerPerson)) {
                       partnerPersonService.deleteProjectPartnerPerson(projectPartnerPerson.getId());
@@ -397,10 +397,10 @@ public class ProjectPartnersAction extends BaseAction {
 
 
     if (project.getPartners() != null) {
-      for (final ProjectPartner projectPartner : project.getPartners()) {
+      for (CenterProjectPartner projectPartner : project.getPartners()) {
         if (projectPartner.getId() == null) {
 
-          ProjectPartner partnerNew = new ProjectPartner();
+          CenterProjectPartner partnerNew = new CenterProjectPartner();
           partnerNew.setActive(true);
           partnerNew.setActiveSince(new Date());
           partnerNew.setCreatedBy(this.getCurrentUser());
@@ -410,18 +410,17 @@ public class ProjectPartnersAction extends BaseAction {
           partnerNew.setInternal(projectPartner.isInternal());
           partnerNew.setProject(projectSave);
 
-          final Institution institution =
-            institutionService.getInstitutionById(projectPartner.getInstitution().getId());
+          Institution institution = institutionService.getInstitutionById(projectPartner.getInstitution().getId());
           partnerNew.setInstitution(institution);
 
-          final long partnerNewId = partnerService.saveProjectPartner(partnerNew);
+          long partnerNewId = partnerService.saveProjectPartner(partnerNew);
 
           partnerNew = partnerService.getProjectPartnerById(partnerNewId);
 
           if (projectPartner.getUsers() != null) {
-            for (final ProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
+            for (CenterProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
 
-              final ProjectPartnerPerson partnerPersonNew = new ProjectPartnerPerson();
+              CenterProjectPartnerPerson partnerPersonNew = new CenterProjectPartnerPerson();
               partnerPersonNew.setActive(true);
               partnerPersonNew.setActiveSince(new Date());
               partnerPersonNew.setCreatedBy(this.getCurrentUser());
@@ -430,7 +429,7 @@ public class ProjectPartnersAction extends BaseAction {
 
               partnerPersonNew.setProjectPartner(partnerNew);
 
-              final User user = userService.getUser(partnerPerson.getUser().getId());
+              User user = userService.getUser(partnerPerson.getUser().getId());
               partnerPersonNew.setUser(user);
 
               partnerPersonService.saveProjectPartnerPerson(partnerPersonNew);
@@ -439,7 +438,7 @@ public class ProjectPartnersAction extends BaseAction {
           }
         } else {
 
-          final ProjectPartner partnerNew = partnerService.getProjectPartnerById(projectPartner.getId());
+          CenterProjectPartner partnerNew = partnerService.getProjectPartnerById(projectPartner.getId());
 
           if (partnerNew.isInternal() != projectPartner.isInternal()) {
             partnerNew.setInternal(projectPartner.isInternal());
@@ -447,10 +446,10 @@ public class ProjectPartnersAction extends BaseAction {
           }
 
           if (projectPartner.getUsers() != null) {
-            for (final ProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
+            for (CenterProjectPartnerPerson partnerPerson : projectPartner.getUsers()) {
               if (partnerPerson.getId() == null) {
 
-                final ProjectPartnerPerson partnerPersonNew = new ProjectPartnerPerson();
+                CenterProjectPartnerPerson partnerPersonNew = new CenterProjectPartnerPerson();
                 partnerPersonNew.setActive(true);
                 partnerPersonNew.setActiveSince(new Date());
                 partnerPersonNew.setCreatedBy(this.getCurrentUser());
@@ -460,7 +459,7 @@ public class ProjectPartnersAction extends BaseAction {
 
                 partnerPersonNew.setProjectPartner(partnerNew);
 
-                final User user = userService.getUser(partnerPerson.getUser().getId());
+                User user = userService.getUser(partnerPerson.getUser().getId());
                 partnerPersonNew.setUser(user);
 
                 partnerPersonService.saveProjectPartnerPerson(partnerPersonNew);
@@ -483,7 +482,7 @@ public class ProjectPartnersAction extends BaseAction {
     this.institutions = institutions;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -495,7 +494,7 @@ public class ProjectPartnersAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setProject(Project project) {
+  public void setProject(CenterProject project) {
     this.project = project;
   }
 
@@ -503,23 +502,23 @@ public class ProjectPartnersAction extends BaseAction {
     this.projectID = projectID;
   }
 
-  public void setProjectPartners(List<ProjectPartner> projectPartners) {
+  public void setProjectPartners(List<CenterProjectPartner> projectPartners) {
     this.projectPartners = projectPartners;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 

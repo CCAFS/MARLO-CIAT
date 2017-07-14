@@ -17,8 +17,8 @@ package org.cgiar.ccafs.marlo.action.json.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.NextuserType;
-import org.cgiar.ccafs.marlo.data.service.INextuserTypeService;
+import org.cgiar.ccafs.marlo.data.model.CenterNextuserType;
+import org.cgiar.ccafs.marlo.data.service.ICenterNextuserTypeService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class NextUserListAction extends BaseAction {
   private static final long serialVersionUID = -6010866345601586878L;
 
 
-  private INextuserTypeService nextUserService;
+  private ICenterNextuserTypeService nextUserService;
 
   private List<Map<String, Object>> nextUsers;
 
@@ -48,7 +48,7 @@ public class NextUserListAction extends BaseAction {
   private long nextUserID;
 
   @Inject
-  public NextUserListAction(APConfig config, INextuserTypeService nextUserService) {
+  public NextUserListAction(APConfig config, ICenterNextuserTypeService nextUserService) {
     super(config);
     this.nextUserService = nextUserService;
   }
@@ -60,13 +60,13 @@ public class NextUserListAction extends BaseAction {
 
     Map<String, Object> nextUser;
 
-    NextuserType nextUserType = nextUserService.getNextuserTypeById(nextUserID);
+    CenterNextuserType nextUserType = nextUserService.getNextuserTypeById(nextUserID);
 
     if (nextUserType != null) {
-      List<NextuserType> nextUserChilds = new ArrayList<>(
+      List<CenterNextuserType> nextUserChilds = new ArrayList<>(
         nextUserType.getNextuserTypes().stream().filter(nu -> nu.isActive()).collect(Collectors.toList()));
 
-      for (NextuserType nu : nextUserChilds) {
+      for (CenterNextuserType nu : nextUserChilds) {
 
         nextUser = new HashMap<>();
         nextUser.put("id", nu.getId());

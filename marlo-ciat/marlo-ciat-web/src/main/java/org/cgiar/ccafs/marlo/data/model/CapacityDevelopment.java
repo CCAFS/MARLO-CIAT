@@ -20,12 +20,12 @@ public class CapacityDevelopment implements java.io.Serializable {
    */
   private static final long serialVersionUID = 1L;
   private Long id;
-  private Project project;
+  private CenterProject project;
   private User usersByModifiedBy;
   private User usersByCreatedBy;
-  private ResearchArea researchArea;
+  private CenterArea researchArea;
   private Crp crp;
-  private ResearchProgram researchProgram;
+  private CenterProgram researchProgram;
   private String title;
   private CapacityDevelopmentType capdevType;
   private int category;
@@ -53,10 +53,10 @@ public class CapacityDevelopment implements java.io.Serializable {
   }
 
 
-  public CapacityDevelopment(Project project, User usersByModifiedBy, User usersByCreatedBy, ResearchArea researchArea,
-    Crp crp, ResearchProgram researchProgram, String title, CapacityDevelopmentType capdevType, int category,
-    boolean active, String modificationJustification, String ctFirstName, String ctLastName, String ctEmail,
-    Date startDate, Date endDate, Integer numParticipants, Integer numMen, Integer numWomen,
+  public CapacityDevelopment(CenterProject project, User usersByModifiedBy, User usersByCreatedBy,
+    CenterArea researchArea, Crp crp, CenterProgram researchProgram, String title, CapacityDevelopmentType capdevType,
+    int category, boolean active, String modificationJustification, String ctFirstName, String ctLastName,
+    String ctEmail, Date startDate, Date endDate, Integer numParticipants, Integer numMen, Integer numWomen,
     Set<CapdevLocations> capdevLocations, Set<CapdevDiscipline> capdevDisciplines,
     Set<CapdevTargetgroup> capdevTargetgroups, Set<CapdevParticipant> capdevParticipants,
     Set<CapdevOutputs> capdevOutputses, Set<CapdevPartners> capdevPartnerses) {
@@ -190,15 +190,15 @@ public class CapacityDevelopment implements java.io.Serializable {
     return numWomen;
   }
 
-  public Project getProject() {
+  public CenterProject getProject() {
     return this.project;
   }
 
-  public ResearchArea getResearchArea() {
+  public CenterArea getResearchArea() {
     return this.researchArea;
   }
 
-  public ResearchProgram getResearchProgram() {
+  public CenterProgram getResearchProgram() {
     return this.researchProgram;
   }
 
@@ -334,17 +334,17 @@ public class CapacityDevelopment implements java.io.Serializable {
   }
 
 
-  public void setProject(Project project) {
+  public void setProject(CenterProject project) {
     this.project = project;
   }
 
 
-  public void setResearchArea(ResearchArea researchArea) {
+  public void setResearchArea(CenterArea researchArea) {
     this.researchArea = researchArea;
   }
 
 
-  public void setResearchProgram(ResearchProgram researchProgram) {
+  public void setResearchProgram(CenterProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
 

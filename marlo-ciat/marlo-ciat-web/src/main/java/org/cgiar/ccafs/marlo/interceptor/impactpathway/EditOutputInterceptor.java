@@ -16,12 +16,12 @@
 package org.cgiar.ccafs.marlo.interceptor.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -39,19 +39,19 @@ public class EditOutputInterceptor extends AbstractInterceptor implements Serial
 
   private static final long serialVersionUID = 8386352290491092445L;
 
-  private IResearchOutputService outputService;
-  private IProgramService programService;
+  private ICenterOutputService outputService;
+  private ICenterProgramService programService;
 
   private Map<String, Object> parameters;
   private Map<String, Object> session;
-  private ResearchCenter researchCenter;
+  private Center researchCenter;
 
   private long outputID = -1;
   private long areaID = -1;
   private long programID = -1;
 
   @Inject
-  public EditOutputInterceptor(IProgramService programService, IResearchOutputService outputService) {
+  public EditOutputInterceptor(ICenterProgramService programService, ICenterOutputService outputService) {
     this.programService = programService;
     this.outputService = outputService;
   }
@@ -61,7 +61,7 @@ public class EditOutputInterceptor extends AbstractInterceptor implements Serial
 
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
-    researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+    researchCenter = (Center) session.get(APConstants.SESSION_CENTER);
 
     try {
       outputID = Long.parseLong(((String[]) parameters.get(APConstants.OUTPUT_ID))[0]);
@@ -83,16 +83,16 @@ public class EditOutputInterceptor extends AbstractInterceptor implements Serial
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
     BaseAction baseAction = (BaseAction) invocation.getAction();
-    ResearchOutput output = outputService.getResearchOutputById(outputID);
+    CenterOutput output = outputService.getResearchOutputById(outputID);
 
     if (output != null) {
 
-      ResearchOutcome outcome = output.getResearchOutcome();
+      CenterOutcome outcome = output.getResearchOutcome();
 
       if (outcome != null) {
         programID = outcome.getResearchTopic().getResearchProgram().getId();
 
-        ResearchProgram program = programService.getProgramById(programID);
+        CenterProgram program = programService.getProgramById(programID);
 
         if (program != null) {
 

@@ -34,7 +34,7 @@ public class CenterUser implements IAuditLog {
   @Expose
   private Long id;
   @Expose
-  private ResearchCenter researchCenter;
+  private Center researchCenter;
   @Expose
   private User user;
 
@@ -56,7 +56,7 @@ public class CenterUser implements IAuditLog {
   public CenterUser() {
   }
 
-  public CenterUser(ResearchCenter researchCenter, User users) {
+  public CenterUser(Center researchCenter, User users) {
     this.researchCenter = researchCenter;
     this.user = users;
   }
@@ -90,7 +90,7 @@ public class CenterUser implements IAuditLog {
     return modifiedBy;
   }
 
-  public ResearchCenter getResearchCenter() {
+  public Center getResearchCenter() {
     return this.researchCenter;
   }
 
@@ -127,7 +127,7 @@ public class CenterUser implements IAuditLog {
     this.modifiedBy = modifiedBy;
   }
 
-  public void setResearchCenter(ResearchCenter researchCenter) {
+  public void setResearchCenter(Center researchCenter) {
     this.researchCenter = researchCenter;
   }
 

@@ -17,10 +17,10 @@ package org.cgiar.ccafs.marlo.validation.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactBeneficiary;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactBeneficiary;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -45,8 +45,8 @@ public class ProgramImpactsValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(ResearchProgram program, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterProgram program, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = program.getClass().getSimpleName();
     String actionFile = ImpactPathwaySectionsEnum.PROGRAM_IMPACT.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -55,7 +55,7 @@ public class ProgramImpactsValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, List<ResearchImpact> researchImpacts, ResearchProgram selectedProgram,
+  public void validate(BaseAction baseAction, List<CenterImpact> researchImpacts, CenterProgram selectedProgram,
     boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
@@ -82,14 +82,14 @@ public class ProgramImpactsValidator extends BaseValidator {
 
     for (int i = 0; i < researchImpacts.size(); i++) {
 
-      ResearchImpact researchImpact = researchImpacts.get(i);
+      CenterImpact researchImpact = researchImpacts.get(i);
       this.validateProgramImpact(baseAction, researchImpact, i);
     }
 
     this.saveMissingFields(selectedProgram, "programimpacts");
   }
 
-  public void validateBeneficiaries(BaseAction baseAction, ResearchImpactBeneficiary impactBeneficiary, int i, int j) {
+  public void validateBeneficiaries(BaseAction baseAction, CenterImpactBeneficiary impactBeneficiary, int i, int j) {
 
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
@@ -129,7 +129,7 @@ public class ProgramImpactsValidator extends BaseValidator {
     }
   }
 
-  public void validateProgramImpact(BaseAction baseAction, ResearchImpact researchImpact, int i) {
+  public void validateProgramImpact(BaseAction baseAction, CenterImpact researchImpact, int i) {
 
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
@@ -180,7 +180,7 @@ public class ProgramImpactsValidator extends BaseValidator {
           baseAction.getText(InvalidFieldsMessages.EMPTYLIST, new String[] {"beneficiaries"}));
       } else {
         for (int j = 0; j < researchImpact.getBeneficiaries().size(); j++) {
-          ResearchImpactBeneficiary beneficiary = researchImpact.getBeneficiaries().get(j);
+          CenterImpactBeneficiary beneficiary = researchImpact.getBeneficiaries().get(j);
           this.validateBeneficiaries(baseAction, beneficiary, i, j);
         }
       }

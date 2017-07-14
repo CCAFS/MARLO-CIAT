@@ -17,17 +17,17 @@ package org.cgiar.ccafs.marlo.action.summaries;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
-import org.cgiar.ccafs.marlo.data.model.DeliverableOutput;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
-import org.cgiar.ccafs.marlo.data.model.ProjectLocation;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
-import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableDocument;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectFundingSource;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectLocation;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectPartner;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.ByteArrayInputStream;
@@ -73,16 +73,16 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
   private byte[] bytesPDF;
   // Parameters
   private long startTime;
-  private ResearchCenter loggedCenter;
-  private Project project;
+  private Center loggedCenter;
+  private CenterProject project;
   // Front-end
   private long projectID;
   // Services
   private ICenterService centerService;
-  private IProjectService projectService;
+  private ICenterProjectService projectService;
 
   @Inject
-  public ProjectSummaryAction(APConfig config, ICenterService centerService, IProjectService projectService) {
+  public ProjectSummaryAction(APConfig config, ICenterService centerService, ICenterProjectService projectService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -247,7 +247,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
       new Class[] {Long.class, String.class, String.class, String.class, String.class, String.class, String.class,
         String.class, String.class});
 
-    for (Deliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
+    for (CenterDeliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
       .collect(Collectors.toList())) {
       Long id = deliverable.getId();
       String deliverableTitle = null;
@@ -311,7 +311,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
         crossCutting = null;
       }
       String deliverableOutputs = "";
-      for (DeliverableOutput deliverableOutput : deliverable.getDeliverableOutputs().stream()
+      for (CenterDeliverableOutput deliverableOutput : deliverable.getDeliverableOutputs().stream()
         .filter(deo -> deo.isActive()).collect(Collectors.toList())) {
         deliverableOutputs += "&#9679;  " + deliverableOutput.getResearchOutput().getTitle() + "<br>";
       }
@@ -319,7 +319,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
         deliverableOutputs = null;
       }
       String supportingDocuments = "";
-      for (DeliverableDocument deliverableDocument : deliverable.getDeliverableDocuments().stream()
+      for (CenterDeliverableDocument deliverableDocument : deliverable.getDeliverableDocuments().stream()
         .filter(dd -> dd.isActive()).collect(Collectors.toList())) {
         if (deliverableDocument.getLink() != null && !deliverableDocument.getLink().trim().isEmpty()) {
           supportingDocuments += "&#9679;  " + deliverableDocument.getLink() + "<br>";
@@ -414,7 +414,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
       globalDimension = "&#9679 Yes";
     } else if (project.getGlobal() != null && !project.getGlobal()) {
       globalDimension = "";
-      for (ProjectLocation projectLocation : project.getProjectLocations().stream()
+      for (CenterProjectLocation projectLocation : project.getProjectLocations().stream()
         .filter(pl -> pl.isActive() && pl.getLocElement().getLocElementType().getId() == 2)
         .collect(Collectors.toList())) {
         if (globalDimension.isEmpty()) {
@@ -427,7 +427,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     String regionalDimension = null;
     if (project.getRegion() != null && project.getRegion()) {
       regionalDimension = "";
-      for (ProjectLocation projectLocation : project.getProjectLocations().stream()
+      for (CenterProjectLocation projectLocation : project.getProjectLocations().stream()
         .filter(pl -> pl.isActive() && pl.getLocElement().getLocElementType().getId() == 1)
         .collect(Collectors.toList())) {
         if (regionalDimension.isEmpty()) {
@@ -506,7 +506,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
     }
 
     String projectOutputs = "";
-    for (ProjectOutput projectOutput : project.getProjectOutputs().stream().filter(po -> po.isActive())
+    for (CenterProjectOutput projectOutput : project.getProjectOutputs().stream().filter(po -> po.isActive())
       .collect(Collectors.toList())) {
       if (projectOutputs.isEmpty()) {
         projectOutputs = "&#9679 " + projectOutput.getResearchOutput().getShortName();
@@ -563,7 +563,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
   private TypedTableModel getFundingSourcesTableModel() {
     TypedTableModel model = new TypedTableModel(new String[] {"crp", "fundingSource", "projectTitle"},
       new Class[] {String.class, String.class, String.class});
-    for (ProjectFundingSource projectFundingSource : project.getProjectFundingSources().stream()
+    for (CenterProjectFundingSource projectFundingSource : project.getProjectFundingSources().stream()
       .filter(fs -> fs.isActive()).collect(Collectors.toList())) {
       String crp = null;
 
@@ -634,7 +634,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
       new TypedTableModel(new String[] {"partnerName", "partnerType", "institution_id", "project_id"},
         new Class[] {String.class, String.class, Long.class, Long.class});
 
-    for (ProjectPartner projectPartner : project.getProjectPartners().stream().filter(pp -> pp.isActive())
+    for (CenterProjectPartner projectPartner : project.getProjectPartners().stream().filter(pp -> pp.isActive())
       .collect(Collectors.toList())) {
       String partnerName = projectPartner.getInstitution().getComposedName();
       Long institution_id = projectPartner.getInstitution().getId();
@@ -652,7 +652,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
 
   @Override
   public void prepare() {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     try {
@@ -663,7 +663,7 @@ public class ProjectSummaryAction extends BaseAction implements Summary {
       throw e;
     }
     try {
-      project = projectService.getProjectById(projectID);
+      project = projectService.getCenterProjectById(projectID);
     } catch (Exception e) {
       LOG.error("Failed to get project from Database. Exception: " + e.getMessage());
       throw e;

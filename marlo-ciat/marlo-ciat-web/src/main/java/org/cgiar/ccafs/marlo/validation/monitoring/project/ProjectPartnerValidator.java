@@ -16,11 +16,11 @@
 package org.cgiar.ccafs.marlo.validation.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectPartner;
 import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -45,8 +45,8 @@ public class ProjectPartnerValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(Project project, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterProject project, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = project.getClass().getSimpleName();
     String actionFile = ProjectSectionsEnum.PARTNERS.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -55,7 +55,7 @@ public class ProjectPartnerValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, Project project, ResearchProgram selectedProgram, boolean saving) {
+  public void validate(BaseAction baseAction, CenterProject project, CenterProgram selectedProgram, boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
 
@@ -85,7 +85,7 @@ public class ProjectPartnerValidator extends BaseValidator {
 
 
     for (int i = 0; i < project.getPartners().size(); i++) {
-      ProjectPartner partner = project.getPartners().get(i);
+      CenterProjectPartner partner = project.getPartners().get(i);
       this.validateOutputPartner(baseAction, partner, i);
     }
 
@@ -94,7 +94,7 @@ public class ProjectPartnerValidator extends BaseValidator {
 
   }
 
-  public void validateOutputPartner(BaseAction baseAction, ProjectPartner partner, int i) {
+  public void validateOutputPartner(BaseAction baseAction, CenterProjectPartner partner, int i) {
 
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));

@@ -30,7 +30,7 @@ public class Parameter implements Serializable {
   @Expose
   private Long id;
   @Expose
-  private ResearchCenter researchCenter;
+  private Center researchCenter;
   @Expose
   private String key;
   @Expose
@@ -43,7 +43,7 @@ public class Parameter implements Serializable {
   public Parameter() {
   }
 
-  public Parameter(ResearchCenter researchCenter, String key, String value) {
+  public Parameter(Center researchCenter, String key, String value) {
     this.researchCenter = researchCenter;
     this.key = key;
     this.value = value;
@@ -56,7 +56,7 @@ public class Parameter implements Serializable {
    * @param active
    * @param activeSince
    */
-  public Parameter(ResearchCenter researchCenter, String key, String value, boolean active, Date activeSince) {
+  public Parameter(Center researchCenter, String key, String value, boolean active, Date activeSince) {
     super();
     this.researchCenter = researchCenter;
     this.key = key;
@@ -79,7 +79,7 @@ public class Parameter implements Serializable {
   }
 
 
-  public ResearchCenter getResearchCenter() {
+  public Center getResearchCenter() {
     return this.researchCenter;
   }
 
@@ -103,7 +103,7 @@ public class Parameter implements Serializable {
     this.activeSince = activeSince;
   }
 
-  public void setCrp(ResearchCenter researchCenter) {
+  public void setCrp(Center researchCenter) {
     this.researchCenter = researchCenter;
   }
 
@@ -119,7 +119,7 @@ public class Parameter implements Serializable {
   /**
    * @param researchCenter the researchCenter to set
    */
-  public void setResearchCenter(ResearchCenter researchCenter) {
+  public void setResearchCenter(Center researchCenter) {
     this.researchCenter = researchCenter;
   }
 

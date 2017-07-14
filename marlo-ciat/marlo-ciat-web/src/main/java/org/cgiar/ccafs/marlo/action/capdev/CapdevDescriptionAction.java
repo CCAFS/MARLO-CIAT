@@ -17,19 +17,19 @@ package org.cgiar.ccafs.marlo.action.capdev;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
+import org.cgiar.ccafs.marlo.data.dao.ICenterProgramDAO;
 import org.cgiar.ccafs.marlo.data.model.CapacityDevelopment;
 import org.cgiar.ccafs.marlo.data.model.CapdevDiscipline;
 import org.cgiar.ccafs.marlo.data.model.CapdevOutputs;
 import org.cgiar.ccafs.marlo.data.model.CapdevPartners;
 import org.cgiar.ccafs.marlo.data.model.CapdevTargetgroup;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
 import org.cgiar.ccafs.marlo.data.model.Crp;
 import org.cgiar.ccafs.marlo.data.model.Discipline;
 import org.cgiar.ccafs.marlo.data.model.Institution;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
 import org.cgiar.ccafs.marlo.data.model.TargetGroup;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICapacityDevelopmentService;
@@ -37,12 +37,12 @@ import org.cgiar.ccafs.marlo.data.service.ICapdevDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevOutputsService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevPartnersService;
 import org.cgiar.ccafs.marlo.data.service.ICapdevTargetgroupService;
+import org.cgiar.ccafs.marlo.data.service.ICenterAreaService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
 import org.cgiar.ccafs.marlo.data.service.IDisciplineService;
 import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.ITargetGroupService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -67,24 +67,24 @@ public class CapdevDescriptionAction extends BaseAction {
   private long capdevID;
   private List<Discipline> disciplines;
   private List<TargetGroup> targetGroups;
-  private List<ResearchArea> researchAreas;
-  private List<ResearchProgram> researchPrograms;
-  private List<Project> projects;
+  private List<CenterArea> researchAreas;
+  private List<CenterProgram> researchPrograms;
+  private List<CenterProject> projects;
   private List<Map<String, Object>> jsonProjects;
   private List<Crp> crps;
   private List<Institution> partners;
-  private List<ResearchOutput> outputs;
+  private List<CenterOutput> outputs;
   private List<Long> capdevDisciplines;
   private List<Long> capdevTargetGroup;
   private List<Long> capdevPartners;
   private List<Long> capdevOutputs;
   private final ICapacityDevelopmentService capdevService;
-  private final IResearchAreaService researchAreaService;
-  private final IResearchProgramDAO researchProgramSercive;
-  private final IProjectService projectService;
+  private final ICenterAreaService researchAreaService;
+  private final ICenterProgramDAO researchProgramSercive;
+  private final ICenterProjectService projectService;
   private final ICrpService crpService;
   private final IInstitutionService institutionService;
-  private final IResearchOutputService researchOutputService;
+  private final ICenterOutputService researchOutputService;
   private final IDisciplineService disciplineService;
   private final ITargetGroupService targetGroupService;
   private final ICapdevDisciplineService capdevDisciplineService;
@@ -93,12 +93,12 @@ public class CapdevDescriptionAction extends BaseAction {
   private final ICapdevOutputsService capdevOutputService;
 
   @Inject
-  public CapdevDescriptionAction(APConfig config, IResearchAreaService researchAreaService,
-    IResearchProgramDAO researchProgramSercive, IProjectService projectService, ICrpService crpService,
+  public CapdevDescriptionAction(APConfig config, ICenterAreaService researchAreaService,
+    ICenterProgramDAO researchProgramSercive, ICenterProjectService projectService, ICrpService crpService,
     IDisciplineService disciplineService, ITargetGroupService targetGroupService,
     ICapacityDevelopmentService capdevService, ICapdevDisciplineService capdevDisciplineService,
     ICapdevTargetgroupService capdevTargetgroupService, IInstitutionService institutionService,
-    IResearchOutputService researchOutputService, ICapdevPartnersService capdevPartnerService,
+    ICenterOutputService researchOutputService, ICapdevPartnersService capdevPartnerService,
     ICapdevOutputsService capdevOutputService) {
     super(config);
     this.researchAreaService = researchAreaService;
@@ -162,7 +162,7 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
-  public List<ResearchOutput> getOutputs() {
+  public List<CenterOutput> getOutputs() {
     return outputs;
   }
 
@@ -171,16 +171,16 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
-  public List<Project> getProjects() {
+  public List<CenterProject> getProjects() {
     return projects;
   }
 
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
@@ -268,7 +268,7 @@ public class CapdevDescriptionAction extends BaseAction {
     final User currentUser = (User) session.getAttribute(APConstants.SESSION_USER);
     if (!outputs.isEmpty()) {
       for (final Long iterator : outputs) {
-        final ResearchOutput output = researchOutputService.getResearchOutputById(iterator);
+        final CenterOutput output = researchOutputService.getResearchOutputById(iterator);
         if (output != null) {
           capdevOutput = new CapdevOutputs();
           capdevOutput.setCapacityDevelopment(capdev);
@@ -370,7 +370,7 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
-  public void setOutputs(List<ResearchOutput> outputs) {
+  public void setOutputs(List<CenterOutput> outputs) {
     this.outputs = outputs;
   }
 
@@ -380,17 +380,17 @@ public class CapdevDescriptionAction extends BaseAction {
   }
 
 
-  public void setProjects(List<Project> projects) {
+  public void setProjects(List<CenterProject> projects) {
     this.projects = projects;
   }
 
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 

@@ -17,14 +17,14 @@ package org.cgiar.ccafs.marlo.action.summaries;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.config.PentahoListener;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.io.ByteArrayInputStream;
@@ -77,15 +77,15 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   // PDF bytes
   private byte[] bytesExcel;
   // Services
-  private IProgramService programService;
+  private ICenterProgramService programService;
   // Params
-  private ResearchProgram researchProgram;
+  private CenterProgram researchProgram;
   private long startTime;
   // Store parters budgets HashMap<Outcome, ProjectCount>
-  HashMap<ResearchOutcome, Integer> allOutcomesProjects = new HashMap<ResearchOutcome, Integer>();
+  HashMap<CenterOutcome, Integer> allOutcomesProjects = new HashMap<CenterOutcome, Integer>();
 
   @Inject
-  public OutcomesContributionsSummaryAction(APConfig config, IProgramService programService) {
+  public OutcomesContributionsSummaryAction(APConfig config, ICenterProgramService programService) {
     super(config);
     this.programService = programService;
   }
@@ -315,9 +315,9 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
         "researchImpactTitle", "projectOutputs", "projectDeliverables"},
       new Class[] {String.class, Long.class, String.class, String.class, String.class, String.class, String.class});
 
-    for (ResearchTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
+    for (CenterTopic researchTopic : researchProgram.getResearchTopics().stream().filter(rt -> rt.isActive())
       .collect(Collectors.toList())) {
-      for (ResearchOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
+      for (CenterOutcome researchOutcome : researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive())
         .collect(Collectors.toList())) {
 
 
@@ -346,12 +346,12 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
           && !researchOutcome.getResearchImpact().getDescription().trim().isEmpty()) {
           researchImpactTitle = researchOutcome.getResearchImpact().getDescription();
         }
-        List<Project> projects = new ArrayList<>();
-        // Project Outputs
+        List<CenterProject> projects = new ArrayList<>();
+        // CenterProject Outputs
         String projectOutputs = "";
-        for (ResearchOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
+        for (CenterOutput researchOutput : researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive())
           .collect(Collectors.toList())) {
-          for (ProjectOutput projectOutput : researchOutput.getProjectOutputs().stream().filter(po -> po.isActive())
+          for (CenterProjectOutput projectOutput : researchOutput.getProjectOutputs().stream().filter(po -> po.isActive())
             .collect(Collectors.toList())) {
             if (projectOutputs.isEmpty()) {
               projectOutputs =
@@ -367,14 +367,14 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
           projectOutputs = null;
         }
 
-        // Project Deliverables
-        HashSet<Project> hashProjects = new HashSet<>();
+        // CenterProject Deliverables
+        HashSet<CenterProject> hashProjects = new HashSet<>();
         hashProjects.addAll(projects);
         projects = new ArrayList<>(hashProjects);
 
         String projectDeliverables = "";
-        for (Project project : projects) {
-          for (Deliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
+        for (CenterProject project : projects) {
+          for (CenterDeliverable deliverable : project.getDeliverables().stream().filter(d -> d.isActive())
             .collect(Collectors.toList())) {
             if (projectDeliverables.isEmpty()) {
               projectDeliverables = "P" + project.getId() + " - " + "D" + deliverable.getId() + ": "
@@ -413,7 +413,7 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
       new TypedTableModel(new String[] {"outcomeID", "outcomeTitle", "projectCount", "researchOutcomeURL"},
         new Class[] {String.class, String.class, String.class, String.class});
 
-    for (ResearchOutcome researchOutcome : allOutcomesProjects.keySet()) {
+    for (CenterOutcome researchOutcome : allOutcomesProjects.keySet()) {
       String researchOutcomeTitle = null;
       researchOutcomeTitle = researchOutcome.getComposedName()
         + (researchOutcome.getShortName() != null && !researchOutcome.getShortName().trim().isEmpty()
@@ -428,7 +428,7 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
   }
 
 
-  public ResearchProgram getResearchProgram() {
+  public CenterProgram getResearchProgram() {
     return researchProgram;
   }
 
@@ -452,7 +452,7 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
     this.bytesExcel = bytesPDF;
   }
 
-  public void setResearchProgram(ResearchProgram researchProgram) {
+  public void setResearchProgram(CenterProgram researchProgram) {
     this.researchProgram = researchProgram;
   }
 
@@ -462,26 +462,26 @@ public class OutcomesContributionsSummaryAction extends BaseAction implements Su
    * @param unsortMap - map to sort
    * @return
    */
-  private HashMap<ResearchOutcome, Integer> sortByComparator(HashMap<ResearchOutcome, Integer> unsortMap) {
+  private HashMap<CenterOutcome, Integer> sortByComparator(HashMap<CenterOutcome, Integer> unsortMap) {
 
     // Convert Map to List
-    List<HashMap.Entry<ResearchOutcome, Integer>> list =
-      new LinkedList<HashMap.Entry<ResearchOutcome, Integer>>(unsortMap.entrySet());
+    List<HashMap.Entry<CenterOutcome, Integer>> list =
+      new LinkedList<HashMap.Entry<CenterOutcome, Integer>>(unsortMap.entrySet());
 
     // Sort list with comparator, to compare the Map values
-    Collections.sort(list, new Comparator<HashMap.Entry<ResearchOutcome, Integer>>() {
+    Collections.sort(list, new Comparator<HashMap.Entry<CenterOutcome, Integer>>() {
 
       @Override
-      public int compare(HashMap.Entry<ResearchOutcome, Integer> o1, HashMap.Entry<ResearchOutcome, Integer> o2) {
+      public int compare(HashMap.Entry<CenterOutcome, Integer> o1, HashMap.Entry<CenterOutcome, Integer> o2) {
 
         return (o2.getValue().compareTo(o1.getValue()));
       }
     });
 
     // Convert sorted map back to a Map
-    HashMap<ResearchOutcome, Integer> sortedMap = new LinkedHashMap<ResearchOutcome, Integer>();
-    for (Iterator<HashMap.Entry<ResearchOutcome, Integer>> it = list.iterator(); it.hasNext();) {
-      HashMap.Entry<ResearchOutcome, Integer> entry = it.next();
+    HashMap<CenterOutcome, Integer> sortedMap = new LinkedHashMap<CenterOutcome, Integer>();
+    for (Iterator<HashMap.Entry<CenterOutcome, Integer>> it = list.iterator(); it.hasNext();) {
+      HashMap.Entry<CenterOutcome, Integer> entry = it.next();
       sortedMap.put(entry.getKey(), entry.getValue());
     }
     return sortedMap;

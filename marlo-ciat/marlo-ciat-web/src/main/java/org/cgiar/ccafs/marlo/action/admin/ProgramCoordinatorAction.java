@@ -17,13 +17,13 @@ package org.cgiar.ccafs.marlo.action.admin;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.Role;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterRole;
 import org.cgiar.ccafs.marlo.data.model.User;
-import org.cgiar.ccafs.marlo.data.model.UserRole;
+import org.cgiar.ccafs.marlo.data.model.CenterUserRole;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IRoleService;
-import org.cgiar.ccafs.marlo.data.service.IUserRoleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterRoleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterUserRoleService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -42,39 +42,39 @@ public class ProgramCoordinatorAction extends BaseAction {
   private static final long serialVersionUID = 1843943617459402461L;
 
   private IUserService userService;
-  private IUserRoleService userRoleService;
-  private IRoleService roleService;
+  private ICenterUserRoleService userRoleService;
+  private ICenterRoleService roleService;
   private ICenterService centerService;
-  private ResearchCenter loggedCenter;
-  private List<UserRole> userRoles;
+  private Center loggedCenter;
+  private List<CenterUserRole> userRoles;
 
   @Inject
   public ProgramCoordinatorAction(APConfig config, IUserService userService, ICenterService centerService,
-    IRoleService roleService, IUserRoleService userRoleService) {
+    ICenterRoleService roleService, ICenterUserRoleService userRoleService) {
     super(config);
     this.userService = userService;
     this.roleService = roleService;
     this.centerService = centerService;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
-  public List<UserRole> getUserRoles() {
+  public List<CenterUserRole> getUserRoles() {
     return userRoles;
   }
 
   @Override
   public void prepare() throws Exception {
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     System.out.println("ROLE ----------- " + this.getSession().get(APConstants.CENTER_COORD_ROLE).toString());
     long coorRoleId = Long.parseLong(this.getSession().get(APConstants.CENTER_COORD_ROLE).toString());
 
-    Role role = roleService.getRoleById(coorRoleId);
+    CenterRole role = roleService.getRoleById(coorRoleId);
 
     userRoles = new ArrayList<>(role.getUserRoles());
 
@@ -95,21 +95,21 @@ public class ProgramCoordinatorAction extends BaseAction {
     if (this.hasPermission("*")) {
 
       long coorRoleId = Long.parseLong(this.getParameterValue(APConstants.CENTER_COORD_ROLE));
-      Role role = roleService.getRoleById(coorRoleId);
-      List<UserRole> userRolesDB = new ArrayList<>(
+      CenterRole role = roleService.getRoleById(coorRoleId);
+      List<CenterUserRole> userRolesDB = new ArrayList<>(
         userRoleService.findAll().stream().filter(ur -> ur.getRole().equals(role)).collect(Collectors.toList()));
 
-      for (UserRole userRole : userRolesDB) {
+      for (CenterUserRole userRole : userRolesDB) {
         if (!userRoles.contains(userRole)) {
           userRoleService.deleteUserRole(userRole.getId());
         }
       }
 
-      for (UserRole userRole : userRoles) {
+      for (CenterUserRole userRole : userRoles) {
         if (userRole.getId() == null || userRole.getId() == -1) {
-          UserRole userRolenew = new UserRole();
+          CenterUserRole userRolenew = new CenterUserRole();
 
-          Role roles = roleService.getRoleById(userRole.getRole().getId());
+          CenterRole roles = roleService.getRoleById(userRole.getRole().getId());
           userRole.setRole(roles);
 
           User user = userService.getUser(userRole.getUser().getId());
@@ -125,11 +125,11 @@ public class ProgramCoordinatorAction extends BaseAction {
     }
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
-  public void setUserRoles(List<UserRole> userRoles) {
+  public void setUserRoles(List<CenterUserRole> userRoles) {
     this.userRoles = userRoles;
   }
 

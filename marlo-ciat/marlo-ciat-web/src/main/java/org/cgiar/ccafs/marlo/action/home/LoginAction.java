@@ -19,7 +19,7 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ADLoginMessages;
 import org.cgiar.ccafs.marlo.data.model.CenterCustomParameter;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.ICenterUserService;
@@ -141,7 +141,7 @@ public class LoginAction extends BaseAction {
         // Obtain the only CRP Center CIAT
         // TODO: Modify CRP to represent Center
         // Crp loggedCrp = crpManager.findCrpByAcronym(this.crp);
-        ResearchCenter loggedCrp = crpManager.findCrpByAcronym(APConstants.CRP_CENTER);
+        Center loggedCrp = crpManager.findCrpByAcronym(APConstants.CRP_CENTER);
 
         // Validate if the user belongs to the selected crp
         if (loggedCrp != null) {

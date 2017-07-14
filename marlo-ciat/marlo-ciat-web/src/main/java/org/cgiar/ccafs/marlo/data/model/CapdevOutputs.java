@@ -18,7 +18,7 @@ public class CapdevOutputs implements java.io.Serializable {
   private Long id;
   private User usersByModifiedBy;
   private User usersByCreatedBy;
-  private ResearchOutput researchOutputs;
+  private CenterOutput researchOutputs;
   private CapacityDevelopment capacityDevelopment;
   private boolean active;
   private Date activeSince;
@@ -33,7 +33,7 @@ public class CapdevOutputs implements java.io.Serializable {
     this.active = active;
   }
 
-  public CapdevOutputs(User usersByModifiedBy, User usersByCreatedBy, ResearchOutput researchOutputs,
+  public CapdevOutputs(User usersByModifiedBy, User usersByCreatedBy, CenterOutput researchOutputs,
     CapacityDevelopment capacityDevelopment, boolean active, Date activeSince, String modificationJustification) {
     this.usersByModifiedBy = usersByModifiedBy;
     this.usersByCreatedBy = usersByCreatedBy;
@@ -60,7 +60,7 @@ public class CapdevOutputs implements java.io.Serializable {
     return this.modificationJustification;
   }
 
-  public ResearchOutput getResearchOutputs() {
+  public CenterOutput getResearchOutputs() {
     return this.researchOutputs;
   }
 
@@ -96,7 +96,7 @@ public class CapdevOutputs implements java.io.Serializable {
     this.modificationJustification = modificationJustification;
   }
 
-  public void setResearchOutputs(ResearchOutput researchOutputs) {
+  public void setResearchOutputs(CenterOutput researchOutputs) {
     this.researchOutputs = researchOutputs;
   }
 

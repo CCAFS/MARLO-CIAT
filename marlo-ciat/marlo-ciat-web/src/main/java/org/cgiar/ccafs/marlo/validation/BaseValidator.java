@@ -2,13 +2,13 @@ package org.cgiar.ccafs.marlo.validation;
 
 
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterSectionStatus;
+import org.cgiar.ccafs.marlo.data.service.ICenterSectionStatusService;
 
 import java.util.Calendar;
 
@@ -29,7 +29,7 @@ public class BaseValidator {
   protected StringBuilder missingFields;
 
   @Inject
-  ISectionStatusService sectionStatusService;
+  ICenterSectionStatusService sectionStatusService;
 
   @Inject
   public BaseValidator() {
@@ -102,18 +102,18 @@ public class BaseValidator {
   /**
    * This method saves the missing fields into the database for a section at ImpactPathway - Outcome.
    * 
-   * @param program is a ResearchProgram.
-   * @param project is a Project.
+   * @param program is a CenterProgram.
+   * @param project is a CenterProject.
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
-  protected void saveMissingFields(Deliverable deliverable, Project project, String sectionName) {
+  protected void saveMissingFields(CenterDeliverable deliverable, CenterProject project, String sectionName) {
     int year = Calendar.getInstance().get(Calendar.YEAR);
 
-    SectionStatus status =
+    CenterSectionStatus status =
       sectionStatusService.getSectionStatusByDeliverable(deliverable.getId(), project.getId(), sectionName, year);
     if (status == null) {
 
-      status = new SectionStatus();
+      status = new CenterSectionStatus();
       status.setSectionName(sectionName);
       status.setDeliverable(deliverable);
       status.setProject(project);
@@ -131,18 +131,18 @@ public class BaseValidator {
   /**
    * This method saves the missing fields into the database for a section at ImpactPathway - Outcome.
    * 
-   * @param program is a ResearchProgram.
-   * @param project is a Project.
+   * @param program is a CenterProgram.
+   * @param project is a CenterProject.
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
-  protected void saveMissingFields(ResearchProgram program, Project project, String sectionName) {
+  protected void saveMissingFields(CenterProgram program, CenterProject project, String sectionName) {
     int year = Calendar.getInstance().get(Calendar.YEAR);
 
-    SectionStatus status =
+    CenterSectionStatus status =
       sectionStatusService.getSectionStatusByProject(program.getId(), project.getId(), sectionName, year);
     if (status == null) {
 
-      status = new SectionStatus();
+      status = new CenterSectionStatus();
       status.setSectionName(sectionName);
       status.setProject(project);
       status.setYear(year);
@@ -159,18 +159,18 @@ public class BaseValidator {
   /**
    * This method saves the missing fields into the database for a section at ImpactPathway - Outcome.
    * 
-   * @param program is a ResearchProgram.
-   * @param outcome is a ResearchOutcome.
+   * @param program is a CenterProgram.
+   * @param outcome is a CenterOutcome.
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
-  protected void saveMissingFields(ResearchProgram program, ResearchOutcome outcome, String sectionName) {
+  protected void saveMissingFields(CenterProgram program, CenterOutcome outcome, String sectionName) {
     int year = Calendar.getInstance().get(Calendar.YEAR);
 
-    SectionStatus status =
+    CenterSectionStatus status =
       sectionStatusService.getSectionStatusByOutcome(program.getId(), outcome.getId(), sectionName, year);
     if (status == null) {
 
-      status = new SectionStatus();
+      status = new CenterSectionStatus();
       status.setSectionName(sectionName);
       status.setResearchProgram(program);
       status.setResearchOutcome(outcome);
@@ -188,18 +188,18 @@ public class BaseValidator {
   /**
    * This method saves the missing fields into the database for a section at ImpactPathway - Outcome.
    * 
-   * @param program is a ResearchProgram.
-   * @param output is a ResearchOutput.
+   * @param program is a CenterProgram.
+   * @param output is a CenterOutput.
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
-  protected void saveMissingFields(ResearchProgram program, ResearchOutput output, String sectionName) {
+  protected void saveMissingFields(CenterProgram program, CenterOutput output, String sectionName) {
     int year = Calendar.getInstance().get(Calendar.YEAR);
 
-    SectionStatus status =
+    CenterSectionStatus status =
       sectionStatusService.getSectionStatusByOutput(program.getId(), output.getId(), sectionName, year);
     if (status == null) {
 
-      status = new SectionStatus();
+      status = new CenterSectionStatus();
       status.setSectionName(sectionName);
       status.setResearchProgram(program);
       status.setResearchOutput(output);
@@ -217,17 +217,17 @@ public class BaseValidator {
   /**
    * This method saves the missing fields into the database for a section at ImpactPathway.
    * 
-   * @param program is a ResearchProgram.
+   * @param program is a CenterProgram.
    * @param sectionName is the name of the section (researchImpact, researchTopics, etc.).
    */
-  protected void saveMissingFields(ResearchProgram program, String sectionName) {
+  protected void saveMissingFields(CenterProgram program, String sectionName) {
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
 
-    SectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName, year);
+    CenterSectionStatus status = sectionStatusService.getSectionStatusByProgram(program.getId(), sectionName, year);
     if (status == null) {
 
-      status = new SectionStatus();
+      status = new CenterSectionStatus();
       status.setSectionName(sectionName);
       status.setResearchProgram(program);
       status.setYear(year);

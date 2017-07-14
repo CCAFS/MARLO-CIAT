@@ -69,6 +69,7 @@ public final class APConstants {
   public static final String DELIVERABLE_ID = "deliverableID";
   public static final String DELIVERABLE_TYPE_ID = "deliverableTypeId";
   public static final String OUTPUT_NAME = "outputName";
+  public static final String OCS_CODE_REQUEST_ID = "ocsCode";
   public static final String CAPDEV_ID = "capdevID";
 
   // login messages and status
@@ -98,39 +99,39 @@ public final class APConstants {
 
   // Relations Name
   public static final String RESEARCH_PROGRAM_IMPACT_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchProgram.researchImpacts)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterProgram.researchImpacts)";
 
   public static final String RESEARCH_PROGRAM_TOPIC_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchProgram.researchTopics)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterProgram.researchTopics)";
 
   public static final String RESEARCH_OUTCOME_MILESTONE_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutcome.researchMilestones)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterOutcome.researchMilestones)";
 
   public static final String OUTCOME_MONITORING_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutcome.monitoringOutcomes)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterOutcome.monitoringOutcomes)";
 
   public static final String RESEARCH_OUTPUT_NEXTUSER_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutput.researchOutputsNextUsers)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterOutput.researchOutputsNextUsers)";
 
   public static final String RESEARCH_OUTPUT_PARTNER_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.ResearchOutput.researchOutputPartners)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterOutput.researchOutputPartners)";
 
   public static final String PROJECT_FUNDING_SOURCE_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectFundingSources)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterProject.projectFundingSources)";
 
   public static final String PROJECT_OUTPUT_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectOutputs)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterProject.projectOutputs)";
 
   public static final String PROJECT_LOCATION_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectLocations)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterProject.projectLocations)";
 
   public static final String PROJECT_PARTNERS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Project.projectPartners)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterProject.projectPartners)";
 
   public static final String DELIVERABLE_DOCUMENT_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Deliverable.deliverableDocuments)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterDeliverable.deliverableDocuments)";
 
   public static final String DELIVERABLE_OUTPUTS_RELATION =
-    "java.util.Set(org.cgiar.ccafs.marlo.data.model.Deliverable.deliverableOutputs)";
+    "java.util.Set(org.cgiar.ccafs.marlo.data.model.CenterDeliverable.deliverableOutputs)";
 
 }

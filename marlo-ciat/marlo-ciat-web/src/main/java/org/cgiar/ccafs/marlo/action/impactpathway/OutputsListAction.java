@@ -17,23 +17,23 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterLeaderTypeEnum;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
+import org.cgiar.ccafs.marlo.data.model.CenterSectionStatus;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
-import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterAreaService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterTopicService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSectionStatusService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -55,24 +55,24 @@ public class OutputsListAction extends BaseAction {
   private static final long serialVersionUID = 6922866669964604405L;
 
   private ICenterService centerService;
-  private IProgramService programService;
-  private IResearchAreaService researchAreaService;
-  private IResearchTopicService researchTopicService;
-  private IResearchOutcomeService outcomeService;
+  private ICenterProgramService programService;
+  private ICenterAreaService researchAreaService;
+  private ICenterTopicService researchTopicService;
+  private ICenterOutcomeService outcomeService;
   private IUserService userService;
-  private IResearchOutputService outputService;
-  private ISectionStatusService sectionStatusService;
+  private ICenterOutputService outputService;
+  private ICenterSectionStatusService sectionStatusService;
 
-  private List<ResearchArea> researchAreas;
-  private List<ResearchProgram> researchPrograms;
-  private List<ResearchOutcome> outcomes;
-  private List<ResearchTopic> researchTopics;
-  private List<ResearchOutput> outputs;
-  private ResearchProgram selectedProgram;
-  private ResearchArea selectedResearchArea;
-  private ResearchTopic selectedResearchTopic;
-  private ResearchOutcome selectedResearchOutcome;
-  private ResearchCenter loggedCenter;
+  private List<CenterArea> researchAreas;
+  private List<CenterProgram> researchPrograms;
+  private List<CenterOutcome> outcomes;
+  private List<CenterTopic> researchTopics;
+  private List<CenterOutput> outputs;
+  private CenterProgram selectedProgram;
+  private CenterArea selectedResearchArea;
+  private CenterTopic selectedResearchTopic;
+  private CenterOutcome selectedResearchOutcome;
+  private Center loggedCenter;
   private long topicID;
   private long programID;
 
@@ -82,10 +82,10 @@ public class OutputsListAction extends BaseAction {
   private String justification;
 
   @Inject
-  public OutputsListAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService,
-    IResearchOutcomeService outcomeService, IUserService userService, IResearchOutputService outputService,
-    ISectionStatusService sectionStatusService) {
+  public OutputsListAction(APConfig config, ICenterService centerService, ICenterProgramService programService,
+    ICenterAreaService researchAreaService, ICenterTopicService researchTopicService,
+    ICenterOutcomeService outcomeService, IUserService userService, ICenterOutputService outputService,
+    ICenterSectionStatusService sectionStatusService) {
     super(config);
     this.centerService = centerService;
     this.programService = programService;
@@ -99,7 +99,7 @@ public class OutputsListAction extends BaseAction {
 
   @Override
   public String add() {
-    ResearchOutput output = new ResearchOutput();
+    CenterOutput output = new CenterOutput();
 
     output.setActive(true);
     output.setActiveSince(new Date());
@@ -117,24 +117,24 @@ public class OutputsListAction extends BaseAction {
     }
   }
 
-  public List<ResearchOutput> allProgramOutput() {
+  public List<CenterOutput> allProgramOutput() {
 
     outcomes = new ArrayList<>();
-    List<ResearchOutput> ouList = new ArrayList<>();
+    List<CenterOutput> ouList = new ArrayList<>();
 
-    List<ResearchTopic> researchTopics = new ArrayList<>(
+    List<CenterTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
-    for (ResearchTopic researchTopic : researchTopics) {
-      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+    for (CenterTopic researchTopic : researchTopics) {
+      List<CenterOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
-      for (ResearchOutcome researchOutcome : researchOutcomes) {
+      for (CenterOutcome researchOutcome : researchOutcomes) {
         outcomes.add(researchOutcome);
-        List<ResearchOutput> researchOutputs = new ArrayList<>(
+        List<CenterOutput> researchOutputs = new ArrayList<>(
           researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
-        for (ResearchOutput researchOutput : researchOutputs) {
+        for (CenterOutput researchOutput : researchOutputs) {
           ouList.add(researchOutput);
         }
       }
@@ -149,7 +149,7 @@ public class OutputsListAction extends BaseAction {
     Map<String, Object> parameters = this.getParameters();
     outputID = Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.OUTPUT_ID))[0]));
 
-    ResearchOutput output = outputService.getResearchOutputById(outputID);
+    CenterOutput output = outputService.getResearchOutputById(outputID);
 
     if (output != null) {
       programID = output.getResearchOutcome().getResearchTopic().getResearchProgram().getId();
@@ -158,7 +158,7 @@ public class OutputsListAction extends BaseAction {
         .setModificationJustification(this.getJustification() == null ? "Outcome deleted" : this.getJustification());
       output.setModifiedBy(this.getCurrentUser());
 
-      SectionStatus status =
+      CenterSectionStatus status =
         sectionStatusService.getSectionStatusByOutput(programID, output.getId(), "outputsList", this.getYear());
 
       if (status != null) {
@@ -183,7 +183,7 @@ public class OutputsListAction extends BaseAction {
     return justification;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -191,7 +191,7 @@ public class OutputsListAction extends BaseAction {
     return outcomeID;
   }
 
-  public List<ResearchOutcome> getOutcomes() {
+  public List<CenterOutcome> getOutcomes() {
     return outcomes;
   }
 
@@ -199,7 +199,7 @@ public class OutputsListAction extends BaseAction {
     return outputID;
   }
 
-  public List<ResearchOutput> getOutputs() {
+  public List<CenterOutput> getOutputs() {
     return outputs;
   }
 
@@ -209,35 +209,35 @@ public class OutputsListAction extends BaseAction {
   }
 
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
 
-  public List<ResearchTopic> getResearchTopics() {
+  public List<CenterTopic> getResearchTopics() {
     return researchTopics;
   }
 
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
-  public ResearchOutcome getSelectedResearchOutcome() {
+  public CenterOutcome getSelectedResearchOutcome() {
     return selectedResearchOutcome;
   }
 
-  public ResearchTopic getSelectedResearchTopic() {
+  public CenterTopic getSelectedResearchTopic() {
     return selectedResearchTopic;
   }
 
@@ -252,7 +252,7 @@ public class OutputsListAction extends BaseAction {
     topicID = -1;
     outcomeID = -1;
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -270,24 +270,24 @@ public class OutputsListAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          List<ResearchLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
+          List<CenterLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
             .filter(rl -> rl.isActive()
-              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+              && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
             .collect(Collectors.toList()));
           if (!userAreaLeads.isEmpty()) {
             areaID = userAreaLeads.get(0).getResearchArea().getId();
           } else {
-            List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
             if (!userProgramLeads.isEmpty()) {
               programID = userProgramLeads.get(0).getResearchProgram().getId();
             } else {
-              List<ResearchProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+              List<CenterProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
                 .collect(Collectors.toList());
               Collections.sort(rps, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-              ResearchProgram rp = rps.get(0);
+              CenterProgram rp = rps.get(0);
               programID = rp.getId();
               areaID = rp.getResearchArea().getId();
             }
@@ -306,9 +306,9 @@ public class OutputsListAction extends BaseAction {
           } catch (Exception e) {
             User user = userService.getUser(this.getCurrentUser().getId());
 
-            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
 
             if (!userLeads.isEmpty()) {
@@ -408,7 +408,7 @@ public class OutputsListAction extends BaseAction {
     this.justification = justification;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -416,7 +416,7 @@ public class OutputsListAction extends BaseAction {
     this.outcomeID = outcomeID;
   }
 
-  public void setOutcomes(List<ResearchOutcome> outcomes) {
+  public void setOutcomes(List<CenterOutcome> outcomes) {
     this.outcomes = outcomes;
   }
 
@@ -424,7 +424,7 @@ public class OutputsListAction extends BaseAction {
     this.outputID = outputID;
   }
 
-  public void setOutputs(List<ResearchOutput> outputs) {
+  public void setOutputs(List<CenterOutput> outputs) {
     this.outputs = outputs;
   }
 
@@ -432,31 +432,31 @@ public class OutputsListAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setResearchTopics(List<ResearchTopic> researchTopics) {
+  public void setResearchTopics(List<CenterTopic> researchTopics) {
     this.researchTopics = researchTopics;
   }
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 
-  public void setSelectedResearchOutcome(ResearchOutcome selectedResearchOutcome) {
+  public void setSelectedResearchOutcome(CenterOutcome selectedResearchOutcome) {
     this.selectedResearchOutcome = selectedResearchOutcome;
   }
 
-  public void setSelectedResearchTopic(ResearchTopic selectedResearchTopic) {
+  public void setSelectedResearchTopic(CenterTopic selectedResearchTopic) {
     this.selectedResearchTopic = selectedResearchTopic;
   }
 

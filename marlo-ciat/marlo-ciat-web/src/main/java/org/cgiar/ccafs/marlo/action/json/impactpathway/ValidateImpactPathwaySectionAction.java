@@ -18,15 +18,15 @@ package org.cgiar.ccafs.marlo.action.json.impactpathway;
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
+import org.cgiar.ccafs.marlo.data.model.CenterSectionStatus;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSectionStatusService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutcomesValidator;
 import org.cgiar.ccafs.marlo.validation.impactpathway.OutputsValidator;
@@ -54,8 +54,8 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   // Logger
   private static final Logger LOG = LoggerFactory.getLogger(ValidateImpactPathwaySectionAction.class);
   // Managers
-  private IProgramService programServcie;
-  private ISectionStatusService sectionStatusService;
+  private ICenterProgramService programServcie;
+  private ICenterSectionStatusService sectionStatusService;
   // Parameters
   private boolean existProgram;
   private boolean validSection;
@@ -63,7 +63,7 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   private long programID;
   private Map<String, Object> section;
   // Model
-  private SectionStatus sectionStatus;
+  private CenterSectionStatus sectionStatus;
 
   // Validator
   private OutcomesValidator outcomeValidator;
@@ -72,8 +72,8 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   private ResearchTopicsValidator topicValidator;
 
   @Inject
-  public ValidateImpactPathwaySectionAction(APConfig config, IProgramService programServcie,
-    ISectionStatusService sectionStatusService, OutcomesValidator outcomeValidator, OutputsValidator outputValidator,
+  public ValidateImpactPathwaySectionAction(APConfig config, ICenterProgramService programServcie,
+    ICenterSectionStatusService sectionStatusService, OutcomesValidator outcomeValidator, OutputsValidator outputValidator,
     ProgramImpactsValidator impactValidator, ResearchTopicsValidator topicValidator) {
     super(config);
     this.programServcie = programServcie;
@@ -104,7 +104,7 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
     }
 
-    ResearchProgram program = programServcie.getProgramById(programID);
+    CenterProgram program = programServcie.getProgramById(programID);
 
     switch (ImpactPathwaySectionsEnum.getValue(sectionName)) {
       case OUTCOME:
@@ -113,19 +113,19 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
         section.put("missingFields", "");
 
         if (program != null) {
-          List<ResearchTopic> topics = new ArrayList<>(
+          List<CenterTopic> topics = new ArrayList<>(
             program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
           if (topics != null && !topics.isEmpty()) {
-            for (ResearchTopic researchTopic : topics) {
-              List<ResearchOutcome> outcomes = new ArrayList<>(
+            for (CenterTopic researchTopic : topics) {
+              List<CenterOutcome> outcomes = new ArrayList<>(
                 researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
               if (outcomes != null && !outcomes.isEmpty()) {
-                for (ResearchOutcome researchOutcome : outcomes) {
+                for (CenterOutcome researchOutcome : outcomes) {
                   sectionStatus = sectionStatusService.getSectionStatusByOutcome(program.getId(),
                     researchOutcome.getId(), sectionName, this.getYear());
 
                   if (sectionStatus == null) {
-                    sectionStatus = new SectionStatus();
+                    sectionStatus = new CenterSectionStatus();
                     sectionStatus.setMissingFields("No section");
                   }
                   if (sectionStatus.getMissingFields().length() > 0) {
@@ -133,13 +133,13 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
                   }
                 }
               } else {
-                sectionStatus = new SectionStatus();
+                sectionStatus = new CenterSectionStatus();
                 sectionStatus.setMissingFields("No otucomes");
                 section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
               }
             }
           } else {
-            sectionStatus = new SectionStatus();
+            sectionStatus = new CenterSectionStatus();
             sectionStatus.setMissingFields("No research topics");
             section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
           }
@@ -152,26 +152,26 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
         section.put("sectionName", sectionName);
         section.put("missingFields", "");
         if (program != null) {
-          List<ResearchTopic> topics = new ArrayList<>(
+          List<CenterTopic> topics = new ArrayList<>(
             program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
           if (topics != null && !topics.isEmpty()) {
-            for (ResearchTopic researchTopic : topics) {
-              List<ResearchOutcome> outcomes = new ArrayList<>(
+            for (CenterTopic researchTopic : topics) {
+              List<CenterOutcome> outcomes = new ArrayList<>(
                 researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
               if (outcomes != null && !outcomes.isEmpty()) {
-                for (ResearchOutcome researchOutcome : outcomes) {
+                for (CenterOutcome researchOutcome : outcomes) {
                   researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
                     .filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
-                  List<ResearchOutput> outputs = new ArrayList<>(researchOutcome.getResearchOutputs().stream()
+                  List<CenterOutput> outputs = new ArrayList<>(researchOutcome.getResearchOutputs().stream()
                     .filter(ro -> ro.isActive()).collect(Collectors.toList()));
                   if (outputs != null && !outputs.isEmpty()) {
-                    for (ResearchOutput researchOutput : outputs) {
+                    for (CenterOutput researchOutput : outputs) {
                       sectionStatus = sectionStatusService.getSectionStatusByOutput(program.getId(),
                         researchOutput.getId(), sectionName, this.getYear());
 
                       if (sectionStatus == null) {
-                        sectionStatus = new SectionStatus();
+                        sectionStatus = new CenterSectionStatus();
                         sectionStatus.setMissingFields("No section");
                       }
                       if (sectionStatus.getMissingFields().length() > 0) {
@@ -180,19 +180,19 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
                       }
                     }
                   } else {
-                    sectionStatus = new SectionStatus();
+                    sectionStatus = new CenterSectionStatus();
                     sectionStatus.setMissingFields("No outputs");
                     section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
                   }
                 }
               } else {
-                sectionStatus = new SectionStatus();
+                sectionStatus = new CenterSectionStatus();
                 sectionStatus.setMissingFields("No outcome");
                 section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
               }
             }
           } else {
-            sectionStatus = new SectionStatus();
+            sectionStatus = new CenterSectionStatus();
             sectionStatus.setMissingFields("No research topics");
             section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
           }
@@ -250,16 +250,16 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   }
 
   public void validateImpact() {
-    ResearchProgram program = programServcie.getProgramById(programID);
+    CenterProgram program = programServcie.getProgramById(programID);
 
     if (program != null) {
-      List<ResearchImpact> impacts =
+      List<CenterImpact> impacts =
         new ArrayList<>(program.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()));
 
-      for (ResearchImpact researchImpact : impacts) {
+      for (CenterImpact researchImpact : impacts) {
         researchImpact.setObjectives(new ArrayList<>());
         if (researchImpact.getResearchImpactObjectives() != null) {
-          for (ResearchImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
+          for (CenterImpactObjective impactObjective : researchImpact.getResearchImpactObjectives().stream()
             .filter(ro -> ro.isActive()).collect(Collectors.toList())) {
             researchImpact.getObjectives().add(impactObjective.getResearchObjective());
             if (researchImpact.getObjectiveValue() == null) {
@@ -280,17 +280,17 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   }
 
   public void validateOutcome() {
-    ResearchProgram program = programServcie.getProgramById(programID);
+    CenterProgram program = programServcie.getProgramById(programID);
 
     if (program != null) {
-      List<ResearchTopic> topics =
+      List<CenterTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
       if (topics != null) {
-        for (ResearchTopic researchTopic : topics) {
-          List<ResearchOutcome> outcomes = new ArrayList<>(
+        for (CenterTopic researchTopic : topics) {
+          List<CenterOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
-          for (ResearchOutcome researchOutcome : outcomes) {
+          for (CenterOutcome researchOutcome : outcomes) {
             researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
               .filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
@@ -303,24 +303,24 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
 
   public void validateOutput() {
 
-    ResearchProgram program = programServcie.getProgramById(programID);
+    CenterProgram program = programServcie.getProgramById(programID);
 
     if (program != null) {
-      List<ResearchTopic> topics =
+      List<CenterTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
       if (topics != null) {
-        for (ResearchTopic researchTopic : topics) {
-          List<ResearchOutcome> outcomes = new ArrayList<>(
+        for (CenterTopic researchTopic : topics) {
+          List<CenterOutcome> outcomes = new ArrayList<>(
             researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
-          for (ResearchOutcome researchOutcome : outcomes) {
+          for (CenterOutcome researchOutcome : outcomes) {
             researchOutcome.setMilestones(new ArrayList<>(researchOutcome.getResearchMilestones().stream()
               .filter(rm -> rm.isActive()).collect(Collectors.toList())));
 
-            List<ResearchOutput> outputs = new ArrayList<>(
+            List<CenterOutput> outputs = new ArrayList<>(
               researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
-            for (ResearchOutput researchOutput : outputs) {
+            for (CenterOutput researchOutput : outputs) {
 
               researchOutput.setNextUsers(new ArrayList<>(researchOutput.getResearchOutputsNextUsers().stream()
                 .filter(nu -> nu.isActive()).collect(Collectors.toList())));
@@ -336,10 +336,10 @@ public class ValidateImpactPathwaySectionAction extends BaseAction {
   }
 
   public void validateTopic() {
-    ResearchProgram program = programServcie.getProgramById(programID);
+    CenterProgram program = programServcie.getProgramById(programID);
 
     if (program != null) {
-      List<ResearchTopic> topics =
+      List<CenterTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
       topicValidator.validate(this, topics, program, false);

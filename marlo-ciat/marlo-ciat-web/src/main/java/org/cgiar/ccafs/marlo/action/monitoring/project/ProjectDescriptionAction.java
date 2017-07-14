@@ -17,37 +17,37 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterFundingSourceType;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectCrosscutingTheme;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectFundingSource;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectLocation;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectType;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
 import org.cgiar.ccafs.marlo.data.model.Crp;
-import org.cgiar.ccafs.marlo.data.model.FundingSourceType;
 import org.cgiar.ccafs.marlo.data.model.LocElement;
 import org.cgiar.ccafs.marlo.data.model.OutcomeOutputs;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
-import org.cgiar.ccafs.marlo.data.model.ProjectFundingSource;
-import org.cgiar.ccafs.marlo.data.model.ProjectLocation;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
-import org.cgiar.ccafs.marlo.data.model.ProjectType;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
 import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.ICenterFundingSourceTypeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectCrosscutingThemeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectFundingSourceService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectLocationService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectTypeService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.data.service.ICrpService;
-import org.cgiar.ccafs.marlo.data.service.IFundingSourceTypeService;
 import org.cgiar.ccafs.marlo.data.service.ILocElementService;
-import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
-import org.cgiar.ccafs.marlo.data.service.IProjectFundingSourceService;
-import org.cgiar.ccafs.marlo.data.service.IProjectLocationService;
-import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IProjectTypeService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -80,53 +80,53 @@ public class ProjectDescriptionAction extends BaseAction {
   private static final long serialVersionUID = 3034101967516313023L;
 
 
-  private final ICenterService centerService;
+  private ICenterService centerService;
 
-  private final IProjectService projectService;
-
-
-  private final IUserService userService;
-
-  private final IResearchOutputService outputService;
+  private ICenterProjectService projectService;
 
 
-  private final IFundingSourceTypeService fundingSourceService;
+  private IUserService userService;
 
-  private final IProjectOutputService projectOutputService;
-
-
-  private final IProjectLocationService projectLocationService;
-
-  private final ILocElementService locElementService;
+  private ICenterOutputService outputService;
 
 
-  private final IProjectFundingSourceService projectFundingSourceService;
+  private ICenterFundingSourceTypeService fundingSourceService;
 
-  private final IProjectCrosscutingThemeService projectCrosscutingThemeService;
-
-
-  private final IAuditLogService auditLogService;
+  private ICenterProjectOutputService projectOutputService;
 
 
-  private final ProjectDescriptionValidator validator;
+  private ICenterProjectLocationService projectLocationService;
+
+  private ILocElementService locElementService;
 
 
-  private final ICrpService crpService;
+  private ICenterProjectFundingSourceService projectFundingSourceService;
 
-  private final IProjectTypeService projectTypeService;
+  private ICenterProjectCrosscutingThemeService projectCrosscutingThemeService;
 
 
-  private ResearchArea selectedResearchArea;
+  private IAuditLogService auditLogService;
 
-  private ResearchProgram selectedProgram;
 
-  private ResearchCenter loggedCenter;
+  private ProjectDescriptionValidator validator;
 
-  private List<ResearchArea> researchAreas;
 
-  private List<ResearchProgram> researchPrograms;
+  private ICrpService crpService;
 
-  private List<FundingSourceType> fundingSourceTypes;
+  private ICenterProjectTypeService projectTypeService;
+
+
+  private CenterArea selectedResearchArea;
+
+  private CenterProgram selectedProgram;
+
+  private Center loggedCenter;
+
+  private List<CenterArea> researchAreas;
+
+  private List<CenterProgram> researchPrograms;
+
+  private List<CenterFundingSourceType> fundingSourceTypes;
 
 
   private List<OutcomeOutputs> outputs;
@@ -134,23 +134,23 @@ public class ProjectDescriptionAction extends BaseAction {
   private List<LocElement> regionLists;
   private List<LocElement> countryLists;
   private List<Crp> crps;
-  private List<ProjectType> projectTypes;
+  private List<CenterProjectType> projectTypes;
   private boolean region;
   private long programID;
   private long areaID;
   private long projectID;
-  private Project project;
+  private CenterProject project;
   private String principalInvestigator;
   private String transaction;
 
   @Inject
-  public ProjectDescriptionAction(APConfig config, ICenterService centerService, IProjectService projectService,
-    IUserService userService, IFundingSourceTypeService fundingSourceService, ProjectDescriptionValidator validator,
-    IResearchOutputService outputService, IProjectOutputService projectOutputService,
-    IProjectFundingSourceService projectFundingSourceService,
-    IProjectCrosscutingThemeService projectCrosscutingThemeService, IProjectLocationService projectLocationService,
-    ILocElementService locElementService, IAuditLogService auditLogService, ICrpService crpService,
-    IProjectTypeService projectTypeService) {
+  public ProjectDescriptionAction(APConfig config, ICenterService centerService, ICenterProjectService projectService,
+    IUserService userService, ICenterFundingSourceTypeService fundingSourceService,
+    ProjectDescriptionValidator validator, ICenterOutputService outputService,
+    ICenterProjectOutputService projectOutputService, ICenterProjectFundingSourceService projectFundingSourceService,
+    ICenterProjectCrosscutingThemeService projectCrosscutingThemeService,
+    ICenterProjectLocationService projectLocationService, ILocElementService locElementService,
+    IAuditLogService auditLogService, ICrpService crpService, ICenterProjectTypeService projectTypeService) {
     super(config);
     this.centerService = centerService;
     this.projectService = projectService;
@@ -169,7 +169,7 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   public Boolean bolValue(String value) {
-    if ((value == null) || value.isEmpty() || value.toLowerCase().equals("null")) {
+    if (value == null || value.isEmpty() || value.toLowerCase().equals("null")) {
       return null;
     }
     return Boolean.valueOf(value);
@@ -178,17 +178,17 @@ public class ProjectDescriptionAction extends BaseAction {
   @Override
   public String cancel() {
 
-    final Path path = this.getAutoSaveFilePath();
+    Path path = this.getAutoSaveFilePath();
 
     if (path.toFile().exists()) {
 
-      final boolean fileDeleted = path.toFile().delete();
+      boolean fileDeleted = path.toFile().delete();
     }
 
     this.setDraft(false);
     Collection<String> messages = this.getActionMessages();
     if (!messages.isEmpty()) {
-      final String validationMessage = messages.iterator().next();
+      String validationMessage = messages.iterator().next();
       this.setActionMessages(null);
       this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
     } else {
@@ -204,9 +204,9 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   private Path getAutoSaveFilePath() {
-    final String composedClassName = project.getClass().getSimpleName();
-    final String actionFile = this.getActionName().replace("/", "_");
-    final String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+    String composedClassName = project.getClass().getSimpleName();
+    String actionFile = this.getActionName().replace("/", "_");
+    String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
@@ -219,11 +219,11 @@ public class ProjectDescriptionAction extends BaseAction {
     return crps;
   }
 
-  public List<FundingSourceType> getFundingSourceTypes() {
+  public List<CenterFundingSourceType> getFundingSourceTypes() {
     return fundingSourceTypes;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -232,7 +232,7 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   private String getPI() {
-    final List<ResearchLeader> leaders = new ArrayList<>(
+    List<CenterLeader> leaders = new ArrayList<>(
       selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
     return leaders.get(0).getUser().getComposedCompleteName();
   }
@@ -249,19 +249,19 @@ public class ProjectDescriptionAction extends BaseAction {
 
     outputs = new ArrayList<>();
 
-    final List<ResearchTopic> researchTopics = new ArrayList<>(
+    List<CenterTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
     principalInvestigator = this.getPI();
-    for (final ResearchTopic researchTopic : researchTopics) {
-      final List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+    for (CenterTopic researchTopic : researchTopics) {
+      List<CenterOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      for (final ResearchOutcome researchOutcome : researchOutcomes) {
-        final OutcomeOutputs outcomeOutputs = new OutcomeOutputs();
+      for (CenterOutcome researchOutcome : researchOutcomes) {
+        OutcomeOutputs outcomeOutputs = new OutcomeOutputs();
         outcomeOutputs.setOutcome(researchOutcome);
         outcomeOutputs.setOutputs(new ArrayList<>());
-        final List<ResearchOutput> researchOutputs = new ArrayList<>(
+        List<CenterOutput> researchOutputs = new ArrayList<>(
           researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-        for (final ResearchOutput researchOutput : researchOutputs) {
+        for (CenterOutput researchOutput : researchOutputs) {
           outcomeOutputs.getOutputs().add(researchOutput);
         }
         outputs.add(outcomeOutputs);
@@ -269,7 +269,7 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
-  public Project getProject() {
+  public CenterProject getProject() {
     return project;
   }
 
@@ -277,7 +277,7 @@ public class ProjectDescriptionAction extends BaseAction {
     return projectID;
   }
 
-  public List<ProjectType> getProjectTypes() {
+  public List<CenterProjectType> getProjectTypes() {
     return projectTypes;
   }
 
@@ -285,19 +285,19 @@ public class ProjectDescriptionAction extends BaseAction {
     return regionLists;
   }
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
@@ -316,7 +316,7 @@ public class ProjectDescriptionAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -324,26 +324,26 @@ public class ProjectDescriptionAction extends BaseAction {
     region = false;
     // Regions List
     regionLists = new ArrayList<>(locElementService.findAll().stream()
-      .filter(le -> le.isActive() && (le.getLocElementType() != null) && (le.getLocElementType().getId() == 1))
+      .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 1)
       .collect(Collectors.toList()));
     Collections.sort(regionLists, (r1, r2) -> r1.getName().compareTo(r2.getName()));
 
     // Country List
     countryLists = new ArrayList<>(locElementService.findAll().stream()
-      .filter(le -> le.isActive() && (le.getLocElementType() != null) && (le.getLocElementType().getId() == 2))
+      .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 2)
       .collect(Collectors.toList()));
     Collections.sort(countryLists, (c1, c2) -> c1.getName().compareTo(c2.getName()));
 
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
-    } catch (final Exception e) {
+    } catch (Exception e) {
       projectID = -1;
     }
 
     if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
       transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-      final Project history = (Project) auditLogService.getHistory(transaction);
+      CenterProject history = (CenterProject) auditLogService.getHistory(transaction);
 
       if (history != null) {
         project = history;
@@ -353,15 +353,13 @@ public class ProjectDescriptionAction extends BaseAction {
       }
 
     } else {
-      project = projectService.getProjectById(projectID);
+      project = projectService.getCenterProjectById(projectID);
     }
 
 
     if (project != null) {
 
-      System.out.println("project.getStartDate() --> " + project.getStartDate());
-
-      final Project ProjectDB = projectService.getProjectById(projectID);
+      CenterProject ProjectDB = projectService.getCenterProjectById(projectID);
       selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
@@ -369,40 +367,39 @@ public class ProjectDescriptionAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-      final Path path = this.getAutoSaveFilePath();
+      Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
-        final Gson gson = new GsonBuilder().create();
-        final JsonObject jReader = gson.fromJson(reader, JsonObject.class);
-        final AutoSaveReader autoSaveReader = new AutoSaveReader();
+        Gson gson = new GsonBuilder().create();
+        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-        project = (Project) autoSaveReader.readFromJson(jReader);
-        final Project projectDB = projectService.getProjectById(project.getId());
+        project = (CenterProject) autoSaveReader.readFromJson(jReader);
+        CenterProject projectDB = projectService.getCenterProjectById(project.getId());
 
         if (project.getProjectLeader() != null) {
           if (project.getProjectLeader().getId() != null) {
-            if ((project.getProjectLeader().getId() != null) || (project.getProjectLeader().getId() != -1)) {
-              final User user = userService.getUser(project.getProjectLeader().getId());
+            if (project.getProjectLeader().getId() != null || project.getProjectLeader().getId() != -1) {
+              User user = userService.getUser(project.getProjectLeader().getId());
               project.setProjectLeader(user);
             }
           }
         }
 
         if (project.getOutputs() != null) {
-          final List<ProjectOutput> outputs = new ArrayList<>();
-          for (final ProjectOutput output : project.getOutputs()) {
+          List<CenterProjectOutput> outputs = new ArrayList<>();
+          for (CenterProjectOutput output : project.getOutputs()) {
 
             if (output.getId() != null) {
-              final ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
+              CenterProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
               outputs.add(projectOutput);
 
 
             } else {
-              final ResearchOutput researchOutput =
-                outputService.getResearchOutputById(output.getResearchOutput().getId());
-              final ProjectOutput projectOutput = new ProjectOutput();
+              CenterOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+              CenterProjectOutput projectOutput = new CenterProjectOutput();
               projectOutput.setResearchOutput(researchOutput);
               projectOutput.setProject(projectDB);
               outputs.add(projectOutput);
@@ -415,7 +412,7 @@ public class ProjectDescriptionAction extends BaseAction {
         }
 
         if (project.getProjectCountries() != null) {
-          for (final ProjectLocation projectLocation : project.getProjectCountries()) {
+          for (CenterProjectLocation projectLocation : project.getProjectCountries()) {
             if (projectLocation != null) {
               projectLocation.setLocElement(
                 locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2()));
@@ -424,7 +421,7 @@ public class ProjectDescriptionAction extends BaseAction {
         }
 
         if (project.getProjectRegions() != null) {
-          for (final ProjectLocation projectLocation : project.getProjectRegions()) {
+          for (CenterProjectLocation projectLocation : project.getProjectRegions()) {
             region = true;
             if (projectLocation != null) {
               projectLocation
@@ -446,7 +443,7 @@ public class ProjectDescriptionAction extends BaseAction {
           project.setsRegion(String.valueOf(project.getRegion()));
         }
 
-        ProjectCrosscutingTheme crosscutingTheme;
+        CenterProjectCrosscutingTheme crosscutingTheme;
         if (this.isEditable()) {
           crosscutingTheme = projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
         } else {
@@ -463,14 +460,14 @@ public class ProjectDescriptionAction extends BaseAction {
 
         if (project.getProjectLocations() != null) {
 
-          final List<ProjectLocation> countries = new ArrayList<>(project.getProjectLocations().stream()
-            .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 2))
+          List<CenterProjectLocation> countries = new ArrayList<>(project.getProjectLocations().stream()
+            .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
             .collect(Collectors.toList()));
 
           project.setProjectCountries(new ArrayList<>(countries));
 
-          final List<ProjectLocation> regions = new ArrayList<>(project.getProjectLocations().stream()
-            .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 1))
+          List<CenterProjectLocation> regions = new ArrayList<>(project.getProjectLocations().stream()
+            .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
             .collect(Collectors.toList()));
 
 
@@ -501,24 +498,24 @@ public class ProjectDescriptionAction extends BaseAction {
 
     topicOutcomes = new ArrayList<>();
 
-    final List<ResearchTopic> researchTopics = new ArrayList<>(
+    List<CenterTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
 
-    for (final ResearchTopic researchTopic : researchTopics) {
-      final TopicOutcomes outcome = new TopicOutcomes();
+    for (CenterTopic researchTopic : researchTopics) {
+      TopicOutcomes outcome = new TopicOutcomes();
       outcome.setTopic(researchTopic);
       outcome.setOutcomes(new ArrayList<>());
-      final List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+      List<CenterOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      for (final ResearchOutcome researchOutcome : researchOutcomes) {
+      for (CenterOutcome researchOutcome : researchOutcomes) {
         outcome.getOutcomes().add(researchOutcome);
       }
 
       topicOutcomes.add(outcome);
     }
 
-    final String params[] =
+    String params[] =
       {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DESCRIPTION_BASE_PERMISSION, params));
 
@@ -574,7 +571,7 @@ public class ProjectDescriptionAction extends BaseAction {
   public String save() {
     if (this.hasPermission("*")) {
 
-      Project projectDB = projectService.getProjectById(projectID);
+      CenterProject projectDB = projectService.getCenterProjectById(projectID);
 
       projectDB.setName(project.getName());
       projectDB.setOcsCode(project.getOcsCode());
@@ -590,18 +587,18 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setSuggestedName(project.getSuggestedName());
 
       if (project.getProjectType().getId() != null) {
-        final ProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());
+        CenterProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());
         projectDB.setProjectType(projectType);
       }
 
       if (project.getProjectLeader().getId() != null) {
-        final User projectLeader = userService.getUser(project.getProjectLeader().getId());
+        User projectLeader = userService.getUser(project.getProjectLeader().getId());
         projectDB.setProjectLeader(projectLeader);
       }
 
-      final long projectSaveID = projectService.saveProject(projectDB);
+      long projectSaveID = projectService.saveCenterProject(projectDB);
 
-      projectDB = projectService.getProjectById(projectSaveID);
+      projectDB = projectService.getCenterProjectById(projectSaveID);
 
       if (project.getProjectCrosscutingTheme() != null) {
         this.saveCrossCuting(projectDB);
@@ -611,16 +608,16 @@ public class ProjectDescriptionAction extends BaseAction {
       this.saveOutputs(projectDB);
       this.saveLocations(projectDB);
 
-      final List<String> relationsName = new ArrayList<>();
+      List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.PROJECT_FUNDING_SOURCE_RELATION);
       relationsName.add(APConstants.PROJECT_OUTPUT_RELATION);
       relationsName.add(APConstants.PROJECT_LOCATION_RELATION);
-      project = projectService.getProjectById(projectID);
+      project = projectService.getCenterProjectById(projectID);
       project.setActiveSince(new Date());
       project.setModifiedBy(this.getCurrentUser());
-      projectService.saveProject(project, this.getActionName(), relationsName);
+      projectService.saveCenterProject(project, this.getActionName(), relationsName);
 
-      final Path path = this.getAutoSaveFilePath();
+      Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
         path.toFile().delete();
@@ -629,8 +626,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
-        final List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
-        for (final String key : keys) {
+        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (String key : keys) {
           this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
         }
       } else {
@@ -644,10 +641,10 @@ public class ProjectDescriptionAction extends BaseAction {
     }
   }
 
-  public void saveCrossCuting(Project projectDB) {
-    final ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
+  public void saveCrossCuting(CenterProject projectDB) {
+    CenterProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
-    final ProjectCrosscutingTheme crosscutingThemeSave =
+    CenterProjectCrosscutingTheme crosscutingThemeSave =
       projectCrosscutingThemeService.getProjectCrosscutingThemeById(projectDB.getProjectCrosscutingTheme().getId());
 
     crosscutingThemeSave
@@ -671,13 +668,13 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
 
-  public void saveFundingSources(Project projectDB) {
+  public void saveFundingSources(CenterProject projectDB) {
 
-    if ((projectDB.getProjectFundingSources() != null) && (projectDB.getProjectFundingSources().size() > 0)) {
-      final List<ProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
+    if (projectDB.getProjectFundingSources() != null && projectDB.getProjectFundingSources().size() > 0) {
+      List<CenterProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
         projectDB.getProjectFundingSources().stream().filter(pfs -> pfs.isActive()).collect(Collectors.toList()));
 
-      for (final ProjectFundingSource projectFundingSource : fundingSourcesPrew) {
+      for (CenterProjectFundingSource projectFundingSource : fundingSourcesPrew) {
         if (!project.getFundingSources().contains(projectFundingSource)) {
           projectFundingSourceService.deleteProjectFundingSource(projectFundingSource.getId());
         }
@@ -686,15 +683,15 @@ public class ProjectDescriptionAction extends BaseAction {
 
     if (project.getFundingSources() != null) {
 
-      for (final ProjectFundingSource projectFundingSource : project.getFundingSources()) {
-        if ((projectFundingSource.getId() == null) || (projectFundingSource.getId() == -1)) {
+      for (CenterProjectFundingSource projectFundingSource : project.getFundingSources()) {
+        if (projectFundingSource.getId() == null || projectFundingSource.getId() == -1) {
 
-          final ProjectFundingSource fundingSourceSave = new ProjectFundingSource();
+          CenterProjectFundingSource fundingSourceSave = new CenterProjectFundingSource();
 
-          final FundingSourceType fundingSourceType =
+          CenterFundingSourceType fundingSourceType =
             fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
-          final Project project = projectService.getProjectById(projectID);
-          final Crp crp = crpService.getCrpById(projectFundingSource.getCrp().getId());
+          CenterProject project = projectService.getCenterProjectById(projectID);
+          Crp crp = crpService.getCrpById(projectFundingSource.getCrp().getId());
 
           fundingSourceSave.setProject(project);
           fundingSourceSave.setCrp(crp);
@@ -710,12 +707,12 @@ public class ProjectDescriptionAction extends BaseAction {
 
         } else {
           boolean hasChanges = false;
-          final ProjectFundingSource fundingSourcePrew =
+          CenterProjectFundingSource fundingSourcePrew =
             projectFundingSourceService.getProjectFundingSourceById(projectFundingSource.getId());
 
           if (!fundingSourcePrew.getFundingSourceType().equals(projectFundingSource.getFundingSourceType())) {
             hasChanges = true;
-            final FundingSourceType fundingSourceType =
+            CenterFundingSourceType fundingSourceType =
               fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
             fundingSourcePrew.setFundingSourceType(fundingSourceType);
           }
@@ -735,19 +732,19 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
 
-  public void saveLocations(Project projectDB) {
+  public void saveLocations(CenterProject projectDB) {
 
     if (project.getProjectRegions() != null) {
-      final List<ProjectLocation> regions = new ArrayList<>(projectDB.getProjectLocations().stream()
-        .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 1))
+      List<CenterProjectLocation> regions = new ArrayList<>(projectDB.getProjectLocations().stream()
+        .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
         .collect(Collectors.toList()));
-      if ((regions != null) && (regions.size() > 0)) {
+      if (regions != null && regions.size() > 0) {
         if (!region) {
-          for (final ProjectLocation projectLocation : regions) {
+          for (CenterProjectLocation projectLocation : regions) {
             projectLocationService.deleteProjectLocation(projectLocation.getId());
           }
         } else {
-          for (final ProjectLocation projectLocation : regions) {
+          for (CenterProjectLocation projectLocation : regions) {
             if (!project.getProjectRegions().contains(projectLocation)) {
               projectLocationService.deleteProjectLocation(projectLocation.getId());
             }
@@ -755,12 +752,12 @@ public class ProjectDescriptionAction extends BaseAction {
         }
       }
 
-      for (final ProjectLocation projectLocation : project.getProjectRegions()) {
+      for (CenterProjectLocation projectLocation : project.getProjectRegions()) {
 
 
-        if ((projectLocation.getId() == null) || (projectLocation.getId() == -1)) {
+        if (projectLocation.getId() == null || projectLocation.getId() == -1) {
 
-          final ProjectLocation projectLocationSave = new ProjectLocation();
+          CenterProjectLocation projectLocationSave = new CenterProjectLocation();
           projectLocationSave.setActive(true);
           projectLocationSave.setActiveSince(new Date());
           projectLocationSave.setCreatedBy(this.getCurrentUser());
@@ -768,7 +765,7 @@ public class ProjectDescriptionAction extends BaseAction {
           projectLocationSave.setModificationJustification("");
           projectLocationSave.setProject(projectDB);
 
-          final LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
+          LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
           projectLocationSave.setLocElement(element);
 
           projectLocationService.saveProjectLocation(projectLocationSave);
@@ -782,24 +779,24 @@ public class ProjectDescriptionAction extends BaseAction {
 
     {
 
-      final List<ProjectLocation> countries = new ArrayList<>(projectDB.getProjectLocations().stream()
-        .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 2))
+      List<CenterProjectLocation> countries = new ArrayList<>(projectDB.getProjectLocations().stream()
+        .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
         .collect(Collectors.toList()));
 
-      if ((countries != null) && (countries.size() > 0)) {
-        for (final ProjectLocation projectLocation : countries) {
+      if (countries != null && countries.size() > 0) {
+        for (CenterProjectLocation projectLocation : countries) {
           if (!project.getProjectCountries().contains(projectLocation)) {
             projectLocationService.deleteProjectLocation(projectLocation.getId());
           }
         }
       }
 
-      for (final ProjectLocation projectLocation : project.getProjectCountries()) {
+      for (CenterProjectLocation projectLocation : project.getProjectCountries()) {
 
 
-        if ((projectLocation.getId() == null) || (projectLocation.getId() == -1)) {
+        if (projectLocation.getId() == null || projectLocation.getId() == -1) {
 
-          final ProjectLocation projectLocationSave = new ProjectLocation();
+          CenterProjectLocation projectLocationSave = new CenterProjectLocation();
           projectLocationSave.setActive(true);
           projectLocationSave.setActiveSince(new Date());
           projectLocationSave.setCreatedBy(this.getCurrentUser());
@@ -807,8 +804,7 @@ public class ProjectDescriptionAction extends BaseAction {
           projectLocationSave.setModificationJustification("");
           projectLocationSave.setProject(projectDB);
 
-          final LocElement element =
-            locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2());
+          LocElement element = locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2());
           projectLocationSave.setLocElement(element);
 
           projectLocationService.saveProjectLocation(projectLocationSave);
@@ -820,13 +816,13 @@ public class ProjectDescriptionAction extends BaseAction {
 
   }
 
-  public void saveOutputs(Project projectDB) {
+  public void saveOutputs(CenterProject projectDB) {
 
-    if ((projectDB.getProjectOutputs() != null) && (projectDB.getProjectOutputs().size() > 0)) {
-      final List<ProjectOutput> outputsPrew = new ArrayList<>(
+    if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
+      List<CenterProjectOutput> outputsPrew = new ArrayList<>(
         projectDB.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
 
-      for (final ProjectOutput output : outputsPrew) {
+      for (CenterProjectOutput output : outputsPrew) {
         if (!project.getOutputs().contains(output)) {
           projectOutputService.deleteProjectOutput(output.getId());
         }
@@ -834,12 +830,12 @@ public class ProjectDescriptionAction extends BaseAction {
     }
 
     if (project.getOutputs() != null) {
-      for (final ProjectOutput output : project.getOutputs()) {
-        if ((output.getId() == null) || (output.getId() == -1)) {
-          final ProjectOutput outputSave = new ProjectOutput();
+      for (CenterProjectOutput output : project.getOutputs()) {
+        if (output.getId() == null || output.getId() == -1) {
+          CenterProjectOutput outputSave = new CenterProjectOutput();
 
-          final ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
-          final Project project = projectService.getProjectById(projectID);
+          CenterOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+          CenterProject project = projectService.getCenterProjectById(projectID);
 
           outputSave.setProject(project);
           outputSave.setResearchOutput(researchOutput);
@@ -870,11 +866,11 @@ public class ProjectDescriptionAction extends BaseAction {
     this.crps = crps;
   }
 
-  public void setFundingSourceTypes(List<FundingSourceType> fundingSourceTypes) {
+  public void setFundingSourceTypes(List<CenterFundingSourceType> fundingSourceTypes) {
     this.fundingSourceTypes = fundingSourceTypes;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -890,7 +886,7 @@ public class ProjectDescriptionAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setProject(Project project) {
+  public void setProject(CenterProject project) {
     this.project = project;
   }
 
@@ -898,7 +894,7 @@ public class ProjectDescriptionAction extends BaseAction {
     this.projectID = projectID;
   }
 
-  public void setProjectTypes(List<ProjectType> projectTypes) {
+  public void setProjectTypes(List<CenterProjectType> projectTypes) {
     this.projectTypes = projectTypes;
   }
 
@@ -911,20 +907,20 @@ public class ProjectDescriptionAction extends BaseAction {
     this.regionLists = regionLists;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 

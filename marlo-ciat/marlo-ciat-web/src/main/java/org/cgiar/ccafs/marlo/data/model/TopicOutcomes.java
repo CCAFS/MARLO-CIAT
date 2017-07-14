@@ -26,23 +26,23 @@ public class TopicOutcomes implements Serializable {
 
   private static final long serialVersionUID = 1930172039006261677L;
 
-  private ResearchTopic topic;
+  private CenterTopic topic;
 
-  private List<ResearchOutcome> outcomes;
+  private List<CenterOutcome> outcomes;
 
-  public List<ResearchOutcome> getOutcomes() {
+  public List<CenterOutcome> getOutcomes() {
     return outcomes;
   }
 
-  public ResearchTopic getTopic() {
+  public CenterTopic getTopic() {
     return topic;
   }
 
-  public void setOutcomes(List<ResearchOutcome> outcomes) {
+  public void setOutcomes(List<CenterOutcome> outcomes) {
     this.outcomes = outcomes;
   }
 
-  public void setTopic(ResearchTopic topic) {
+  public void setTopic(CenterTopic topic) {
     this.topic = topic;
   }
 

@@ -16,7 +16,7 @@ public class CenterCustomParameter implements java.io.Serializable {
   private User modifiedBy;
   private CenterParameter centerParameter;
   private User createdBy;
-  private ResearchCenter researchCenter;
+  private Center researchCenter;
   private String value;
   private boolean active;
   private Date activeSince;
@@ -57,7 +57,7 @@ public class CenterCustomParameter implements java.io.Serializable {
   }
 
 
-  public ResearchCenter getResearchCenter() {
+  public Center getResearchCenter() {
     return researchCenter;
   }
 
@@ -98,7 +98,7 @@ public class CenterCustomParameter implements java.io.Serializable {
     this.modifiedBy = modifiedBy;
   }
 
-  public void setResearchCenter(ResearchCenter researchCenter) {
+  public void setResearchCenter(Center researchCenter) {
     this.researchCenter = researchCenter;
   }
 

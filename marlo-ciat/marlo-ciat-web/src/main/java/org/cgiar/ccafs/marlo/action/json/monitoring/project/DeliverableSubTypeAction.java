@@ -17,8 +17,8 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.DeliverableType;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableTypeService;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableType;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableTypeService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -37,14 +37,14 @@ public class DeliverableSubTypeAction extends BaseAction {
 
   private static final long serialVersionUID = -4481506940773334182L;
 
-  private IDeliverableTypeService deliverableTypeService;
+  private ICenterDeliverableTypeService deliverableTypeService;
 
   private Long deliverableTypeId;
 
   private List<Map<String, Object>> deliverableSubTypes;
 
   @Inject
-  public DeliverableSubTypeAction(APConfig config, IDeliverableTypeService deliverableTypeService) {
+  public DeliverableSubTypeAction(APConfig config, ICenterDeliverableTypeService deliverableTypeService) {
     super(config);
     this.deliverableTypeService = deliverableTypeService;
   }
@@ -54,10 +54,10 @@ public class DeliverableSubTypeAction extends BaseAction {
     deliverableSubTypes = new ArrayList<>();
     Map<String, Object> deliverableSubType;
 
-    DeliverableType deliverableType = deliverableTypeService.getDeliverableTypeById(deliverableTypeId);
+    CenterDeliverableType deliverableType = deliverableTypeService.getDeliverableTypeById(deliverableTypeId);
 
     if (deliverableType != null) {
-      for (DeliverableType type : deliverableTypeService.getSubDeliverableType(deliverableType.getId())) {
+      for (CenterDeliverableType type : deliverableTypeService.getSubDeliverableType(deliverableType.getId())) {
         if (type.getId() != 62) {
           deliverableSubType = new HashMap<String, Object>();
           deliverableSubType.put("id", type.getId());

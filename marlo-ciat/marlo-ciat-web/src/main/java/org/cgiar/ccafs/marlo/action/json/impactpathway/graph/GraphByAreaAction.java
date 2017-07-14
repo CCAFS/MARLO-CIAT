@@ -17,16 +17,16 @@ package org.cgiar.ccafs.marlo.action.json.impactpathway.graph;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpact;
-import org.cgiar.ccafs.marlo.data.model.ResearchImpactObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterImpact;
+import org.cgiar.ccafs.marlo.data.model.CenterImpactObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterObjective;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterObjectiveService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -51,8 +51,8 @@ public class GraphByAreaAction extends BaseAction {
   private static final Logger LOG = LoggerFactory.getLogger(GraphByAreaAction.class);
 
   // Managers -Services
-  private IProgramService programService;
-  private IResearchObjectiveService objectiveService;
+  private ICenterProgramService programService;
+  private ICenterObjectiveService objectiveService;
 
   // Parameters
   private long programID;
@@ -61,8 +61,8 @@ public class GraphByAreaAction extends BaseAction {
   private HashMap<String, Object> elements;
 
   @Inject
-  public GraphByAreaAction(APConfig config, IProgramService programService,
-    IResearchObjectiveService objectiveService) {
+  public GraphByAreaAction(APConfig config, ICenterProgramService programService,
+    ICenterObjectiveService objectiveService) {
     super(config);
     this.programService = programService;
     this.objectiveService = objectiveService;
@@ -76,8 +76,8 @@ public class GraphByAreaAction extends BaseAction {
     List<HashMap<String, Object>> dataEdges = new ArrayList<HashMap<String, Object>>();
 
 
-    ResearchProgram researchProgram = programService.getProgramById(programID);
-    ResearchArea area = researchProgram.getResearchArea();
+    CenterProgram researchProgram = programService.getProgramById(programID);
+    CenterArea area = researchProgram.getResearchArea();
 
     // Research Area Data
     HashMap<String, Object> dataArea = new HashMap<>();
@@ -91,13 +91,13 @@ public class GraphByAreaAction extends BaseAction {
     dataArea.put("data", dataAreaDetail);
     dataNodes.add(dataArea);
 
-    List<ResearchObjective> objectives = new ArrayList<>();
+    List<CenterObjective> objectives = new ArrayList<>();
     if (objectiveService.findAll() != null) {
       objectives = objectiveService.findAll().stream().filter(o -> o.isActive()).collect(Collectors.toList());
     }
 
     int i = 1;
-    for (ResearchObjective researchObjective : objectives) {
+    for (CenterObjective researchObjective : objectives) {
       // Strategic Objective Data
       HashMap<String, Object> dataObjective = new HashMap<>();
       HashMap<String, Object> dataObjectiveDetail = new HashMap<>();
@@ -113,11 +113,11 @@ public class GraphByAreaAction extends BaseAction {
       i++;
     }
 
-    List<ResearchProgram> programs =
+    List<CenterProgram> programs =
       new ArrayList<>(area.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
 
-    for (ResearchProgram program : programs) {
+    for (CenterProgram program : programs) {
 
       // Research Program Data
       HashMap<String, Object> dataProgram = new HashMap<>();
@@ -133,16 +133,16 @@ public class GraphByAreaAction extends BaseAction {
       dataNodes.add(dataProgram);
 
 
-      List<ResearchImpact> impacts =
+      List<CenterImpact> impacts =
         new ArrayList<>(program.getResearchImpacts().stream().filter(ri -> ri.isActive()).collect(Collectors.toList()));
 
-      List<ResearchTopic> topics =
+      List<CenterTopic> topics =
         new ArrayList<>(program.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
 
       i = 1;
 
-      for (ResearchImpact impact : impacts) {
+      for (CenterImpact impact : impacts) {
         // Research Impact Data
         HashMap<String, Object> dataImpact = new HashMap<>();
         HashMap<String, Object> dataImpactDetail = new HashMap<>();
@@ -158,10 +158,10 @@ public class GraphByAreaAction extends BaseAction {
         dataImpact.put("data", dataImpactDetail);
         dataNodes.add(dataImpact);
 
-        List<ResearchImpactObjective> impactObjectives = new ArrayList<>(
+        List<CenterImpactObjective> impactObjectives = new ArrayList<>(
           impact.getResearchImpactObjectives().stream().filter(io -> io.isActive()).collect(Collectors.toList()));
 
-        for (ResearchImpactObjective impactObjective : impactObjectives) {
+        for (CenterImpactObjective impactObjective : impactObjectives) {
           // Relation S Objective - Program Impact
           HashMap<String, Object> dataEdgeImpact = new HashMap<>();
           HashMap<String, Object> dataEdgeImpactDetail = new HashMap<>();
@@ -177,7 +177,7 @@ public class GraphByAreaAction extends BaseAction {
 
       i = 1;
 
-      for (ResearchTopic topic : topics) {
+      for (CenterTopic topic : topics) {
         // Research Topic Data
         HashMap<String, Object> dataTopic = new HashMap<>();
         HashMap<String, Object> dataTopicDetail = new HashMap<>();
@@ -194,10 +194,10 @@ public class GraphByAreaAction extends BaseAction {
         dataNodes.add(dataTopic);
 
         int j = 1;
-        List<ResearchOutcome> outcomes = new ArrayList<>(topic.getResearchOutcomes().stream()
+        List<CenterOutcome> outcomes = new ArrayList<>(topic.getResearchOutcomes().stream()
           .filter(ro -> ro.isActive() && ro.getResearchImpact() != null).collect(Collectors.toList()));
 
-        for (ResearchOutcome outcome : outcomes) {
+        for (CenterOutcome outcome : outcomes) {
           // Research Outcome Data
           HashMap<String, Object> dataOutcome = new HashMap<>();
           HashMap<String, Object> dataOutcomeDetail = new HashMap<>();
@@ -219,7 +219,7 @@ public class GraphByAreaAction extends BaseAction {
           dataEdgeOutcome.put("data", dataEdgeOutcomeDetail);
           dataEdges.add(dataEdgeOutcome);
 
-          List<ResearchOutput> outputs = new ArrayList<>(
+          List<CenterOutput> outputs = new ArrayList<>(
             outcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
 
           dataOutcomeDetail.put("Nouptus", outputs.size());
@@ -227,7 +227,7 @@ public class GraphByAreaAction extends BaseAction {
           dataNodes.add(dataOutcome);
 
           int k = 1;
-          for (ResearchOutput output : outputs) {
+          for (CenterOutput output : outputs) {
             // Research Output Data
             HashMap<String, Object> dataOutput = new HashMap<>();
             HashMap<String, Object> dataOutputDetail = new HashMap<>();

@@ -15,7 +15,7 @@
 			<column name="capdev_type" />
 		</many-to-one>
 		<many-to-one name="project"
-			class="org.cgiar.ccafs.marlo.data.model.Project" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterProject" fetch="select">
 			<column name="project" not-null="false" />
 		</many-to-one>
 		<many-to-one name="usersByModifiedBy" class="org.cgiar.ccafs.marlo.data.model.User"
@@ -27,7 +27,7 @@
 			<column name="created_by" />
 		</many-to-one>
 		<many-to-one name="researchArea"
-			class="org.cgiar.ccafs.marlo.data.model.ResearchArea" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterArea" fetch="select">
 			<column name="research_area" />
 		</many-to-one>
 		<many-to-one name="crp" class="org.cgiar.ccafs.marlo.data.model.Crp"
@@ -35,7 +35,7 @@
 			<column name="crp" />
 		</many-to-one>
 		<many-to-one name="researchProgram"
-			class="org.cgiar.ccafs.marlo.data.model.ResearchProgram" fetch="select">
+			class="org.cgiar.ccafs.marlo.data.model.CenterProgram" fetch="select">
 			<column name="research_program" />
 		</many-to-one>
 		<property name="title" type="string">
