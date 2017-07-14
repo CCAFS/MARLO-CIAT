@@ -338,12 +338,12 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
     capdev = capdevService.getCapacityDevelopmentById(capdevID);
 
-    capdevTypes = new ArrayList<>(capdevTypeService.findAll().stream()
-      .filter(le -> le.getCategory().equals("" + capdev.getCategory())).collect(Collectors.toList()));
-
 
     if (capdev != null) {
+      capdevTypes = new ArrayList<>(capdevTypeService.findAll().stream()
+        .filter(le -> le.getCategory().equals("" + capdev.getCategory())).collect(Collectors.toList()));
       System.out.println("capdev.getStartDate() -->" + capdev.getStartDate());
+
       final List<CapdevParticipant> participants = new ArrayList<>(capdev.getCapdevParticipants());
       if (capdev.getCategory() == 1) {
         if (!participants.isEmpty()) {

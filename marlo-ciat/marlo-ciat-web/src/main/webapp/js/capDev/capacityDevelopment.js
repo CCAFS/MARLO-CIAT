@@ -240,18 +240,18 @@
           success: function(data) {
             console.log(data.length)
             if(data.length > 0){
-              var mytable = $('<table></table>').attr({ id: "basicTable" , class:"table table-bordered"});
+              var mytable = $('<table></table>').attr( "class","table table-bordered");
             var rows = data[0].content.length;
             var cols = data[0].headers.length;
             var tr = [];
-            var header = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(mytable);
+            var header = $('<tr></tr>').appendTo(mytable);
 
             for (var i = 0; i < cols; i++) {
               $('<th></th>').text(data[0].headers[i]).appendTo(header); 
             }
 
             for (var i = 0; i < rows; i++) {
-              var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(mytable);
+              var row = $('<tr></tr>').appendTo(mytable);
               for (var j = 0; j < cols; j++) {
                 $('<td></td>').text(data[0].content[i][data[0].headers[j]]).appendTo(row); 
               }
