@@ -16,12 +16,12 @@
 package org.cgiar.ccafs.marlo.validation.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
-import org.cgiar.ccafs.marlo.data.model.Project;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableDocument;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
 import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -44,8 +44,8 @@ public class DeliverableValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(Deliverable deliverable, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterDeliverable deliverable, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = deliverable.getClass().getSimpleName();
     String actionFile = ProjectSectionsEnum.DELIVERABLES.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -54,7 +54,7 @@ public class DeliverableValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, Deliverable deliverable, Project project, ResearchProgram selectedProgram,
+  public void validate(BaseAction baseAction, CenterDeliverable deliverable, CenterProject project, CenterProgram selectedProgram,
     boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
@@ -78,7 +78,7 @@ public class DeliverableValidator extends BaseValidator {
   }
 
 
-  public void validateDeliverable(BaseAction baseAction, Deliverable deliverable) {
+  public void validateDeliverable(BaseAction baseAction, CenterDeliverable deliverable) {
 
     if (deliverable.getName() != null) {
       if (!this.isValidString(deliverable.getName()) && this.wordCount(deliverable.getName()) <= 50) {
@@ -128,7 +128,7 @@ public class DeliverableValidator extends BaseValidator {
 
   }
 
-  public void validateDocument(BaseAction baseAction, DeliverableDocument document, int i) {
+  public void validateDocument(BaseAction baseAction, CenterDeliverableDocument document, int i) {
     if (!this.isValidString(document.getLink()) && this.wordCount(document.getLink()) <= 200) {
       this.addMessage(baseAction.getText("deliverable.action.documents.link", String.valueOf(i + 1)));
       baseAction.getInvalidFields().put("input-deliverable.documents[" + i + "].link",

@@ -52,8 +52,9 @@
         
         <div class="container">
           <div id="marlo-logo" class="animated fadeIn">
-            <div id="title" >MiLE</div>    
-            <div id="subTitle" class="visible-md-block visible-lg-block"> Monitoring Learning and Evaluation</div>
+            <a href="${baseUrl}">
+            <div id="title" >MARLO</div>    
+            <div id="subTitle" class="visible-md-block visible-lg-block">Managing Agricultural Research for Learning & Outcomes</div>
             <div class="clearfix"></div>
             [#if !config.production] <h4 class="testEnvironment"><span class="label label-danger text-left">Testing Environment</span></h4> [/#if]
           </div>

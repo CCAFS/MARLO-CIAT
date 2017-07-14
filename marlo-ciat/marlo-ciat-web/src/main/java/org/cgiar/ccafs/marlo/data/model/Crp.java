@@ -46,7 +46,7 @@ public class Crp implements java.io.Serializable, IAuditLog {
   private boolean marlo;
 
 
-  private Set<ProjectFundingSource> projectFundingSources = new HashSet<ProjectFundingSource>(0);
+  private Set<CenterProjectFundingSource> projectFundingSources = new HashSet<CenterProjectFundingSource>(0);
 
 
   public Crp() {
@@ -54,7 +54,7 @@ public class Crp implements java.io.Serializable, IAuditLog {
 
 
   public Crp(Long id, User modifiedBy, User createdBy, String name, String acronym, boolean active, Date activeSince,
-    String modificationJustification, boolean marlo, Set<ProjectFundingSource> projectFundingSources) {
+    String modificationJustification, boolean marlo, Set<CenterProjectFundingSource> projectFundingSources) {
     super();
     this.id = id;
     this.modifiedBy = modifiedBy;
@@ -112,7 +112,7 @@ public class Crp implements java.io.Serializable, IAuditLog {
     return name;
   }
 
-  public Set<ProjectFundingSource> getProjectFundingSources() {
+  public Set<CenterProjectFundingSource> getProjectFundingSources() {
     return projectFundingSources;
   }
 
@@ -162,7 +162,7 @@ public class Crp implements java.io.Serializable, IAuditLog {
   }
 
 
-  public void setProjectFundingSources(Set<ProjectFundingSource> projectFundingSources) {
+  public void setProjectFundingSources(Set<CenterProjectFundingSource> projectFundingSources) {
     this.projectFundingSources = projectFundingSources;
   }
 

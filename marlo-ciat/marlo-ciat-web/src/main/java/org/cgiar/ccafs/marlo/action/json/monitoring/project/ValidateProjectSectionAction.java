@@ -17,16 +17,16 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectCrosscutingTheme;
-import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectCrosscutingTheme;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectPartner;
+import org.cgiar.ccafs.marlo.data.model.CenterSectionStatus;
 import org.cgiar.ccafs.marlo.data.model.ProjectSectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.SectionStatus;
-import org.cgiar.ccafs.marlo.data.service.IProjectCrosscutingThemeService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.ISectionStatusService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectCrosscutingThemeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSectionStatusService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.validation.monitoring.project.DeliverableValidator;
 import org.cgiar.ccafs.marlo.validation.monitoring.project.ProjectDescriptionValidator;
@@ -56,11 +56,11 @@ public class ValidateProjectSectionAction extends BaseAction {
   private static final Logger LOG = LoggerFactory.getLogger(ValidateProjectSectionAction.class);
 
   // Managers
-  private IProjectService projectService;
+  private ICenterProjectService projectService;
 
-  private IProjectCrosscutingThemeService projectCrosscutingThemeService;
+  private ICenterProjectCrosscutingThemeService projectCrosscutingThemeService;
 
-  private ISectionStatusService sectionStatusService;
+  private ICenterSectionStatusService sectionStatusService;
   // Parameters
   private boolean existProject;
   private boolean validSection;
@@ -69,7 +69,7 @@ public class ValidateProjectSectionAction extends BaseAction {
   private long projectID;
   private Map<String, Object> section;
   // Model
-  private SectionStatus sectionStatus;
+  private CenterSectionStatus sectionStatus;
   // Validator
   private ProjectDescriptionValidator descriptionValidator;
 
@@ -78,10 +78,10 @@ public class ValidateProjectSectionAction extends BaseAction {
   private DeliverableValidator deliverableValidator;
 
   @Inject
-  public ValidateProjectSectionAction(APConfig config, IProjectService projectService,
-    ISectionStatusService sectionStatusService, ProjectDescriptionValidator descriptionValidator,
+  public ValidateProjectSectionAction(APConfig config, ICenterProjectService projectService,
+    ICenterSectionStatusService sectionStatusService, ProjectDescriptionValidator descriptionValidator,
     ProjectPartnerValidator partnerValidator, DeliverableValidator deliverableValidator,
-    IProjectCrosscutingThemeService projectCrosscutingThemeService) {
+    ICenterProjectCrosscutingThemeService projectCrosscutingThemeService) {
     super(config);
     this.projectService = projectService;
     this.projectCrosscutingThemeService = projectCrosscutingThemeService;
@@ -107,8 +107,8 @@ public class ValidateProjectSectionAction extends BaseAction {
       }
     }
 
-    Project project = projectService.getProjectById(projectID);
-    ResearchProgram program = project.getResearchProgram();
+    CenterProject project = projectService.getCenterProjectById(projectID);
+    CenterProgram program = project.getResearchProgram();
 
     switch (ProjectSectionsEnum.getValue(sectionName)) {
       case DELIVERABLES:
@@ -117,17 +117,17 @@ public class ValidateProjectSectionAction extends BaseAction {
         section.put("missingFields", "");
 
         if (project != null) {
-          List<Deliverable> deliverables =
+          List<CenterDeliverable> deliverables =
             new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
 
           if (deliverables != null && !deliverables.isEmpty()) {
-            for (Deliverable deliverable : deliverables) {
+            for (CenterDeliverable deliverable : deliverables) {
 
               sectionStatus = sectionStatusService.getSectionStatusByDeliverable(deliverable.getId(), projectID,
                 sectionName, this.getYear());
 
               if (sectionStatus == null) {
-                sectionStatus = new SectionStatus();
+                sectionStatus = new CenterSectionStatus();
                 sectionStatus.setMissingFields("No section");
               }
               if (sectionStatus.getMissingFields().length() > 0) {
@@ -135,7 +135,7 @@ public class ValidateProjectSectionAction extends BaseAction {
               }
             }
           } else {
-            sectionStatus = new SectionStatus();
+            sectionStatus = new CenterSectionStatus();
             sectionStatus.setMissingFields("No deliverables");
             section.put("missingFields", section.get("missingFields") + "-" + sectionStatus.getMissingFields());
           }
@@ -180,7 +180,7 @@ public class ValidateProjectSectionAction extends BaseAction {
         StringUtils.trim(((String[]) parameters.get(APConstants.PROJECT_ID))[0]));
     }
 
-    existProject = projectService.existProject(projectID);
+    existProject = projectService.existCenterProject(projectID);
 
     // Validate if the section exists.
     List<String> sections = new ArrayList<>();
@@ -204,17 +204,17 @@ public class ValidateProjectSectionAction extends BaseAction {
   }
 
   public void validateDeliverables() {
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     if (project != null) {
 
-      ResearchProgram program = project.getResearchProgram();
+      CenterProgram program = project.getResearchProgram();
 
-      List<Deliverable> deliverables =
+      List<CenterDeliverable> deliverables =
         new ArrayList<>(project.getDeliverables().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
 
       if (deliverables != null && !deliverables.isEmpty()) {
-        for (Deliverable deliverable : deliverables) {
+        for (CenterDeliverable deliverable : deliverables) {
 
           deliverable.setDocuments(new ArrayList<>(
             deliverable.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList())));
@@ -228,13 +228,13 @@ public class ValidateProjectSectionAction extends BaseAction {
 
   public void validateDescription() {
 
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     if (project != null) {
 
-      ResearchProgram program = project.getResearchProgram();
+      CenterProgram program = project.getResearchProgram();
 
-      ProjectCrosscutingTheme crosscutingTheme;
+      CenterProjectCrosscutingTheme crosscutingTheme;
       if (this.isEditable()) {
         crosscutingTheme = projectCrosscutingThemeService.getProjectCrosscutingThemeById(project.getId());
       } else {
@@ -256,17 +256,17 @@ public class ValidateProjectSectionAction extends BaseAction {
   }
 
   public void validatePartners() {
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     if (project != null) {
 
-      ResearchProgram program = project.getResearchProgram();
+      CenterProgram program = project.getResearchProgram();
 
       project.setPartners(new ArrayList<>(
         project.getProjectPartners().stream().filter(pp -> pp.isActive()).collect(Collectors.toList())));
 
       if (project.getPartners() != null || !project.getPartners().isEmpty()) {
-        for (ProjectPartner partner : project.getPartners()) {
+        for (CenterProjectPartner partner : project.getPartners()) {
           partner.setUsers(new ArrayList<>(
             partner.getProjectPartnerPersons().stream().filter(ppp -> ppp.isActive()).collect(Collectors.toList())));
         }

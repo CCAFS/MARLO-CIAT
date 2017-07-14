@@ -17,8 +17,8 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.HashMap;
@@ -36,7 +36,7 @@ public class OutputInfoAction extends BaseAction {
   private static final long serialVersionUID = 6056401366531194841L;
 
 
-  private IResearchOutputService outputService;
+  private ICenterOutputService outputService;
 
 
   private long outputID;
@@ -44,7 +44,7 @@ public class OutputInfoAction extends BaseAction {
   private Map<String, Object> outputInfo;
 
   @Inject
-  public OutputInfoAction(APConfig config, IResearchOutputService outputService) {
+  public OutputInfoAction(APConfig config, ICenterOutputService outputService) {
     super(config);
     this.outputService = outputService;
   }
@@ -53,7 +53,7 @@ public class OutputInfoAction extends BaseAction {
   public String execute() throws Exception {
 
     outputInfo = new HashMap<>();
-    ResearchOutput output = outputService.getResearchOutputById(outputID);
+    CenterOutput output = outputService.getResearchOutputById(outputID);
 
     if (output != null) {
       outputInfo.put("id", output.getId());

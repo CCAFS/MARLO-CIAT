@@ -17,26 +17,26 @@ package org.cgiar.ccafs.marlo.action.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.DeliverableCrosscutingTheme;
-import org.cgiar.ccafs.marlo.data.model.DeliverableDocument;
-import org.cgiar.ccafs.marlo.data.model.DeliverableOutput;
-import org.cgiar.ccafs.marlo.data.model.DeliverableType;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableCrosscutingTheme;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableDocument;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverableType;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableCrosscutingThemeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableDocumentService;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableService;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableTypeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableCrosscutingThemeService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableDocumentService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableOutputService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableTypeService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.AutoSaveReader;
@@ -67,25 +67,25 @@ public class ProjectDeliverableAction extends BaseAction {
   private static final long serialVersionUID = 6553033204498654741L;
 
 
-  private IDeliverableService deliverableService;
+  private ICenterDeliverableService deliverableService;
 
 
-  private IDeliverableTypeService deliverableTypeService;
+  private ICenterDeliverableTypeService deliverableTypeService;
 
 
-  private IDeliverableCrosscutingThemeService deliverableCrosscutingService;
+  private ICenterDeliverableCrosscutingThemeService deliverableCrosscutingService;
 
-  private IDeliverableOutputService deliverableOutputService;
+  private ICenterDeliverableOutputService deliverableOutputService;
 
 
-  private IResearchOutputService outputService;
+  private ICenterOutputService outputService;
 
-  private IDeliverableDocumentService deliverableDocumentService;
+  private ICenterDeliverableDocumentService deliverableDocumentService;
 
 
   private ICenterService centerService;
 
-  private IProjectService projectService;
+  private ICenterProjectService projectService;
 
   private IAuditLogService auditLogService;
   private DeliverableValidator validator;
@@ -93,25 +93,25 @@ public class ProjectDeliverableAction extends BaseAction {
   private long projectID;
   private long programID;
   private long areaID;
-  private Project project;
-  private ResearchArea selectedResearchArea;
-  private ResearchProgram selectedProgram;
-  private ResearchCenter loggedCenter;
+  private CenterProject project;
+  private CenterArea selectedResearchArea;
+  private CenterProgram selectedProgram;
+  private Center loggedCenter;
 
-  private Deliverable deliverable;
-  private List<ResearchArea> researchAreas;
-  private List<ResearchProgram> researchPrograms;
-  private List<DeliverableType> deliverableSubTypes;
-  private List<DeliverableType> deliverableTypeParent;
-  private List<ResearchOutput> outputs;
+  private CenterDeliverable deliverable;
+  private List<CenterArea> researchAreas;
+  private List<CenterProgram> researchPrograms;
+  private List<CenterDeliverableType> deliverableSubTypes;
+  private List<CenterDeliverableType> deliverableTypeParent;
+  private List<CenterOutput> outputs;
   private String transaction;
 
   @Inject
   public ProjectDeliverableAction(APConfig config, ICenterService centerService,
-    IDeliverableTypeService deliverableTypeService, IDeliverableService deliverableService,
-    IProjectService projectService, IDeliverableDocumentService deliverableDocumentService,
-    DeliverableValidator validator, IDeliverableCrosscutingThemeService deliverableCrosscutingService,
-    IDeliverableOutputService deliverableOutputService, IResearchOutputService outputService,
+    ICenterDeliverableTypeService deliverableTypeService, ICenterDeliverableService deliverableService,
+    ICenterProjectService projectService, ICenterDeliverableDocumentService deliverableDocumentService,
+    DeliverableValidator validator, ICenterDeliverableCrosscutingThemeService deliverableCrosscutingService,
+    ICenterDeliverableOutputService deliverableOutputService, ICenterOutputService outputService,
     IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
@@ -162,7 +162,7 @@ public class ProjectDeliverableAction extends BaseAction {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public Deliverable getDeliverable() {
+  public CenterDeliverable getDeliverable() {
     return deliverable;
   }
 
@@ -170,19 +170,19 @@ public class ProjectDeliverableAction extends BaseAction {
     return deliverableID;
   }
 
-  public List<DeliverableType> getDeliverableSubTypes() {
+  public List<CenterDeliverableType> getDeliverableSubTypes() {
     return deliverableSubTypes;
   }
 
-  public List<DeliverableType> getDeliverableTypeParent() {
+  public List<CenterDeliverableType> getDeliverableTypeParent() {
     return deliverableTypeParent;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
-  public List<ResearchOutput> getOutputs() {
+  public List<CenterOutput> getOutputs() {
     return outputs;
   }
 
@@ -194,15 +194,15 @@ public class ProjectDeliverableAction extends BaseAction {
 
     outputs = new ArrayList<>();
 
-    List<ProjectOutput> projectOutputs =
+    List<CenterProjectOutput> projectOutputs =
       new ArrayList<>(project.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
 
-    for (ProjectOutput projectOutput : projectOutputs) {
+    for (CenterProjectOutput projectOutput : projectOutputs) {
       outputs.add(projectOutput.getResearchOutput());
     }
   }
 
-  public Project getProject() {
+  public CenterProject getProject() {
     return project;
   }
 
@@ -210,21 +210,21 @@ public class ProjectDeliverableAction extends BaseAction {
     return projectID;
   }
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
@@ -236,7 +236,7 @@ public class ProjectDeliverableAction extends BaseAction {
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -252,7 +252,7 @@ public class ProjectDeliverableAction extends BaseAction {
     if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
       transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-      Deliverable history = (Deliverable) auditLogService.getHistory(transaction);
+      CenterDeliverable history = (CenterDeliverable) auditLogService.getHistory(transaction);
 
       if (history != null) {
         deliverable = history;
@@ -267,9 +267,9 @@ public class ProjectDeliverableAction extends BaseAction {
 
 
     if (deliverable != null) {
-      Deliverable deliverableDB = deliverableService.getDeliverableById(deliverable.getId());
+      CenterDeliverable deliverableDB = deliverableService.getDeliverableById(deliverable.getId());
       projectID = deliverableDB.getProject().getId();
-      project = projectService.getProjectById(projectID);
+      project = projectService.getCenterProjectById(projectID);
 
       selectedProgram = project.getResearchProgram();
       programID = selectedProgram.getId();
@@ -288,20 +288,21 @@ public class ProjectDeliverableAction extends BaseAction {
         JsonObject jReader = gson.fromJson(reader, JsonObject.class);
         AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-        deliverable = (Deliverable) autoSaveReader.readFromJson(jReader);
+        deliverable = (CenterDeliverable) autoSaveReader.readFromJson(jReader);
 
         if (deliverable.getOutputs() != null) {
-          List<DeliverableOutput> outputs = new ArrayList<>();
-          for (DeliverableOutput output : deliverable.getOutputs()) {
+          List<CenterDeliverableOutput> outputs = new ArrayList<>();
+          for (CenterDeliverableOutput output : deliverable.getOutputs()) {
 
             if (output.getId() != null) {
-              DeliverableOutput deliverableOutput = deliverableOutputService.getDeliverableOutputById(output.getId());
+              CenterDeliverableOutput deliverableOutput =
+                deliverableOutputService.getDeliverableOutputById(output.getId());
               outputs.add(deliverableOutput);
 
 
             } else {
-              ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
-              DeliverableOutput deliverableOutput = new DeliverableOutput();
+              CenterOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+              CenterDeliverableOutput deliverableOutput = new CenterDeliverableOutput();
               deliverableOutput.setResearchOutput(researchOutput);
               deliverableOutput.setDeliverable(deliverableDB);
               outputs.add(deliverableOutput);
@@ -319,7 +320,7 @@ public class ProjectDeliverableAction extends BaseAction {
       } else {
         this.setDraft(false);
 
-        DeliverableCrosscutingTheme deliverableCrosscutingTheme;
+        CenterDeliverableCrosscutingTheme deliverableCrosscutingTheme;
         if (this.isEditable()) {
           deliverableCrosscutingTheme =
             deliverableCrosscutingService.getDeliverableCrosscutingThemeById(deliverable.getId());
@@ -394,7 +395,7 @@ public class ProjectDeliverableAction extends BaseAction {
   public String save() {
     if (this.hasPermission("*")) {
 
-      Deliverable deliverableDB = deliverableService.getDeliverableById(deliverableID);
+      CenterDeliverable deliverableDB = deliverableService.getDeliverableById(deliverableID);
 
       deliverableDB.setName(deliverable.getName());
       deliverableDB.setStartDate(deliverable.getStartDate());
@@ -402,7 +403,7 @@ public class ProjectDeliverableAction extends BaseAction {
 
 
       if (deliverable.getDeliverableType().getId() != null) {
-        DeliverableType deliverableType =
+        CenterDeliverableType deliverableType =
           deliverableTypeService.getDeliverableTypeById(deliverable.getDeliverableType().getId());
         deliverableDB.setDeliverableType(deliverableType);
       }
@@ -448,10 +449,10 @@ public class ProjectDeliverableAction extends BaseAction {
     }
   }
 
-  public void saveCrossCuting(Deliverable deliverableDB) {
-    DeliverableCrosscutingTheme crosscutingTheme = deliverable.getDeliverableCrosscutingTheme();
+  public void saveCrossCuting(CenterDeliverable deliverableDB) {
+    CenterDeliverableCrosscutingTheme crosscutingTheme = deliverable.getDeliverableCrosscutingTheme();
 
-    DeliverableCrosscutingTheme crosscutingThemeSave = deliverableCrosscutingService
+    CenterDeliverableCrosscutingTheme crosscutingThemeSave = deliverableCrosscutingService
       .getDeliverableCrosscutingThemeById(deliverableDB.getDeliverableCrosscutingTheme().getId());
 
     crosscutingThemeSave
@@ -474,13 +475,13 @@ public class ProjectDeliverableAction extends BaseAction {
 
   }
 
-  public void saveDocuments(Deliverable deliverableDB) {
+  public void saveDocuments(CenterDeliverable deliverableDB) {
 
     if (deliverableDB.getDeliverableDocuments() != null && deliverableDB.getDeliverableDocuments().size() > 0) {
-      List<DeliverableDocument> deliverableDocuments = new ArrayList<>(
+      List<CenterDeliverableDocument> deliverableDocuments = new ArrayList<>(
         deliverableDB.getDeliverableDocuments().stream().filter(dd -> dd.isActive()).collect(Collectors.toList()));
 
-      for (DeliverableDocument deliverableDocument : deliverableDocuments) {
+      for (CenterDeliverableDocument deliverableDocument : deliverableDocuments) {
         if (!deliverable.getDocuments().contains(deliverableDocument)) {
           deliverableDocumentService.deleteDeliverableDocument(deliverableDocument.getId());
         }
@@ -488,10 +489,10 @@ public class ProjectDeliverableAction extends BaseAction {
     }
 
     if (deliverable.getDocuments() != null) {
-      for (DeliverableDocument deliverableDocument : deliverable.getDocuments()) {
+      for (CenterDeliverableDocument deliverableDocument : deliverable.getDocuments()) {
 
         if (deliverableDocument.getId() == null || deliverableDocument.getId() == -1) {
-          DeliverableDocument documentSave = new DeliverableDocument();
+          CenterDeliverableDocument documentSave = new CenterDeliverableDocument();
 
           documentSave.setActive(true);
           documentSave.setCreatedBy(this.getCurrentUser());
@@ -500,7 +501,7 @@ public class ProjectDeliverableAction extends BaseAction {
           documentSave.setModificationJustification("");
           documentSave.setLink(deliverableDocument.getLink());
 
-          Deliverable deliverable = deliverableService.getDeliverableById(deliverableID);
+          CenterDeliverable deliverable = deliverableService.getDeliverableById(deliverableID);
           documentSave.setDeliverable(deliverable);
 
           deliverableDocumentService.saveDeliverableDocument(documentSave);
@@ -508,7 +509,7 @@ public class ProjectDeliverableAction extends BaseAction {
 
         } else {
           boolean hasChanges = false;
-          DeliverableDocument documentPrew =
+          CenterDeliverableDocument documentPrew =
             deliverableDocumentService.getDeliverableDocumentById(deliverableDocument.getId());
 
           if (!documentPrew.getLink().equals(deliverableDocument.getLink())) {
@@ -529,12 +530,12 @@ public class ProjectDeliverableAction extends BaseAction {
 
   }
 
-  public void saveOutputs(Deliverable deliverableDB) {
+  public void saveOutputs(CenterDeliverable deliverableDB) {
     if (deliverableDB.getDeliverableOutputs() != null && deliverableDB.getDeliverableOutputs().size() > 0) {
-      List<DeliverableOutput> deliverableOutputsPrew = new ArrayList<>(
+      List<CenterDeliverableOutput> deliverableOutputsPrew = new ArrayList<>(
         deliverableDB.getDeliverableOutputs().stream().filter(d -> d.isActive()).collect(Collectors.toList()));
 
-      for (DeliverableOutput deliverableOutput : deliverableOutputsPrew) {
+      for (CenterDeliverableOutput deliverableOutput : deliverableOutputsPrew) {
         if (!deliverable.getOutputs().contains(deliverableOutput)) {
           deliverableOutputService.deleteDeliverableOutput(deliverableOutput.getId());
         }
@@ -543,9 +544,9 @@ public class ProjectDeliverableAction extends BaseAction {
     }
 
     if (deliverable.getOutputs() != null) {
-      for (DeliverableOutput deliverableOutput : deliverable.getOutputs()) {
+      for (CenterDeliverableOutput deliverableOutput : deliverable.getOutputs()) {
         if (deliverableOutput.getId() == null || deliverableOutput.getId() == -1) {
-          DeliverableOutput deliverableOutputSave = new DeliverableOutput();
+          CenterDeliverableOutput deliverableOutputSave = new CenterDeliverableOutput();
 
           deliverableOutputSave.setActive(true);
           deliverableOutputSave.setCreatedBy(this.getCurrentUser());
@@ -553,7 +554,7 @@ public class ProjectDeliverableAction extends BaseAction {
           deliverableOutputSave.setActiveSince(new Date());
           deliverableOutputSave.setModificationJustification("");
 
-          ResearchOutput output = outputService.getResearchOutputById(deliverableOutput.getResearchOutput().getId());
+          CenterOutput output = outputService.getResearchOutputById(deliverableOutput.getResearchOutput().getId());
           deliverableOutputSave.setResearchOutput(output);
           deliverableOutputSave.setDeliverable(deliverableDB);
 
@@ -568,7 +569,7 @@ public class ProjectDeliverableAction extends BaseAction {
     this.areaID = areaID;
   }
 
-  public void setDeliverable(Deliverable deliverable) {
+  public void setDeliverable(CenterDeliverable deliverable) {
     this.deliverable = deliverable;
   }
 
@@ -576,20 +577,20 @@ public class ProjectDeliverableAction extends BaseAction {
     this.deliverableID = deliverableID;
   }
 
-  public void setDeliverableSubTypes(List<DeliverableType> deliverableSubTypes) {
+  public void setDeliverableSubTypes(List<CenterDeliverableType> deliverableSubTypes) {
     this.deliverableSubTypes = deliverableSubTypes;
   }
 
-  public void setDeliverableTypeParent(List<DeliverableType> deliverableTypeParent) {
+  public void setDeliverableTypeParent(List<CenterDeliverableType> deliverableTypeParent) {
     this.deliverableTypeParent = deliverableTypeParent;
   }
 
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
-  public void setOutputs(List<ResearchOutput> outputs) {
+  public void setOutputs(List<CenterOutput> outputs) {
     this.outputs = outputs;
   }
 
@@ -597,7 +598,7 @@ public class ProjectDeliverableAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setProject(Project project) {
+  public void setProject(CenterProject project) {
     this.project = project;
   }
 
@@ -605,19 +606,19 @@ public class ProjectDeliverableAction extends BaseAction {
     this.projectID = projectID;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 

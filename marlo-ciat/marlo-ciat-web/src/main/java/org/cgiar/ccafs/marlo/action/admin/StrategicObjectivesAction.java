@@ -17,10 +17,10 @@ package org.cgiar.ccafs.marlo.action.admin;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchObjective;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterObjective;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IResearchObjectiveService;
+import org.cgiar.ccafs.marlo.data.service.ICenterObjectiveService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -40,35 +40,35 @@ public class StrategicObjectivesAction extends BaseAction {
   private static final long serialVersionUID = 4240576135659881112L;
 
 
-  private IResearchObjectiveService objectiveService;
+  private ICenterObjectiveService objectiveService;
 
 
   private ICenterService centerService;
 
 
-  private ResearchCenter loggedCenter;
+  private Center loggedCenter;
 
-  private List<ResearchObjective> objectives;
+  private List<CenterObjective> objectives;
 
   @Inject
-  public StrategicObjectivesAction(APConfig config, IResearchObjectiveService objectiveService,
+  public StrategicObjectivesAction(APConfig config, ICenterObjectiveService objectiveService,
     ICenterService centerService) {
     super(config);
     this.objectiveService = objectiveService;
     this.centerService = centerService;
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
-  public List<ResearchObjective> getObjectives() {
+  public List<CenterObjective> getObjectives() {
     return objectives;
   }
 
   @Override
   public void prepare() throws Exception {
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     objectives = new ArrayList<>(objectiveService.findAll().stream()
@@ -87,18 +87,18 @@ public class StrategicObjectivesAction extends BaseAction {
   @Override
   public String save() {
     if (this.hasPermission("*")) {
-      List<ResearchObjective> objectivesDB = new ArrayList<>(objectiveService.findAll().stream()
+      List<CenterObjective> objectivesDB = new ArrayList<>(objectiveService.findAll().stream()
         .filter(o -> o.isActive() && o.getResearchCenter().equals(loggedCenter)).collect(Collectors.toList()));
 
-      for (ResearchObjective researchObjective : objectivesDB) {
+      for (CenterObjective researchObjective : objectivesDB) {
         if (!objectives.contains(researchObjective)) {
           objectiveService.deleteResearchObjective(researchObjective.getId());
         }
       }
 
-      for (ResearchObjective researchObjective : objectives) {
+      for (CenterObjective researchObjective : objectives) {
         if (researchObjective.getId() == null || researchObjective.getId() == -1) {
-          ResearchObjective researchObjectiveNew = new ResearchObjective();
+          CenterObjective researchObjectiveNew = new CenterObjective();
 
           researchObjectiveNew.setActive(true);
           researchObjectiveNew.setCreatedBy(this.getCurrentUser());
@@ -118,11 +118,11 @@ public class StrategicObjectivesAction extends BaseAction {
     }
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
-  public void setObjectives(List<ResearchObjective> objectives) {
+  public void setObjectives(List<CenterObjective> objectives) {
     this.objectives = objectives;
   }
 }

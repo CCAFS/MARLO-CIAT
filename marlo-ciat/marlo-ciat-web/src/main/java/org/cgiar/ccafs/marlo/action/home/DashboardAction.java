@@ -17,7 +17,7 @@ package org.cgiar.ccafs.marlo.action.home;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -29,7 +29,7 @@ import com.google.inject.Inject;
 public class DashboardAction extends BaseAction {
 
   private static final long serialVersionUID = -4006598729888638344L;
-  private ResearchCenter loggedCrp;
+  private Center loggedCrp;
   private ICenterService crpManager;
 
   /**
@@ -43,17 +43,17 @@ public class DashboardAction extends BaseAction {
     this.crpManager = crpManager;
   }
 
-  public ResearchCenter getLoggedCrp() {
+  public Center getLoggedCrp() {
     return loggedCrp;
   }
 
   @Override
   public void prepare() throws Exception {
-    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCrp = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCrp = crpManager.getCrpById(loggedCrp.getId());
   }
 
-  public void setLoggedCrp(ResearchCenter loggedCrp) {
+  public void setLoggedCrp(Center loggedCrp) {
     this.loggedCrp = loggedCrp;
   }
 

@@ -19,16 +19,16 @@ import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.action.summaries.ImpactSubmissionSummaryAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwayCyclesEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchCycle;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.Submission;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterCycle;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterSubmission;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchCycleService;
-import org.cgiar.ccafs.marlo.data.service.ISubmissionService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterCycleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterSubmissionService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
@@ -57,25 +57,25 @@ public class IPSubmissionAction extends BaseAction {
 
   // LOG
   private static Logger LOG = LoggerFactory.getLogger(IPSubmissionAction.class);
-  private ISubmissionService submissionService;
-  private IProgramService programService;
-  private IResearchCycleService cycleService;
+  private ICenterSubmissionService submissionService;
+  private ICenterProgramService programService;
+  private ICenterCycleService cycleService;
   private ICenterService centerService;
 
 
   private SendMail sendMail;
-  private ResearchProgram program;
-  private ResearchCycle cycle;
+  private CenterProgram program;
+  private CenterCycle cycle;
 
-  private ResearchCenter loggedCenter;
+  private Center loggedCenter;
   private long programID;
   private boolean isSubmited = false;
   @Inject
   ImpactSubmissionSummaryAction impactSubmissionSummaryAction;
 
   @Inject
-  public IPSubmissionAction(APConfig config, ISubmissionService submissionService, IProgramService programService,
-    IResearchCycleService cycleService, ICenterService centerService, SendMail sendMail) {
+  public IPSubmissionAction(APConfig config, ICenterSubmissionService submissionService, ICenterProgramService programService,
+    ICenterCycleService cycleService, ICenterService centerService, SendMail sendMail) {
     super(config);
     this.programService = programService;
     this.submissionService = submissionService;
@@ -89,9 +89,9 @@ public class IPSubmissionAction extends BaseAction {
     if (this.hasPermission("*")) {
       if (this.isCompleteIP(programID)) {
         if (submissionService.findAll() != null) {
-          ResearchProgram program = programService.getProgramById(programID);
+          CenterProgram program = programService.getProgramById(programID);
 
-          List<Submission> submissions = new ArrayList<>(program.getSubmissions().stream()
+          List<CenterSubmission> submissions = new ArrayList<>(program.getSubmissions().stream()
             .filter(s -> s.getResearchCycle().equals(cycle) && s.getYear().intValue() == this.getYear())
             .collect(Collectors.toList()));
 
@@ -103,7 +103,7 @@ public class IPSubmissionAction extends BaseAction {
 
         if (!isSubmited) {
 
-          Submission submission = new Submission();
+          CenterSubmission submission = new CenterSubmission();
           submission.setResearchProgram(program);
           submission.setDateTime(new Date());
           submission.setUser(this.getCurrentUser());
@@ -143,13 +143,13 @@ public class IPSubmissionAction extends BaseAction {
   // return false;
   // }
   //
-  // ResearchProgram researchProgram = programService.getProgramById(programId);
+  // CenterProgram researchProgram = programService.getProgramById(programId);
   //
-  // List<SectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
+  // List<CenterSectionStatus> sectionStatuses = new ArrayList<>(researchProgram.getSectionStatuses().stream()
   // .filter(ss -> ss.getYear() == (short) this.getYear()).collect(Collectors.toList()));
   //
   // if (sectionStatuses != null && sectionStatuses.size() > 0) {
-  // for (SectionStatus sectionStatus : sectionStatuses) {
+  // for (CenterSectionStatus sectionStatus : sectionStatuses) {
   // if (sectionStatus.getMissingFields().length() > 0) {
   // return false;
   // }
@@ -167,7 +167,7 @@ public class IPSubmissionAction extends BaseAction {
   @Override
   public void prepare() throws Exception {
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     try {
@@ -212,24 +212,24 @@ public class IPSubmissionAction extends BaseAction {
     StringBuilder ccEmails = new StringBuilder();
 
     // CC
-    ResearchArea area = program.getResearchArea();
+    CenterArea area = program.getResearchArea();
 
-    List<ResearchLeader> areaLeaders =
+    List<CenterLeader> areaLeaders =
       new ArrayList<>(area.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
 
     if (!areaLeaders.isEmpty()) {
-      for (ResearchLeader leader : areaLeaders) {
+      for (CenterLeader leader : areaLeaders) {
         ccEmails.append(leader.getUser().getEmail());
         ccEmails.append(", ");
       }
     }
 
-    List<ResearchLeader> programLeaders =
+    List<CenterLeader> programLeaders =
       new ArrayList<>(program.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
 
     if (!programLeaders.isEmpty()) {
-      for (ResearchLeader leader : programLeaders) {
+      for (CenterLeader leader : programLeaders) {
         ccEmails.append(leader.getUser().getEmail());
         ccEmails.append(", ");
       }
@@ -247,12 +247,12 @@ public class IPSubmissionAction extends BaseAction {
     String bbcEmails = this.config.getEmailNotification();
 
     // Send pdf
-    // Get the PDF from the Project report url.
+    // Get the PDF from the CenterProject report url.
     ByteBuffer buffer = null;
     String fileName = null;
     String contentType = null;
     try {
-      ResearchProgram program = programService.getProgramById(programID);
+      CenterProgram program = programService.getProgramById(programID);
       impactSubmissionSummaryAction.setResearchProgram(program);
       impactSubmissionSummaryAction.execute();
 

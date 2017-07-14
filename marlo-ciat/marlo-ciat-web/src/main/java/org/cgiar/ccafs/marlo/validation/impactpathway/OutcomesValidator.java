@@ -17,10 +17,10 @@ package org.cgiar.ccafs.marlo.validation.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.data.model.ImpactPathwaySectionsEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchMilestone;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterMilestone;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.validation.BaseValidator;
@@ -46,8 +46,8 @@ public class OutcomesValidator extends BaseValidator {
     this.centerService = centerService;
   }
 
-  private Path getAutoSaveFilePath(ResearchOutcome outcome, long centerID) {
-    ResearchCenter center = centerService.getCrpById(centerID);
+  private Path getAutoSaveFilePath(CenterOutcome outcome, long centerID) {
+    Center center = centerService.getCrpById(centerID);
     String composedClassName = outcome.getClass().getSimpleName();
     String actionFile = ImpactPathwaySectionsEnum.OUTCOME.getStatus().replace("/", "_");
     String autoSaveFile =
@@ -56,7 +56,7 @@ public class OutcomesValidator extends BaseValidator {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public void validate(BaseAction baseAction, ResearchOutcome outcome, ResearchProgram selectedProgram,
+  public void validate(BaseAction baseAction, CenterOutcome outcome, CenterProgram selectedProgram,
     boolean saving) {
 
     baseAction.setInvalidFields(new HashMap<>());
@@ -79,7 +79,7 @@ public class OutcomesValidator extends BaseValidator {
 
   }
 
-  public void validateMilestones(BaseAction baseAction, ResearchMilestone milestone, int i) {
+  public void validateMilestones(BaseAction baseAction, CenterMilestone milestone, int i) {
     List<String> params = new ArrayList<String>();
     params.add(String.valueOf(i + 1));
 
@@ -128,7 +128,7 @@ public class OutcomesValidator extends BaseValidator {
 
   }
 
-  public void validateOutcome(BaseAction baseAction, ResearchOutcome outcome) {
+  public void validateOutcome(BaseAction baseAction, CenterOutcome outcome) {
 
     if (outcome.getResearchImpact() != null) {
       if (outcome.getResearchImpact().getId() == -1) {

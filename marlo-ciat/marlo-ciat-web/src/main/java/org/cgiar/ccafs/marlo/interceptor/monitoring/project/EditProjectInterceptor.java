@@ -16,11 +16,11 @@
 package org.cgiar.ccafs.marlo.interceptor.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -40,17 +40,17 @@ public class EditProjectInterceptor extends AbstractInterceptor implements Seria
 
 
   private Map<String, Object> parameters;
-  private IProjectService projectService;
-  private IProgramService programService;
+  private ICenterProjectService projectService;
+  private ICenterProgramService programService;
   private Map<String, Object> session;
 
-  private ResearchCenter researchCenter;
+  private Center researchCenter;
   private long areaID = -1;
   private long programID = -1;
   private long projectID = -1;
 
   @Inject
-  public EditProjectInterceptor(IProjectService projectService, IProgramService programService) {
+  public EditProjectInterceptor(ICenterProjectService projectService, ICenterProgramService programService) {
     this.projectService = projectService;
     this.programService = programService;
   }
@@ -59,7 +59,7 @@ public class EditProjectInterceptor extends AbstractInterceptor implements Seria
   public String intercept(ActionInvocation invocation) throws Exception {
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
-    researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+    researchCenter = (Center) session.get(APConstants.SESSION_CENTER);
 
     try {
       projectID = Long.parseLong(((String[]) parameters.get(APConstants.PROJECT_ID))[0]);
@@ -81,13 +81,13 @@ public class EditProjectInterceptor extends AbstractInterceptor implements Seria
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
     BaseAction baseAction = (BaseAction) invocation.getAction();
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
     if (project != null) {
 
 
       programID = project.getResearchProgram().getId();
-      ResearchProgram program = programService.getProgramById(programID);
+      CenterProgram program = programService.getProgramById(programID);
 
       if (program != null) {
 

@@ -19,15 +19,15 @@
 package org.cgiar.ccafs.marlo.action;
 
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.Role;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterRole;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IRoleService;
-import org.cgiar.ccafs.marlo.data.service.IUserRoleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterRoleService;
+import org.cgiar.ccafs.marlo.data.service.ICenterUserRoleService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
@@ -50,18 +50,18 @@ public class CenterActivitiesAction extends BaseAction {
 
   private static final long serialVersionUID = 486231648621207806L;
 
-  private IRoleService roleService;
-  private IUserRoleService userRoleService;
+  private ICenterRoleService roleService;
+  private ICenterUserRoleService userRoleService;
   private ICenterService crpService;
   private IUserService userService;
-  private IProgramService programService;
-  private Role role;
+  private ICenterProgramService programService;
+  private CenterRole role;
   private long clRol;
-  private ResearchProgram selectedProgram;
+  private CenterProgram selectedProgram;
   private IAuditLogService auditLogService;
-  private ResearchCenter loggedCrp;
-  private Role roleCl;
-  private List<ResearchProgram> programs;
+  private Center loggedCrp;
+  private CenterRole roleCl;
+  private List<CenterProgram> programs;
   private long crpProgramID;
 
   private String transaction;
@@ -70,8 +70,8 @@ public class CenterActivitiesAction extends BaseAction {
 
 
   @Inject
-  public CenterActivitiesAction(APConfig config, IRoleService roleManager, IUserRoleService userRoleManager,
-    ICenterService crpManager, IUserService userManager, IProgramService crpProgramService,
+  public CenterActivitiesAction(APConfig config, ICenterRoleService roleManager, ICenterUserRoleService userRoleManager,
+    ICenterService crpManager, IUserService userManager, ICenterProgramService crpProgramService,
     IAuditLogService auditLogManager, SendMail sendMail) {
     super(config);
     this.roleService = roleManager;
@@ -124,21 +124,21 @@ public class CenterActivitiesAction extends BaseAction {
     return crpProgramID;
   }
 
-  public ResearchCenter getLoggedCrp() {
+  public Center getLoggedCrp() {
     return loggedCrp;
   }
 
 
-  public List<ResearchProgram> getPrograms() {
+  public List<CenterProgram> getPrograms() {
     return programs;
   }
 
 
-  public Role getRoleCl() {
+  public CenterRole getRoleCl() {
     return roleCl;
   }
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
@@ -153,7 +153,7 @@ public class CenterActivitiesAction extends BaseAction {
    * @param role is the role(Cluster Leader)
    * @param crpClusterPreview is the crpCluster
    */
-  private void notifyRoleAssigned(User userAssigned, Role role) {
+  private void notifyRoleAssigned(User userAssigned, CenterRole role) {
     String ClusterRole = this.getText("cluster.role");
     String ClusterRoleAcronym = this.getText("cluster.role.acronym");
 
@@ -190,7 +190,7 @@ public class CenterActivitiesAction extends BaseAction {
   }
 
 
-  private void notifyRoleUnassigned(User userAssigned, Role role) {
+  private void notifyRoleUnassigned(User userAssigned, CenterRole role) {
     String ClusterRole = this.getText("cluster.role");
     String ClusterRoleAcronym = this.getText("cluster.role.acronym");
 
@@ -227,7 +227,7 @@ public class CenterActivitiesAction extends BaseAction {
   public void prepare() throws Exception {
     // TODO:Update this method.
     // Get the Users list that have the pmu role in this crp.
-    loggedCrp = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCrp = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCrp = crpService.getCrpById(loggedCrp.getId());
 
   }
@@ -251,22 +251,22 @@ public class CenterActivitiesAction extends BaseAction {
   }
 
 
-  public void setLoggedCrp(ResearchCenter loggedCrp) {
+  public void setLoggedCrp(Center loggedCrp) {
     this.loggedCrp = loggedCrp;
   }
 
 
-  public void setPrograms(List<ResearchProgram> programs) {
+  public void setPrograms(List<CenterProgram> programs) {
     this.programs = programs;
   }
 
 
-  public void setRoleCl(Role roleCl) {
+  public void setRoleCl(CenterRole roleCl) {
     this.roleCl = roleCl;
   }
 
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 

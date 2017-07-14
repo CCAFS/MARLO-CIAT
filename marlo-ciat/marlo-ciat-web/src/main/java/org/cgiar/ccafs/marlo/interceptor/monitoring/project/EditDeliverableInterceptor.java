@@ -16,13 +16,13 @@
 package org.cgiar.ccafs.marlo.interceptor.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
-import org.cgiar.ccafs.marlo.data.model.Deliverable;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.service.IDeliverableService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterDeliverable;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.service.ICenterDeliverableService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
@@ -40,21 +40,21 @@ public class EditDeliverableInterceptor extends AbstractInterceptor implements S
 
   private static final long serialVersionUID = 1L;
 
-  private IDeliverableService deliverableService;
-  private IProjectService projectService;
-  private IProgramService programService;
+  private ICenterDeliverableService deliverableService;
+  private ICenterProjectService projectService;
+  private ICenterProgramService programService;
 
   private Map<String, Object> parameters;
   private Map<String, Object> session;
-  private ResearchCenter researchCenter;
+  private Center researchCenter;
   private long areaID = -1;
   private long programID = -1;
   private long projectID = -1;
   private long deliverableID = -1;
 
   @Inject
-  public EditDeliverableInterceptor(IDeliverableService deliverableService, IProjectService projectService,
-    IProgramService programService) {
+  public EditDeliverableInterceptor(ICenterDeliverableService deliverableService, ICenterProjectService projectService,
+    ICenterProgramService programService) {
     this.deliverableService = deliverableService;
     this.programService = programService;
     this.projectService = projectService;
@@ -64,7 +64,7 @@ public class EditDeliverableInterceptor extends AbstractInterceptor implements S
   public String intercept(ActionInvocation invocation) throws Exception {
     parameters = invocation.getInvocationContext().getParameters();
     session = invocation.getInvocationContext().getSession();
-    researchCenter = (ResearchCenter) session.get(APConstants.SESSION_CENTER);
+    researchCenter = (Center) session.get(APConstants.SESSION_CENTER);
 
     try {
       deliverableID = Long.parseLong(((String[]) parameters.get(APConstants.DELIVERABLE_ID))[0]);
@@ -86,17 +86,17 @@ public class EditDeliverableInterceptor extends AbstractInterceptor implements S
     boolean hasPermissionToEdit = false;
     boolean editParameter = false;
     BaseAction baseAction = (BaseAction) invocation.getAction();
-    Deliverable deliverable = deliverableService.getDeliverableById(deliverableID);
+    CenterDeliverable deliverable = deliverableService.getDeliverableById(deliverableID);
 
     if (deliverable != null) {
 
       projectID = deliverable.getProject().getId();
-      Project project = projectService.getProjectById(projectID);
+      CenterProject project = projectService.getCenterProjectById(projectID);
 
       if (project != null) {
 
         programID = project.getResearchProgram().getId();
-        ResearchProgram program = programService.getProgramById(programID);
+        CenterProgram program = programService.getProgramById(programID);
 
         if (program != null) {
 

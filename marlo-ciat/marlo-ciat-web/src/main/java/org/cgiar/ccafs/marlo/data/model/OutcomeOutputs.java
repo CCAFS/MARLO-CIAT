@@ -26,23 +26,23 @@ public class OutcomeOutputs implements Serializable {
 
   private static final long serialVersionUID = -891647133437368282L;
 
-  private ResearchOutcome outcome;
+  private CenterOutcome outcome;
 
-  private List<ResearchOutput> outputs;
+  private List<CenterOutput> outputs;
 
-  public ResearchOutcome getOutcome() {
+  public CenterOutcome getOutcome() {
     return outcome;
   }
 
-  public List<ResearchOutput> getOutputs() {
+  public List<CenterOutput> getOutputs() {
     return outputs;
   }
 
-  public void setOutcome(ResearchOutcome outcome) {
+  public void setOutcome(CenterOutcome outcome) {
     this.outcome = outcome;
   }
 
-  public void setOutputs(List<ResearchOutput> outputs) {
+  public void setOutputs(List<CenterOutput> outputs) {
     this.outputs = outputs;
   }
 

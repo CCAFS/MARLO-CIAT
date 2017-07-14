@@ -17,11 +17,11 @@ package org.cgiar.ccafs.marlo.action.json.monitoring.project;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterOutcome;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
 import org.cgiar.ccafs.marlo.data.model.TopicOutcomes;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutcomeService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.SendMail;
 
@@ -47,8 +47,8 @@ public class OuputRequestAction extends BaseAction {
 
 
   private SendMail sendMail;
-  private IResearchOutcomeService outcomeService;
-  private IProjectService projectService;
+  private ICenterOutcomeService outcomeService;
+  private ICenterProjectService projectService;
   private List<TopicOutcomes> outcomes;
   private boolean messageSent;
   private Long outcomeID;
@@ -56,7 +56,7 @@ public class OuputRequestAction extends BaseAction {
   private Long projectID;
 
   @Inject
-  public OuputRequestAction(APConfig config, IResearchOutcomeService outcomeService, IProjectService projectService,
+  public OuputRequestAction(APConfig config, ICenterOutcomeService outcomeService, ICenterProjectService projectService,
     SendMail sendMail) {
     super(config);
     this.outcomeService = outcomeService;
@@ -69,9 +69,9 @@ public class OuputRequestAction extends BaseAction {
     String subject;
     StringBuilder message = new StringBuilder();
 
-    Project project = projectService.getProjectById(projectID);
+    CenterProject project = projectService.getCenterProjectById(projectID);
 
-    ResearchOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
+    CenterOutcome outcome = outcomeService.getResearchOutcomeById(outcomeID);
 
     String outcomeName = outcome.getComposedName();
     String outputName = this.outputName;
@@ -87,7 +87,7 @@ public class OuputRequestAction extends BaseAction {
     message.append("<b>Program: </b>");
     message.append(project.getResearchProgram().getName());
     message.append("</br></br>");
-    message.append("<b>Project: </b>");
+    message.append("<b>CenterProject: </b>");
     message.append(project.getComposedName());
     message.append("</br></br>");
     message.append("<b>Outcome : </b>");
@@ -152,7 +152,7 @@ public class OuputRequestAction extends BaseAction {
 
     if (this.getRequest().getParameter(APConstants.PROJECT_ID) != null) {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
-      LOG.info("The user {} load the output request section related to the program (Project ID) {}.",
+      LOG.info("The user {} load the output request section related to the program (CenterProject ID) {}.",
         this.getCurrentUser().getEmail(), projectID);
     }
 

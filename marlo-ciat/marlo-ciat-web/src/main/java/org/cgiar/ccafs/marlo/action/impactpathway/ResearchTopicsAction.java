@@ -20,18 +20,18 @@ package org.cgiar.ccafs.marlo.action.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.ResearchArea;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeader;
-import org.cgiar.ccafs.marlo.data.model.ResearchLeaderTypeEnum;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
-import org.cgiar.ccafs.marlo.data.model.ResearchTopic;
+import org.cgiar.ccafs.marlo.data.model.CenterArea;
+import org.cgiar.ccafs.marlo.data.model.Center;
+import org.cgiar.ccafs.marlo.data.model.CenterLeader;
+import org.cgiar.ccafs.marlo.data.model.CenterLeaderTypeEnum;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterTopic;
 import org.cgiar.ccafs.marlo.data.model.User;
 import org.cgiar.ccafs.marlo.data.service.IAuditLogService;
 import org.cgiar.ccafs.marlo.data.service.ICenterService;
-import org.cgiar.ccafs.marlo.data.service.IProgramService;
-import org.cgiar.ccafs.marlo.data.service.IResearchAreaService;
-import org.cgiar.ccafs.marlo.data.service.IResearchTopicService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProgramService;
+import org.cgiar.ccafs.marlo.data.service.ICenterAreaService;
+import org.cgiar.ccafs.marlo.data.service.ICenterTopicService;
 import org.cgiar.ccafs.marlo.data.service.IUserService;
 import org.cgiar.ccafs.marlo.security.Permission;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -69,29 +69,29 @@ public class ResearchTopicsAction extends BaseAction {
   // Services (Managers)
   private ICenterService centerService;
 
-  private IProgramService programService;
+  private ICenterProgramService programService;
 
-  private IResearchAreaService researchAreaService;
-  private IResearchTopicService researchTopicService;
+  private ICenterAreaService researchAreaService;
+  private ICenterTopicService researchTopicService;
   private IAuditLogService auditLogService;
   private IUserService userService;
   private ResearchTopicsValidator validator;
   // Local Variables
-  private ResearchCenter loggedCenter;
+  private Center loggedCenter;
 
-  private List<ResearchArea> researchAreas;
-  private List<ResearchTopic> topics;
-  private List<ResearchProgram> researchPrograms;
-  private ResearchArea selectedResearchArea;
-  private ResearchProgram selectedProgram;
+  private List<CenterArea> researchAreas;
+  private List<CenterTopic> topics;
+  private List<CenterProgram> researchPrograms;
+  private CenterArea selectedResearchArea;
+  private CenterProgram selectedProgram;
   private long programID;
   private long areaID;
   private String transaction;
 
 
   @Inject
-  public ResearchTopicsAction(APConfig config, ICenterService centerService, IProgramService programService,
-    IResearchAreaService researchAreaService, IResearchTopicService researchTopicService, IUserService userService,
+  public ResearchTopicsAction(APConfig config, ICenterService centerService, ICenterProgramService programService,
+    ICenterAreaService researchAreaService, ICenterTopicService researchTopicService, IUserService userService,
     ResearchTopicsValidator validator, IAuditLogService auditLogService) {
     super(config);
     this.centerService = centerService;
@@ -139,7 +139,7 @@ public class ResearchTopicsAction extends BaseAction {
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
 
-  public ResearchCenter getLoggedCenter() {
+  public Center getLoggedCenter() {
     return loggedCenter;
   }
 
@@ -148,27 +148,27 @@ public class ResearchTopicsAction extends BaseAction {
   }
 
 
-  public List<ResearchArea> getResearchAreas() {
+  public List<CenterArea> getResearchAreas() {
     return researchAreas;
   }
 
 
-  public List<ResearchProgram> getResearchPrograms() {
+  public List<CenterProgram> getResearchPrograms() {
     return researchPrograms;
   }
 
 
-  public ResearchProgram getSelectedProgram() {
+  public CenterProgram getSelectedProgram() {
     return selectedProgram;
   }
 
 
-  public ResearchArea getSelectedResearchArea() {
+  public CenterArea getSelectedResearchArea() {
     return selectedResearchArea;
   }
 
 
-  public List<ResearchTopic> getTopics() {
+  public List<CenterTopic> getTopics() {
     return topics;
   }
 
@@ -181,7 +181,7 @@ public class ResearchTopicsAction extends BaseAction {
     areaID = -1;
     programID = -1;
 
-    loggedCenter = (ResearchCenter) this.getSession().get(APConstants.SESSION_CENTER);
+    loggedCenter = (Center) this.getSession().get(APConstants.SESSION_CENTER);
     loggedCenter = centerService.getCrpById(loggedCenter.getId());
 
     researchAreas = new ArrayList<>(
@@ -199,24 +199,24 @@ public class ResearchTopicsAction extends BaseAction {
         } catch (Exception ex) {
           User user = userService.getUser(this.getCurrentUser().getId());
 
-          List<ResearchLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
+          List<CenterLeader> userAreaLeads = new ArrayList<>(user.getResearchLeaders().stream()
             .filter(rl -> rl.isActive()
-              && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
+              && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_AREA_LEADER_TYPE.getValue())
             .collect(Collectors.toList()));
           if (!userAreaLeads.isEmpty()) {
             areaID = userAreaLeads.get(0).getResearchArea().getId();
           } else {
-            List<ResearchLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userProgramLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
             if (!userProgramLeads.isEmpty()) {
               programID = userProgramLeads.get(0).getResearchProgram().getId();
             } else {
-              List<ResearchProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
+              List<CenterProgram> rps = researchAreas.get(0).getResearchPrograms().stream().filter(r -> r.isActive())
                 .collect(Collectors.toList());
               Collections.sort(rps, (rp1, rp2) -> rp1.getId().compareTo(rp2.getId()));
-              ResearchProgram rp = rps.get(0);
+              CenterProgram rp = rps.get(0);
               programID = rp.getId();
               areaID = rp.getResearchArea().getId();
             }
@@ -235,9 +235,9 @@ public class ResearchTopicsAction extends BaseAction {
           } catch (Exception e) {
             User user = userService.getUser(this.getCurrentUser().getId());
 
-            List<ResearchLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
+            List<CenterLeader> userLeads = new ArrayList<>(user.getResearchLeaders().stream()
               .filter(rl -> rl.isActive()
-                && rl.getType().getId() == ResearchLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
+                && rl.getType().getId() == CenterLeaderTypeEnum.RESEARCH_PROGRAM_LEADER_TYPE.getValue())
               .collect(Collectors.toList()));
 
             if (!userLeads.isEmpty()) {
@@ -252,7 +252,7 @@ public class ResearchTopicsAction extends BaseAction {
         if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
           transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+          CenterProgram history = (CenterProgram) auditLogService.getHistory(transaction);
 
           if (history != null) {
             selectedProgram = history;
@@ -274,7 +274,7 @@ public class ResearchTopicsAction extends BaseAction {
         if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
           transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-          ResearchProgram history = (ResearchProgram) auditLogService.getHistory(transaction);
+          CenterProgram history = (CenterProgram) auditLogService.getHistory(transaction);
 
           if (history != null) {
             selectedProgram = history;
@@ -310,7 +310,7 @@ public class ResearchTopicsAction extends BaseAction {
           JsonObject jReader = gson.fromJson(reader, JsonObject.class);
           AutoSaveReader autoSaveReader = new AutoSaveReader();
 
-          selectedProgram = (ResearchProgram) autoSaveReader.readFromJson(jReader);
+          selectedProgram = (CenterProgram) autoSaveReader.readFromJson(jReader);
 
           topics = new ArrayList<>(selectedProgram.getTopics());
 
@@ -351,7 +351,7 @@ public class ResearchTopicsAction extends BaseAction {
   public String save() {
     if (this.hasPermission("*")) {
 
-      List<ResearchTopic> researchTopicsPrew;
+      List<CenterTopic> researchTopicsPrew;
 
       selectedProgram = programService.getProgramById(programID);
 
@@ -359,7 +359,7 @@ public class ResearchTopicsAction extends BaseAction {
         researchTopicsPrew =
           selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList());
 
-        for (ResearchTopic researchTopic : researchTopicsPrew) {
+        for (CenterTopic researchTopic : researchTopicsPrew) {
           if (!topics.contains(researchTopic)) {
             researchTopicService.deleteResearchTopic(researchTopic.getId());
           }
@@ -367,9 +367,9 @@ public class ResearchTopicsAction extends BaseAction {
       }
 
 
-      for (ResearchTopic researchTopic : topics) {
+      for (CenterTopic researchTopic : topics) {
         if (researchTopic.getId() == null || researchTopic.getId() == -1) {
-          ResearchTopic newResearchTopic = new ResearchTopic();
+          CenterTopic newResearchTopic = new CenterTopic();
           newResearchTopic.setActive(true);
           newResearchTopic.setActiveSince(new Date());
           newResearchTopic.setCreatedBy(this.getCurrentUser());
@@ -383,7 +383,7 @@ public class ResearchTopicsAction extends BaseAction {
         } else {
           boolean hasChanges = false;
 
-          ResearchTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
+          CenterTopic researchTopicPrew = researchTopicService.getResearchTopicById(researchTopic.getId());
 
           if (!researchTopicPrew.getResearchTopic().equals(researchTopic.getResearchTopic().trim())) {
             hasChanges = true;
@@ -445,7 +445,7 @@ public class ResearchTopicsAction extends BaseAction {
     this.areaID = areaID;
   }
 
-  public void setLoggedCenter(ResearchCenter loggedCenter) {
+  public void setLoggedCenter(Center loggedCenter) {
     this.loggedCenter = loggedCenter;
   }
 
@@ -453,23 +453,23 @@ public class ResearchTopicsAction extends BaseAction {
     this.programID = programID;
   }
 
-  public void setResearchAreas(List<ResearchArea> researchAreas) {
+  public void setResearchAreas(List<CenterArea> researchAreas) {
     this.researchAreas = researchAreas;
   }
 
-  public void setResearchPrograms(List<ResearchProgram> researchPrograms) {
+  public void setResearchPrograms(List<CenterProgram> researchPrograms) {
     this.researchPrograms = researchPrograms;
   }
 
-  public void setSelectedProgram(ResearchProgram selectedProgram) {
+  public void setSelectedProgram(CenterProgram selectedProgram) {
     this.selectedProgram = selectedProgram;
   }
 
-  public void setSelectedResearchArea(ResearchArea selectedResearchArea) {
+  public void setSelectedResearchArea(CenterArea selectedResearchArea) {
     this.selectedResearchArea = selectedResearchArea;
   }
 
-  public void setTopics(List<ResearchTopic> topics) {
+  public void setTopics(List<CenterTopic> topics) {
     this.topics = topics;
   }
 

@@ -17,10 +17,10 @@ package org.cgiar.ccafs.marlo.security;
 
 
 import org.cgiar.ccafs.marlo.data.model.ADLoginMessages;
-import org.cgiar.ccafs.marlo.data.model.ResearchCenter;
+import org.cgiar.ccafs.marlo.data.model.Center;
 import org.cgiar.ccafs.marlo.data.model.User;
-import org.cgiar.ccafs.marlo.data.model.UserRole;
-import org.cgiar.ccafs.marlo.data.service.impl.RoleService;
+import org.cgiar.ccafs.marlo.data.model.CenterUserRole;
+import org.cgiar.ccafs.marlo.data.service.impl.CenterRoleService;
 import org.cgiar.ccafs.marlo.data.service.impl.UserService;
 import org.cgiar.ccafs.marlo.security.authentication.Authenticator;
 import org.cgiar.ccafs.marlo.utils.APConstants;
@@ -72,7 +72,7 @@ public class APCustomRealm extends AuthorizingRealm {
 
   // Managers
   private UserService userManager;
-  private RoleService userRoleManager;
+  private CenterRoleService userRoleManager;
 
 
   @Named("DB")
@@ -82,7 +82,7 @@ public class APCustomRealm extends AuthorizingRealm {
   private Authenticator ldapAuthenticator;
 
   @Inject
-  public APCustomRealm(UserService userManager, RoleService userRoleManager,
+  public APCustomRealm(UserService userManager, CenterRoleService userRoleManager,
     @Named("DB") Authenticator dbAuthenticator, @Named("LDAP") Authenticator ldapAuthenticator) {
     super(new MemoryConstrainedCacheManager());
     this.userManager = userManager;
@@ -172,9 +172,9 @@ public class APCustomRealm extends AuthorizingRealm {
     Session session = SecurityUtils.getSubject().getSession();
 
     User user = userManager.getUser((Long) principals.getPrimaryPrincipal());
-    ResearchCenter crp = (ResearchCenter) session.getAttribute(APConstants.SESSION_CENTER);
+    Center crp = (Center) session.getAttribute(APConstants.SESSION_CENTER);
 
-    for (UserRole userRole : user.getUserRoles()) {
+    for (CenterUserRole userRole : user.getUserRoles()) {
       authorizationInfo.addRole(userRole.getRole().getAcronym());
     }
 

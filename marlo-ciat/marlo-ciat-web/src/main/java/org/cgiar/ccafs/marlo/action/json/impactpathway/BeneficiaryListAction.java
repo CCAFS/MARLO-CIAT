@@ -17,9 +17,9 @@ package org.cgiar.ccafs.marlo.action.json.impactpathway;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.model.Beneficiary;
-import org.cgiar.ccafs.marlo.data.model.BeneficiaryType;
-import org.cgiar.ccafs.marlo.data.service.IBeneficiaryTypeService;
+import org.cgiar.ccafs.marlo.data.model.CenterBeneficiary;
+import org.cgiar.ccafs.marlo.data.model.CenterBeneficiaryType;
+import org.cgiar.ccafs.marlo.data.service.ICenterBeneficiaryTypeService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -45,10 +45,10 @@ public class BeneficiaryListAction extends BaseAction {
 
   private long beneficiaryTypeID;
 
-  private IBeneficiaryTypeService beneficiaryTypeService;
+  private ICenterBeneficiaryTypeService beneficiaryTypeService;
 
   @Inject
-  public BeneficiaryListAction(APConfig config, IBeneficiaryTypeService beneficiaryTypeService) {
+  public BeneficiaryListAction(APConfig config, ICenterBeneficiaryTypeService beneficiaryTypeService) {
     super(config);
     this.beneficiaryTypeService = beneficiaryTypeService;
   }
@@ -60,18 +60,18 @@ public class BeneficiaryListAction extends BaseAction {
 
     Map<String, Object> beneficiary;
 
-    BeneficiaryType beneficiaryType = beneficiaryTypeService.getBeneficiaryTypeById(beneficiaryTypeID);
+    CenterBeneficiaryType beneficiaryType = beneficiaryTypeService.getBeneficiaryTypeById(beneficiaryTypeID);
 
     if (beneficiaryType != null) {
 
-      Beneficiary nonSpec = beneficiaryType.getBeneficiaries().stream()
+      CenterBeneficiary nonSpec = beneficiaryType.getBeneficiaries().stream()
         .filter(b -> b.isActive() && b.getName().equals("Non Specific")).collect(Collectors.toList()).get(0);
       beneficiary = new HashMap<>();
       beneficiary.put("id", nonSpec.getId());
       beneficiary.put("name", nonSpec.getName());
       beneficiaries.add(beneficiary);
 
-      for (Beneficiary b : beneficiaryType.getBeneficiaries().stream()
+      for (CenterBeneficiary b : beneficiaryType.getBeneficiaries().stream()
         .filter(b -> b.isActive() && !b.getName().equals("Non Specific")).collect(Collectors.toList())) {
 
         beneficiary = new HashMap<>();
