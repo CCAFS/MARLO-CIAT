@@ -80,40 +80,40 @@ public class ProjectDescriptionAction extends BaseAction {
   private static final long serialVersionUID = 3034101967516313023L;
 
 
-  private ICenterService centerService;
+  private final ICenterService centerService;
 
-  private IProjectService projectService;
-
-
-  private IUserService userService;
-
-  private IResearchOutputService outputService;
+  private final IProjectService projectService;
 
 
-  private IFundingSourceTypeService fundingSourceService;
+  private final IUserService userService;
 
-  private IProjectOutputService projectOutputService;
-
-
-  private IProjectLocationService projectLocationService;
-
-  private ILocElementService locElementService;
+  private final IResearchOutputService outputService;
 
 
-  private IProjectFundingSourceService projectFundingSourceService;
+  private final IFundingSourceTypeService fundingSourceService;
 
-  private IProjectCrosscutingThemeService projectCrosscutingThemeService;
-
-
-  private IAuditLogService auditLogService;
+  private final IProjectOutputService projectOutputService;
 
 
-  private ProjectDescriptionValidator validator;
+  private final IProjectLocationService projectLocationService;
+
+  private final ILocElementService locElementService;
 
 
-  private ICrpService crpService;
+  private final IProjectFundingSourceService projectFundingSourceService;
 
-  private IProjectTypeService projectTypeService;
+  private final IProjectCrosscutingThemeService projectCrosscutingThemeService;
+
+
+  private final IAuditLogService auditLogService;
+
+
+  private final ProjectDescriptionValidator validator;
+
+
+  private final ICrpService crpService;
+
+  private final IProjectTypeService projectTypeService;
 
 
   private ResearchArea selectedResearchArea;
@@ -169,7 +169,7 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   public Boolean bolValue(String value) {
-    if (value == null || value.isEmpty() || value.toLowerCase().equals("null")) {
+    if ((value == null) || value.isEmpty() || value.toLowerCase().equals("null")) {
       return null;
     }
     return Boolean.valueOf(value);
@@ -178,17 +178,17 @@ public class ProjectDescriptionAction extends BaseAction {
   @Override
   public String cancel() {
 
-    Path path = this.getAutoSaveFilePath();
+    final Path path = this.getAutoSaveFilePath();
 
     if (path.toFile().exists()) {
 
-      boolean fileDeleted = path.toFile().delete();
+      final boolean fileDeleted = path.toFile().delete();
     }
 
     this.setDraft(false);
     Collection<String> messages = this.getActionMessages();
     if (!messages.isEmpty()) {
-      String validationMessage = messages.iterator().next();
+      final String validationMessage = messages.iterator().next();
       this.setActionMessages(null);
       this.addActionMessage("draft:" + this.getText("cancel.autoSave"));
     } else {
@@ -204,9 +204,9 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   private Path getAutoSaveFilePath() {
-    String composedClassName = project.getClass().getSimpleName();
-    String actionFile = this.getActionName().replace("/", "_");
-    String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
+    final String composedClassName = project.getClass().getSimpleName();
+    final String actionFile = this.getActionName().replace("/", "_");
+    final String autoSaveFile = project.getId() + "_" + composedClassName + "_" + actionFile + ".json";
 
     return Paths.get(config.getAutoSaveFolder() + autoSaveFile);
   }
@@ -232,7 +232,7 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   private String getPI() {
-    List<ResearchLeader> leaders = new ArrayList<>(
+    final List<ResearchLeader> leaders = new ArrayList<>(
       selectedProgram.getResearchLeaders().stream().filter(rl -> rl.isActive()).collect(Collectors.toList()));
     return leaders.get(0).getUser().getComposedCompleteName();
   }
@@ -249,19 +249,19 @@ public class ProjectDescriptionAction extends BaseAction {
 
     outputs = new ArrayList<>();
 
-    List<ResearchTopic> researchTopics = new ArrayList<>(
+    final List<ResearchTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
     principalInvestigator = this.getPI();
-    for (ResearchTopic researchTopic : researchTopics) {
-      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+    for (final ResearchTopic researchTopic : researchTopics) {
+      final List<ResearchOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      for (ResearchOutcome researchOutcome : researchOutcomes) {
-        OutcomeOutputs outcomeOutputs = new OutcomeOutputs();
+      for (final ResearchOutcome researchOutcome : researchOutcomes) {
+        final OutcomeOutputs outcomeOutputs = new OutcomeOutputs();
         outcomeOutputs.setOutcome(researchOutcome);
         outcomeOutputs.setOutputs(new ArrayList<>());
-        List<ResearchOutput> researchOutputs = new ArrayList<>(
+        final List<ResearchOutput> researchOutputs = new ArrayList<>(
           researchOutcome.getResearchOutputs().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-        for (ResearchOutput researchOutput : researchOutputs) {
+        for (final ResearchOutput researchOutput : researchOutputs) {
           outcomeOutputs.getOutputs().add(researchOutput);
         }
         outputs.add(outcomeOutputs);
@@ -324,26 +324,26 @@ public class ProjectDescriptionAction extends BaseAction {
     region = false;
     // Regions List
     regionLists = new ArrayList<>(locElementService.findAll().stream()
-      .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 1)
+      .filter(le -> le.isActive() && (le.getLocElementType() != null) && (le.getLocElementType().getId() == 1))
       .collect(Collectors.toList()));
     Collections.sort(regionLists, (r1, r2) -> r1.getName().compareTo(r2.getName()));
 
     // Country List
     countryLists = new ArrayList<>(locElementService.findAll().stream()
-      .filter(le -> le.isActive() && le.getLocElementType() != null && le.getLocElementType().getId() == 2)
+      .filter(le -> le.isActive() && (le.getLocElementType() != null) && (le.getLocElementType().getId() == 2))
       .collect(Collectors.toList()));
     Collections.sort(countryLists, (c1, c2) -> c1.getName().compareTo(c2.getName()));
 
     try {
       projectID = Long.parseLong(StringUtils.trim(this.getRequest().getParameter(APConstants.PROJECT_ID)));
-    } catch (Exception e) {
+    } catch (final Exception e) {
       projectID = -1;
     }
 
     if (this.getRequest().getParameter(APConstants.TRANSACTION_ID) != null) {
 
       transaction = StringUtils.trim(this.getRequest().getParameter(APConstants.TRANSACTION_ID));
-      Project history = (Project) auditLogService.getHistory(transaction);
+      final Project history = (Project) auditLogService.getHistory(transaction);
 
       if (history != null) {
         project = history;
@@ -359,7 +359,9 @@ public class ProjectDescriptionAction extends BaseAction {
 
     if (project != null) {
 
-      Project ProjectDB = projectService.getProjectById(projectID);
+      System.out.println("project.getStartDate() --> " + project.getStartDate());
+
+      final Project ProjectDB = projectService.getProjectById(projectID);
       selectedProgram = ProjectDB.getResearchProgram();
       programID = selectedProgram.getId();
       selectedResearchArea = selectedProgram.getResearchArea();
@@ -367,39 +369,40 @@ public class ProjectDescriptionAction extends BaseAction {
       researchPrograms = new ArrayList<>(
         selectedResearchArea.getResearchPrograms().stream().filter(rp -> rp.isActive()).collect(Collectors.toList()));
 
-      Path path = this.getAutoSaveFilePath();
+      final Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists() && this.getCurrentUser().isAutoSave() && this.isEditable()) {
         BufferedReader reader = null;
         reader = new BufferedReader(new FileReader(path.toFile()));
-        Gson gson = new GsonBuilder().create();
-        JsonObject jReader = gson.fromJson(reader, JsonObject.class);
-        AutoSaveReader autoSaveReader = new AutoSaveReader();
+        final Gson gson = new GsonBuilder().create();
+        final JsonObject jReader = gson.fromJson(reader, JsonObject.class);
+        final AutoSaveReader autoSaveReader = new AutoSaveReader();
 
         project = (Project) autoSaveReader.readFromJson(jReader);
-        Project projectDB = projectService.getProjectById(project.getId());
+        final Project projectDB = projectService.getProjectById(project.getId());
 
         if (project.getProjectLeader() != null) {
           if (project.getProjectLeader().getId() != null) {
-            if (project.getProjectLeader().getId() != null || project.getProjectLeader().getId() != -1) {
-              User user = userService.getUser(project.getProjectLeader().getId());
+            if ((project.getProjectLeader().getId() != null) || (project.getProjectLeader().getId() != -1)) {
+              final User user = userService.getUser(project.getProjectLeader().getId());
               project.setProjectLeader(user);
             }
           }
         }
 
         if (project.getOutputs() != null) {
-          List<ProjectOutput> outputs = new ArrayList<>();
-          for (ProjectOutput output : project.getOutputs()) {
+          final List<ProjectOutput> outputs = new ArrayList<>();
+          for (final ProjectOutput output : project.getOutputs()) {
 
             if (output.getId() != null) {
-              ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
+              final ProjectOutput projectOutput = projectOutputService.getProjectOutputById(output.getId());
               outputs.add(projectOutput);
 
 
             } else {
-              ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
-              ProjectOutput projectOutput = new ProjectOutput();
+              final ResearchOutput researchOutput =
+                outputService.getResearchOutputById(output.getResearchOutput().getId());
+              final ProjectOutput projectOutput = new ProjectOutput();
               projectOutput.setResearchOutput(researchOutput);
               projectOutput.setProject(projectDB);
               outputs.add(projectOutput);
@@ -412,7 +415,7 @@ public class ProjectDescriptionAction extends BaseAction {
         }
 
         if (project.getProjectCountries() != null) {
-          for (ProjectLocation projectLocation : project.getProjectCountries()) {
+          for (final ProjectLocation projectLocation : project.getProjectCountries()) {
             if (projectLocation != null) {
               projectLocation.setLocElement(
                 locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2()));
@@ -421,7 +424,7 @@ public class ProjectDescriptionAction extends BaseAction {
         }
 
         if (project.getProjectRegions() != null) {
-          for (ProjectLocation projectLocation : project.getProjectRegions()) {
+          for (final ProjectLocation projectLocation : project.getProjectRegions()) {
             region = true;
             if (projectLocation != null) {
               projectLocation
@@ -460,14 +463,14 @@ public class ProjectDescriptionAction extends BaseAction {
 
         if (project.getProjectLocations() != null) {
 
-          List<ProjectLocation> countries = new ArrayList<>(project.getProjectLocations().stream()
-            .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
+          final List<ProjectLocation> countries = new ArrayList<>(project.getProjectLocations().stream()
+            .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 2))
             .collect(Collectors.toList()));
 
           project.setProjectCountries(new ArrayList<>(countries));
 
-          List<ProjectLocation> regions = new ArrayList<>(project.getProjectLocations().stream()
-            .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
+          final List<ProjectLocation> regions = new ArrayList<>(project.getProjectLocations().stream()
+            .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 1))
             .collect(Collectors.toList()));
 
 
@@ -498,24 +501,24 @@ public class ProjectDescriptionAction extends BaseAction {
 
     topicOutcomes = new ArrayList<>();
 
-    List<ResearchTopic> researchTopics = new ArrayList<>(
+    final List<ResearchTopic> researchTopics = new ArrayList<>(
       selectedProgram.getResearchTopics().stream().filter(rt -> rt.isActive()).collect(Collectors.toList()));
 
 
-    for (ResearchTopic researchTopic : researchTopics) {
-      TopicOutcomes outcome = new TopicOutcomes();
+    for (final ResearchTopic researchTopic : researchTopics) {
+      final TopicOutcomes outcome = new TopicOutcomes();
       outcome.setTopic(researchTopic);
       outcome.setOutcomes(new ArrayList<>());
-      List<ResearchOutcome> researchOutcomes = new ArrayList<>(
+      final List<ResearchOutcome> researchOutcomes = new ArrayList<>(
         researchTopic.getResearchOutcomes().stream().filter(ro -> ro.isActive()).collect(Collectors.toList()));
-      for (ResearchOutcome researchOutcome : researchOutcomes) {
+      for (final ResearchOutcome researchOutcome : researchOutcomes) {
         outcome.getOutcomes().add(researchOutcome);
       }
 
       topicOutcomes.add(outcome);
     }
 
-    String params[] =
+    final String params[] =
       {loggedCenter.getAcronym(), selectedResearchArea.getId() + "", selectedProgram.getId() + "", projectID + ""};
     this.setBasePermission(this.getText(Permission.PROJECT_DESCRIPTION_BASE_PERMISSION, params));
 
@@ -587,16 +590,16 @@ public class ProjectDescriptionAction extends BaseAction {
       projectDB.setSuggestedName(project.getSuggestedName());
 
       if (project.getProjectType().getId() != null) {
-        ProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());
+        final ProjectType projectType = projectTypeService.getProjectTypeById(project.getProjectType().getId());
         projectDB.setProjectType(projectType);
       }
 
       if (project.getProjectLeader().getId() != null) {
-        User projectLeader = userService.getUser(project.getProjectLeader().getId());
+        final User projectLeader = userService.getUser(project.getProjectLeader().getId());
         projectDB.setProjectLeader(projectLeader);
       }
 
-      long projectSaveID = projectService.saveProject(projectDB);
+      final long projectSaveID = projectService.saveProject(projectDB);
 
       projectDB = projectService.getProjectById(projectSaveID);
 
@@ -608,7 +611,7 @@ public class ProjectDescriptionAction extends BaseAction {
       this.saveOutputs(projectDB);
       this.saveLocations(projectDB);
 
-      List<String> relationsName = new ArrayList<>();
+      final List<String> relationsName = new ArrayList<>();
       relationsName.add(APConstants.PROJECT_FUNDING_SOURCE_RELATION);
       relationsName.add(APConstants.PROJECT_OUTPUT_RELATION);
       relationsName.add(APConstants.PROJECT_LOCATION_RELATION);
@@ -617,7 +620,7 @@ public class ProjectDescriptionAction extends BaseAction {
       project.setModifiedBy(this.getCurrentUser());
       projectService.saveProject(project, this.getActionName(), relationsName);
 
-      Path path = this.getAutoSaveFilePath();
+      final Path path = this.getAutoSaveFilePath();
 
       if (path.toFile().exists()) {
         path.toFile().delete();
@@ -626,8 +629,8 @@ public class ProjectDescriptionAction extends BaseAction {
 
       if (!this.getInvalidFields().isEmpty()) {
         this.setActionMessages(null);
-        List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
-        for (String key : keys) {
+        final List<String> keys = new ArrayList<String>(this.getInvalidFields().keySet());
+        for (final String key : keys) {
           this.addActionMessage(key + ": " + this.getInvalidFields().get(key));
         }
       } else {
@@ -642,9 +645,9 @@ public class ProjectDescriptionAction extends BaseAction {
   }
 
   public void saveCrossCuting(Project projectDB) {
-    ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
+    final ProjectCrosscutingTheme crosscutingTheme = project.getProjectCrosscutingTheme();
 
-    ProjectCrosscutingTheme crosscutingThemeSave =
+    final ProjectCrosscutingTheme crosscutingThemeSave =
       projectCrosscutingThemeService.getProjectCrosscutingThemeById(projectDB.getProjectCrosscutingTheme().getId());
 
     crosscutingThemeSave
@@ -670,11 +673,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void saveFundingSources(Project projectDB) {
 
-    if (projectDB.getProjectFundingSources() != null && projectDB.getProjectFundingSources().size() > 0) {
-      List<ProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
+    if ((projectDB.getProjectFundingSources() != null) && (projectDB.getProjectFundingSources().size() > 0)) {
+      final List<ProjectFundingSource> fundingSourcesPrew = new ArrayList<>(
         projectDB.getProjectFundingSources().stream().filter(pfs -> pfs.isActive()).collect(Collectors.toList()));
 
-      for (ProjectFundingSource projectFundingSource : fundingSourcesPrew) {
+      for (final ProjectFundingSource projectFundingSource : fundingSourcesPrew) {
         if (!project.getFundingSources().contains(projectFundingSource)) {
           projectFundingSourceService.deleteProjectFundingSource(projectFundingSource.getId());
         }
@@ -683,15 +686,15 @@ public class ProjectDescriptionAction extends BaseAction {
 
     if (project.getFundingSources() != null) {
 
-      for (ProjectFundingSource projectFundingSource : project.getFundingSources()) {
-        if (projectFundingSource.getId() == null || projectFundingSource.getId() == -1) {
+      for (final ProjectFundingSource projectFundingSource : project.getFundingSources()) {
+        if ((projectFundingSource.getId() == null) || (projectFundingSource.getId() == -1)) {
 
-          ProjectFundingSource fundingSourceSave = new ProjectFundingSource();
+          final ProjectFundingSource fundingSourceSave = new ProjectFundingSource();
 
-          FundingSourceType fundingSourceType =
+          final FundingSourceType fundingSourceType =
             fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
-          Project project = projectService.getProjectById(projectID);
-          Crp crp = crpService.getCrpById(projectFundingSource.getCrp().getId());
+          final Project project = projectService.getProjectById(projectID);
+          final Crp crp = crpService.getCrpById(projectFundingSource.getCrp().getId());
 
           fundingSourceSave.setProject(project);
           fundingSourceSave.setCrp(crp);
@@ -707,12 +710,12 @@ public class ProjectDescriptionAction extends BaseAction {
 
         } else {
           boolean hasChanges = false;
-          ProjectFundingSource fundingSourcePrew =
+          final ProjectFundingSource fundingSourcePrew =
             projectFundingSourceService.getProjectFundingSourceById(projectFundingSource.getId());
 
           if (!fundingSourcePrew.getFundingSourceType().equals(projectFundingSource.getFundingSourceType())) {
             hasChanges = true;
-            FundingSourceType fundingSourceType =
+            final FundingSourceType fundingSourceType =
               fundingSourceService.getFundingSourceTypeById(projectFundingSource.getFundingSourceType().getId());
             fundingSourcePrew.setFundingSourceType(fundingSourceType);
           }
@@ -735,16 +738,16 @@ public class ProjectDescriptionAction extends BaseAction {
   public void saveLocations(Project projectDB) {
 
     if (project.getProjectRegions() != null) {
-      List<ProjectLocation> regions = new ArrayList<>(projectDB.getProjectLocations().stream()
-        .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 1)
+      final List<ProjectLocation> regions = new ArrayList<>(projectDB.getProjectLocations().stream()
+        .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 1))
         .collect(Collectors.toList()));
-      if (regions != null && regions.size() > 0) {
+      if ((regions != null) && (regions.size() > 0)) {
         if (!region) {
-          for (ProjectLocation projectLocation : regions) {
+          for (final ProjectLocation projectLocation : regions) {
             projectLocationService.deleteProjectLocation(projectLocation.getId());
           }
         } else {
-          for (ProjectLocation projectLocation : regions) {
+          for (final ProjectLocation projectLocation : regions) {
             if (!project.getProjectRegions().contains(projectLocation)) {
               projectLocationService.deleteProjectLocation(projectLocation.getId());
             }
@@ -752,12 +755,12 @@ public class ProjectDescriptionAction extends BaseAction {
         }
       }
 
-      for (ProjectLocation projectLocation : project.getProjectRegions()) {
+      for (final ProjectLocation projectLocation : project.getProjectRegions()) {
 
 
-        if (projectLocation.getId() == null || projectLocation.getId() == -1) {
+        if ((projectLocation.getId() == null) || (projectLocation.getId() == -1)) {
 
-          ProjectLocation projectLocationSave = new ProjectLocation();
+          final ProjectLocation projectLocationSave = new ProjectLocation();
           projectLocationSave.setActive(true);
           projectLocationSave.setActiveSince(new Date());
           projectLocationSave.setCreatedBy(this.getCurrentUser());
@@ -765,7 +768,7 @@ public class ProjectDescriptionAction extends BaseAction {
           projectLocationSave.setModificationJustification("");
           projectLocationSave.setProject(projectDB);
 
-          LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
+          final LocElement element = locElementService.getLocElementById(projectLocation.getLocElement().getId());
           projectLocationSave.setLocElement(element);
 
           projectLocationService.saveProjectLocation(projectLocationSave);
@@ -779,24 +782,24 @@ public class ProjectDescriptionAction extends BaseAction {
 
     {
 
-      List<ProjectLocation> countries = new ArrayList<>(projectDB.getProjectLocations().stream()
-        .filter(fl -> fl.isActive() && fl.getLocElement().getLocElementType().getId() == 2)
+      final List<ProjectLocation> countries = new ArrayList<>(projectDB.getProjectLocations().stream()
+        .filter(fl -> fl.isActive() && (fl.getLocElement().getLocElementType().getId() == 2))
         .collect(Collectors.toList()));
 
-      if (countries != null && countries.size() > 0) {
-        for (ProjectLocation projectLocation : countries) {
+      if ((countries != null) && (countries.size() > 0)) {
+        for (final ProjectLocation projectLocation : countries) {
           if (!project.getProjectCountries().contains(projectLocation)) {
             projectLocationService.deleteProjectLocation(projectLocation.getId());
           }
         }
       }
 
-      for (ProjectLocation projectLocation : project.getProjectCountries()) {
+      for (final ProjectLocation projectLocation : project.getProjectCountries()) {
 
 
-        if (projectLocation.getId() == null || projectLocation.getId() == -1) {
+        if ((projectLocation.getId() == null) || (projectLocation.getId() == -1)) {
 
-          ProjectLocation projectLocationSave = new ProjectLocation();
+          final ProjectLocation projectLocationSave = new ProjectLocation();
           projectLocationSave.setActive(true);
           projectLocationSave.setActiveSince(new Date());
           projectLocationSave.setCreatedBy(this.getCurrentUser());
@@ -804,7 +807,8 @@ public class ProjectDescriptionAction extends BaseAction {
           projectLocationSave.setModificationJustification("");
           projectLocationSave.setProject(projectDB);
 
-          LocElement element = locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2());
+          final LocElement element =
+            locElementService.getLocElementByISOCode(projectLocation.getLocElement().getIsoAlpha2());
           projectLocationSave.setLocElement(element);
 
           projectLocationService.saveProjectLocation(projectLocationSave);
@@ -818,11 +822,11 @@ public class ProjectDescriptionAction extends BaseAction {
 
   public void saveOutputs(Project projectDB) {
 
-    if (projectDB.getProjectOutputs() != null && projectDB.getProjectOutputs().size() > 0) {
-      List<ProjectOutput> outputsPrew = new ArrayList<>(
+    if ((projectDB.getProjectOutputs() != null) && (projectDB.getProjectOutputs().size() > 0)) {
+      final List<ProjectOutput> outputsPrew = new ArrayList<>(
         projectDB.getProjectOutputs().stream().filter(po -> po.isActive()).collect(Collectors.toList()));
 
-      for (ProjectOutput output : outputsPrew) {
+      for (final ProjectOutput output : outputsPrew) {
         if (!project.getOutputs().contains(output)) {
           projectOutputService.deleteProjectOutput(output.getId());
         }
@@ -830,12 +834,12 @@ public class ProjectDescriptionAction extends BaseAction {
     }
 
     if (project.getOutputs() != null) {
-      for (ProjectOutput output : project.getOutputs()) {
-        if (output.getId() == null || output.getId() == -1) {
-          ProjectOutput outputSave = new ProjectOutput();
+      for (final ProjectOutput output : project.getOutputs()) {
+        if ((output.getId() == null) || (output.getId() == -1)) {
+          final ProjectOutput outputSave = new ProjectOutput();
 
-          ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
-          Project project = projectService.getProjectById(projectID);
+          final ResearchOutput researchOutput = outputService.getResearchOutputById(output.getResearchOutput().getId());
+          final Project project = projectService.getProjectById(projectID);
 
           outputSave.setProject(project);
           outputSave.setResearchOutput(researchOutput);

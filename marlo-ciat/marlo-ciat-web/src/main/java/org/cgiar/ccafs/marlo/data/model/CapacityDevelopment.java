@@ -3,6 +3,7 @@ package org.cgiar.ccafs.marlo.data.model;
 // Generated May 30, 2017 3:06:49 PM by Hibernate Tools 3.4.0.CR1
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -159,6 +160,16 @@ public class CapacityDevelopment implements java.io.Serializable {
     return this.endDate;
   }
 
+  public String getEndDateFormat() {
+    final String pattern = "yyyy-MM-dd";
+    final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    String date = "";
+    if (this.endDate != null) {
+      date = simpleDateFormat.format(this.endDate);
+    }
+    return date;
+  }
+
   public Long getId() {
     return this.id;
   }
@@ -191,6 +202,16 @@ public class CapacityDevelopment implements java.io.Serializable {
     return this.researchProgram;
   }
 
+  public String getStarDateFormat() {
+    final String pattern = "yyyy-MM-dd";
+    final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    String date = "";
+    if (this.startDate != null) {
+      date = simpleDateFormat.format(this.startDate);
+    }
+    return date;
+  }
+
   public Date getStartDate() {
     return this.startDate;
   }
@@ -207,10 +228,10 @@ public class CapacityDevelopment implements java.io.Serializable {
     return this.usersByModifiedBy;
   }
 
+
   public boolean isActive() {
     return this.active;
   }
-
 
   public void setActive(boolean active) {
     this.active = active;
@@ -231,6 +252,7 @@ public class CapacityDevelopment implements java.io.Serializable {
   public void setCapdevOutputses(Set<CapdevOutputs> capdevOutputses) {
     this.capdevOutputses = capdevOutputses;
   }
+
 
   public void setCapdevParticipants(Set<CapdevParticipant> capdevParticipants) {
     this.capdevParticipants = capdevParticipants;
@@ -340,7 +362,6 @@ public class CapacityDevelopment implements java.io.Serializable {
   public void setUsersByCreatedBy(User usersByCreatedBy) {
     this.usersByCreatedBy = usersByCreatedBy;
   }
-
 
   public void setUsersByModifiedBy(User usersByModifiedBy) {
     this.usersByModifiedBy = usersByModifiedBy;

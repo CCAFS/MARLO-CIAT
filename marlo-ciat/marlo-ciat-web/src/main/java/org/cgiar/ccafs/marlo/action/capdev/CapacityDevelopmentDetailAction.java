@@ -33,6 +33,7 @@ import org.cgiar.ccafs.marlo.data.service.IParticipantService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 import org.cgiar.ccafs.marlo.utils.InvalidFieldsMessages;
 import org.cgiar.ccafs.marlo.utils.ReadExcelFile;
+import org.cgiar.ccafs.marlo.validation.capdev.CapacityDevelopmentValidator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   private CapacityDevelopment capdev;
   private List<LocElement> regionsList;
   private List<LocElement> countryList;
+  private List<Map<String, Object>> countriesList;
   private List<CapacityDevelopmentType> capdevTypes;
   private List<Long> capdevCountries;
   private List<Long> capdevRegions;
@@ -79,6 +81,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   private final ICapdevLocationsService capdevLocationService;
   private final IParticipantService participantService;
   private final ICapdevParticipantService capdevParicipantService;
+  private final CapacityDevelopmentValidator validator;
   private final ReadExcelFile reader = new ReadExcelFile();
 
 
@@ -91,7 +94,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public CapacityDevelopmentDetailAction(APConfig config, ICapacityDevelopmentService capdevService,
     ICapacityDevelopmentTypeDAO capdevTypeService, ILocElementService locElementService,
     ICapdevLocationsService capdevLocationService, IParticipantService participantService,
-    ICapdevParticipantService capdevParicipantService) {
+    ICapdevParticipantService capdevParicipantService, CapacityDevelopmentValidator validator) {
     super(config);
     this.capdevService = capdevService;
     this.capdevTypeService = capdevTypeService;
@@ -99,6 +102,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     this.capdevLocationService = capdevLocationService;
     this.participantService = participantService;
     this.capdevParicipantService = capdevParicipantService;
+    this.validator = validator;
   }
 
 
@@ -141,6 +145,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
   public String getContact() {
     return contact;
+  }
+
+
+  public List<Map<String, Object>> getCountriesList() {
+    return countriesList;
   }
 
 
@@ -220,10 +229,10 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     return regionsList;
   }
 
-
   public File getUploadFile() {
     return uploadFile;
   }
+
 
   public String getUploadFileContentType() {
     return uploadFileContentType;
@@ -243,7 +252,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public boolean isHasSupportingDocs() {
     return hasSupportingDocs;
   }
-
 
   /*
    * This method create a participant list from data got from excel file
@@ -279,6 +287,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     return participantList;
   }
 
+
   @Override
   public void prepare() throws Exception {
 
@@ -308,6 +317,14 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
       .collect(Collectors.toList()));
     Collections.sort(countryList, (c1, c2) -> c1.getName().compareTo(c2.getName()));
 
+    countriesList = new ArrayList<>();
+    for (final LocElement country : countryList) {
+      final Map<String, Object> countryMap = new HashMap<>();
+      countryMap.put("displayName", country.getName());
+      countryMap.put("value", country.getName());
+      countriesList.add(countryMap);
+    }
+
 
     participantList = new ArrayList<>();
     capdevCountries = new ArrayList<>();
@@ -326,6 +343,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
 
     if (capdev != null) {
+      System.out.println("capdev.getStartDate() -->" + capdev.getStartDate());
       final List<CapdevParticipant> participants = new ArrayList<>(capdev.getCapdevParticipants());
       if (capdev.getCategory() == 1) {
         if (!participants.isEmpty()) {
@@ -402,7 +420,9 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
       capdev.setTitle(participant.getName() + " " + participant.getLastName());
       capdevService.saveCapacityDevelopment(capdev);
       this.saveParticipant(participant);
-      this.saveCapDevParticipan(participant, capdev);
+      if (capdev.getCapdevParticipants().isEmpty()) {
+        this.saveCapDevParticipan(participant, capdev);
+      }
     }
 
     // if capdec is group
@@ -428,6 +448,8 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
     this.saveCapDevRegions(capdevRegions, capdev);
     this.saveCapDevCountries(capdevCountries, capdev);
+
+    this.addActionMessage("message: Information was correctly saved.</br>");
 
 
     return SUCCESS;
@@ -542,6 +564,11 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   }
 
 
+  public void setCountriesList(List<Map<String, Object>> countriesList) {
+    this.countriesList = countriesList;
+  }
+
+
   public void setCountryList(List<LocElement> countryList) {
     this.countryList = countryList;
   }
@@ -556,7 +583,6 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
     this.hasParticipantList = hasParticipantList;
   }
 
-
   public void setHasSupportingDocs(boolean hasSupportingDocs) {
     this.hasSupportingDocs = hasSupportingDocs;
   }
@@ -565,6 +591,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
   public void setParticipant(Participant participant) {
     this.participant = participant;
   }
+
 
   public void setParticipantList(List<Participant> participantList) {
     this.participantList = participantList;
@@ -613,6 +640,7 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
 
     if (save) {
       System.out.println("entro al if save");
+      // validator.validateCapDevDetail(this, capdev, participant, uploadFile, uploadFileContentType);
       if (capdev.getCapdevType().getId() == -1) {
         this.addFieldError("capdev.capdevType.id", "Type is required.");
         this.getInvalidFields().put("capdev.capdevType.id", InvalidFieldsMessages.EMPTYFIELD);
@@ -636,16 +664,23 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
         if (participant.getGender().equalsIgnoreCase("-1")) {
           this.addFieldError("participant.gender", "Gender is required.");
         }
-        if (participant.getCitizenship().equalsIgnoreCase("")) {
+        if (participant.getCitizenship().equalsIgnoreCase("-1")) {
           this.addFieldError("participant.citizenship", "Citizenship is required.");
         }
         if (participant.getEmail().equalsIgnoreCase("")) {
           this.addFieldError("participant.email", "Email is required.");
         }
+        if (!participant.getEmail().equalsIgnoreCase("")) {
+          final boolean validEmail = validator.validateEmail(participant.getEmail());
+          if (!validEmail) {
+            System.out.println("Email no valido");
+            this.addFieldError("participant.email", "enter a valid email address.");
+          }
+        }
         if (participant.getInstitution().equalsIgnoreCase("")) {
           this.addFieldError("participant.institution", "institution required.");
         }
-        if (participant.getCountryOfInstitucion().equalsIgnoreCase("")) {
+        if (participant.getCountryOfInstitucion().equalsIgnoreCase("-1")) {
           this.addFieldError("participant.countryOfInstitucion", "Country of institution is required.");
         }
         if (participant.getSupervisor().equalsIgnoreCase("")) {
@@ -664,26 +699,21 @@ public class CapacityDevelopmentDetailAction extends BaseAction {
         if ((uploadFile == null) && (capdev.getNumParticipants() == null)) {
           this.addFieldError("capdev.numParticipants", "Num participants is required.");
         }
-
         if (uploadFile != null) {
           if (!uploadFileContentType.equals("application/vnd.ms-excel")
             && !uploadFileContentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
             System.out.println("formato incorrecto");
             this.addFieldError("uploadFile", "Only excel files(.xls, xlsx) are allowed.");
           }
-
-          if (uploadFile.length() > 2000000) {
+          if (uploadFile.length() > 31457280) {
             System.out.println("file muy pesado");
             this.addFieldError("uploadFile", "capdev.fileSize");
           }
-
           if (!reader.validarExcelFile(uploadFile)) {
             System.out.println("el archivo no coincide con la plantilla");
             this.addFieldError("uploadFile", "file wrong");
           }
         }
-
-
       }
     }
 

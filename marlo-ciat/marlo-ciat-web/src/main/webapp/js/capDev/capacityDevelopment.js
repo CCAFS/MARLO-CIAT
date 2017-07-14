@@ -13,6 +13,9 @@
       "endDate": "#capdev\\.endDate"
     });
 
+    console.log("capdev.startDate")
+    console.log($(".capdevstartDate").val())
+
 
     $dialogContent = $("#dialog-searchContactPerson");
     var dialogOptions = {
@@ -135,7 +138,23 @@
         $(this).attr( "selected" , "selected");
       }
       });
+
+     var citizenship = $(".citizenshipInput").val();
+     $(".pCitizenshipcountriesList select option").each(function() {
+      if($(this).val() == citizenship){
+        $(this).attr( "selected" , "selected");
+      }
+      });
+
+     var countryOfInstitucion = $(".countryOfInstitucionInput").val();
+     $(".pcountryOfInstitucionList select option").each(function() {
+      if($(this).val() == countryOfInstitucion){
+        $(this).attr( "selected" , "selected");
+      }
+      });
     })();
+
+
 
   }
 

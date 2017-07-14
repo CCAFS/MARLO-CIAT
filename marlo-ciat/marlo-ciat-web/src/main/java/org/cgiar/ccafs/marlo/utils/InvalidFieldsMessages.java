@@ -26,5 +26,7 @@ public class InvalidFieldsMessages {
   public static String INVALID_NUMBER = "Invalid Number";
   public static String EMPTYUSERLIST = "There must be at least one person here.";
   public static String CHECKBOX = "Select an option";
+  public static String INVALID_FORMAT = "Only excel files(.xls, xlsx) are allowed.";
+  public static String FILE_SIZE = "The maximun size allowed is 30MB";
 
 }

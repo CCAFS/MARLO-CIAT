@@ -39,7 +39,6 @@
 			<div class="pull-right">
 				<a class="" href="[@s.url action='${centerSession}/capdev' /] "><span class="glyphicon glyphicon-circle-arrow-left"></span>[@s.text name="capdev.gotoBack" /]</a> 
 			</div>
-				
 		</div>
 		
 		<div class="col-md-12 form-group newCapdevForm"> 
@@ -96,7 +95,7 @@
 					<div class="col-md-12 newCapdevField">
 						<!-- Strart date-->
 						<div class="col-md-6 ">
-							[@customForm.input name="capdev.startDate" i18nkey="capdev.form.startDate" type="text"  help="capdev.help.startDate" required=true  editable=true /]
+							[@customForm.input name="capdev.startDate" i18nkey="capdev.form.startDate" type="text"  help="capdev.help.startDate" required=true  editable=true className="capdevstartDate"/]
 						</div>
 						<!-- end date-->
 						<div class="col-md-6 ">
@@ -205,8 +204,10 @@
 							<input type="hidden" name="" value="${(participant.gender)!}" class="genderInput"/>
 							[@customForm.select name="participant.gender" listName="genders" keyFieldName="value" displayFieldName="displayName" help="" i18nkey="capdev.participant.gender"  placeholder="capdev.select" required=true editable=true className=""/]
 						</div>
-						<div class="col-md-6">
-							[@customForm.input name="participant.citizenship" i18nkey="capdev.participant.citizenship" type="text" required=true /]
+						<div class="col-md-6 pCitizenshipcountriesList">
+							<!-- [@customForm.input name="participant.citizenship" i18nkey="capdev.participant.citizenship" type="text" required=true /] -->
+							<input type="hidden" name="" value="${(participant.citizenship)!}" class="citizenshipInput"/>
+							[@customForm.select name="participant.citizenship" listName="countriesList" keyFieldName="value" displayFieldName="displayName" help="" i18nkey="capdev.participant.citizenship" className="" multiple=false placeholder="capdev.select" required=true /]
 						</div>
 					</div>
 					<div class="col-md-12 newCapdevField">
@@ -221,8 +222,10 @@
 						<div class="col-md-6">
 							[@customForm.input name="participant.institution" i18nkey="capdev.participant.Institution" type="text" required=true /]
 						</div>
-						<div class="col-md-6">
-							[@customForm.input name="participant.countryOfInstitucion" i18nkey="capdev.participant.country" type="text" required=true /]
+						<div class="col-md-6 pcountryOfInstitucionList">
+							<!-- [@customForm.input name="participant.countryOfInstitucion" i18nkey="capdev.participant.country" type="text" required=true /] -->
+							<input type="hidden" name="" value="${(participant.countryOfInstitucion)!}" class="countryOfInstitucionInput"/>
+							[@customForm.select name="participant.countryOfInstitucion" listName="countriesList" keyFieldName="value" displayFieldName="displayName" help="" i18nkey="capdev.participant.country" className="" multiple=false placeholder="capdev.select" required=true /]
 						</div>
 					</div>
 					<div class="col-md-12 newCapdevField">
