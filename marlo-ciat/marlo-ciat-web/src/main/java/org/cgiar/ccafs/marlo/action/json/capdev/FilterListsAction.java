@@ -17,18 +17,18 @@ package org.cgiar.ccafs.marlo.action.json.capdev;
 
 import org.cgiar.ccafs.marlo.action.BaseAction;
 import org.cgiar.ccafs.marlo.config.APConfig;
-import org.cgiar.ccafs.marlo.data.dao.IResearchProgramDAO;
+import org.cgiar.ccafs.marlo.data.dao.ICenterProgramDAO;
+import org.cgiar.ccafs.marlo.data.model.CenterOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProgram;
+import org.cgiar.ccafs.marlo.data.model.CenterProject;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectOutput;
+import org.cgiar.ccafs.marlo.data.model.CenterProjectPartner;
 import org.cgiar.ccafs.marlo.data.model.Institution;
-import org.cgiar.ccafs.marlo.data.model.Project;
-import org.cgiar.ccafs.marlo.data.model.ProjectOutput;
-import org.cgiar.ccafs.marlo.data.model.ProjectPartner;
-import org.cgiar.ccafs.marlo.data.model.ResearchOutput;
-import org.cgiar.ccafs.marlo.data.model.ResearchProgram;
+import org.cgiar.ccafs.marlo.data.service.ICenterOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectOutputService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectPartnerService;
+import org.cgiar.ccafs.marlo.data.service.ICenterProjectService;
 import org.cgiar.ccafs.marlo.data.service.IInstitutionService;
-import org.cgiar.ccafs.marlo.data.service.IProjectOutputService;
-import org.cgiar.ccafs.marlo.data.service.IProjectPartnerService;
-import org.cgiar.ccafs.marlo.data.service.IProjectService;
-import org.cgiar.ccafs.marlo.data.service.IResearchOutputService;
 import org.cgiar.ccafs.marlo.utils.APConstants;
 
 import java.util.ArrayList;
@@ -50,17 +50,18 @@ public class FilterListsAction extends BaseAction {
   private List<Map<String, Object>> jsonResearchPrograms;
   private List<Map<String, Object>> jsonProjects;
   private List<Map<String, Object>> jsonPartners_output;
-  private final IResearchProgramDAO researchProgramSercive;
-  private final IProjectService projectService;
-  private final IProjectPartnerService projectPartnerService;
-  private final IProjectOutputService projectOutputService;
+  private final ICenterProgramDAO researchProgramSercive;
+  private final ICenterProjectService projectService;
+  private final ICenterProjectPartnerService projectPartnerService;
+  private final ICenterProjectOutputService projectOutputService;
   private final IInstitutionService institutionService;
-  private final IResearchOutputService researchOutputService;
+  private final ICenterOutputService researchOutputService;
 
   @Inject
-  public FilterListsAction(APConfig config, IResearchProgramDAO researchProgramSercive, IProjectService projectService,
-    IProjectPartnerService projectPartnerService, IProjectOutputService projectOutputService,
-    IInstitutionService institutionService, IResearchOutputService researchOutputService) {
+  public FilterListsAction(APConfig config, ICenterProgramDAO researchProgramSercive,
+    ICenterProjectService projectService, ICenterProjectPartnerService projectPartnerService,
+    ICenterProjectOutputService projectOutputService, IInstitutionService institutionService,
+    ICenterOutputService researchOutputService) {
     super(config);
     this.researchProgramSercive = researchProgramSercive;
     this.projectService = projectService;
@@ -82,10 +83,10 @@ public class FilterListsAction extends BaseAction {
       Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.QUERY_PARAMETER))[0]));
     System.out.println("projectID --> " + projectID);
 
-    List<ProjectPartner> projectPartners = new ArrayList<>();
-    List<ProjectOutput> projectOutputs = new ArrayList<>();
+    List<CenterProjectPartner> projectPartners = new ArrayList<>();
+    List<CenterProjectOutput> projectOutputs = new ArrayList<>();
     List<Institution> partners = new ArrayList<>();
-    List<ResearchOutput> outputs = new ArrayList<>();
+    List<CenterOutput> outputs = new ArrayList<>();
 
     if (projectID > 0) {
       projectPartners = projectPartnerService.findAll().stream()
@@ -117,7 +118,7 @@ public class FilterListsAction extends BaseAction {
     if (!projectPartners.isEmpty()) {
       System.out.println("!projectPartners.isEmpty()");
       final List<Map<String, Object>> listpartnertMap = new ArrayList<>();
-      for (final ProjectPartner projectPartner : projectPartners) {
+      for (final CenterProjectPartner projectPartner : projectPartners) {
         final Map<String, Object> projectPartnermap = new HashMap<>();
         projectPartnermap.put("idPartner", projectPartner.getInstitution().getId());
         projectPartnermap.put("partnerName", projectPartner.getInstitution().getName());
@@ -134,7 +135,7 @@ public class FilterListsAction extends BaseAction {
       outputs = researchOutputService.findAll();
       System.out.println("outputs.size() " + outputs.size());
       final List<Map<String, Object>> listpartnertMap = new ArrayList<>();
-      for (final ResearchOutput researchOutput : outputs) {
+      for (final CenterOutput researchOutput : outputs) {
         final Map<String, Object> researchOutputMap = new HashMap<>();
         researchOutputMap.put("idOutput", researchOutput.getId());
         researchOutputMap.put("outputTitle", researchOutput.getTitle());
@@ -149,7 +150,7 @@ public class FilterListsAction extends BaseAction {
     if (!projectOutputs.isEmpty()) {
       System.out.println("!projectOutputs.isEmpty()");
       final List<Map<String, Object>> listpartnertMap = new ArrayList<>();
-      for (final ProjectOutput projectOutput : projectOutputs) {
+      for (final CenterProjectOutput projectOutput : projectOutputs) {
         final Map<String, Object> projectOutputMap = new HashMap<>();
         projectOutputMap.put("idOutput", projectOutput.getResearchOutput().getId());
         projectOutputMap.put("outputTitle", projectOutput.getResearchOutput().getTitle());
@@ -170,7 +171,7 @@ public class FilterListsAction extends BaseAction {
     final long researchProgramID =
       Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.QUERY_PARAMETER))[0]));
 
-    List<Project> projects = new ArrayList<>();
+    List<CenterProject> projects = new ArrayList<>();
     if (researchProgramID > 0) {
       projects = projectService.findAll().stream()
         .filter(p -> p.isActive() && (p.getResearchProgram().getId() == researchProgramID))
@@ -180,7 +181,7 @@ public class FilterListsAction extends BaseAction {
     }
 
     if (!projects.isEmpty()) {
-      for (final Project project : projects) {
+      for (final CenterProject project : projects) {
         final Map<String, Object> projectMap = new HashMap<>();
         projectMap.put("projectID", project.getId());
         projectMap.put("projectName", project.getName());
@@ -198,7 +199,7 @@ public class FilterListsAction extends BaseAction {
     final long researchAreaID =
       Long.parseLong(StringUtils.trim(((String[]) parameters.get(APConstants.QUERY_PARAMETER))[0]));
     this.jsonResearchPrograms = new ArrayList<>();
-    List<ResearchProgram> researchPrograms = new ArrayList<>();
+    List<CenterProgram> researchPrograms = new ArrayList<>();
     if (researchAreaID > 0) {
       researchPrograms = researchProgramSercive.findAll().stream()
         .filter(le -> le.isActive() && (le.getResearchArea().getId() == researchAreaID)).collect(Collectors.toList());
@@ -206,7 +207,7 @@ public class FilterListsAction extends BaseAction {
       researchPrograms = researchProgramSercive.findAll();
     }
 
-    for (final ResearchProgram researchProgram : researchPrograms) {
+    for (final CenterProgram researchProgram : researchPrograms) {
       final Map<String, Object> rpMap = new HashMap<String, Object>();
       rpMap.put("rpID", researchProgram.getId());
       rpMap.put("rpName", researchProgram.getName());
