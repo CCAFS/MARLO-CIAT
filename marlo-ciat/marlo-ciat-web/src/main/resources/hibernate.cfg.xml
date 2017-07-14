@@ -89,7 +89,6 @@
 		<mapping resource="xmls/SrfCrossCuttingIssues.hbm.xml" />
 		<mapping resource="xmls/SrfIdos.hbm.xml" />
 		<mapping resource="xmls/CenterImpactStatement.hbm.xml" />
-		<mapping resource="xmls/ResearchImpactStatement.hbm.xml" />	
 		<mapping resource="xmls/CapacityDevelopment.hbm.xml" />
 		<mapping resource="xmls/CapacityDevelopmentTypes.hbm.xml" />
 		<mapping resource="xmls/CapDevLocations.hbm.xml" />

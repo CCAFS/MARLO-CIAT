@@ -14,7 +14,7 @@
         <many-to-one name="usersByCreatedBy" class="org.cgiar.ccafs.marlo.data.model.User" fetch="select">
             <column name="created_by" />
         </many-to-one>
-        <many-to-one name="researchOutputs" class="org.cgiar.ccafs.marlo.data.model.ResearchOutput" fetch="select">
+        <many-to-one name="researchOutputs" class="org.cgiar.ccafs.marlo.data.model.CenterOutput" fetch="select">
             <column name="output_id" />
         </many-to-one>
         <many-to-one name="capacityDevelopment" class="org.cgiar.ccafs.marlo.data.model.CapacityDevelopment" fetch="select">
