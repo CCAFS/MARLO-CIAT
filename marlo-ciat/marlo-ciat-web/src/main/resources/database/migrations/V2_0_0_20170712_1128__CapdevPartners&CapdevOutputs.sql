@@ -30,6 +30,6 @@ CREATE TABLE `capdev_outputs` (
   `modification_justification` text NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `capdev_output_capdevid_fk`      FOREIGN KEY (`capdev_id`)     REFERENCES `capacity_development` (`id`),
-  CONSTRAINT `capdev_output_outputid_fk`      FOREIGN KEY (`output_id`)     REFERENCES `research_outputs` (`id`),
+  CONSTRAINT `capdev_output_outputid_fk`      FOREIGN KEY (`output_id`)     REFERENCES `center_outputs` (`id`),
   CONSTRAINT `capdev_output_createdby_fk`     FOREIGN KEY (`created_by`)    REFERENCES `users` (`id`),
   CONSTRAINT `capdev_output_modifiedby_fk`    FOREIGN KEY (`modified_by`)   REFERENCES `users` (`id`));
