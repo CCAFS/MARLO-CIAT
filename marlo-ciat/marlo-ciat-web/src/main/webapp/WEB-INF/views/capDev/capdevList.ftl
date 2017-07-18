@@ -44,7 +44,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<table class="table table-bordered">
+				<table class="table table-bordered capdevTable">
 				  <tr>
 				    <th style="width: 3%">ID</th>
 				    <th style="width: 15%">Title</th> 
@@ -58,7 +58,7 @@
 				  
 				  [#if capDevs?has_content]
 				  [#list capDevs as i]
-					  <tr>
+					  <tr class="capdevTbody">
 					    <td>C${i.id}</td>
 					    [#if i.title??]
 					    <td>
